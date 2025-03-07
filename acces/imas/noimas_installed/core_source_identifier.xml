@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<constants name="core_source" identifier="yes" create_mapping_function="yes">
+<header>
+Translation table for sources of particles, momentum and heat.
+</header>
+<!-- Some lines and indices are common with the edge_sources/source/identifier --> 
+
+<ddInstance xpath="/core_sources/source/identifier"/>
+
+<int name="unspecified"             description="Unspecified source type"                                                         unique="yes">0</int>
+<int name="total"                   description="Total source; combines all sources"                                              unique="yes">1</int>
+<int name="nbi"                     description="Source from Neutral Beam Injection"                                              unique="yes">2</int>
+<int name="ec"                      description="Sources from electron cyclotron heating and current drive"               unique="yes">3</int>
+<int name="lh"                      description="Sources from lower hybrid heating and current drive"                             unique="yes">4</int>
+<int name="ic"                      description="Sources from heating at the ion cyclotron range of frequencies"                  unique="yes">5</int>
+<int name="fusion"                  description="Sources from fusion reactions, e.g. alpha particle heating"                      unique="yes">6</int>
+<int name="ohmic"                   description="Source from ohmic heating"                                                       unique="yes">7</int>
+<int name="bremsstrahlung"          description="Source from bremsstrahlung; radiation losses are negative sources"                unique="yes">8</int>
+<int name="synchrotron_radiation"   description="Source from synchrotron radiation; radiation losses are negative sources"         unique="yes">9</int>
+<int name="line_radiation"          description="Source from line radiation; radiation losses are negative sources"               unique="yes">10</int>
+<int name="collisional_equipartition" description="Collisional equipartition"                                                     unique="yes">11</int>
+<int name="cold_neutrals"           description="Source of cold neutrals"                                                         unique="yes">12</int>
+<int name="bootstrap_current"       description="Bootstrap current"                                                               unique="yes">13</int>
+<int name="pellet"                  description="Sources from injection"                                                          unique="yes">14</int>
+
+<int name="auxiliary"               description="Source from auxiliary systems, e.g. heating and current drive systems"           unique="yes">100</int>
+<int name="ic_nbi"                  description="A combination of the ic and nbi sources"                                         unique="yes">101</int>
+<int name="ic_fusion"               description="A combination of the ic and fusion sources"                                      unique="yes">102</int>
+<int name="ic_nbi_fusion"           description="A combination of the ic and fusion sources"                                      unique="yes">103</int>
+<int name="ec_lh"                   description="A combination of the ec and lh sources"                                          unique="yes">104</int>
+<int name="ec_ic"                   description="A combination of the ec and ic sources"                                          unique="yes">105</int>
+<int name="lh_ic"                   description="A combination of the lh and ic sources"                                          unique="yes">106</int>
+<int name="ec_lh_ic"                description="A combination of the ec, lh and ic sources"                                      unique="yes">107</int>
+<int name="gas_puff"                description="Gas puff"                                                                        unique="yes">108</int>
+<int name="killer_gas_puff"         description="Killer gas puff"                                                                 unique="yes">109</int>
+
+<int name="radiation"               description="Total radiation source; radiation losses are negative sources"                         unique="yes">200</int>
+<int name="cyclotron_radiation"     description="Source from cyclotron radiation; radiation losses are negative sources"          unique="yes">201</int>
+<int name="cyclotron_synchrotron_radiation" description="Source from combined cyclotron and synchrotron radiation; radiation losses are negative sources"  unique="yes">202</int>
+<int name="impurity_radiation"      description="Line radiation and Bremsstrahlung source; radiation losses are negative sources." unique="yes">203</int>
+
+<int name="particles_to_wall"       description="Particle pumping by the wall; negative source for plasma and positive source for the wall" unique="yes">303</int>
+<int name="particles_to_pump"       description="Particle pumping by external pump; negative source for plasma and positive source for the pump" unique="yes">304</int>
+<int name="charge_exchange"        description="Source from charge exchange. Charge exchange losses are negative sources"                                   unique="yes">305</int>
+
+<int name="transport"               description="Source term related to transport processes"                                      unique="yes">400</int>
+<int name="neoclassical"            description="Source term related to neoclassical processes"                                   unique="yes">401</int>
+<int name="equipartition"           description="Equipartition due to collisions and turbulence"                                  unique="yes">402</int>
+<int name="turbulent_equipartition" description="Turbulent equipartition"                                                         unique="yes">403</int>
+
+<int name="runaways"                description="Source from run-away processes; includes both electron and ion run-away"         unique="yes">501</int>
+
+<int name="ionisation"                description="Source from ionisation processes (not accounting for charge exchange)"         unique="yes">601</int>
+<int name="recombination"          description="Source from recombination processes (not accounting for charge exchange)"   unique="yes">602</int>
+<int name="excitation"            description="Source from excitation processes"            unique="yes">603</int>
+
+<int name="database"                description="Source from database entry"                                                      unique="yes">801</int>
+<int name="gaussian"                description="Artificial source with a gaussian profile"                                       unique="yes">802</int>
+
+<int name="custom_1"      description="Custom source terms 1; content to be decided by data provided"                             unique="yes">901</int>
+<int name="custom_2"      description="Custom source terms 2; content to be decided by data provided"                             unique="yes">902</int>
+<int name="custom_3"      description="Custom source terms 3; content to be decided by data provided"                             unique="yes">903</int>
+<int name="custom_4"      description="Custom source terms 4; content to be decided by data provided"                             unique="yes">904</int>
+<int name="custom_5"      description="Custom source terms 5; content to be decided by data provided"                             unique="yes">905</int>
+<int name="custom_6"      description="Custom source terms 6; content to be decided by data provided"                             unique="yes">906</int>
+<int name="custom_7"      description="Custom source terms 7; content to be decided by data provided"                             unique="yes">907</int>
+<int name="custom_8"      description="Custom source terms 8; content to be decided by data provided"                             unique="yes">908</int>
+<int name="custom_9"      description="Custom source terms 9; content to be decided by data provided"                             unique="yes">909</int>
+
+<!-- Not sure what these sources represents?
+<int name="background"              description="Background source"                                                               unique="yes">28</int>
+<int name="impurity"                description="Impurity source"                                                                 unique="yes">29</int>
+<int name="cold_neutral_cooling"    description="Cold neutrals from the edge that enters the plasma"                              unique="yes">24</int>
+-->
+
+</constants>

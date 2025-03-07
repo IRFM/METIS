@@ -1,0 +1,790 @@
+param.gene.nbrho	: 	  nombre de points radiaux 
+param.gene.nbt 	 	: 	  nombre de points de temps 
+param.gene.nbeq		: 	  nombre d'equation dans le solveur 
+param.gene.tdeb		: 	  temps de debut du calcul 
+param.gene.tfin		: 	  temps de fin du calcul 
+param.gene.t		: 	  temps courant 
+param.gene.dt		: 	  pas de temps courant 
+param.gene.kmin		: 	  premier indice pour le calcul 
+param.gene.kmax		: 	  dernier indice pour le calcul 
+param.gene.k 	 : 	  indice courant 
+param.gene.dk 	 : 	  nombre de pas de temps calculer ou ajouter lors de la derniere boucle 
+param.gene.nbfci 	 : 	  nombre de coupleurs fci 
+param.gene.nbfce 	 : 	  nombre de coupleurs fce 
+param.gene.nbhyb 	 : 	  nombre de coupleurs hybride 
+param.gene.nbidn 	 : 	  nombre d'injecteur de neutres 
+param.gene.nbglacon 	 : 	  nombre de lignes d'injection de glacons 
+param.gene.x 	 : 	  vecteur des x /que rho = rhomax(t) * x; 
+param.gene.dx 	 : 	  pas d'espace en x 
+param.gene.nbg 	 : 	  nombre de gaz prevu intervenant dans la composition 
+param.gene.nbrhorz 	 : 	  nombre de points en rho de la grille RZ des surfaces magnetiques 
+param.gene.nbthetarz 	 : 	  nombre de points en theta de la grille RZ des surfaces magnetiques 
+param.gene.nbsepa 	 : 	  nombre de points definissant la separatrice 
+param.gene.signe.ip 	 : 	  signe du courant plasma 
+param.gene.signe.b0 	 : 	  signe du champ toroidal 
+param.gene.lambda 	 : 	  facteur lambda dans les flux de chaleur provenant du flux de particules {0,3/.2,5/2} 
+param.gene.modecoef 	 : 	  mode de calcul des coefficients des equations de transport  0 -> tous, 1 -> convectif +diagonaux 
+param.gene.self 	 : 	  mode de fonctionnement completement  auto consistant si = 1, 0 -> coefficient +neoclassique auto consistant 
+param.gene.fast 	 : 	  0 -> mode standart correct, 1-> pas de sources neoclassique, ni de coefficient neo self consistante 
+param.gene.psiequi 	 : 	  0,1,2 -> pas de coipie / recopie / recopie si difference {2} 
+param.gene.adiabatic 	 : 	  premiere evaluation des champ au temps t+dt : 0 => methode explicite, 1 => calcul adiabatic a partir de l'equilibre 
+param.gene.delta_adia 	 : 	  maximum de la variation adiabatic relative 
+param.gene.nmax 	 : 	  nombre maximum de boucles de convergence dans le solveur pour les non linearites (0 = pas de convergence) 
+param.gene.nequi_ini 	 : 	  nombre maximum de boucles de convergence pour l'equilibre initial (pas de convergence si 0) 
+param.gene.nequi 	 : 	  nombre maximum de boucles de convergence pour l'equilibre (pas de convergence si 0) 
+param.gene.dpsi_ini 	 : 	  tolerance sur le psi initiale au premier temps (condition de sortie de la boucle) 
+param.gene.djmoy 	 : 	  tolerance sur le jmoy dans le solveur (condition de sortie de la boucle) 
+param.gene.cn 	 : 	  coefficient f du solveur (implicite - explicite) 
+param.gene.amorti 	 : 	  coefficient d'amortissement de l'oscillation des coefficients de transports dans la boucle de convergence (0.5) 
+param.gene.mjmoy 	 : 	  coefficient d'amortissement des oscillations dans la boucle de convergence de l'equilibre sur jmoy {0.5/0.7} 
+param.gene.verbose 	 : 	  pour afficher les messages d'etats -> 1 
+param.gene.evx_inter 	 : 	  1 => intercalle les evenements MHD dans la base temps en time-splitting quand ils se produisent 
+param.gene.critere.ne 	 : 	  critere de convergence (erreur relative) pour ne 
+param.gene.critere.pe 	 : 	  critere de convergence (erreur relative) pour Pe 
+param.gene.critere.pion 	 : 	  critere de convergence (erreur relative) pour Pi 
+param.gene.critere.psi 	 : 	  critere de convergence (erreur relative) pour la fonction de flux 
+param.gene.critere.fluce 	 : 	  critere de convergence (erreur relative) pour fluce 
+param.gene.critere.flucion 	 : 	  critere de convergence (erreur relative) pour flucion 
+param.gene.critere.rot 	 : 	  critere de convergence (erreur relative) pour la rotation plasma 
+param.gene.file 	 : 	  nom du fichier de sauvegarde   (avec chemin) 
+param.gene.origine 	 : 	  nom du fichier d'origine des donnees (avec chemin) 
+param.gene.nbsauve 	 : 	  nombre de pas de temps entre 2 sauvegarde (0 = sauve a la fin) 
+param.gene.rapsauve 	 : 	  nom du repertoire de sauvegarde rapide + racine generique du nom des fichiers, la sauvegarde rapide est activee si non vide 
+param.gene.version_zineb 	 : 	  version de zineb 
+param.gene.date_zineb 	 : 	  date d'installation de la version 
+param.compo.z 	 : 	  charge des ions 
+param.compo.a 	 : 	  masse des atomes 
+param.fonction.impur 	 : 	  fonction de calcul de la composition du plasma + prad  (zeff, ae, nj ...) et transport des impuretes {zinebcompo = Calcul simple de alphae, du rayonnement et de la densite d'impurtes (+zeff)} 
+param.fonction.equi 	 : 	  fonction de calcul de l'equilibre magnetique + limite analytique de stabilite {zequi_helena = Calcul de l'equilibre} 
+param.fonction.neo 	 : 	  fonction de calcul des grandeurs neoclassiques {zneo = Calcul des grandeurs neoclassiques avec Nclass} 
+param.fonction.mhd.dds 	 : 	  fonction de calcul des dents de scie (crash) {zddscrash = Calcul du crash des DDS} 
+param.fonction.mhd.elm 	 : 	  fonction de calcul des elm (crash) 
+param.fonction.mhd.limite 	 : 	  fonction de calcul des limites de stabilite simple (seuil DDS et ELM) {zlimmhd = limite de stabilite des DDS et ELM} 
+param.fonction.fci 	 : 	  fonction de calcul des sources du a fci {zfcisimple = Calcul simple du depot de puisance FCI} 
+param.fonction.fce 	 : 	  fonction de calcul des sources du a fce {zfcesimple = Calcul simple du depot de puisance fce} 
+param.fonction.hyb 	 : 	  fonction de calcul des sources du a hybride {zhybsimple = Calcul simple du depot de puisance Hybride} 
+param.fonction.idn 	 : 	  fonction de calcul des sources du a idn {zsimbad = calcul des sources dues a l'IDN avec le code Simbad} 
+param.fonction.n0 	 : 	  fonction de calcul de la source de neutre au bord {zneutres = Calcul de l'equilibre} 
+param.fonction.bord 	 : 	  fonction de calcul du bord ou de l'etat du mur et de l'injection de gaz {zmurgaz = Calcul simple du bord et de l'etat du mur} 
+param.fonction.glacon 	 : 	  fonction de calcul du depot des glacons {zglaquelc = Calcul du depot de matiere de l'injection de glacon utilisant GLAQUELC (Parks/Fois)} 
+param.fonction.fus 	 : 	  fonction de calcul de la puissance de fusion + alpha {zfusion = Calcul simple des produits de fuison et du chauffage du a alpha} 
+param.fonction.coefa 	 : 	  fonction de calcul des coefficients des equations de transport "a" {zjetto = Modele de coefficients de transport Bohm/Gyro Bohm } 
+param.fonction.coefb 	 : 	  fonction de calcul des coefficients des equations de transport "b" 
+param.fonction.coefc 	 : 	  fonction de calcul des coefficients des equations de transport "c" 
+param.fonction.coefd 	 : 	  fonction de calcul des coefficients des equations de transport "d" 
+param.fonction.coefe 	 : 	  fonction de calcul des coefficients des equations de transport "e" 
+param.fonction.coeff 	 : 	  fonction de calcul des coefficients des equations de transport "f" 
+param.fonction.plot 	 : 	  fonction de plot durant les calculs {zplot = Plot interratif pour Cronos-Zineb} 
+param.fonction.asser 	 : 	  fonction de gestion des asservissement 
+param.memoire.impur 	 : 	  memoire de calcul de la composition du plasma (zeff, ae, nj ...) 
+param.memoire.bord 	 : 	  memoire de calcul de la structure bord 
+param.memoire.fci 	 : 	  memoire de calcul des sources du a fci 
+param.memoire.fce 	 : 	  memoire de calcul des sources du a fce 
+param.memoire.hyb 	 : 	  memoire de calcul des sources du a hybride 
+param.memoire.idn 	 : 	  memoire de calcul des sources du a idn 
+param.memoire.n0 	 : 	  memoire de calcul de la source de neutre au bord 
+param.memoire.fus 	 : 	  memoire de calcul de la puissance de fusion + alpha 
+param.batch.impur 	 : 	  mode batch pour le calcul de la composition du plasma (zeff, ae, nj ...) 
+param.batch.fci 	 : 	  mode batch pour le calcul des sources du a fci 
+param.batch.fce 	 : 	  mode batch pour le calcul des sources du a fce 
+param.batch.hyb 	 : 	  mode batch pour le calcul des sources du a hybride 
+param.batch.idn 	 : 	  mode batch pour le calcul des sources du a idn 
+param.batch.n0 	 : 	  mode batch pour le calcul de la source de neutre au bord 
+param.batch.fus 	 : 	  mode batch pour le calcul de la puissance de fusion + alpha 
+param.cons.impur.zeff 	 : 	 0-> zeff donne | 1-> zeff calcule (Ne^exposant) 
+param.cons.impur.exposant 	 : 	 exposant de la loi zeff = a * Ne ^exposant 
+param.cons.impur.cmin1 	 : 	 rapport de la densite du 1er minoriatire sur la densite de l'espece principale 
+param.cons.impur.cmin2 	 : 	 rapport de la densite du 2ieme minoriatire sur la densite de l'espece principale 
+param.cons.impur.rimp 	 : 	 rapport de la densite de la 2ieme impurete sur la densite de la premiere impurete 
+param.cons.impur.reflex 	 : 	 coefficient de reflexion du rayonnement cyclo par les parois 
+param.cons.equi 	 : 	  parametres de l'equilibre magnetique 
+param.cons.neo.bootmodel 	 : 	 model pour le bootstrap (defaut = 0) 0  -> Houlberg; 1  -> Hirshmann; 2  -> Kessel 
+param.cons.neo.nbeq 	 : 	  nombre de moments pour le calcul de l'equilibre neoclassique (defaut = 3) {2,3} 
+param.cons.neo.banane 	 : 	 largeur de banane finie au centre  -> 1 (defaut = 1 ) {0,1} 
+param.cons.neo.noncreux 	 : 	 profil non creux  au centre  -> 1 (defaut = 0 ) 
+param.cons.mhd.dds.dds_coef 	 : 	 coefficient de stabilite des dds 
+param.cons.mhd.elm 	 : 	  parametres des elm 
+param.cons.mhd.limite.dds_coef 	 : 	 coefficient de stabilite des dds 
+param.cons.fci.mode 	 : 	 mode FCI: FWEH, HMIN ou FWCD 
+param.cons.fci.centre 	 : 	 centre de la gaussienne 
+param.cons.fci.largeur 	 : 	 largeur de la gaussienne 
+param.cons.fci.fraction 	 : 	 fraction de la puissance sur les ions 
+param.cons.fci.frequence 	 : 	 frequence de l'onde 
+param.cons.fci.efficacite 	 : 	 facteur multiplicatif de l'efficacite de courant 
+param.cons.fce.mode 	 : 	 mode de fonctionnement ECE ou ECECD 
+param.cons.fce.centre 	 : 	 centre de la gaussienne 
+param.cons.fce.largeur 	 : 	 largeur de la gaussienne 
+param.cons.fce.anglepoloidal 	 : 	 angle poloidal de visee du mirroir 
+param.cons.fce.mu 	 : 	 rapport de l'impulsion // sur l'impulsion totale 
+param.cons.hyb.centre 	 : 	 centre de la gaussienne 
+param.cons.hyb.largeur 	 : 	 largeur de la gaussienne 
+param.cons.hyb.fraction 	 : 	 fraction sur les ions 
+param.cons.hyb.freq_ghz 	 : 	 frequence en GHz 
+param.cons.hyb.efficacite 	 : 	 efficacite de generation de courant 
+param.cons.hyb.calcul_centre 	 : 	 centre calcule (1) ou donne (0) 
+param.cons.hyb.npar 	 : 	 n //  
+param.cons.hyb.xdur 	 : 	 si 1 utilise prof.xdur a la place de la gaussienne pour la forme du depot 
+param.cons.hyb.gamstar 	 : 	 absorption non resonnante par passage normalisee a <Dn//>^2 
+param.cons.idn.align 	 : 	 position des injecteurs pour Jet: 0 -> standard, 1 -> upshift 
+param.cons.idn.energie 	 : 	 energie du faiceau en keV 
+param.cons.idn.fraction1 	 : 	 fraction a l'energie entiere 
+param.cons.idn.fraction2 	 : 	 fraction a l'energie 1/2 
+param.cons.idn.fraction3 	 : 	 fraction a l'energie 1/3 
+param.cons.idn.charge 	 : 	 nombre de charge de l'espece injecte 
+param.cons.idn.masse 	 : 	 masee de l'espece injecte (ua) 
+param.cons.idn.type 	 : 	 type d'interraction faisceau plasma : 1 -> D-D 
+param.cons.idn.machine 	 : 	 nom de la machine (utiliser pour chosir la description geometrique des injecteurs) 
+param.cons.n0 	 : 	  parametres de la source de neutre au bord 
+param.cons.bord.frac_conv 	 : 	 fraction de la puissance convecteee perdue qui tombe sur le mur/limiteur mouille (su) 
+param.cons.bord.frac_rad 	 : 	 fraction de la puissance rayonnee perdue qui tombe sur le mur/limiteur  (su) 
+param.cons.bord.eff 	 : 	 efficacite de pompage (su) 
+param.cons.bord.eff_he 	 : 	 efficacite de pompage helium (su) 
+param.cons.bord.eff_mur 	 : 	 efficacite de pompage des impuretees de meme espece que le mur (su) 
+param.cons.bord.eff_imp 	 : 	 efficacite de pompage des impuretees de meme espece que les impuretees contenues dans le mur (su) 
+param.cons.bord.zmur 	 : 	 charge des atomes du mur (su) 
+param.cons.bord.amur 	 : 	 masse des atomes du mur (su) 
+param.cons.bord.zimp 	 : 	 charge des impuretees contenues dans le mur (su) 
+param.cons.bord.aimp 	 : 	 masse des impuretees contenues dans le mur (su) 
+param.cons.bord.sput 	 : 	 fraction du flux incident de particules entrainant l'emmision d'un atome du mur vers le plasma  (su) 
+param.cons.bord.imp 	 : 	 fraction du flux incident de particules entrainant l'emmision d'un atome d'impuretee vers le plasma (su)  
+param.cons.bord.lambda 	 : 	 longueur d'attenuation de la densite au bord (m) = sqrt(Dortho * Lc * Cs) 
+param.cons.bord.kappa 	 : 	 capacite thermique du mur (J*K^-1) 
+param.cons.bord.tref 	 : 	 temperature refrigerant (K) 
+param.cons.bord.cond 	 : 	 conductivite thermique du mur (J*K^-1*s^-1) 
+param.cons.bord.nb0 	 : 	 nombre maximale d'atome implantable dans le mur (en equivalent electrons) 
+param.cons.bord.ei 	 : 	 energie de desabsorbtion (en K) 
+param.cons.bord.tebord 	 : 	 temperature electronique au bord (eV) 
+param.cons.bord.tibord 	 : 	 temperature ionique au bord (eV) 
+param.cons.galcon 	 : 	  parametres du depot des glacons 
+param.cons.fus 	 : 	  parametres de la puissance de fusion + alpha 
+param.cons.fast 	 : 	  parametres des rapides 
+param.cons.coefa.inverse 	 : 	 effet scisaillement inverse (oui -> 1, non -> 0) [1] 
+param.cons.coefa.modeh 	 : 	 effet mode H (oui -> 1, non -> 0) [0] 
+param.cons.coefa.seuil 	 : 	 seuil pour le scisaillement inverse [0.05] 
+param.cons.coefa.facteur 	 : 	 facteur de l'effet du scisaillement inverse [1] 
+param.cons.coefa.aeb 	 : 	 coefficient du terme bohm de Xie [8e-5] 
+param.cons.coefa.aegb 	 : 	 coefficient du terme gyro bohm de Xie [7e-2] 
+param.cons.coefa.aib 	 : 	 coefficient du terme bohm de Xii [1.6e-4] 
+param.cons.coefa.aigb 	 : 	 coefficient du terme gyro bohm de Xii [1.75e-2] 
+param.cons.coefa.d 	 : 	 coefficient multiplicateur de D [1] 
+param.cons.coefa.ware 	 : 	 coefficient du terme de convection Ware [1] 
+param.cons.coefa.convection 	 : 	 vitesse de convection de la matiere  pour Ne=1e20 m^-3 (modele en 1/Ne^2) [0] 
+param.cons.coefb 	 : 	  parametre de la fonction  de calcul des coefficients de transport "b" 
+param.cons.coefc 	 : 	  parametre de la fonction  de calcul des coefficients de transport "c" 
+param.cons.coefd 	 : 	  parametre de la fonction  de calcul des coefficients de transport "d" 
+param.cons.coefe 	 : 	  parametre de la fonction  de calcul des coefficients de transport "e" 
+param.cons.coeff 	 : 	  parametre de la fonction  de calcul des coefficients de transport "f" 
+param.cons.neomulti.ee 	 : 	  * diffusivite thermique electronique neo 
+param.cons.neomulti.ve 	 : 	  * vitesse de conevction thermique electronique neo 
+param.cons.neomulti.ii 	 : 	  * diffusivite thermique ionique neo 
+param.cons.neomulti.vi 	 : 	  * vitesse de conevction thermique ionique neo 
+param.cons.neomulti.nn 	 : 	  * diffusivite electronique neo 
+param.cons.neomulti.vn 	 : 	  * vitesse de conevction electronique neo 
+param.cons.plot 	 : 	  parametre de la fonction de plot durant les calculs 
+param.cons.asser 	 : 	  parametre de la fonction de gestion des asservissemnt 
+param.cons.glacon.ablat 	 : 	 modele d'ablation 1 = NGS-TS 
+param.cons.glacon.deriv 	 : 	 calcul de la derive si = 1 
+param.cons.glacon.mix 	 : 	 melange neutre/ion [0..1] 
+param.cons.glacon.nu 	 : 	 correction de la dependance du modele de derive en Te (0) 
+param.cons.glacon.rinj 	 : 	 rayon du point initial de la trajectoire d'injection (m) 
+param.cons.glacon.zinj 	 : 	 azimut du point initial de la trajectoire d'injection (m) 
+param.cons.glacon.angleinj 	 : 	 angle de la trajectoire d'injection en degres (sens trigo, 0 = HFS ; 180 = LFS) 
+param.cons.glacon.phiglac 	 : 	 diametre du glacon (m) 
+param.cons.glacon.vitesse 	 : 	 vitesse d'injection (m/s) 
+param.cons.glacon.amass 	 : 	 nombre de masse de l'isotope de l'hydrogene utilise pour le glacon 
+param.cons.glacon.prob 	 : 	 probabilite d'injection [0..1] 
+param.phys.c 	 : 	  vitesse de la lumiere dans le vide (m/s)  (definition) 
+param.phys.h 	 : 	  constante de Planck (J*s) (+/- 0.0000052e-34) 
+param.phys.e 	 : 	  charge de l'electron (C)   (+/- 0.000000063e-19) 
+param.phys.mu0 	 : 	  permeabilite du vide (H/m) (definition) 
+param.phys.epsi0 	 : 	  permitivite du vide (F/m)  (definition) 
+param.phys.g 	 : 	  constante de la gravitation (N*m^2/kg^2) (+/- 0.010e-11) 
+param.phys.k 	 : 	  constante de Boltzmann (J/K)  (+/- 0.0000024e-23) 
+param.phys.alpha 	 : 	  constante de structure fine (+/- 0.000000027e-3 ) 
+param.phys.me 	 : 	  masse au repos de l'electron (kg) (+/- 0.00000079e-31) 
+param.phys.mp 	 : 	  masse au repos du proton (kg) 
+param.phys.ua 	 : 	  1 unite atomique (kg) (+/- 1.00000013e-27) 
+param.phys.avo 	 : 	  nombre d'avogadro (mol^-1) (+/- 0.00000047e23) 
+param.plot.onoff 	 : 	  si le plot est active =1 
+param.plot.intervalle 	 : 	  plot un temps sur n, si = 0 utilise mode.plot 
+param.plot.run 	 : 	  1 si le programme tourne, 0 en pause 
+param.plot.fin 	 : 	  1 si le boutton stop a ete active 
+param.plot.pause 	 : 	  temps de pause entre 2 calcul en s (si =0 utilise drawnow) 
+param.plot.figure1 	 : 	  handle de la figure 1 (controle) 
+param.plot.figure2 	 : 	  handle de la figure 2 (temps) 
+param.plot.figure3 	 : 	  handle de la figure 3 (profil) 
+param.plot.h.run 	 : 	  handle du bouton stop 
+param.plot.h.pause 	 : 	  handle du bouton pause 
+param.plot.h.keyboard 	 : 	  handle du bouton keyboard 
+param.plot.h.step 	 : 	  handle du bouton d'execution pas a pas en mode pause 
+param.plot.h.fin 	 : 	  handle du bouton fin 
+param.plot.h.info 	 : 	  handle de la zone d'information 
+param.plot.order 	 : 	  palette de couleurs par defaut 
+param.split.onoff 	 : 	  autorise le decoupage si = 1 
+param.split.mode 	 : 	  mode de decoupe: 1 -> automatique sur critere de convergence, 0 -> impose 
+param.split.dtmax 	 : 	  intervalle de temps maximun autorise (s) 
+param.split.dtmin 	 : 	  intervalle de temps minimum autorise (s) 
+param.split.nb 	 : 	  nombre de point dans l'intervalle si impose 
+param.split.equi 	 : 	  temps entre deux calcul de l'equilibre (s) 
+param.from.machine 	 : 	  nom de la machine qui produit les donnees 
+param.from.shot.num 	 : 	  numero du choc 
+param.from.shot.date 	 : 	  date + heure du choc 
+param.from.shot.info 	 : 	  informations sur le choc 
+param.from.creation.date 	 : 	  date + heure de creation du fichier de donnees zineb 
+param.from.creation.user 	 : 	  nom du user qui a cree le fichier 
+param.from.creation.info 	 : 	  informations diverses sur la creation du fichier (automatique) 
+param.from.creation.com 	 : 	  commentaire ecrit par l'utilisateur lors de la creation 
+param.from.source.desc 	 : 	  description des sources de donneees 
+param.from.sample.signal 	 : 	  parametre d'echantillonage  pour un signal simple =s(temps,1) 
+param.from.sample.groupe 	 : 	  parametre d'echantillonage  pour un groupe =g(temps,espace) 
+param.asser.data 	 : 	 param.asser.delais 	 : 	 param.nombre.fci 	 : 	  nombre de coupleurs fci 
+param.nombre.fce 	 : 	  nombre de coupleurs fce 
+param.nombre.hyb 	 : 	  nombre de coupleurs hybride 
+param.nombre.idn 	 : 	  nombre d'injecteur de neutres 
+param.nombre.glacon 	 : 	  nombre de lignes d'injection de glacons 
+param.intervalle.temps 	 : 	  intervalle de la base de temps 
+param.intervalle.calcul 	 : 	  intervalle de calcul 
+param.edit.currentfile 	 : 	  nom du fichier en cours d'edition (doit etre positionnee au chargement) 
+data.geo.mode 	 : 	  mode de description de la derniere surface magnetique : 0 -> symetrique, 1 -> asymetrique, 2 -> RZ ** 
+data.geo.r0 	 : 	  grand rayon (m)  ** 
+data.geo.z0 	 : 	  shift en z0 de la separatrice (m)  ** 
+data.geo.a 	 : 	  petit rayon (m)  ** 
+data.geo.e1 	 : 	  ellipticite de la derniere surface magnetique  ** 
+data.geo.trh1 	 : 	  triangularite haute de la derniere surface magnetique  ** 
+data.geo.trb1 	 : 	  triangularite basse de la derniere surface magnetique ** 
+data.geo.ind1 	 : 	  indentation de la derniere surface magentique ** 
+data.geo.b0 	 : 	  valeur du champ toroidal sur l'axe en l'absence de plasma (T) ** 
+data.geo.R 	 : 	  R de la derniere surface magentique (m) 
+data.geo.Z 	 : 	  Z de la derniere surface magentique (non recentree) (m) 
+data.equi.rhomax 	 : 	  valeur maximale de rho (m) 
+data.equi.drhomaxdt 	 : 	  derive temporelle de rhomax (m*s^-1) 
+data.equi.phi 	 : 	  profil du flux toroidal; 
+data.equi.phid1 	 : 	  profil du flux toroidal; 
+data.equi.phid2 	 : 	  profil du flux toroidal; 
+data.equi.dphidt 	 : 	  profil du flux toroidal; 
+data.equi.psi 	 : 	  profil du flux poloidal ( calcule par l'equilibre pour controle); 
+data.equi.rhog 	 : 	  profil de rho geometrique (r/a) en fonction de rho 
+data.equi.d 	 : 	  profil de decentrement de shafranov (m) 
+data.equi.e 	 : 	  profil d'ellipticite 
+data.equi.a 	 : 	  profil de petit rayon (m) 
+data.equi.trh 	 : 	  profil de triangularite Z>=0 
+data.equi.trl 	 : 	  profil de triangularite Z<0 
+data.equi.ind 	 : 	  profil d'indentation 
+data.equi.grho2 	 : 	  <|gradient(rho)|^2> 
+data.equi.grho 	 : 	  <|gradient(rho)|> 
+data.equi.vpr 	 : 	  V' chez nous, <RJ>/4/pi^2 chez Houlberg 
+data.equi.spr 	 : 	  S' 
+data.equi.dvprdt 	 : 	  derivee temporelle de vpr 
+data.equi.dsprdt 	 : 	  derivee temporelle de sp 
+data.equi.F 	 : 	  fonction diamagnetique 
+data.equi.grho2r2 	 : 	  <|gradient(rho)|^2/R^2> 
+data.equi.grhor 	 : 	  <|gradient(rho)|/R> 
+data.equi.ri 	 : 	  <1/R> 
+data.equi.b2 	 : 	  <B^2> 
+data.equi.b2i 	 : 	  <1/B^2> 
+data.equi.psi0 	 : 	  fonction flux au centre 
+data.equi.q 	 : 	  q calcule par l'equilbre (pour controle) 
+data.equi.rmoy 	 : 	  <R> = <sqrt(g)> 
+data.equi.ftrap 	 : 	  fraction de piegées 
+data.equi.jmoy 	 : 	  densite de courant recalcule a partir de l'equilibre 
+data.equi.ptot 	 : 	  profil de pression total recalcule a partir de l'equilibre 
+data.equi.ip 	 : 	  courant plasma vu par l'quilibre (A) 
+data.equi.li 	 : 	  self interne 
+data.equi.r2 	 : 	  <R^2> (m^2) 
+data.equi.r2i 	 : 	  <1/R2> (m^-2) 
+data.equi.r2tau2 	 : 	  <R^2/tau^2> (m^-6) 
+data.equi.grho2b2 	 : 	  < |grad(rho)|^2/B^2 > (m^2.T^-2) 
+data.equi.r3tau3 	 : 	  <R^3/tau^3> (m^-3) 
+data.equi.r3tau 	 : 	  <R^3/tau> (m) 
+data.equi.bnorme 	 : 	  normalisation utilisee dans l'equilibre 
+data.equi.conv 	 : 	  nombre de boucle pour la convergence sur Jmoy ( <0 pas de convergence sur Jmoy) 
+data.equi.oscil 	 : 	  1 si la convergence est sortie sur une oscillation 
+data.equi.fail 	 : 	  0 si la fonction de calcul de l'equilibre a  converge 
+data.equi.R 	 : 	  R des surfaces magentiques (m) 
+data.equi.Z 	 : 	  Z des surfaces magentiques (m) 
+data.equi.BR 	 : 	  Br des surfaces magentiques (T) 
+data.equi.BZ 	 : 	  Bz des surfaces magentiques (T) 
+data.equi.BPHI 	 : 	  Bphi des surfaces magentiques (T) 
+data.equi.rhoRZ 	 : 	  rho correspondant aux surfaces magentiques (m) 
+data.mhd 	 : 	 
+data.cons.ip 	 : 	  courant plasma (A) * {pour le premier temps sert a l'initialisation de l'equilibre} 
+data.cons.vloop 	 : 	  tension par tour a la surface du plasma(V) 
+data.cons.flux 	 : 	  flux au bord (W) 
+data.cons.ne1 	 : 	  densite au bord (m^-3) 
+data.cons.ge1 	 : 	  flux de particule au bord au bord (m^-2*s^-1) 
+data.cons.te1 	 : 	  temperature electronique au bord (eV) 
+data.cons.qe1 	 : 	  flux de chaleur electronique au bord (W*m^-2*s^-1) 
+data.cons.pe1 	 : 	  pression electronique au bord (Pa) 
+data.cons.ti1 	 : 	  temperature ionique au bord (eV) 
+data.cons.qi1 	 : 	  flux de chaleur ionique au bord (W*m^-2*s^-1) 
+data.cons.pion1 	 : 	  pression ionique au bord (Pa) 
+data.cons.ffe1 	 : 	  flux de "turbulence" electronique au bord 
+data.cons.fe1 	 : 	  amplitude de turbulence electronique au bord 
+data.cons.ffi1 	 : 	  flux de "turbulence" ionique au bord 
+data.cons.fi1 	 : 	  amplitude de turbulence ionique au bord 
+data.cons.frot1 	 : 	  "flux" de rotation plasma au bord 
+data.cons.rot1 	 : 	  vitesse de rotation  plasma au bord 
+data.cons.c 	 : 	  injection de gaz au bord en atome/s 
+data.cons.pomp 	 : 	  consigne du pompage (atome /s) 
+data.cons.fci 	 : 	  puissance fci 
+data.cons.fce 	 : 	  puissance fce 
+data.cons.hyb 	 : 	  puissance hyb 
+data.cons.idn 	 : 	  puissance idn 
+data.cons.glacon 	 : 	  consigne d'injection de glacons 
+data.cons.zeffm 	 : 	  valeur consigne pour le zeff moyen quand il est donne a la place du profil de zeff 
+data.cons.asser.nl0 	 : 	  densite linieique centrale 
+data.cons.asser.ne0 	 : 	  densite centrale 
+data.cons.asser.ne1 	 : 	  densite au bord 
+data.cons.asser.nemoy 	 : 	  densite moyenne 
+data.cons.asser.te0 	 : 	  temperature electronique centrale 
+data.cons.asser.te1 	 : 	  temperature electronique au bord 
+data.cons.asser.li 	 : 	  self interne 
+data.cons.asser.q0 	 : 	  consigne q0 
+data.cons.asser.c 	 : 	  consigne d'injection de gaz (a precisier) 
+data.gene.temps 	 : 	  vecteur temps ** 
+data.gene.conv 	 : 	  nombre de boucles pour la convergence du solveur (<0 si il n'y a pas convergence) 
+data.gene.nbsplit 	 : 	  nombre de decoupe dans un intervalle de temps pour la convergence 
+data.gene.surface 	 : 	  surface d'une section du plasma 
+data.gene.volume 	 : 	  volume du plasma 
+data.gene.zeffm 	 : 	  zeff moyen lineique 
+data.gene.zeffne 	 : 	  zeff moyen pondere par ne 
+data.gene.netot 	 : 	  nombre d'electrons dans le plasma 
+data.gene.nemoy 	 : 	  densite electronique moyenne (volumique) 
+data.gene.dnetotdt 	 : 	  derivee temporelle du nombre d'electrons dans le plasma 
+data.gene.piqne 	 : 	  piquage de la densite electronique ne0/nemoy 
+data.gene.nbar 	 : 	  nl0/2/rhomax 
+data.gene.temoy 	 : 	  temperature electronique moyenne (volumique) 
+data.gene.piqte 	 : 	  piquage de la temperature electronique te0/temoy 
+data.gene.timoy 	 : 	  temperature ionique moyenne (volumique) 
+data.gene.piqti 	 : 	  piquage de la temperature ionique te0/temoy 
+data.gene.we 	 : 	  energie des electrons tehrmiques 
+data.gene.wion 	 : 	  energie des ions tehrmiques 
+data.gene.wdia 	 : 	  energie diamagnetique (totale + supra) 
+data.gene.wth 	 : 	  energie totale thermique du plasma 
+data.gene.wbp 	 : 	  energie poloidal du plama 
+data.gene.wmag 	 : 	  energie magnetique du plama 
+data.gene.dwedt 	 : 	  derivee temporelle de l'energie des electrons tehrmiques 
+data.gene.dwiondt 	 : 	  derivee temporelle de l'energie des ions tehrmiques 
+data.gene.dwdiadt 	 : 	  derivee temporelle de l'energie diamagnetique (totale + supra) 
+data.gene.dwthdt 	 : 	  derivee temporelle de l'energie totale thermique du plasma 
+data.gene.dwbpdt 	 : 	  derivee temporelle de l'energie poloidal du plama 
+data.gene.dwmagdt 	 : 	  derivee temporelle de l'energie magnetique du plama 
+data.gene.pel 	 : 	  puissance totale deposee sur les eletrons 
+data.gene.pion 	 : 	  puissance totale deposee sur les ions 
+data.gene.padde 	 : 	  puissance totale deposee sur les eletrons (par les chauffages) 
+data.gene.paddion 	 : 	  puissance totale deposee sur les ions  (par les chauffages) 
+data.gene.paddtot 	 : 	  puissance de chauffage totale (chauffage +alpha +ohm) 
+data.gene.paddfci 	 : 	  puissance du chauffage fci (thermique) 
+data.gene.paddhyb 	 : 	  puissance de chauffage hybride (thermique) 
+data.gene.paddfce 	 : 	  puissance de chauffage fce (thermique) 
+data.gene.paddidn 	 : 	  puissance de chauffage IDN (thermique) 
+data.gene.paddohm 	 : 	  puissance de chauffage ohmique 
+data.gene.paddfus 	 : 	  puissance de chauffage de fusion 
+data.gene.pbrem 	 : 	  puissance perdue a cause du rayonnement de freinage 
+data.gene.prad 	 : 	  puissance perdue par rayonnement (sans brem. et sans cyclo.) 
+data.gene.pcyclo 	 : 	  puissance perdue a cause du rayonnement cyclo. 
+data.gene.pn0 	 : 	  puissance perdue par echange de charge avec les neutres froid 
+data.gene.nadd 	 : 	  nombre d'electrons injectés dans le plasma 
+data.gene.ploss 	 : 	  puissance perdue par le plasma (corrige de Pbrem, Pcyclo et dwdia/dt) 
+data.gene.qei 	 : 	  puissance echangee entre les electrons et le ions du aux collisions (equipartition) 
+data.gene.qneo 	 : 	  puissance echangee entre les electrons et les ions due au effets neoclassique. 
+data.gene.sne 	 : 	  source totale d'electron 
+data.gene.sne_bord 	 : 	  source totale d'electron du au neutre de bord 
+data.gene.sne_idn 	 : 	  source totale d'electron du a l'injection de neutre 
+data.gene.snions 	 : 	  source totale par espece 
+data.gene.taue 	 : 	  temps de vie de l'energie eletronique 
+data.gene.tauion 	 : 	  temps de vie de l'energie des ions 
+data.gene.taune 	 : 	  temps de vie de la martiere 
+data.gene.tau 	 : 	  temps de confinement carateristique (total) 
+data.gene.tauth 	 : 	  temps de confinement carateristique thermique 
+data.gene.tauj 	 : 	  temps de diffusion du courant 
+data.gene.tauei 	 : 	  temps d'equipartition 
+data.gene.betap 	 : 	  beta poloidal 
+data.gene.beta 	 : 	  beta total 
+data.gene.betastar 	 : 	  beta *  = liee a la puissance de fusion 
+data.gene.betadia 	 : 	  beta shafravof (diamagnetique) 
+data.gene.ip 	 : 	  courant plasma formule analityque (A) 
+data.gene.ipepar 	 : 	  courant plasma a partir E/eta +Jni (A) 
+data.gene.ipohm 	 : 	  courant plasma partie ohmique E/eta (A) 
+data.gene.ipjmoy 	 : 	  courant plasma a partir de jmoy (A) 
+data.gene.icd 	 : 	  courant genere par les chauffages (A) 
+data.gene.iboot 	 : 	  courant de bootstrap (A) 
+data.gene.ini 	 : 	  courant non inductif (A) 
+data.gene.li 	 : 	  self interne (H) {formule avec bpol} 
+data.gene.liip 	 : 	  self interne (H) {formule avec bpol et ip} 
+data.gene.licr 	 : 	  self interne (H){formule avec q} 
+data.gene.vloop 	 : 	  tension par tour sur une boucle fixe  (V) 
+data.gene.vsurf 	 : 	  tension par tour  a la surface du plasma (V) 
+data.gene.vres 	 : 	  tension par tour moyenne resitive U = Pohm/Ip (V) { c'est le vloop de la base) 
+data.mode.impur 	 : 	  mode de calcul de la composition du plasma (zeff, ae, nj ...) 
+data.mode.psi 	 : 	  mode de calcul du flux poloidal (courant) 
+data.mode.nel 	 : 	  mode de calcul de la densite electronique 
+data.mode.pe 	 : 	  mode de calcul de la pression electronique 
+data.mode.pion 	 : 	  mode de calcul de la pression ionique 
+data.mode.equi 	 : 	  mode de calcul de l'equilibre magnetique 
+data.mode.neo 	 : 	  mode de calcul des grandeurs neoclassique 
+data.mode.fluce 	 : 	  mode de calcul de l'amplitude de la turbulence electronique 
+data.mode.flucion 	 : 	  mode de calcul de l'amplitude de la turbulence ionique 
+data.mode.rot 	 : 	  mode de calcul coef equation rotation plasma couplant rot 
+data.mode.cons.psi 	 : 	  mode  Ip (0), Vloop (1) ou psi au bord (2) donne pour la diffusion du courant (psi) 
+data.mode.cons.ne 	 : 	  mode Ne_bord (0) ou flux de matiere (1) donne au bord 
+data.mode.cons.pe 	 : 	  mode Te_bord (0) ou flux de chaleur electonique (1) donne au bord 
+data.mode.cons.pion 	 : 	  mode Ti_bord (0) ou flux de chaleur ionique  (1)donne au bord 
+data.mode.cons.fluce 	 : 	  mode amplitude (0) ou flux de turbulence electronique (1) donne au bord 
+data.mode.cons.flucion 	 : 	  mode amplitude (0) ou flux de turbulence ionique  (1)donne au bord 
+data.mode.cons.rot 	 : 	  mode vitesse (0) ou flux  (1) de rotation ionique donne au bord 
+data.mode.consbord.ne 	 : 	  nebord est donne en entree (0) ou par la fonction de bord (1) 
+data.mode.consbord.te 	 : 	  tebord est donne en entree (0) ou par la fonction de bord (1) 
+data.mode.consbord.ti 	 : 	  tibord est donne en entree (0) ou par la fonction de bord (1) 
+data.mode.consbord.fluxge 	 : 	  le flux de ne est donne en entree (0) ou par la fonction de bord (1) 
+data.mode.consbord.fluxqe 	 : 	  le flux de chaleur electronique  est donne en entree (0) ou par la fonction de bord (1) 
+data.mode.consbord.fluxqi 	 : 	  le flux de chaleur ionique est donne en entree (0) ou par la fonction de bord (1) 
+data.mode.mhd.dds 	 : 	  mode de calcul des dent de scie 
+data.mode.mhd.elm 	 : 	  mode de calcul des elm 
+data.mode.mhd.limite 	 : 	  mode de calcul des limites de stabilite 
+data.mode.fci 	 : 	  mode de calcul des sources du a fci 
+data.mode.fce 	 : 	  mode de calcul des sources du a fce 
+data.mode.hyb 	 : 	  mode de calcul des sources du a hybride 
+data.mode.idn 	 : 	  mode de calcul des sources du a ind 
+data.mode.n0 	 : 	  mode de calcul de la source de neutre au bord 
+data.mode.bord 	 : 	  mode de calcul des parametres de la fonction de bord 
+data.mode.glacon 	 : 	  mode de calcul du depot des glacons 
+data.mode.fus 	 : 	  mode de calcul de la puissance de fusion + alpha 
+data.mode.ohm 	 : 	  mode de calcul de la puissance ohmique 
+data.mode.qneo 	 : 	  mode de calcul de l'equipartition du au gradient de pression ionique 
+data.mode.qei 	 : 	  mode de calcul de l'equipartition ion - electron 
+data.mode.prad 	 : 	  mode de calcul de la puissance rayonnee 
+data.mode.brem 	 : 	  mode de calcul du rayonnement de frainage 
+data.mode.cyclo 	 : 	  mode de calcul du rayonnement cyclotron 
+data.mode.ee 	 : 	  mode de calcul coef equation Pe couplant Pe (Te) 
+data.mode.ei 	 : 	  mode de calcul coef equation Pe couplant Pi 
+data.mode.en 	 : 	  mode de calcul coef equation Pe couplant ne 
+data.mode.ej 	 : 	  mode de calcul coef equation Pe couplant j 
+data.mode.ve 	 : 	  mode de calcul coef equation Pe, vitesse de convection 
+data.mode.ep 	 : 	  mode de calcul coef equation Pe couplant Pe (Pe) 
+data.mode.ie 	 : 	  mode de calcul coef equation Pi couplant Pe 
+data.mode.ii 	 : 	  mode de calcul coef equation Pi couplant Pi (Ti) 
+data.mode.in 	 : 	  mode de calcul coef equation Pi couplant ne 
+data.mode.ij 	 : 	  mode de calcul coef equation Pi couplant j 
+data.mode.vi 	 : 	  mode de calcul coef equation Pi, vitesse de convection 
+data.mode.ip 	 : 	  mode de calcul coef equation Pi couplant Pi (Pi) 
+data.mode.ne 	 : 	  mode de calcul coef equation Ne couplant Pe 
+data.mode.ni 	 : 	  mode de calcul coef equation Ne couplant Pi 
+data.mode.nn 	 : 	  mode de calcul coef equation Ne couplant ne 
+data.mode.nj 	 : 	  mode de calcul coef equation Ne couplant j 
+data.mode.vn 	 : 	  mode de calcul coef equation Ne, vitesse de convection 
+data.mode.fefe 	 : 	  mode de calcul coef equation fluce couplant fluce 
+data.mode.fev 	 : 	  mode de calcul coef equation fluce, vitesse de convection 
+data.mode.fifi 	 : 	  mode de calcul coef equation flucion couplant flucion 
+data.mode.fiv 	 : 	  mode de calcul coef equation flucion, vitesse de convection 
+data.mode.rotv 	 : 	  mode de calcul coef equation rotation plasma, vitesse de convection 
+data.mode.eta 	 : 	  mode resistivite 
+data.mode.jboot 	 : 	  mode courant de bootstrap 
+data.mode.plot 	 : 	  parametre de la fonction de plot durant les calculs 
+data.mode.zeff 	 : 	  zeff est calcule ou donne en entree 
+data.mode.ae 	 : 	  alphae est calcule ou donne en entree 
+data.mode.asser 	 : 	  mode des asservissement (0,1) = consignes donnees en entrees / 2 = calcul des consignes gerees par un asservissement 
+data.mode.premiertemps 	 : 	  1 pour le premier temps, zero ailleurs (change le fonctionnement de certains modules, initialise automatiquement) 
+data.prof.psi 	 : 	  flux poloidal (en Wb) * 
+data.prof.ne 	 : 	  profil de densite electronique (en m^-3) * 
+data.prof.pe 	 : 	  profil de pression electronique (en Pa) * 
+data.prof.pion 	 : 	  profil de pression ionique (en Pa) * 
+data.prof.ae 	 : 	  profil de facteur reliant ne a ni(eff) 
+data.prof.fluce 	 : 	  profil de l'amplitude de la turbulence electronique (su) 
+data.prof.flucion 	 : 	  profil de l'amplitude de la turbulence ionique  (su) 
+data.prof.rot 	 : 	  profil de vitesse de rotation plasma (rad/s) ou (m/s) a preciser 
+data.prof.psid1 	 : 	  derivee 1ere du flux poloidal 
+data.prof.ned1 	 : 	  derivee 1ere du profil de densite electronique 
+data.prof.ped1 	 : 	  derivee 1ere du profil de pression electronique 
+data.prof.piond1 	 : 	  derivee 1ere du profil de pression ionique 
+data.prof.aed1 	 : 	  derivee 1ere du profil de facteur reliant ne a ni(eff) 
+data.prof.fluced1 	 : 	  derivee 1ere du profil de l'amplitude de la turbulence electronique (su) 
+data.prof.fluciond1 	 : 	  derivee 1ere du profil de l'amplitude de la turbulence ionique  (su) 
+data.prof.rotd1 	 : 	  derivee 1ere du profil de vitesse de rotation plasma 
+data.prof.psid2 	 : 	  derivee 2ieme du flux poloidal 
+data.prof.ned2 	 : 	  derivee 2ieme du profil de densite electronique 
+data.prof.ped2 	 : 	  derivee 2ieme du profil de pression electronique 
+data.prof.piond2 	 : 	  derivee 2ieme du profil de pression ionique 
+data.prof.aed2 	 : 	  derivee 2ieme du profil de facteur reliant ne a ni(eff) 
+data.prof.fluced2 	 : 	  derivee 2ieme du profil de l'amplitude de la turbulence electronique (su) 
+data.prof.fluciond2 	 : 	  derivee 2ieme du profil de l'amplitude de la turbulence ionique  (su) 
+data.prof.rotd2 	 : 	  derivee 2ieme du profil de vitesse de rotation plasma 
+data.prof.te 	 : 	  profil de Te (temperature electronique en eV) 
+data.prof.ti 	 : 	  profil de Ti  (temperature ionique en eV) 
+data.prof.ni 	 : 	  profil de Ni  (densite ionique totale en m-3) 
+data.prof.gte 	 : 	  profil de gradient Te (temperature electronique en eV/m) 
+data.prof.gti 	 : 	  profil de gradient Ti  (temperature ionique en eV/m) 
+data.prof.gne 	 : 	  profil de gradient Ne  (temperature ionique en m^-2) 
+data.prof.gni 	 : 	  profil de gradient Ni  (temperature ionique en m^-2) 
+data.prof.flux.qe 	 : 	  profil de flux de chaleur electronique (W * m^-2 * s^-1) 
+data.prof.flux.qi 	 : 	  profil de flux de chaleur ionique    (W * m^-2 * s^-1) 
+data.prof.flux.ge 	 : 	  profil de flux d'electrons (m^-2 * s^-1) 
+data.prof.flux.gi 	 : 	  profil de flux d'ions (m^-2 * s^-1) 
+data.prof.flux.fluce 	 : 	  profil de flux de l'amplitude de la turbulence electronique 
+data.prof.flux.fluci 	 : 	  profil de flux de l'amplitude de la turbulence ionique 
+data.prof.flux.rot 	 : 	  profil de flux de rotation plasma 
+data.prof.flux.keeff 	 : 	  profil du coefficient effectif deduit de qe 
+data.prof.flux.kieff 	 : 	  profil du coefficient effectif deduit de qi 
+data.prof.flux.deeff 	 : 	  profil du coefficient effectif deduit de ge 
+data.prof.flux.dieff 	 : 	  profil du coefficient effectif deduit de gi 
+data.prof.flux.kean 	 : 	  profil du coefficient anormal deduit de qe 
+data.prof.flux.kian 	 : 	  profil du coefficient anormal deduit de qi 
+data.prof.flux.dean 	 : 	  profil du coefficient anormal deduit de ge 
+data.prof.dpsidt 	 : 	  derivee temporelle de psi 
+data.prof.dnedt 	 : 	  derivee temporelle de densite electronique 
+data.prof.dpedt 	 : 	  derivee temporelle de pression electronique (en Pa) 
+data.prof.dpiondt 	 : 	  derivee temporelle de pression ionique (en Pa) 
+data.prof.daedt 	 : 	  derivee temporelle de facteur reliant ne a ni(eff) 
+data.prof.dflucedt 	 : 	  derivee temporelle de l'amplitude de la turbulence electronique (su) 
+data.prof.dfluciondt 	 : 	  derivee temporelle de l'amplitude de la turbulence ionique  (su) 
+data.prof.drotdt 	 : 	  acceleration de la rotation plasma 
+data.prof.ptot 	 : 	  pression totale y compris les suprathermiques * 
+data.prof.shear 	 : 	  profil de shear magnetique   (su) 
+data.prof.lte 	 : 	  longueur de gradient de Te (Te / grad(Te)) 
+data.prof.lti 	 : 	  longueur de gradient de Ti (Ti / grad(Ti)) 
+data.prof.lne 	 : 	  longueur de gradient de Ne (ne / grad(ne)) 
+data.prof.lni 	 : 	  longueur de gradient de Ni (ni / grad(ni)) 
+data.prof.dpsidt_phi 	 : 	  derivee temporelle de psi a phi constant 
+data.prof.jphi 	 : 	  profil de densite de courant toroidale effective (A/m^2) 
+data.prof.jpol 	 : 	  profil de densite de courant poloidale effective (A/m^2) 
+data.prof.jeff 	 : 	  profil de courant effectif (A/m^2) 
+data.prof.jmoy 	 : 	  profil de courant moyen (A/m^2) * 
+data.prof.q 	 : 	  profil de q     (su) 
+data.prof.epar 	 : 	  profil de E// = <E.B>/B0   (V/m) 
+data.prof.bpolm 	 : 	  profil de champ poloidal moyen <|Bp|> (T) 
+data.prof.bpol 	 : 	  profil de champ poloidal sqrt(<Bp.Bp>)  (T) -> relie a l'energie 
+data.prof.bphi 	 : 	  profil de champ toroidal moyen <B.gradient(phi)> (T) 
+data.prof.ej 	 : 	  profil de puissance ohmique 
+data.prof.zeff 	 : 	  profil de zeff 
+data.prof.xdur 	 : 	  profil de X dur proportionnel au depot de puissance hybride 
+data.prof.mhd_cd 	 : 	  profil de modulation de l'efficacite de generation de courant du a l'activite MHD  (Jcd = mhd_cd * Jcd0) 
+data.source.fci.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.fci.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.fci.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.fci.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.fci.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.fci.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.fci.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.fci.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.fci.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.fci.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.fci.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.fci.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.fci.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.fci.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.fci.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.fce.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.fce.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.fce.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.fce.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.fce.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.fce.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.fce.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.fce.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.fce.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.fce.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.fce.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.fce.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.fce.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.fce.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.fce.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.idn.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.idn.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.idn.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.idn.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.idn.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.idn.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.idn.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.idn.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.idn.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.idn.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.idn.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.idn.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.idn.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.idn.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.idn.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.hyb.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.hyb.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.hyb.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.hyb.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.hyb.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.hyb.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.hyb.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.hyb.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.hyb.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.hyb.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.hyb.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.hyb.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.hyb.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.hyb.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.hyb.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.fus.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.fus.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.fus.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.fus.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.fus.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.fus.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.fus.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.fus.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.fus.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.fus.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.fus.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.fus.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.fus.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.fus.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.fus.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.n0.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.n0.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.n0.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.n0.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.n0.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.n0.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.n0.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.n0.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.n0.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.n0.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.n0.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.n0.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.n0.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.n0.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.n0.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.n.n0 	 : 	  sources de matiere par espece du aux neutres froids (nb atomes) 
+data.source.n.fus 	 : 	  sources de matiere par espece du aux reactions de fusions (nb atomes ?) 
+data.source.n.idn 	 : 	  sources de matiere par espece du a l'injection de neutres (nb atomes) 
+data.source.n.n0th 	 : 	  profil de densite de neutres thermique provenant du bord (en equivalent electron) 
+data.source.prad 	 : 	  puissance rayonnee 
+data.source.brem 	 : 	  source de rayonnement de frainage 
+data.source.cyclo 	 : 	  source de rayonnement cyclotron0 
+data.source.ohm 	 : 	  depot de puissance ohmique 
+data.source.qei 	 : 	  echange ion electron (equipartition) 
+data.source.qneo 	 : 	  echange ion electron (effet neoclassique) 
+data.source.jboot 	 : 	  source du au courant de bootstrap (A/m^2) 
+data.source.fluce.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.fluce.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.fluce.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.fluce.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.fluce.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.fluce.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.fluce.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.fluce.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.fluce.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.fluce.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.fluce.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.fluce.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.fluce.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.fluce.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.fluce.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.flucion.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.flucion.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.flucion.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.flucion.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.flucion.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.flucion.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.flucion.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.flucion.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.flucion.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.flucion.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.flucion.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.flucion.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.flucion.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.flucion.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.flucion.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.source.totale.el 	 : 	  densite de puissance deposee sur les electrons 
+data.source.totale.ion 	 : 	  densite de puissance depossee sur les ions 
+data.source.totale.ne 	 : 	  debit de densite de particules injectes par le chauffage  idn (en equivalent electrons) ou par le bord 
+data.source.totale.j 	 : 	  densite de courant genere par le chauffage // a B ( j = <J.B>/Bo) 
+data.source.totale.w 	 : 	  quantite de mouvement de rotation toroidal genere par le chauffage 
+data.source.totale.fluce 	 : 	  source d'amplitude de la turbulence electronique 
+data.source.totale.flucion 	 : 	  source d'amplitude de la turbulence ionique 
+data.source.totale.psupra 	 : 	  pression de suprathermique isotrope (en equilibre lors du depot) 
+data.source.totale.paniso 	 : 	  composante de la pression de suprathermique anisotrope (en equilibre lors du depot) 
+data.source.totale.neutron.dt 	 : 	  flux de neutrons de la reaction  D + T -> He4 + n 
+data.source.totale.neutron.tt 	 : 	  flux de neutrons de la reaction  T + T -> He4 + 2n 
+data.source.totale.neutron.dd 	 : 	  flux de neutrons de la reaction  D + D -> He3 + ne 
+data.source.totale.neutron.the3 	 : 	  flux de neutrons de la reaction  T + He3 -> He4 + p + n 
+data.source.totale.proton.dd 	 : 	  flux de protons de la reaction D + D -> T + p 
+data.source.totale.proton.dhe3 	 : 	  flux de protons de la reaction D + He3 -> He4 + p 
+data.coef.eta 	 : 	  resistivite du plasma (ohm * m) 
+data.coef.ee 	 : 	  coefficient equation Pe couplant Pe  (Te)  (m^-1 * s^-1) 
+data.coef.ei 	 : 	  coefficient equation Pe couplant Pi    (m^-1 * s^-1) 
+data.coef.en 	 : 	  coefficient equation Pe couplant ne    (m^-1 * s^-1) 
+data.coef.ej 	 : 	  coefficient equation Pe couplant j      (?) 
+data.coef.ve 	 : 	  coefficient equation Pe, vitesse de convection (m*s^-1) 
+data.coef.ep 	 : 	  coefficient equation Pe couplant Pe  (Pe)  (m^-1 * s^-1) 
+data.coef.ie 	 : 	  coefficient equation Pi couplant Pe  (m^-1 * s^-1) 
+data.coef.ii 	 : 	  coefficient equation Pi couplant Pi (Ti) (m^-1 * s^-1) 
+data.coef.in 	 : 	  coefficient equation Pi couplant ne  (m^-1 * s^-1) 
+data.coef.ij 	 : 	  coefficient equation Pi couplant j     (?) 
+data.coef.vi 	 : 	  coefficient equation Pi, vitesse de convection (m*s^-1) 
+data.coef.ip 	 : 	  coefficient equation Pi couplant Pi (Pi) (m^-1 * s^-1) 
+data.coef.ne 	 : 	  coefficient equation Ne couplant Pe   (m^2 * s^-1) 
+data.coef.ni 	 : 	  coefficient equation Ne couplant Pi   (m^2 * s^-1) 
+data.coef.nn 	 : 	  coefficient equation Ne couplant ne   (m^2 * s^-1) 
+data.coef.nj 	 : 	  coefficient equation Ne couplant j     (?) 
+data.coef.vn 	 : 	  coefficient equation Ne, vitesse de convection (m*s^-1) 
+data.coef.fev 	 : 	  coefficient equation fluce, vitesse de convection 
+data.coef.fefe 	 : 	  coefficient equation fluce couplant fluce 
+data.coef.fiv 	 : 	  coefficient equation flucion, vitesse de convection 
+data.coef.fifi 	 : 	  coefficient equation flucion couplant flucion 
+data.coef.rotv 	 : 	  coefficient equation rotation plasma, vitesse de convection 
+data.coef.rot 	 : 	  coefficient equation rotation plasma couplant la rotation plasma 
+data.neo.eta 	 : 	  resistivite (ohm * m) 
+data.neo.jboot 	 : 	  courant de bootstrap (A/m^2) 
+data.neo.coef.ee 	 : 	  diffusivite thermique electronique neo  (m^2/s) 
+data.neo.coef.ve 	 : 	  vitesse de conevction thermique electronique neo 
+data.neo.coef.ii 	 : 	  diffusivite thermique ionique neo 
+data.neo.coef.vi 	 : 	  vitesse de conevction thermique ionique neo 
+data.neo.coef.nn 	 : 	  diffusivite electronique neo 
+data.neo.coef.vn 	 : 	  vitesse de conevction electronique neo 
+data.neo.vtor 	 : 	  profil de vitesse de rotation toroidale (m/s) 
+data.neo.vtheta 	 : 	  profil de vitesse de rotation poloidale (m/s) 
+data.neo.mach 	 : 	  profil de nombre de mach 
+data.neo.er 	 : 	  profil de champ electrique radial 
+data.neo.flux.ne 	 : 	  profil de flux eletronique neoclassique 
+data.neo.flux.nion 	 : 	  profil de flux ionique (somme sur les especes) neoclasique 
+data.neo.flux.qe 	 : 	  profil de flux de chaleur electronique neoclassique 
+data.neo.flux.qion 	 : 	  profil de flux de chaleur ionique (somme sur les especes) neoclassique 
+data.neo.qei 	 : 	  echange ion electron (equipartition) 
+data.neo.qneo 	 : 	  echange ion electron (effet neoclassique) 
+data.impur.prad 	 : 	  puissance rayonnee 
+data.impur.brem 	 : 	  source de rayonnement de frainage 
+data.impur.cyclo 	 : 	  source de rayonnement cyclotron0 
+data.impur.zeff 	 : 	  profil de zeff 
+data.impur.impur 	 : 	  profils de densite d'impuretes 
+data.impur.ae 	 : 	  profil de facteur reliant ne a ni(eff) 
+data.bord.temp 	 : 	  temperature du mur (K) 
+data.bord.nb 	 : 	  nombre d'atome dans le mur (en equivalent electrons) 
+data.bord.pref 	 : 	  puissance perdue du a la refrigeration (W) 
+data.bord.pchauffe 	 : 	  puissance de chauffage (W) 
+data.bord.fluxpompe 	 : 	  flux total pompe (electrons * s^-1), le nombre de particules pompees en equivalent electrons 
+data.bord.fluxplasma 	 : 	  flux total en provenance du plasma (en equivalent electrons)(electrons *  s^-1) 
+data.bord.fluxgazout 	 : 	  flux, par espece, en provenance du plasma (atomes  * s^-1) 
+data.bord.fluxgaz 	 : 	  flux de gaz (fueling)  (atomes * s^-1) 
+data.bord.fluxmur_c 	 : 	  flux total de neutres chaud reflechit vers le plasma (recyclage, en equivalent electrons, electrons * s^-1) 
+data.bord.fluxmur_f 	 : 	  flux total  de neutres froid emis par le mur vers le plasma (fuelling +degazage + sputtering, en equivalent electrons, electrons * s^-1) 
+data.bord.fluxgazin_c 	 : 	  flux de neutres chaud, par espece vers le plasma (recyclage, atomes * s^-1) 
+data.bord.fluxgazin_f 	 : 	  flux de neutres froid, par espece vers le plasma (fuelling +degazage + sputtering,atomes * s^-1) 
+data.bord.nebord 	 : 	  densite electronique au bord en fonction des parametres du limiteur (m^-3) 
+data.bord.nibord 	 : 	  densites ioniques au bord en fonction des parametres du limiteur (m^-3) 
+data.bord.tebord 	 : 	  temperature electronique au bord en fonction des parametres du limiteur (eV) 
+data.bord.tibord 	 : 	  temperature ionique au bord en fonction des parametres du limiteur (eV) 
+data.bord.fluxgebord 	 : 	  flux d'electron au bord (electrons * s^-1) 
+data.bord.fluxqebord 	 : 	  flux de chaleur electronique au bord (W) 
+data.bord.fluxqibord 	 : 	  flux de chaleur ionique au bord (W) 
+data.evx.dds 	 : 	  declenchement d'une dent de scie0 
+data.evx.elm 	 : 	  declenchement d'un elm 
+data.exp.ne0 	 : 	  densite electronique au centre (m^-3) 
+data.exp.nea 	 : 	  densite electronique au bord (m^-3) 
+data.exp.te0 	 : 	  temperature electronique au centre (keV) 
+data.exp.tea 	 : 	  temperature electronique au bord (keV) 
+data.exp.ni0 	 : 	  densite ionique au centre (m^-3) 
+data.exp.nia 	 : 	  densite ionique au bord (m^-3) 
+data.exp.ti0 	 : 	  temperature ionique au centre (keV) 
+data.exp.tia 	 : 	  temperature ionique au bord (keV) 
+data.exp.j0 	 : 	  densiste de courant moyen au centre (A*m^-2) 
+data.exp.ip 	 : 	  courant plasma (A) 
+data.exp.li 	 : 	  self interne 
+data.exp.vloop 	 : 	  tension par tour (V) 
+data.exp.q0 	 : 	  facteur de securite au centre 
+data.exp.qa 	 : 	  facteur de securite au bord 
+data.exp.betadia 	 : 	  beta diamagnetique 

@@ -1,0 +1,31 @@
+#/bin/bash
+rm -rf libs/MUMPS_4.7.3/SCILAB/Help/CVS
+rm -rf libs/MUMPS_4.7.3/SCILAB/examples/CVS
+rm -rf libs/MUMPS_4.7.3/PORD/lib/CVS
+rm -rf libs/MUMPS_4.7.3/PORD/include/CVS
+rm -rf libs/MUMPS_4.7.3/MATLAB/INSTALL/CVS
+rm -rf op/psitbx/html/CVS
+rm -rf op/psitbx/@psitbxpsi/CVS
+rm -rf op/psitbx/@psitbxpsi/private/CVS
+rm -rf op/psitbx/@psitbxdcd/CVS
+rm -rf op/psitbx/@psitbxdcd/private/CVS
+rm -rf op/psitbx/@psitbxfun/CVS
+rm -rf op/psitbx/@psitbxfun/private/CVS
+rm -rf op/psitbx/@psitbxgrid/CVS
+rm -rf op/psitbx/@psitbxgrid/private/CVS
+rm -rf op/expokit/matlab/CVS
+rm -rf op/expokit/fortran/CVS
+rm -rf op/expokit/data/CVS
+rm -rf op/m2html/private/CVS
+rm -rf op/m2html/@template/CVS
+rm -rf op/m2html/@template/private/CVS
+rm -rf op/m2html/templates/blue/CVS
+rm -rf op/m2html/templates/CVS
+rm -rf op/m2html/templates/frame/CVS
+rm -rf op/xml_io_tools/html/CVS
+rm -rf op/xml/xmltree/CVS
+rm -rf op/xml/xmltree/@xmltree/CVS
+rm -rf op/xml/xmltree/@xmltree/private/CVS
+rm -rf op/xml/XML4MAT/CVS
+rm -rf op/StructBrows/StructBrowser/CVS
+find . -name "CVS" -print

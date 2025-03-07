@@ -1,0 +1,14 @@
+MEX       = mex
+MUMPS_DIR = $(HOME)/MUMPS_4.7.3
+
+LMETISDIR = $(HOME)/METIS/metis
+LMETIS = -L$(LMETISDIR) -lmetis
+LPORDDIR = $(MUMPS_DIR)/PORD/lib
+LPORD = -L$(LPORDDIR) -lpord
+LORDERINGS = $(LPORD) $(LMETIS)
+
+LIBSEQ  = -L$(MUMPS_DIR)/libseq -lmpiseq
+
+LIBFORT = -L/usr/lib32 -lblas -L/usr/lib32/mips4 -lfortran
+
+OPTC    = -O

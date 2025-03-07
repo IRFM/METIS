@@ -1,0 +1,358 @@
+ 
+==================================================
+Start of JET53521_itb_test_nomorph @ 5-Jul-10   9:20:56
+full name of test file : 
+	JET53521_itb_test_nomorph.mat
+
+--------------------------------------------------
+test created on  :
+	Linux port-artaud-jf 2.6.29.6-desktop-3mnb #1 SMP Fri Dec 4 15:21:12 EST 2009 i686 Intel(R) Core(TM)2 Duo CPU     T7100  @ 1.80GHz GNU/Linux
+
+test executed on :
+	Linux enea144.efda-itm.eu 2.6.18-194.3.1.el5 #1 SMP Tue May 11 13:21:39 CEST 2010 x86_64 x86_64 x86_64 GNU/Linux
+
+    
+--------------------------------------------------
+test created and executed with same version of CRONOS (4.2 from 20100114 )
+    
+--------------------------------------------------
+test created and execute with different Matlab version
+test created with Matlab version 7.5.0.338 (R2007b) 
+test executed with Matlab version 7.6.0.324 (R2008a) 
+    
+using fast mex PDE solver
+
+z0dinput = 
+
+      option: [1x1 struct]
+        info: [1x1 struct]
+      langue: 'anglais'
+      zsinfo: [1x1 struct]
+    profinfo: [1x1 struct]
+    mode_exp: 2
+         exp: []
+        cons: [1x1 struct]
+         geo: [1x1 struct]
+       exp0d: [1x1 struct]
+     machine: 'JET'
+        shot: 53521
+
+
+ans = 
+
+               gaz: 2
+             frhe0: 0
+          tauhemul: 0
+           neasser: 0
+               ane: 0
+              vane: 2.0579
+               pix: 0.7000
+               piw: 0.5000
+               pif: 0
+           scaling: 0
+             fprad: 0.3333
+             HH_li: 0
+        l2hscaling: 0
+             modeh: 1
+     configuration: 3
+            l2hmul: 2
+          l2hslope: 0
+             fpped: 1
+         taurotmul: 0
+           xiioxie: 0
+           kishape: 3
+              qdds: 1
+             kidds: 3
+           runaway: 1
+          modeboot: 1
+             vloop: 0
+              vref: 0
+                li: 0.5214
+         breakdown: 0.0300
+         laochange: 1
+          morphing: 0
+              zeff: 7
+              zmax: 28
+              zimp: 6
+              rimp: 0.1000
+              frad: 1
+          matthews: 1
+                rw: 0.7000
+         angle_ece: 90
+          synergie: 0
+              sens: 0
+         angle_nbi: 60
+             rtang: 1.8500
+              zext: 0.1000
+              einj: 98014
+            lhmode: 3
+             etalh: 0.8000
+             npar0: 2
+            freqlh: 3.7000
+               wlh: 0.3520
+               xlh: 0.4000
+               dlh: 0.3000
+              fwcd: 0
+              mino: 'H'
+              cmin: 0.1000
+              nphi: 15
+              freq: 56.2378
+              sitb: 3
+               tae: 0
+              smhd: 0
+              tmhd: 0
+               rip: 0
+             signe: 1
+            carnot: 0.4200
+               aux: 0.0500
+            effinj: 0.7000
+           machine: 'JET'
+          nbicdmul: 1
+          dilution: 1
+    mode_expo_inte: 0
+
+Metis: using separatrix given by points (R,Z) :@:i...!.!.!.!.!.!.!.!.!.........~~~ in 54.4907 s (cpu = 396.86 s)
+shot disruption @ 53.8706 s (112)
+difference in zerod data :
+ real value differ by 2.67218e-16 (1.68548e-15 of norm): s1.meff & s2.meff 
+ real value differ by 6.04066e-11 (9.73005e-14 of norm): s1.pfus & s2.pfus 
+ real value differ by 3.10022e-20 (8.08345e-13 of norm): s1.RR & s2.RR 
+ real value differ by 2.20419e-08 (7.23163e-13 of norm): s1.pohm & s2.pohm 
+ real value differ by 3.31563e-07 (4.91569e-12 of norm): s1.iohm & s2.iohm 
+ real value differ by 6.98827e-14 (1.31759e-12 of norm): s1.vloop & s2.vloop 
+ real value differ by 2.01834e-09 (4.01665e-13 of norm): s1.pbrem & s2.pbrem 
+ real value differ by 1.71079e-08 (3.94018e-13 of norm): s1.prad & s2.prad 
+ real value differ by 9.42443e-12 (1.43187e-13 of norm): s1.pradsol & s2.pradsol 
+ real value differ by 2.78402e-10 (4.00507e-13 of norm): s1.pcyclo & s2.pcyclo 
+ real value differ by 2.48872e-13 (1.47265e-12 of norm): s1.zeff & s2.zeff 
+ real value differ by 2.29855e-13 (1.36352e-12 of norm): s1.zeffsc & s2.zeffsc 
+ real value differ by 4.96827e-10 (2.54419e-14 of norm): s1.inbicd & s2.inbicd 
+ real value differ by 7.56187e-09 (1.99778e-13 of norm): s1.iboot & s2.iboot 
+ real value differ by 95261.8 (6.53001e-14 of norm): s1.nem & s2.nem 
+ real value differ by 94361.2 (6.78324e-14 of norm): s1.nim & s2.nim 
+ real value differ by 5036.1 (2.65299e-14 of norm): s1.nebord & s2.nebord 
+ real value differ by 86072.1 (6.8486e-14 of norm): s1.nDm & s2.nDm 
+ real value differ by 94625.1 (6.84468e-14 of norm): s1.n1m & s2.n1m 
+ real value differ by 6.35038e-14 (7.52892e-14 of norm): s1.qa & s2.qa 
+ real value differ by 5.49205e-14 (7.86451e-14 of norm): s1.q95 & s2.q95 
+ real value differ by 7.65261e-13 (2.34597e-12 of norm): s1.qmin & s2.qmin 
+ real value differ by 8.31248e-12 (1.29775e-11 of norm): s1.q0 & s2.q0 
+ real value differ by 3.99001e-14 (2.24828e-13 of norm): s1.ate & s2.ate 
+ real value differ by 5.62028e-11 (2.80775e-13 of norm): s1.tem & s2.tem 
+ real value differ by 1.426e-10 (2.62233e-13 of norm): s1.te0 & s2.te0 
+ real value differ by 2.57884e-12 (3.97077e-13 of norm): s1.tebord & s2.tebord 
+ real value differ by 6.61978e-15 (9.07874e-14 of norm): s1.tite & s2.tite 
+ real value differ by 1.35648e-14 (2.62799e-13 of norm): s1.betap & s2.betap 
+ real value differ by 1.58e-14 (1.69755e-13 of norm): s1.betaptot & s2.betaptot 
+ real value differ by 2.48974e-14 (1.21667e-13 of norm): s1.piqj & s2.piqj 
+ real value differ by 3.08229e-08 (8.62529e-14 of norm): s1.w & s2.w 
+ real value differ by 1.6735e-08 (8.82893e-14 of norm): s1.wth & s2.wth 
+ real value differ by 3.81857e-14 (2.84707e-13 of norm): s1.hitb & s2.hitb 
+ real value differ by 4.81255e-12 (5.34567e-12 of norm): s1.aitb & s2.aitb 
+ real value differ by 2.16645e-13 (3.16479e-12 of norm): s1.hmhd & s2.hmhd 
+ real value differ by 4.02468e-10 (8.09151e-14 of norm): s1.ecrit_nbi & s2.ecrit_nbi 
+ real value differ by 1.17902e-08 (5.1803e-13 of norm): s1.ecrit_he & s2.ecrit_he 
+ real value differ by 4.73842e-15 (5.06838e-14 of norm): s1.li & s2.li 
+ real value differ by 3.71038e-13 (2.78331e-13 of norm): s1.tauip & s2.tauip 
+ real value differ by 3.19497e-15 (2.86478e-13 of norm): s1.xnbi & s2.xnbi 
+ real value differ by 2.47866e-10 (7.93218e-14 of norm): s1.wrad & s2.wrad 
+ real value differ by 6.02556e-15 (5.06872e-13 of norm): s1.d0 & s2.d0 
+ real value differ by 8.74677e-17 (1.82083e-15 of norm): s1.frnbi & s2.frnbi 
+ real value differ by 2.30286e-12 (1.3494e-13 of norm): s1.fwcorr & s2.fwcorr 
+ real value differ by 2.01577e-16 (2.4273e-15 of norm): s1.zmszl & s2.zmszl 
+ real value differ by 9.87001e+07 (6.59867e-14 of norm): s1.n0a & s2.n0a 
+ real value differ by 7.6675e-16 (3.44396e-15 of norm): s1.rres & s2.rres 
+ real value differ by 2.51485e-16 (2.40773e-15 of norm): s1.rm & s2.rm 
+ real value differ by 4.77806e-15 (1.0658e-13 of norm): s1.drmdt & s2.drmdt 
+ real value differ by 432065 (4.66378e-13 of norm): s1.efficiency & s2.efficiency 
+ real value differ by 1.46472e-15 (1.06448e-13 of norm): s1.fracmino & s2.fracmino 
+ real value differ by 1.50706e-10 (2.1075e-13 of norm): s1.ppedmax & s2.ppedmax 
+ real value differ by 3.92663e-10 (6.55403e-14 of norm): s1.pioniz & s2.pioniz 
+ real value differ by 1.07189e-10 (7.56585e-14 of norm): s1.irun & s2.irun 
+ real value differ by 5011.24 (3.31507e-14 of norm): s1.nmino & s2.nmino 
+ real value differ by 1.50938e-11 (1.83636e-15 of norm): s1.einj_nbi_icrh & s2.einj_nbi_icrh 
+ real value differ by 1.4791e-09 (9.71945e-14 of norm): s1.pnbi_icrh & s2.pnbi_icrh 
+ real value differ by 5.04215e-14 (1.64546e-12 of norm): s1.ialign & s2.ialign 
+ real value differ by 3.63123e-14 (1.54489e-13 of norm): s1.sn0fr & s2.sn0fr 
+ real value differ by 2.85993e-09 (1.52255e-13 of norm): s1.wrot & s2.wrot 
+ real value differ by 2829.11 (2.93749e-13 of norm): s1.nimpm & s2.nimpm 
+ real value differ by 1.09941e-09 (1.65021e-15 of norm): s1.pnbi & s2.pnbi 
+ real value differ by 2.48824e-10 (3.47709e-14 of norm): s1.einj_icrh & s2.einj_icrh 
+ real value differ by 1.10583e-08 (1.08425e-14 of norm): s1.pin & s2.pin 
+ real value differ by 8.63923e-08 (8.94079e-14 of norm): s1.ploss & s2.ploss 
+ real value differ by 7.63416e-08 (4.41342e-13 of norm): s1.dwdt & s2.dwdt 
+ real value differ by 6.16429e-08 (7.71891e-13 of norm): s1.dwthdt & s2.dwthdt 
+ real value differ by 4.98209e-11 (8.49535e-14 of norm): s1.pfus_th & s2.pfus_th 
+ real value differ by 3.99508e-09 (2.05846e-14 of norm): s1.picrh_th & s2.picrh_th 
+ real value differ by 4.71455e-09 (4.85345e-14 of norm): s1.pel_icrh & s2.pel_icrh 
+ real value differ by 2.36777e-09 (2.3096e-14 of norm): s1.pion_icrh & s2.pion_icrh 
+ real value differ by 3.42288e-08 (5.18408e-14 of norm): s1.pnbi_th & s2.pnbi_th 
+ real value differ by 1.69756e-11 (1.07349e-13 of norm): s1.esup_fus & s2.esup_fus 
+ real value differ by 1.41887e-08 (9.56122e-14 of norm): s1.esup_nbi & s2.esup_nbi 
+ real value differ by 1.80646e-09 (7.31408e-14 of norm): s1.esup_icrh & s2.esup_icrh 
+ real value differ by 3.64289e-10 (3.04407e-13 of norm): s1.esup_lh & s2.esup_lh 
+ real value differ by 3.50804e-10 (1.36545e-13 of norm): s1.ecrit_icrh & s2.ecrit_icrh 
+ real value differ by 2.31614e-15 (7.99772e-14 of norm): s1.taus_icrh & s2.taus_icrh 
+ real value differ by 8.80482e-08 (9.16691e-14 of norm): s1.pth & s2.pth 
+ real value differ by 2.30847e-08 (5.09841e-14 of norm): s1.pion_nbi & s2.pion_nbi 
+ real value differ by 1.79172e-08 (8.60256e-14 of norm): s1.pel_nbi & s2.pel_nbi 
+ real value differ by 1.07185e-11 (1.27573e-13 of norm): s1.pion_fus & s2.pion_fus 
+ real value differ by 4.03512e-11 (8.02172e-14 of norm): s1.pel_fus & s2.pel_fus 
+ real value differ by 2.2191e-08 (4.00362e-14 of norm): s1.pion & s2.pion 
+ real value differ by 2.3275e-08 (5.35257e-14 of norm): s1.pel & s2.pel 
+ real value differ by 2.25412e-09 (3.44275e-13 of norm): s1.dwmagtordt & s2.dwmagtordt 
+ real value differ by 2.05233e-09 (1.12644e-13 of norm): s1.wmagtor & s2.wmagtor 
+ real value differ by 2.90578e-08 (1.9076e-13 of norm): s1.wrlw & s2.wrlw 
+ real value differ by 4.79506e-10 (1.41329e-15 of norm): s1.plossl2h & s2.plossl2h 
+ real value differ by 1.28883e-14 (6.30596e-13 of norm): s1.tauthl & s2.tauthl 
+ real value differ by 2.34858e-14 (6.73028e-13 of norm): s1.tauh & s2.tauh 
+ real value differ by 1.61707e-13 (5.40141e-13 of norm): s1.tauhe_l & s2.tauhe_l 
+ real value differ by 3.02208e-13 (5.87669e-13 of norm): s1.tauhe_h & s2.tauhe_h 
+ real value differ by 8.64088e-08 (8.94341e-14 of norm): s1.plhthr & s2.plhthr 
+ real value differ by 4.86691e-14 (1.86896e-12 of norm): s1.taue & s2.taue 
+ real value differ by 7.69206e-13 (1.9345e-12 of norm): s1.tauhe & s2.tauhe 
+ real value differ by 2.54024e-16 (2.50855e-13 of norm): s1.betan & s2.betan 
+ real value differ by 7.11664e-12 (2.24979e-14 of norm): s1.pped & s2.pped 
+ real value differ by 2.12087e-07 (1.15959e-13 of norm): s1.pw & s2.pw 
+ real value differ by 3.99281e-14 (1.73279e-13 of norm): s1.ape & s2.ape 
+ real value differ by 239077 (1.16291e-13 of norm): s1.ne0 & s2.ne0 
+ real value differ by 197625 (1.01116e-13 of norm): s1.ni0 & s2.ni0 
+ real value differ by 1.59625e-08 (3.84551e-13 of norm): s1.pei & s2.pei 
+ real value differ by 1.93223e-14 (7.64114e-14 of norm): s1.tauee & s2.tauee 
+ real value differ by 6.07902e-14 (2.40042e-13 of norm): s1.tauii & s2.tauii 
+ real value differ by 1.21227e-13 (5.38164e-13 of norm): s1.tauei & s2.tauei 
+ real value differ by 1.2519e-12 (2.23629e-13 of norm): s1.telim & s2.telim 
+ real value differ by 6285.99 (1.83597e-14 of norm): s1.nelim & s2.nelim 
+ real value differ by 1.17471e-08 (1.21532e-14 of norm): s1.plim & s2.plim 
+ real value differ by 1.37855e-06 (2.83707e-14 of norm): s1.peakdiv & s2.peakdiv 
+ real value differ by 3.1279e-15 (3.26941e-13 of norm): s1.taup & s2.taup 
+ real value differ by 3.22934e-07 (5.9305e-12 of norm): s1.ilh & s2.ilh 
+ real value differ by 4.91095e-14 (7.90538e-13 of norm): s1.taus_nbi & s2.taus_nbi 
+ real value differ by 3.6863e+06 (3.65065e-12 of norm): s1.etalh0 & s2.etalh0 
+ real value differ by 1.37263e+06 (5.58453e-12 of norm): s1.etalh1 & s2.etalh1 
+ real value differ by 5.03092e+06 (5.85347e-12 of norm): s1.etalh & s2.etalh 
+ real value differ by 8.61006e-16 (5.69993e-14 of norm): s1.piqnbi & s2.piqnbi 
+ real value differ by 9.31164e-17 (3.11364e-15 of norm): s1.mu0_nbi & s2.mu0_nbi 
+ real value differ by 3.22935e-07 (5.01929e-12 of norm): s1.icd & s2.icd 
+ real value differ by 3.98209e-15 (2.70547e-13 of norm): s1.dlh & s2.dlh 
+ real value differ by 2.69456e-08 (9.47751e-14 of norm): s1.wdia & s2.wdia 
+ real value differ by 1.00637e-08 (5.00014e-14 of norm): s1.wbp & s2.wbp 
+ real value differ by 4.29967e-08 (9.18727e-13 of norm): s1.dwbpdt & s2.dwbpdt 
+ real value differ by 4.09477e-12 (4.15309e-13 of norm): s1.tauj & s2.tauj 
+ real value differ by 1.34757e-14 (1.58018e-14 of norm): s1.qeff & s2.qeff 
+ real value differ by 6.92256e-14 (1.12202e-12 of norm): s1.vmes & s2.vmes 
+ real value differ by 1.015e-08 (7.1159e-14 of norm): s1.ipar & s2.ipar 
+ real value differ by 4.98373e-16 (2.67723e-13 of norm): s1.phiplasma & s2.phiplasma 
+ real value differ by 7.64593e-08 (1.40902e-12 of norm): s1.poynting & s2.poynting 
+ real value differ by 3.23444e-07 (3.36302e-12 of norm): s1.ini & s2.ini 
+ real value differ by 5.47916e-14 (5.04412e-13 of norm): s1.taus_he & s2.taus_he 
+ real value differ by 102.765 (1.25915e-13 of norm): s1.ndd & s2.ndd 
+ real value differ by 46.2727 (2.40986e-13 of norm): s1.ndd_th & s2.ndd_th 
+ real value differ by 51.685 (9.42227e-14 of norm): s1.ndd_nbi_th & s2.ndd_nbi_th 
+ real value differ by 12.3157 (1.46787e-13 of norm): s1.ndd_nbi_nbi & s2.ndd_nbi_nbi 
+ real value differ by 7.61702e-11 (1.23614e-13 of norm): s1.pddfus & s2.pddfus 
+ real value differ by 1.2462e-12 (2.40592e-13 of norm): s1.tibord & s2.tibord 
+ real value differ by 7758.09 (4.25555e-14 of norm): s1.nibord & s2.nibord 
+ real value differ by 5.21423e-12 (7.65672e-14 of norm): s1.teped & s2.teped 
+ real value differ by 4.4232e-12 (7.52079e-14 of norm): s1.tiped & s2.tiped 
+ real value differ by 63679.3 (6.75536e-14 of norm): s1.neped & s2.neped 
+ real value differ by 64839.1 (7.16805e-14 of norm): s1.niped & s2.niped 
+ real value differ by 9.7672e-15 (3.21742e-14 of norm): s1.edgeflux & s2.edgeflux 
+ real value differ by 5.39448e-14 (6.86058e-14 of norm): s1.snbi & s2.snbi 
+ real value differ by 1.33729e-14 (4.48111e-13 of norm): s1.taue_alt & s2.taue_alt 
+ real value differ by 8.86181e-09 (7.83994e-15 of norm): s1.pelec & s2.pelec 
+CRONOSTEST: WARNING = 1.29775e-11 of norm 
+
+
+difference in profiles :
+ real value differ by 4.54573e-13 (3.47455e-12 of norm): s1.xie & s2.xie 
+ real value differ by 1.06457e-12 (8.05788e-12 of norm): s1.xii & s2.xii 
+ real value differ by 2.055e-08 (3.6742e-13 of norm): s1.qe & s2.qe 
+ real value differ by 2.0746e-08 (2.78083e-13 of norm): s1.qi & s2.qi 
+ real value differ by 9.6267e-09 (1.30513e-12 of norm): s1.qei & s2.qei 
+ real value differ by 5.26162e-10 (9.00693e-13 of norm): s1.nbishape_el & s2.nbishape_el 
+ real value differ by 3.80168e-09 (1.40626e-12 of norm): s1.nbishape_ion & s2.nbishape_ion 
+ real value differ by 1.24965e-09 (8.04001e-13 of norm): s1.jnbishape & s2.jnbishape 
+ real value differ by 336920 (1.62555e-12 of norm): s1.nbinesource & s2.nbinesource 
+ real value differ by 2.78432e-16 (3.73235e-14 of norm): s1.pitch & s2.pitch 
+ real value differ by 4.32038e-09 (1.37423e-12 of norm): s1.pnbi & s2.pnbi 
+ real value differ by 759769 (2.1217e-12 of norm): s1.nep & s2.nep 
+ real value differ by 38.7693 (2.79482e-12 of norm): s1.n0 & s2.n0 
+ real value differ by 8.58621e+06 (7.98359e-13 of norm): s1.s0 & s2.s0 
+ real value differ by 30.4018 (2.19388e-12 of norm): s1.n0m & s2.n0m 
+ real value differ by 7.91086e+06 (7.35636e-13 of norm): s1.s0m & s2.s0m 
+ real value differ by 4.13124e-13 (3.33481e-12 of norm): s1.dn & s2.dn 
+ real value differ by 1.15783e-10 (2.28445e-11 of norm): s1.vn & s2.vn 
+ real value differ by 5.41816e-14 (2.57381e-11 of norm): s1.ware & s2.ware 
+ real value differ by 1.74285e+06 (4.41365e-12 of norm): s1.ge & s2.ge 
+ real value differ by 2.77708e-10 (3.53926e-12 of norm): s1.tep & s2.tep 
+ real value differ by 7.3167e-11 (9.38842e-13 of norm): s1.tip & s2.tip 
+ real value differ by 7.09851e-08 (5.93629e-12 of norm): s1.jli & s2.jli 
+ real value differ by 7.12627e-08 (6.00949e-12 of norm): s1.jeff & s2.jeff 
+ real value differ by 4.63832e-12 (2.48523e-11 of norm): s1.qjli & s2.qjli 
+ real value differ by 2.64362e-08 (9.69345e-12 of norm): s1.jboot & s2.jboot 
+ real value differ by 1.24186e-19 (5.88041e-12 of norm): s1.eta & s2.eta 
+ real value differ by 1.0818e-09 (8.06418e-13 of norm): s1.jnbicd & s2.jnbicd 
+ real value differ by 4.09916e-07 (5.56094e-11 of norm): s1.jlh & s2.jlh 
+ real value differ by 8.60819e-09 (3.30175e-12 of norm): s1.jrun & s2.jrun 
+ real value differ by 3.78311e-09 (4.68621e-12 of norm): s1.plh & s2.plh 
+ real value differ by 3.84531e-09 (1.42617e-12 of norm): s1.pnbi_ion & s2.pnbi_ion 
+ real value differ by 3.10682e-10 (4.42048e-13 of norm): s1.pfweh & s2.pfweh 
+ real value differ by 1.14361e-10 (1.40209e-13 of norm): s1.picrh & s2.picrh 
+ real value differ by 8.32437e-11 (1.4419e-13 of norm): s1.picrh_ion & s2.picrh_ion 
+ real value differ by 8.80135e-11 (3.92124e-12 of norm): s1.pbrem & s2.pbrem 
+ real value differ by 3.96664e-10 (3.57201e-12 of norm): s1.prad & s2.prad 
+ real value differ by 3.37445e-11 (7.85918e-13 of norm): s1.pioniz & s2.pioniz 
+ real value differ by 2.20688e-11 (2.90347e-12 of norm): s1.pcyclo & s2.pcyclo 
+ real value differ by 2.96743e-08 (3.72791e-11 of norm): s1.pohm & s2.pohm 
+ real value differ by 632327 (1.85191e-12 of norm): s1.nip & s2.nip 
+ real value differ by 3.17131e-13 (1.97121e-13 of norm): s1.vpr & s2.vpr 
+ real value differ by 2.55075e-13 (1.97865e-13 of norm): s1.vpr_tor & s2.vpr_tor 
+ real value differ by 1.70637e-14 (1.87508e-13 of norm): s1.spr & s2.spr 
+ real value differ by 1.75212e-15 (6.66634e-13 of norm): s1.grho2r2 & s2.grho2r2 
+ real value differ by 1.25908e-16 (5.75099e-14 of norm): s1.r2i & s2.r2i 
+ real value differ by 1.85942e-16 (3.01484e-14 of norm): s1.ri & s2.ri 
+ real value differ by 5.20127e-14 (2.41463e-13 of norm): s1.C2 & s2.C2 
+ real value differ by 3.04202e-14 (1.80425e-13 of norm): s1.C3 & s2.C3 
+ real value differ by 7.40735e-15 (3.79104e-13 of norm): s1.grho & s2.grho 
+ real value differ by 1.66724e-14 (7.18832e-13 of norm): s1.grho2 & s2.grho2 
+ real value differ by 8.79806e-14 (2.96252e-12 of norm): s1.kx & s2.kx 
+ real value differ by 1.5511e-15 (8.9576e-13 of norm): s1.dx & s2.dx 
+ real value differ by 2.38804e-15 (4.51777e-14 of norm): s1.Raxe & s2.Raxe 
+ real value differ by 4.76159e-17 (1.3977e-14 of norm): s1.epsi & s2.epsi 
+ real value differ by 1.0932e-15 (8.72065e-14 of norm): s1.rmx & s2.rmx 
+ real value differ by 2.43336e-15 (6.08318e-13 of norm): s1.bpol & s2.bpol 
+ real value differ by 1.50654e-15 (9.17704e-15 of norm): s1.fdia & s2.fdia 
+ real value differ by 1.50591e-15 (2.86805e-13 of norm): s1.psi & s2.psi 
+ real value differ by 7.2243e-15 (5.85763e-14 of norm): s1.phi & s2.phi 
+ real value differ by 6.17795e-14 (1.74167e-13 of norm): s1.dphidx & s2.dphidx 
+ real value differ by 9.49981e-15 (6.91269e-12 of norm): s1.dpsidt & s2.dpsidt 
+ real value differ by 3.32498e-15 (5.89717e-12 of norm): s1.epar & s2.epar 
+ real value differ by 2.49882e-13 (6.74246e-12 of norm): s1.zeff & s2.zeff 
+ real value differ by 615965 (1.81652e-12 of norm): s1.n1p & s2.n1p 
+ real value differ by 22500.4 (8.94602e-12 of norm): s1.nzp & s2.nzp 
+ real value differ by 1.91184e-14 (4.77325e-13 of norm): s1.xieshape & s2.xieshape 
+ real value differ by 1.93841e-13 (5.0379e-12 of norm): s1.xieshape_itb & s2.xieshape_itb 
+ real value differ by 3.84399e-09 (1.22675e-12 of norm): s1.source_ion & s2.source_ion 
+ real value differ by 9.02464e-09 (5.58913e-12 of norm): s1.source_el & s2.source_el 
+ real value differ by 4.13718e-07 (4.27583e-11 of norm): s1.jni & s2.jni 
+ real value differ by 8.3589e-16 (9.00672e-14 of norm): s1.ftrap & s2.ftrap 
+ real value differ by 9.76407e-10 (9.50226e-13 of norm): s1.ptot & s2.ptot 
+ real value differ by 2.9675e-08 (3.72738e-11 of norm): s1.ej & s2.ej 
+ real value differ by 1.76236e-09 (1.49947e-11 of norm): s1.fprad & s2.fprad 
+ real value differ by 7.70245e-10 (7.22825e-13 of norm): s1.omega & s2.omega 
+ real value differ by 1.98022e-08 (1.62865e-11 of norm): s1.utheta & s2.utheta 
+ real value differ by 3.62222e-09 (8.37016e-12 of norm): s1.vtheta & s2.vtheta 
+ real value differ by 5.37544e-09 (8.3368e-12 of norm): s1.er & s2.er 
+ real value differ by 1.85894e-08 (4.6852e-12 of norm): s1.vtor & s2.vtor 
+ real value differ by 6.97292e-07 (2.55255e-11 of norm): s1.web & s2.web 
+ real value differ by 3.2534e-15 (8.35371e-13 of norm): s1.rot_nbi & s2.rot_nbi 
+ real value differ by 1.22217e-15 (8.95885e-13 of norm): s1.rot_n0 & s2.rot_n0 
+ real value differ by 3.47091e-17 (2.93258e-12 of norm): s1.rot_lh & s2.rot_lh 
+ real value differ by 5.36555e-16 (6.20266e-13 of norm): s1.frot & s2.frot 
+ real value differ by 4.40224e-16 (4.10606e-13 of norm): s1.rtor & s2.rtor 
+ real value differ by 4.72408e-13 (4.06894e-12 of norm): s1.drot & s2.drot 
+ real value differ by 1.45657e-11 (9.1289e-12 of norm): s1.vrot & s2.vrot 
+CRONOSTEST: WARNING = 5.56094e-11 of norm 
+
+

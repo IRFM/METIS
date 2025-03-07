@@ -1,0 +1,68 @@
+Commandes de donnees
+
+Consignes
+>> data.cons
+
+ans = 
+
+        ip: [85x1 double]	conditions aux limites
+     vloop: [85x1 double]	conditions aux limites
+      flux: [85x1 double]	conditions aux limites
+       ne1: [85x1 double]	conditions aux limites
+       ge1: [85x1 double]	conditions aux limites
+       te1: [85x1 double]	conditions aux limites
+       qe1: [85x1 double]	conditions aux limites
+       pe1: [85x1 double]	conditions aux limites
+       ti1: [85x1 double]	conditions aux limites
+       qi1: [85x1 double]	conditions aux limites
+     pion1: [85x1 double]	conditions aux limites
+      ffe1: [85x1 double]	conditions aux limites
+       fe1: [85x1 double]	conditions aux limites
+      ffi1: [85x1 double]	conditions aux limites
+       fi1: [85x1 double]	conditions aux limites
+     frot1: [85x1 double]	conditions aux limites
+      rot1: [85x1 double]	conditions aux limites
+         c: [85x5 double]	extract/inject matiere
+      pomp: [85x1 double]	extract/inject matiere
+       fci: [85x3 double]	chauffage
+       fce: [85x1 double]	chauffage
+       hyb: [85x2 double]	chauffage
+       idn: [85x1 double]	chauffage
+    glacon: [85x1 double]	extract/inject matiere
+     zeffm: [85x1 double]	extract/inject matiere
+      nhnd: [85x1 double]	extract/inject matiere
+     asser: [1x1 struct]
+
+
+Asservissements
+>> data.cons.asser
+
+ans = 
+
+      nl0: [85x1 double]
+      ne0: [85x1 double]
+      ne1: [85x1 double]
+    nemoy: [85x1 double]
+      te0: [85x1 double]
+      te1: [85x1 double]
+       li: [85x1 double]
+       q0: [85x1 double]
+        c: [85x5 double]
+
+Geeometrie
+>> data.geo
+
+ans = 
+
+    mode: [85x1 double]
+      r0: [85x1 double]
+      z0: [85x1 double]
+       a: [85x1 double]
+      e1: [85x1 double]
+    trh1: [85x1 double]
+    trb1: [85x1 double]
+    ind1: [85x1 double]
+      b0: [85x1 double]
+       R: [85x250 single]
+       Z: [85x250 single]
+ 

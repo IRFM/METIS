@@ -1,0 +1,14 @@
+% plot l'histogramme des dt
+function zplotdt(file)
+
+gene = evalin('base','data.gene');
+param = evalin('base','param');
+[dt,tmin,tmax,res,restot] = zgetdt(file)
+
+
+h=findobj(0,'type','figure','tag','zplotdt');
+if isempty(h)
+   h=figure('tag','zplotdt');
+else
+   figure(h);
+end

@@ -1,0 +1,16 @@
+MEX       = mex
+MUMPS_DIR = $(HOME)/MUMPS_4.7.3
+
+LMETISDIR = $(HOME)/METIS/metis
+LMETIS = -L$(LMETISDIR) -lmetis
+LPORDDIR = $(MUMPS_DIR)/PORD/lib
+LPORD = -L$(LPORDDIR) -lpord
+LORDERINGS = $(LPORD) $(LMETIS)
+
+LIBSEQ  = -L$(MUMPS_DIR)/libseq -lmpiseq
+
+LIBFORT = -L/usr/local/pgi/linux86/5.2/lib -llapack -lblas -lpgf90 -lpgc -lpgf90rtl -lpgftnrtl -lpgf902 -lpgf90_rpm1 -lpghpf2
+
+OPTC    = -g
+
+

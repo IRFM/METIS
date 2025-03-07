@@ -1,0 +1,12 @@
+ 
+==================================================
+??? Undefined function or variable 'time'.
+
+Error in ==> metis_test at 144
+fprintf('Start of %s @ %s\n',testfilename,time);
+
+144 fprintf('Start of %s @ %s\n',testfilename,time);
+time
+??? Undefined function or variable 'time'.
+
+exit

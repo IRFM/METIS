@@ -1,0 +1,16 @@
+METIS is a software program developed by the Commissariat à l'énergie 
+atomique et aux énergies alternatives (CEA). It is a simplified
+integrated modelling transport code for rapid simulation of tokamak
+experiments. Its main domains of application are the preparation and
+the analysis of tokamak experiments.
+
+METIS is written in Matlab.
+
+METIS features a graphical interface for configuring the code, running
+the simulation, visualizing results, savinge results to a file 
+and loading input or results from a file.
+
+The reference to be cited for this code is:
+
+J.F. Artaud et al., "Metis: a fast integrated tokamak modelling tool for
+scenario design", Nucl. Fusion 58 (2018) 105001, DOI 10.1088/1741-4326/aad5b1

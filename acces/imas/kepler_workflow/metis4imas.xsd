@@ -1,0 +1,3223 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ROOT" >
+<xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="gaz" default="3" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+1 -&gt; H, 2 -&gt; D , 3 -&gt; DT &amp; 4 -&gt; He
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="frhe0" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ratio of residual helium, other than alpha from fusion DT
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tauhemul" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+helium confinement time: tau_He_star = tauhemul * taue; if = 0 , use the scaling law;
+if &lt; 0 take into account recycling of neutral in the divertor :
+ tau_He_star = tauhemul * taue + Recycling / (1 - Recycling) * tau_p
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-20"/>
+<xs:maxInclusive value="20"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="neasser" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ODE for density evolution: if = 0: zs.nbar = cons.nbar (no ODE solved);
+if = 1: density controlled by gas puff with reference cons.nbar using electron density confinment times;
+ if = 2, as 1 and density limited to prevent disruption
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="Recycling" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Recycling coefficient used with neasser &gt; 0; also used for recycling at target in two points model
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.999"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="eta_gas_puff" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Gas puff fuelling efficiency (allows to use directly measurements from gas injection)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="natural" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+natural density: if = 1, impose density to be higher than natural density;
+if = 2, impose natural density instead of nbar reference
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fnbar_nat" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor applied to natural density scaling law
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nea_factor" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+edge density: multiplication factor applied to edge density scaling law:
+if &gt; 0, ne_edge =  nea_factor * LCFS_denstity_scaling_law;
+if &lt; 0,  ne_edge =  abs(nea_factor) * n_bar
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-0.7"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ftaup" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor multiplying particle confinement time (taup)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fn0a" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+cold neutral source: factor multiplying the core plasma source of neutral for limited plasma (allows to choose the fraction that goes directly in core plasma and in SOL)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fn0a_div" default="0.1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+cold neutral source: factor multiplying the core plasma source of neutral for diverted plasma (allows to choose the fraction that goes directly in core plasma and in SOL)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ane" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+density  peaking: (central density / volume average density) choice:
+0 -&gt; f(nsat / nbar) in L-mode, where nsat is the saturation density (LOC/SOC) and f(n_Gr / nbar) in H-mode;
+1 -&gt; flat profile;
+2 -&gt; peaking factor function of li;
+3 -&gt; peaking factor function of collisionality scaling law;
+4 -&gt; fixed value given by parameter vane;
+5 -&gt; proportional to Ti;
+10 -&gt; C. Angioni formula 5 NF 2007 (depends on Greenwald fraction, NBI fuelling and R0);
+11 -&gt; Angioni 2007 formula 5 in H mode and new fit scaling law from Lmode data base for L-mode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="10"/>
+<xs:enumeration value="11"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="vane" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if ane = 4, value of density peaking factor
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.5"/>
+<xs:maxInclusive value="5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ne_shape" default="Auto" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+method used to compute density profile shape: 
+Auto -&gt; depending of L or H mode; 
+Hmode -&gt; force Hmode shape also in Lmode; 
+Lmode -&gt; force Lmode shape also in Hmode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Auto"/>
+<xs:enumeration value="Lmode"/>
+<xs:enumeration value="Hmode"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ne_free" default="3" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+number of parameters to define density profile:
+if = 3, central density, edge density and peaking factor;
+if = 4,central density, edge density, peaking factor and pedestal density
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="neped_expo" default="-0.7" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+density at pedestal top: exponent in scaling law for pedestal density:
+ne_ped = ne_a * (ne_a / ne_Gr)^neped_expo
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-2.5"/>
+<xs:maxInclusive value="0"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="pix" default="0.7" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+position of maximum of pellet deposition profile
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="piw" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+width of pellet deposition profile (gaussian); if = 0, NGS model is used to compute the shape of deposition
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="pif" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+fraction of fuelling due to pellet injection; if = 1, automatic detection of pellet injection (detection of peaks in nbar waveform)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="scaling" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+choice of scaling law for energy confinement time:
+0 = ITERL-96P(th) + ITERH-98P(y,2);
+1 = Ohmic (to be used for startup phase);
+2 = ITPA 2 terms;
+3 = DS03 (no beta dependence);
+ 4 = adjusted to match experimental value of Wdia;
+5 = scaling ITER EIV,Std;
+6 = Ohmic scaling in Tokamak Wesson;
+7 = ITERH-98P(y,2)/2 L-mode + ITERH-98P(y,2) H-mode;
+8 = user defined scaling (as matlab function);
+9 =  J. Garcia PRL J_pol = 0 (for hybrid scenario);
+10 = Sauter &amp; Martin in H-mode + quasi analytical in L-mode;
+11 = Sauter &amp; Martin in H-mode + Elbeze EIV 2005 L-mode;
+12 = same as 11 with limitation on beta_N for burning plasma with high radiative fraction
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="7"/>
+<xs:enumeration value="8"/>
+<xs:enumeration value="9"/>
+<xs:enumeration value="10"/>
+<xs:enumeration value="11"/>
+<xs:enumeration value="12"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="dilution" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+dilution effect on energy confinement:
+if = 0, no dilution effect;
+if = 1, take into account the ions density dilution on plasma energy contents (W_new = (1 + ni/ne) * W_scaling)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tau_limitation" default="On" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+SOC / LOC transition:
+if = Off, no limitation of confinement time;
+if = On, the confinement time is the minimum of confinement time given by Neo-Alcator scaling and L-mode scaling law (useful for ramp up or at low density);
+if = Saturate, the confinement time is the minimum of confinement time given by SOC / LOC transition point and L-mode scaling law
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="On"/>
+<xs:enumeration value="Off"/>
+<xs:enumeration value="Saturate"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ploss_exp" default="with_prad" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+method used to compute ploss :
+if = with_prad, radiative power is subtracted from input power (pin), including brem, cyclo and fraction (fprad) of line radiation;
+ if = no_prad, ploss = pin;
+ if = max_power, ploss is the maximum of volume integrated total source power (Qe + Qi) as a function of radial position;
+if = max(pel)+max(pion), ploss is the maximum of volume integrated electron source power Qe  + the maximum of volume integrated ion source power Qi
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="with_prad"/>
+<xs:enumeration value="no_prad"/>
+<xs:enumeration value="max_power"/>
+<xs:enumeration value="max(pel)+max(pion)"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fprad" default="0.333333" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+fraction of line radiative power (core plasma) substracted from input power to compute Ploss (Ploss = Pin - fprad * Pline)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="HH_li" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if &gt; 0, li variation effect on plasma energy content W = (li/HH_li) ^ (2/3) * W_scaling
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="HH_gas_puff" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if &gt; 0, energy confinement reduction with gas puff fuelling: W = (1 -tanh(HH_gas_puff .* P_ioniz ./ P_in)) * W_scaling
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="l2hscaling" maxOccurs="1" minOccurs="1" default="0">
+<xs:annotation>
+<xs:documentation>
+L to H power threshold scaling law:
+0 = LH99(1);
+1 = LH2002;
+2 = LH2002 + Zeff;
+3 = YR Martin 2008;
+4 = NLM-7 Murari 2012;
+5 = NLM-11 Murari 2012;
+6 =  Jpol change of sign in edge region (E. R. Solano rule);
+10 = multimachine scaling law from Murari 2013 (BUEMS);
+ if &lt; 0, criterion based on plasma rotation (abs(l2hscaling) = value of Gamma_ExB / Gamma_ITG for transition)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="-10"/>
+<xs:enumeration value="-5"/>
+<xs:enumeration value="-3"/>
+<xs:enumeration value="-2"/>
+<xs:enumeration value="-1.5"/>
+<xs:enumeration value="-1"/>
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="modeh" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+L-Mode to H-mode allowed transition:
+0 -&gt; force L-mode;
+1-&gt; L-Mode to H-mode transition allowed;
+2 -&gt; force H-mode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="l2hmul" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+offset added to the threshold power for the transition L-&gt; H (MW)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="plhthr" default="pel+pion" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Power compared to scaling for L to H transition, either:
+Ploss as defined for scaling law  (pel + pion - fraction of prad);
+twice ion  power (2*pion);
+power conducted to LCFS (P_LCFS)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="pel+pion"/>
+<xs:enumeration value="2*pion"/>
+<xs:enumeration value="P_LCFS"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="l2hslope" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+slope of linear transition between tau_L and tau_H controlled by difference between conducted and threshold power;
+ if = 0, on / off transition;
+if &lt; 0 , additionally decrease of confinement when density is close to Greenwald limit
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fpl2h_lim" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor applied to L-&gt; H scaling power threshold in limiter configuration
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.5"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="pl2h_mass_charge" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+L to H transition:
+if = 0, scaling law as defined by l2hscaling;
+if = 1, adds dependences on mass and charge of main ion (R. Behn et all, PPCF 2015)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="hysteresis" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Control of histeresis for the back transition H-&gt; L mode:
+P_{H-&gt;L} = hysteresis * P_{in} + (1 - hysteresis) * P_{lh,thr}
+
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ton_modeh" default="Inf" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if it is defined, start time for the H mode phase
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-Inf"/>
+<xs:maxInclusive value="Inf"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="toff_modeh" default="Inf" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if it is defined, end time for the H mode phase
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-Inf"/>
+<xs:maxInclusive value="Inf"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fpped" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if &gt; 0, pedestal pressure multiplier (pressure deduced from scaling law);
+ if = 0, switch off limitation  of pedestal pressure due to MHD and experimental limit;
+ if &lt; 0, stiff model is activated (in this case, pedestal pressure multiplier is abs(fpped))
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-100"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="hmore_pped" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 0, no effect;
+if = 1, pedestal pressure is multiplied by the H factor waveform: pped_use = H_factor * pped_predicted;
+if = 2, pedestal pressure is multiplied by the H factor waveform when H factor is greater than 1: pped_use = max(1,H_factor) * pped_predicted
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ode_pped" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 0, no effect;
+if = 1, pressure at the top of pedestal evolves in time with pedestal confinement time:
+d(3/2*Vp*Pped)/dt = - (3/2*Vp*Pped)/ tau_ped + Power_LCFS with tau_ped = W_ped_steady_state / Power_LCFS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fstiff" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+stiff transport model: when stiff model is activated (fpped &lt; 0),abs(fstiff) gives the temperature gradient in the core in eV per electron banana width; default value = 1;
+ if fstiff&lt;0, use ftrap*rho_banana+(1-ftrap)*rho_larmor instead of rho_banana
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="usepped_scl" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 0, pedestal energy content is the difference between H-mode and L-mode energy content or half of this difference (see scaling options);
+ if = 1, tau_ped scaling law (ITPA McDonald) is used to compute Pped (does not work with stiff model);
+if = 2, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling law prediction is used;
+if = 3, P_ped scaling incorporating experimental data and prediction from MHD code for ITER and DEMO is used
+if = 4, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling incorporating prediction from MHD code for ITER and DEMO is used
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="taurotmul" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+toroidal rotation momentum confinement time: multiplication factor applied to energy confinement time to obtain toroidal rotation momentum confinement time (tau_rotation = taurotmul * taue);
+ if = 0, toroidal rotation momentum confinement time = ion heat confinement time
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rotation_scl" default="Rice" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+intrinsic rotation scaling: switch between differents scaling for spontaneous (intrinsic) rotation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Rice"/>
+<xs:enumeration value="Barnes & Parra"/>
+<xs:enumeration value="deGrassie"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fintrinsic" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor applied to intrinsic rotation scaling.The constant in the scaling in not determined;
+ Suggested value with Rice scaling is between 0.15-0.25;
+ Suggested value with deGrassie scaling is about 1;
+ if = 0,a factor depending on collisionality is used, computed from  J. C. Hillesheim et al, arxiv:1407.2121v1 physics.plasma-ph 8 Jul 2014
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="omega_shape" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+shape of rotation profile: if = 0, proportional to Ti;
+if = 1, given by scaling law from H. Weisen et al paper (NF 52 2012 p 042001);
+if = 2, proportionnal to Pion;
+if = 3, proportional to Ptot;
+if = 4, proportional to n_ion;
+if = 5, proportional local value of deGrassie scaling;
+if = 6, interpolation between Ti shape and deGrassie shape depending of relative weight of NBI source on rotation compared to intrinsic rotation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="xiioxie" default="2" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ratio  Xii over Xie;
+ if = 0 -&gt; compute from ITG / TEM stability diagram; 
+ if &gt; 0, assigned value of xii // xie; 
+ if &lt; 0 , xii // xie is computed using the critical gradient model in which the stiffness parameter is given by xiioxie;
+ in this case the theoretical value is 4.5
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="xiioxie_ped" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ratio Xii over Xie for edge an pedestal;
+ if = 0,the value for the core plasma is used (xiioxie)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="kishape" default="3" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+radial shape of heat tranport cofficient:
+if &gt; 0, Kappa = C  ( 1 + kishape * x ^ ki_expo);
+if = 0, Kappa = C * model_based_shape (see coef_shape);
+if &lt; 0 , Kappa =  q^abs(kishape)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ki_expo" default="2" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if &gt; 0, exponent of Kappa shape fonction;
+if &lt; 0, the shape is Kappa = C*(x-2 / 3*x^2+abs(ki_expo) / x / 30+kishape*x^20);
+ in this case ki_expo controls the centre and kishape controls the edge;
+this gives a rather linear temperature profile in the gradient zone
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-3"/>
+<xs:maxInclusive value="20"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="xieorkie" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 0, radial shape of heat tranport cofficient is Kappa;
+if = 1, instead of given Kappa shape, Chi shape is fixed (Kappa ~ Ne * Chi)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="coef_shape" default="98" maxOccurs="103" minOccurs="98"><xs:element name="" default="1" maxOccurs="
+<xs:annotation>
+<xs:documentation>
+Shape of transport coefficient (Kappa) when kishape = 0: Bohm-gyroBohm or CDBM model;
+ parameter xieorkie is ignored in this case
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="98"/><xs:enumeration value="103"/><xs:enumeration value="98"/>
+<xs:enumeration value="99"/><xs:enumeration value="100"/><xs:enumeration value="98"/><xs:enumeration value="109"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="grad_ped" default="3" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+method to compute the pressure gradient at the top of pedestal:
+if = 0, use the method that does not take into account the discontinuity in gradient;
+if = 1, take into account the discontinuity in gradient;
+ if = 2, improved integration method for equation is used;
+ if = 3, improved integration method for equation is used and no limitation in flux;
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="adiabatic" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 0, turn off adiabatic compression term in the ODE for energy content evolution;
+ if = 1, turn on adiabatic compression term in the ODE for energy content evolution; this term is generally negligible but not during breakdown, fast build-up of plasma volume or disruption;
+ Warning:this term can add some numerical noise in simulation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="qdds" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Sawtooth model:
+if &gt; 0,time averaged effect with clamping of safety factor at qdds value inside qdds radius;
+if = 0, no effect;
+if &lt; 0, time resolved sawteeth, triggered when q0 &lt;= abs(qdds)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-2"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ddsmode" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Sawthooth reconnection:
+0 = simple clamping;
+1 = Porcelli;
+2 = Kadomtsev;
+3 = partial Kadomtsev
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="s1crit" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+critical shear for sawtooth triggering: if = 0, use criterium on qdds,
+otherwise trigger a ST when magnetic shear @ q=1 is above s1crit;
+qdds must be &lt; 0 to activate this mechanism (Porcelli PPCF 1996)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="w1" default="0.1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Sawtooth reconnection: width of null magnetic shear zone in unit of psistar(q=1) [0.1,1] {0.5} (Porcelli PPCF 1996)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="epsq" default="0.01" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Sawtooth reconnection: slope of q inside mixing radius (Porcelli PPCF 1996)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="kidds" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Sawtooth model: transport multiplicator inside q &lt;= qdds flux surface
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="peeling" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ELMs type:
+if = 0, ballooning limit only;
+if = 1, ballooning and peeling limits;
+if = 2, peeling limit only (use as peeling limit the proxy &lt;j&gt;_top_pedestal &gt; (Ip / Splasma))
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="dwow_elm" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ELMs model: if &gt; 0, fraction of pedestal energy losses during one ELM (crash  is triggered when pped exceeds ppedmax value);
+if = 0,  no ELM (default mode);
+ if = 1, use MHD limit for threshold and energy scaling for energy content after crash;
+ if &lt; 0, use scaling law f(nustar) * abs(dwow_elm)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tau_elm_factor" default="10" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ELMs model: factor between turbulent tranport and neoclassical transport in pedestal;
+i.e. multiplicator of energy confinement time used to obtain effective confinement time in H-mode between ELMs crashes 
+(taue_etb = tau_elm_factor * taue)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="runaway" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+runaway current model:
+if = 0, no runaway current;
+if = 1, runaways appear if electric field is above critical field limit;
+if = 2, model for runaway including LH waves effect;
+if = 3, include model for LH and delay for runaway acceleration;
+if = 4, as 3 profiles (Te, Ne, Zeff) instead of averaged quantities;
+if = 5, as 4 with additional collisions with neutrals (dedicated to breakdown studies)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="modeboot" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+bootstrap current model:
+if = 0, scaling law G. T. HOANG;
+if  = 1, Sauter formula;
+if = 2, Sauter formula + asymmetric current;
+if  = 3, Hager &amp; Chang modified Sauter formula;
+if = 4, Hager &amp; Chang modified Sauter formula + asymmetric current
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="bootmul" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor applied to bootstrap current
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ffit_ped" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+bootstrap current model: multiplication factor applied to gradients computation in pedestal
+if = 0 use standard 3 points derivative
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fspot" default="0.15" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor applied to bootstrap like current due to fast alpha particles (0.05 - 0.15; must be computed with the help of SPOT or other MC codes)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="vloop" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Current diffusion, boundary condition:
+if = 0, Ip  waveform given;
+if = 1, vloop = 0 as reference, Ip free;
+if = 2, vloop = vref, Ip free;
+if = 3, PLH is computed to follow Ip waveform @ vloop = 0;
+ if = 4, poloidal edge flux given by flux waveform
+;if = 5, hybrid boundary condition for the coupling with FREEBIE;
+if = 6, P_NBI is computed to follow Ip waveform @ vloop = 0
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="vref" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Current diffusion, boundary condition: reference value  for Vloop;
+Switch from Ip reference to poloidal flux reference when Vloop &lt;= vref
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-3"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tswitch" default="Inf" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Current diffusion, boundary condition: time at which switching from Ip reference to  poloidal flux reference (or vref) is allowed (s)
+ (used only with option.vloop &gt; 0, inactive in evolution mode)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="Inf"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="li" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+value of normalised internal inductance at the first time (used to compute initial current profile)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="breakdown" default="0.03" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Value of Vloop at the first time step:
+if &gt; 0, electric field at the breakdown time normalised to the Dreicer electric field;
+if &lt; 0, initial Vloop in Volt per turn
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-100"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="berror" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+residual magnetic field at breakdown time (T);
+if = 0, computation taue_breakdown is desactivated
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="L_eddy" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+characteristic inductance value of passive structure that can carry current during breakdown (H);
+if = 0, use typical value taking into account major radius of the plasma
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="R_eddy" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+characteristic resistance value of passive structure that can carry current during breakdown (Ohm);
+if = 0, use typical value taking into account major radius of the plasma
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="C_eddy" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+fraction of eddy current that is removed from plasma current waveform (I_p = I_p_ref - C_eddy * I_eddy)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="B_eddy" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor of error magnetic field created by eddy current (B_RorZ = B_eddy * mu0 * I_eddy / R / pi)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="PSI_eddy" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor of pertubation due to eddy current on poloidal flux waveform (Flux = Flux_ref - PSI_eddy * I_eddy)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="I_eddy" maxOccurs="1" minOccurs="1" default="1">
+<xs:annotation>
+<xs:documentation>
+Initial eddy current:
+if = 0, set inital eddy current to 0;
+if = 1, take the maximum of breakdown voltage divided by R_eddy, and initial plasma current waveform
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="p_prefill" default="0.001" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+prefill pressure (Pa, 1 Torr = 133.3 Pa)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="temp_vac" default="300" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+temperature of vacuum vessel and cold neutrals (K)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1.8"/>
+<xs:maxInclusive value="3000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="VV_volume" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+vacuum vessel volume; if = 0, the maximum plasma volume defined by LCFS is used (m^3)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="initiation_only" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 1, stay in initiation mode for the whole simulation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="zeff" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Zeff: 0-&gt; reference &amp; flat , 1 -&gt; average given + profile effect, 2,3 &amp; 4  -&gt; scaling + profile effect for wall/divertor in C,Be or W;
+ 5 -&gt; Tore Supra scaling and  6-&gt; Matthews scaling if not used for radiative power; 7 -&gt; universal scaling law; 8 -&gt; universal scaling law +  profile effect
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
+<xs:enumeration value="7"/>
+<xs:enumeration value="8"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="faccu" default="0.5" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor of accumulation for heavy impurity in the core plasma: 1) with W_effect = 0: 
+ works with zeff key values that allow profile effect (1,2,3,4 &amp; 8);
+ n_heavy = faccu * n_accumulation(x) + (1 - faccu) * r .* n_e(x);
+ if = 0, no accumulation;
+ if &gt; 0, use d neoclassical simplified formula depending on density peaking and temperature peaking;
+ if &lt; 0, use d neoclassical simplified formula depending only on density peaking;
+ 2) with W_effect = 1: factor in exponential exp(acc_inte * faccu);
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="heat_acc" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor for the plasma heating decontamination (works with W_effect = 1 only): if &gt; 0, electron heating tends to reduce impurity accumulation and ion heating tends to increase impurity accumulation in core plasma; reverse sign adds inverse effect.
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rot_acc" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor for the plasma rotation decontamination (works with W_effect = 1 only): if &gt; 0, rotation tends to reduce impurity accumulation;
+otherwise if &lt; 0,rotation tends to increase impurity accumulation;
+ if = 0, no effect of rotation on impurity accumulation.
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fne_acc" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+with W_effect = 1: exponent applied to the normalized electron density for the shape of tungsten density;
+n_W(x) = (C(SOL,divertor)+ cw_offset * ne_edge)  * (n_e(x)/n_e(1)^fne_acc *  exp(acc_inte * faccu)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="gradient_Wacc" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor applied to gradients computation (2 points formula) in pedestal; used in  W accumulation formula (value must be the same as ffit_ped)
+if = 0 use standard 3 points derivative
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="W_effect" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 1, take into account specific effect of Tungsten (as variation of the ionisation state in plasma).
+if used, SOL parameters must be adjusted (at least cw_factor and cw_offset)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="zmax" default="8" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+charge number of main impurity responsible for radiated power (example: O, Ar, Ne, Xe)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="3"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="zimp" default="6" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+charge number of light impurity (example: C, Be)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="3"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rimp" default="0.1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ratio between density of main impurity (n_zmax) and density of light impurity (n_zimp)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="density_model" default="minconv" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+model used to identify density transport coefficients (post processing; have no impact on density profile)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="default"/>
+<xs:enumeration value="control"/>
+<xs:enumeration value="curvature"/>
+<xs:enumeration value="minconv"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="frad" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor for line radiative power
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fte_edge" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor applied to LCFS temperature (for studies of egde radiation and poloidal flux comsumption)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="matthews" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+line radiation model:
+if = 1, line radiative power (Pline) is normalised to Matthews scaling law;
+if = 2, Pline is normalised to Rapp scaling law;
+if = 0, Pline is given by cooling rate formulation (coronal equilibrium) for the core plasma. Difference between Matthews scaling and cooling rate formulation is used for SOL + Divertor radiative power;
+if = -1, same as 0 but use improved computation for radiative mantle
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="-1"/>
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="z_prad" default="zmax" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Charge number used in scaling formula: zmax (original version), zimp or Z_Stangeby = formula defined in Stangeby book
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="zmax"/>
+<xs:enumeration value="zimp"/>
+<xs:enumeration value="Stangeby"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="gaunt" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Gaunt factor:
+if = 0, use fixed Gaunt factor (1.1027);
+if = 1, compute Gaunt factor depending on Te and main ion Z for bremsstrahlung
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="noncoronal" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+non coronal radiative power:
+if = 0, use coronal equilibrium;
+if = 1, use a simplified model for non coronal radiative power computation;
+if &gt; 1 , use a simplified model for non coronal radiative power computation in divertor only;
+if = 2,  full effect;
+ if = 3, half effect;
+ if = 4, 0.2 * full effect;
+if = 5, 0.1 * full effect
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rw" default="0.7" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+wall reflection coefficient of the cyclotron radiation; if &lt; 0, use LATF model instead of Albajar scaling
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="configuration" default="3" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+PFC configuration:
+if = 0,poloidal limiter in L and H mode;
+if = 1, toroidal limiter in L and H mode;
+if = 2, poloidal limiter or divertor depending on LCFS shape (X point automatic detection);
+if = 3, toroidal limiter  or divertor depending on LCFS shape (X point automatic detection);
+if = 4, divertor in both L and H mode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="lambda_scale" maxOccurs="1" minOccurs="1" default="3">
+<xs:annotation>
+<xs:documentation>
+scaling used for SOL width:
+if = 0, uses fraction of a or R (see sol_lscale);
+if = 1, uses Goldston model (gives similar result to Eich scaling);
+if = 2,  uses Goldston model in H-mode diverted plasma, otherwise uses given width;
+if = 3, uses Goldston model in H-mode diverted plasma, otherwise uses Halpern scaling law
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="factor_scale" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+multiplication factor applied to the SOL width when it is defined by a scaling law, for H mode only (Dsol_Hmode = factor_scale * Goldston scaling)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="sol_lscale" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+scaling parameter of folding length in the SOL:
+if = 0, a / 100 (previous metis version);
+if &gt; 0, scale as a * sol_lscale (typical value 0.01);
+if &lt; 0, scale as R0 * sol_lscale (typical value 0.003)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-0.1"/>
+<xs:maxInclusive value="0.1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="eioniz" default="25" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+average ionisation energy per atom;
+if = 0, tabulated value dependent on Te and ne is used
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="de" default="0.5" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: secondary electron emission coefficient
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="alpha_e" default="0.82" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: multiplication factor applied to parallel heat flux in formula for the kinetic effect correction to fluid formulation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.15"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fnesol" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+interpolation factor to compute average density in SOL along magnetic field line:
+(used for SOL radiative power computation)
+ne_sol = (1 -fnesol) * ne_LCFS + fnesol * ne_target
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="sol_model" default="scaling" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+model used to compute egde (LCFS) values
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="scaling"/>
+<xs:enumeration value="2_points"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="sol_rad" default="coupled" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+SOL radiative power: if = coupled, the radiative power in SOL and core plasma are coupled (Cooling rate is used to compute core plasma radiative power and difference between scaling law and core radiative power gives SOL radiative power);
+if = decoupled, the radiative powers in SOL and divertor are separately computed (must be used with 2-points model)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="coupled"/>
+<xs:enumeration value="decoupled"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="lcx" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+connexion length multiplication factor to take into account LCFS safety factor divergence due to X point (connexion length ~ lcx * R * q_eff for diverted plasma)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="20"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fpower" default="0.6" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: fraction of power crossing the LCFS that goes to the target (only one target is considered in two points model, generally the outer one)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fR_target" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: multiplication factor that gives the target radius as R_target = fR_target * R0
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.5"/>
+<xs:maxInclusive value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fcond" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: fraction of conductive // power versus convective+conductive;
+if &gt; 0, without kinetic correction;
+if &lt; 0, with kinetic correction
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fmom" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: fmom * (1 + Tiu/Teu);
+fmom = factor to take into account momentum loss by ions (friction on neutrals, ...);
+Tiu = LCFS Ti; Teu = LCFS Te;
+if fmom = 0, uses the simple model based on the balance between charge exchange and ionisation rate at the target (used for detachment studies)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="mach_corr" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: supersonic flow;
+if = 0, assume Mach number = 1 at the target;
+if = 1, take into account possible Mach number &gt; 1 near the target
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="yield_model" default="Javev" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Tungsten density - model used to compute sputtering yields:
+if = fit, use fit of DIVIMP simulation;
+if = Javev, use model from Janev paper;
+if = Matsunami, use model from Matsunami report
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="fit"/>
+<xs:enumeration value="Javev"/>
+<xs:enumeration value="Matsunami"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ftwleak" default="0.5" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Tungsten density - interpolation factor used to compute W leakage from target to LCFS: Tleak=(abs(ftwleak)*Zw(Te_LCFS)+(1-abs(ftwleak))*Zw(Te_plate))*sqrt(ne*S);
+if &gt; 0, fw_leak = exp(-(Tleak /Tplate)^2);
+ if &lt; 0, fw_leak = fit_DIVIMP(Tleak /Tplate).
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="cw_factor" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Tungsten density: abs(cw_factor) = multiplication factor applied to the source of tungsten,
+used to compute tungsten density profile in core plasma;
+if &gt; 0, no redeposition of tungsten on target;
+if &lt; 0 uses a simple prompt redeposition model on target
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="cw_offset" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Tungsten density: tungsten concentration due to sources other than divertor targets, expressed in concentration relative to electron density (&lt;nw_residual&gt; / &lt;n_e&gt;
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.01"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fzmax_div" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model: fraction (in percent) of radiative impurity, associated to charge zmax, in divertor;
+controls the radiative fraction in divertor;
+if &gt; 0, the minimal temperature in the radiative power integral along field line is 0, as in original model(R. Clark et al, Journal of Nuclear Materials 1995);
+ if &lt; 0, the fraction is abs(fzmax_div) and the minimal temperature in integral is te_lim
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-100"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="carbonblow" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+two points model - carbon density enhancement in divertor due to sputtering:
+if&gt; 0, the density of carbon in divertor is increased proportionally to physical sputtering * carbonblow;
+if &lt;0, the density of carbon in divertor is increased proportionally to total sputtering (physical + chemical + ...) * abs(carbonblow)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-3"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="angle_ece" maxOccurs="1" minOccurs="1" default="90">
+<xs:annotation>
+<xs:documentation>
+ECCD efficiency - trapped particles effect: ECRH effectif deposition poloidal location: 0 -&gt; LFS, 90 -&gt; top, 180 -&gt; HFS.
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="90"/>
+<xs:enumeration value="180"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="synergie" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ECCD efficiency - synergy effect:ECCD effciency multiplication factor due to synergy with LHCD;
+if = 1, no  synergy;
+if = 0, computed from overlap of current sources due to ECCD and LHCD
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="sens" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ECCD current drive orientation:
+if = -1,  counter-current;
+if = 0, normal injection (no current);
+if = 1, co-current (same as Ip)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="-1"/>
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="eccdmul" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ECCD efficiency: multiplication factor applied to ECRH current drive efficiency
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="angle_nbi" default="90" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: NBI beam angle  (&lt;0 -&gt; counter-current , 0 = normal, &gt;0 -&gt; co-current);
+ used to compute the fraction of power injected perpendiculary (cos(angle_nbi)) and not perpendiculary (sin(angle_nbi))
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-90"/>
+<xs:maxInclusive value="90"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rtang" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: tangency radius of neutral beam;
+if = 0, use angle_nbi to compute Rtang (m)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="zext" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: vertical shift at the center of the plasma of the neutral beam trajectory (normalized radius)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="drs1" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: half width of neutral beam in toroidal direction expressed in units of minor radius (computed as variation of tangential radius);
+if = 0, use default METIS value (1/6)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.25"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="dzs1" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: normalised half width of neutral beam in vertical direction;
+if = 0, use default METIS value (0.05)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.25"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="einj" default="1e+06" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: NBI beam energy (eV)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="10000"/>
+<xs:maxInclusive value="1e+07"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nbicdmul" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+first NB injector: multiplication factor applied to NBI current drive efficiency
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="e_shielding" default="Lin-Liu" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+current shielding factor model :
+if = Lin-Liu, use Y.R Lin-Liu &amp; F. L. Hilton  model (Physics of Plasmas 4 (11) 1997);
+if = Honda-Sauter, use model with collisionality depedence (M. Honda et al NF 52 (2012) p 023021)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Lin-Liu"/>
+<xs:enumeration value="Honda-Sauter"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="cur_nbi_time" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Choose temporal evolution of I_NBICD:
+if = 0, same behaviour as PNBI waveform;
+if = 1; same behaviour as thermal PNBI_th;
+intermediate value gives behaviour proportional to cur_nbi_time * PNBI_th + (1-cur_nbi_time) * PNBI (reference);
+Possibly inacurate in evolution mode (inside Simulink/Kepler): must be set to 0 in this case
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nb_nbi" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+number of NBI injectors used in METIS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="angle_nbi2" default="90" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: NBI beam angle  (&lt;0 -&gt; counter-current , 0 = normal, &gt;0 -&gt; co-current);
+ used to compute the fraction of power injected perpendiculary (cos(angle_nbi)) and not perpendiculary (sin(angle_nbi))
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-90"/>
+<xs:maxInclusive value="90"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rtang2" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: tangency radius of neutral beam;
+if = 0, use angle_nbi to compute Rtang (m)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="zext2" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: vertical shift at the center of the plasma of the neutral beam trajectory (normalized radius)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="drs2" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: half width of neutral beam in toroidal direction expressed in units of minor radius (computed as variation of tangential radius);
+if = 0, use default METIS value (1/6)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.25"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="dzs2" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: normalised half width of neutral beam in vertical direction;
+if = 0, use default METIS value (0.05)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.25"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="einj2" default="1e+06" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: NBI beam energy (eV)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="10000"/>
+<xs:maxInclusive value="1e+07"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nbicdmul2" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+second NB injector: multiplication factor applied to NBI current drive efficiency
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="lhmode" maxOccurs="1" minOccurs="1" default="2">
+<xs:annotation>
+<xs:documentation>
+LHCD efficiency model:
+if = 0, Fisch like law  when wlh is defined, otherwise ITER basis scaling (Constant * &lt;Te&gt;);
+if = 1, adjusted to fit of chosen value of Vloop (vref);
+if = 2,  fixed value (etalh);
+if = 3,  Goniche scaling law;
+if = 4, simulTS scaling (for Tore Supra only);
+if = 5, this is use to describe a second ECCD system instead of LHCD system
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="upshiftmode" default="newmodel" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+parallel refractive index upshift model:
+if = "newmodel", then use the new formulation taking into account ALOHA/C3PO/LUKE  2012/2013 results;
+if = linear, upshift increases linearly from napr0 at the edge to fupshift*npar0 at plasma center;
+if = 1/q, npar proportional to 1/q;
+ = Bpol, npar proportional to Bpol;
+ = x^2,  npar proportional to x^2;
+if=sqrt(x), npar proportional to sqrt(x);
+if = null, no upshift;
+if = step@edge, npar becomes npar0 + fupshift
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="newmodel"/>
+<xs:enumeration value="linear"/>
+<xs:enumeration value="1/q"/>
+<xs:enumeration value="Bpol"/>
+<xs:enumeration value="x^2"/>
+<xs:enumeration value="sqrt(x)"/>
+<xs:enumeration value="null"/>
+<xs:enumeration value="step@edge"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fupshift" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+parallel refractive index upshift model: parameter for upshift model.
+When upshiftmode = 'newmodel', then factor applied to kinetic resonance position: n_par_Landau = fupshift * 6.5 / sqrt(Te).
+In this case, for backward compatibility, if fupshift=0, then fupshift is reset internally to 1
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="etalh" default="0.8" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LHCD efficiency or directivity:
+if lhmode = 2, value of normalised LHCD efficiency (etaLH in A/Wm^2);
+otherwise launcher directivity defined as the fraction of total LH power in the co-current peak;
+if lhmode = 5,   multiplication factor applied to ECRH current drive efficiency for the second EC system (gives also sign of current source: if &gt; 0, co-current and if &lt; 0 counter-current)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-3e+19"/>
+<xs:maxInclusive value="3e+19"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="npar0" default="2" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+launched parallel refractive index of LH at antenna
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="freqlh" default="3.7" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Lower Hybrid frequency (GHz)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="wlh" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LH power deposition model:
+if = 0, LH source profile is computed with xlh et dlh;
+otherwise wlh is the width of LH antenna active part (m);
+in this case, the source shape is computed with a simple model;
+ if lhmode = 5, must be set to 0
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="xlh" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LH power deposition model: position of the maximum of LH current profile.
+(or position of the maximum of the second EC deposition profile, if lhmode = 5)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.8"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="dlh" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LH power deposition model: width of the LH current profile;
+(for Tore Supra, if = 0, use of profile from hard x-ray diagnostic; or width of second ECRH deposition profile if  lhmode = 5)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="0.7"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="npar_neg" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LH power deposition model:parallel refractive index of negative peak in the spectrum at the launcher; if = 0, used npar_neg = -npar0
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="0"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="angle_ece2" maxOccurs="1" minOccurs="1" default="90">
+<xs:annotation>
+<xs:documentation>
+second ECCD system efficiency - trapped particles effect: ECRH effectif deposition poloidal location: 0 -&gt; LFS, 90 -&gt; top, 180 -&gt; HFS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="90"/>
+<xs:enumeration value="180"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fwcd" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme:
+if = -1, counter current FWCD;
+if = 0, minority ion heating;
+if =1, FWCD mode;
+if = 2, FW mode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="-1"/>
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="icrh_model" default="PION_fit-Stix" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Selection of the ICRH model:
+if = PION_fit-Stix, deposition width fitted from PION +  Stix formulation for ion distribution function;
+if = Dumont-Vu, new model using resonance width and convergence on quaisilinear diffusion coefficient
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="PION_fit-Stix"/>
+<xs:enumeration value="Dumont-Vu"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="mino" default="H" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme: minority species for ICRH scheme
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="H"/>
+<xs:enumeration value="He3"/>
+<xs:enumeration value="He4"/>
+<xs:enumeration value="T"/>
+<xs:enumeration value="D"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="cmin" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme: fraction of the first minority species (nX/nD or nX/n_main if no deuterium in plasma discharge);
+if = 0, no suprathermal ions in plasma, direct heating of electrons and ions
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nphi" default="25" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme: main toroidal wave number at ICRH launcher
+(n_phi ~ (c*R*n_par) / (2*pi*freq) with assumption K_phi ~ K_par)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="freq" default="57" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme: ICRH frequency in MHz
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="20"/>
+<xs:maxInclusive value="200"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="icrh_width" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme: multiplication factor for ICRH power deposition profile width (for PION_fit-Stix model)
+or vertical extention of ICRH power deposition in units of normalised radius (for Dumont-Vu model)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fact_mino" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ICRH heating scheme (only used in PION_fit-Stix model): multiplication factor applied to formula giving fraction of minority ions accelerated by ICRH wave;
+if = 0, default value depending on species is used
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="orbit_width" maxOccurs="1" minOccurs="1" default="0">
+<xs:annotation>
+<xs:documentation>
+Orbit width effect - with model Dumont-Vu:
+if = 0, no orbit width effect;
+if = 1, broaden the fast ion source profile according to analytical formula
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="ifast_icrh" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Fast ion induced current: with model Dumont-Vu, multiplication factor applied to current due to fast minority ions; must be computed with the help of SPOT
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fabs_fw" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Direct electron power absorption in minority scheme: with model Dumont-Vu, abs(fabs_fw) = fraction of power absorbed directly by electrons;
+if &gt; 0, fast wave current drive, otherwise if &lt; 0, fast wave electron heating
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-1"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fMC_loss" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Conversion mode: with model Dumont-Vu, fraction of power coming from mode conversion (IBW) that is lost
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="sitb" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ITB control:
+if = 0, no ITB;
+if = 1, allow ITB with null or negative magnetic shear;if = 2, same  as 1  + rotation effect on ITB;
+ if = 3, same as 2 + MHD rational q effect
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="itb_sensitivity" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ITB control: sensitivity for the creation of the barrier [1]
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="itb_slope_max" default="2" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+ITB control: controls the maximum pressure gradient inside barrier [2];
+larger value gives lager gradient
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tae" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+TAE control: if = 0 no TAE;
+if = 1, take into account TAE effect in alpha fusion power losses (decrease fast alpha pressure gradient)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="alpha_channeling" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+factor of enhancement of ion heating due to alpha channeling:
+if = 0, no effect;
+ if = 1, all power goes to ions
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="smhd" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+threshold for ideal no wall limit:
+ if &gt; 0, decreases confinement time when beta_N exceeds limit smhd (in percent);
+if = 100, no MHD limit;
+if = 0, threshold at 4*li;
+if &lt; 0, threshold at abs(smhd)*li
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="100"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tmhd" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+threshold for ideal no wall limit: first time ideal no wall limit allowed (s)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="Inf"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rip" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Ripple (Tore Supra only):
+if = 0, no ripple effect;
+if = 1 , take in account the ripple in Tore Supra
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="signe" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+sign of toroidal field projected on plasma current direction
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="-1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="laochange" maxOccurs="1" minOccurs="1" default="1">
+<xs:annotation>
+<xs:documentation>
+Current diffusion coordinate:
+if = 0,current diffusion equation is solved using Lao coordinate (r/a);
+if = 1, current diffusion equation is solved using flux coordinate (rho)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="morphing" default="5" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+2D equilibrium shape: exponent of morphing curve for the matching of LCFS
+(when LCFS is given by points, not used if LCFS is defined only by moments)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="15"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="mode_expo_inte" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Current diffusion, numerical method:
+if = 0,poloidal flux diffusion equation is solved using Crank-Nicholson method;
+if = 1, poloidal flux diffusion equation is solved using exponential integrator method
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="cronos_regul" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+method used to compute q(0); q(0) is constrained to be above 0.5:
+if = 0, use simple extrapolation (metis default);
+if = 1, use analytic formula (cronos default);
+if = 2, average of two previous formulas;
+if = 3, remove limitation to be above 0.5 and extrapolate q(0) imposing null second derivative on magnetic axis (for use with time resolved sawtooth model);
+if = 4, minimal modification using physical assumptions;
+if = 5, change in poloidal flux near magnetic axis in order to use all formulas whitout extrapolation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+<xs:enumeration value="5"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="equi_ppar" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+equilibrium solver: input pressure for Grad Shafranov equation:
+if = 0, perpendicular or isotropic pressure;
+if = 1, parallel pressure;
+if = 2, total pressure;
+if = 3, parallel pressure + rotational energy
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="impur_rot" default="imp" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+toroidal rotation, choice of impurity for rotation data output: 
+ imp = light impurity (charge zimp);
+ max = impurity for radiation (charge zmax)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="imp"/>
+<xs:enumeration value="max"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="mode_vtheta" default="Neoclassical V_pol" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+poloidal rotation - selection of the method used to compute poloidal rotation:
+'Neoclassical V_pol' = use neoclassical formulation from ref: Y. B. Kim et all, Phys. Fluids. B 3  (8) 1991  p 2050-
+ 'same v_tor' = assume all species have the same toroidal rotation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="Neoclassical V_pol"/>
+<xs:enumeration value="same v_tor"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="rot_jr_loss" default="off" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Toroidal rotation:
+if = on, take into account forces due to backward current generated to compensate for for radial current induced by particles losses (fast and thermal);
+if = off, this effect is not included in the toroidal rotation computation
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="on"/>
+<xs:enumeration value="off"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="carnot" default="0.42" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Power plant: thermal power to electricity power conversion efficiency
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="mul_blanket" default="1.2" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Power plant: fusion power multiplication factor due to neutron multiplication in breeding blanket
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.5"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="aux" default="0.05" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Power plant: fraction of electric power used by auxiliary systems other than additional heating sources
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="effinj" default="0.7" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Power plant: conversion efficiency of additional heating sources
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="available_flux" default="Inf" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+available poloidal flux provided by central solenoid and poloidal field coils (Wb)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="Inf"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="machine" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+name of the Device
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="shot" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+shot number or simulation identification number
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="999999"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="reference_parameters" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+file name that contains Parameters that will overwrite user defined Parameters (if empty, it is not used)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="first_wall" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+matfile name that contains (R,Z) points describing poloidal section of the first_wall.
+if empty, it is not used
+Variable names should be R and Z. R and Z must be vectors of same length
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="dwdt_method" default="implicit" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Numerical method for evolution mode: method used to compute the time derivative of energy (dW / dt):
+if =  implicit, same method as in full shot simulation;
+if = explicit, explicit polynomial filtered method;
+if = none, dW / dt is set to 0;
+if = v4.2, explicit method used in previous versions of METIS;
+ if = working_point, for Operation mode computation, method to find the steady state solution (all d/dt = 0 except dpsi/dt)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="implicit"/>
+<xs:enumeration value="explicit"/>
+<xs:enumeration value="none"/>
+<xs:enumeration value="v4.2"/>
+<xs:enumeration value="working_point"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nbmax" default="31" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Numerical method: maximum number of convergence loops
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="31"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="tol0d" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Numerical method: tolerance on relative error to stop the convergence loop;
+if = 0, use default values : 1e-2 for fast mode, 1e-3 for full run and evolution mode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="1.000000e-01"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="init_output_ids" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control:\nif = 0, continue to write at the end of existing record;\nif=1 on init call, initialise output IDS (reset and write the 1st time slice)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="restart" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control:name of the restart file;\nif empty, no restart file is saved; otherwise, after each call, the restart file is saved
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="summary" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write summary IDS;\nif=1, write summary IDS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="core_profiles" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write core_profiles IDS;\nif=1, write core_profiles IDS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="core_transport" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write core_transport IDS;\nif=1, write core_transport IDS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="core_sources" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write core_sources IDS;\nif=1, write core_sources IDS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="edge" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write edge IDSs;\nif=1, write edge IDSs (edge_profiles and edge_transport)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="numerics" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write numerics IDSs;\nif=1, write numerics IDSs (transport_solver_numerics)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="equilibrium" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = 0, do not write equilibrium IDS;\nif=1, write equilibrium IDS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="equi_extrap" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+2D equilibrium - method for extrapolation of Psi oustside the LCFS:\nif = 0, surface current at LCFS but better accuracy inside LCFS;\nif = 1, smooth fields but accuracy decrease inside LCFS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="Convex_LCFS" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+2D equilibrium: force LCFS used for 2D extrapolation to be convex:\nif = 0, keep LCFS as it is provided;\nif = 1, force LCFS to be convex
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fixed_grid" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+2D equilibrium, for rectangular grid:\nif = 0, uses floating grid following plasma displacement;\nif = 1 uses same grid for all time slices
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nb_points_pol" default="65" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+2D equilibrium: number of points in poloidal direction for inverse (rho,theta) grid of equilibrium
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="35"/>
+<xs:maxInclusive value="255"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nb_points_radial" default="51" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+2D equilibrium: number of points in radial direction for rectangular (R,Z) grid of equilibrium
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="33"/>
+<xs:maxInclusive value="301"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="pulse_schedule_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for pulse_schedule IDS;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="summary_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for summary IDS;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="core_profiles_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for core_profiles IDS;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="core_transport_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for core_transport IDS;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="core_sources_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for core_sources IDS;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="edge_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for edge IDSs (egde_profiles and edge_transport);\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="numerics_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for transport_solver_numerics IDSs;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="equilibrium_occurrence" type="string" default="" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: output ids occurrence for equilibrium IDS;\nif empty, use default occurence (0)
+</xs:documentation>
+</xs:annotation>
+</xs:element>
+<xs:element name="COCOS" default="11" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+UAL control: choice for the output COCOS
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:minInclusive value="1"/>
+<xs:maxInclusive value="18"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:schema>

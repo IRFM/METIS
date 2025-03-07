@@ -1,0 +1,169 @@
+###################
+# GLOBAL VARIABLES#
+###################
+
+#MATLAB library
+MATLABHOME=/Applications/MatLab_R2015a.app
+MATLABLIBDIR=$(MATLABHOME)/bin/maci64
+
+#BLAS library
+BLASLIB=-Wl,-framework -Wl,veclib
+
+#LAPACK library
+LAPACKLIB=$(BLASLIB)
+
+#make executable
+MAKE=make
+
+#mex executable
+MEXBIN=$(MATLABLIBDIR)/../mex
+MEX = $(MEXBIN)
+
+#Temporary working directory for writting temporary files
+#blank means that we use the same directory of the data cronos file
+#put the absolute path
+CRONOSTEMPDIR=/tmp
+
+#this key allows or not cronos to write in CRONOS simulation data base
+#uncomment one (default is YES)
+#CRONOS_DATABASE_WRITE=YES
+CRONOS_DATABASE_WRITE=NO
+
+
+####################
+#PLATFORM VARIABLES#
+####################
+#preprocessing for matlab version
+#if you use a version later than MATLAB 7.3
+#then put MATLABVERSION=-DMATLAB73
+#else put nothing
+MATLABVERSION=-DMATLAB73
+
+#preprocessing for CRONOSINT variables
+#CRONOSINT=integer*8 for 64 bits machine
+#         =integer*8 for 32 bits machine
+DEF=-DCRONOSINT=integer*8  $(MATLABVERSION)
+
+#preprocessing executable
+CPP=cpp -P
+
+##################
+#PARALLEL VERSION#
+##################
+#if use MPI  put MPI=-DMPI else put MPI=
+MPI=
+
+ifeq ($(MPI),-DMPI)
+   #if you use MPI code
+   #mpi include directory
+   INCLUDE_MPI=-I/usr/local/pgi/linux86-64/6.0/include
+
+   #mpi library
+   LIB_MPI=-Mmpi
+
+   #flags for openmp
+   OPENMP=-mp
+else
+   INCLUDE_MPI=
+   LIB_MPI=
+   OPENMP=
+endif
+
+#########################################
+#COMPILERS OPTIONS for compiling modules#
+#########################################
+F90=gfortran -cpp
+F90FLAGS=  -fPIC  -fdefault-real-8 -fdefault-double-8  $(MPI) $(INCLUDE_MPI) $(DEF) -fno-align-commons -fmax-errors=1 -ffixed-line-length-none
+F90DEBUGFLAGS=-g -O0 -fPIC -cpp -fdefault-real-8 -fdefault-double-8  $(MPI) $(INCLUDE_MPI) $(DEF)
+F90LIBS=$(LIB_MPI) 
+NETCDF_DIR=/Applications/netcdf
+#NETCDF_ALTERNATIVE=$(MATLABHOME)/bin/glnxa64
+FORTLIBS=-L/usr/lib64 -lgfortran
+LDFLAGS=-L/usr/lib -L/usr/lib64
+
+CC=gcc
+CFLAGS= -fPIC $(MPI) $(INCLUDE_MPI)
+CLIBS=$(LIB_MPI)
+
+#specific flags for module
+
+#compiling GLF23
+CPU=INTEL
+FFLAGS_GLF23=-fPIC -fdefault-real-8 -fdefault-double-8
+
+
+#for compiling SAMPLING
+CFLAGS_SAMPLING=-fPIC -I$(MATLABHOME)/extern/include/
+
+#for compiling REMA
+FFLAGS_REMA=
+
+#for compiling HELENA fileversion
+FFLAGS_HELENA=-nodps -fpic -i4 -r8 -w95 -w90 -save -zero -132
+
+#for compiling SPOT
+FFLAGS_SPOT=
+
+#for compiling LIBS
+FFLAGS_MUMPS=-fpic -cpp $(DEF) -i4 $(DEF)
+#FCFLAGS_MUMPS=-fpic
+
+
+##########################################
+#COMPILER OPTIONS for compiling mex-files#
+##########################################
+#Name of the mexfile extension
+EXT=mexmaci64
+
+#C options 
+CC_="gcc"
+CFLAGS_="-fPIC $(INCLUDE_MPI) $(DEF) "
+CDEBUGFLAGS_="-g " 
+#CDEBUGFLAGS_="-g -traceback -debug-g -traceback -debug" 
+CLIBS_=" -L$(MATLABLIBDIR) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lm"
+
+
+#FORTRAN options 
+FC_="gfortran-mp-4.7"
+FC_="gcc"
+FC_="gfortran"
+FC90_="gfortran"
+FFLAGS_="-fPIC  -cpp $(DEF) -fdefault-real-8 -fdefault-integer-8 -fdefault-double-8 -DMX_COMPAT_32 -I/${MATLABHOME}/extern/include -fmax-errors=1 -ffixed-line-length-none"
+FOPTIMFLAGS_="-O3"
+FDEBUGFLAGS_= "-g "
+FLIBS_=" -L$(MATLABLIBDIR) $(LAPACKLIB) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lgfortran "
+
+#C++ options
+CXX_="g++"
+CXXFLAGS_="-fPIC $(DEF) -ansi"
+CXXOPTIMFLAGS_=" "
+#CXXDEBUGFLAGS_="-g"
+CXXLIBS_="-Wl,-rpath-link,$(MATLABLIBDIR) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lm -lstdc++"
+
+#LD options 
+LDFLAGS_="-fPIC -shared -lgfortran -L/usr/lib64"
+LDOPTIMFLAGS_="-O3 "
+LDDEBUGFLAGS_="-g "
+LDLIBS_=
+
+#C++ LD options
+LDCXX_="gfortran" 
+LDCXXFLAGS_="-fPIC -shared -lgfortran -L/usr/lib64"
+LDCXXOPTIMFLAGS_="-O3"
+LDCXXDEBUGFLAGS_="-g "
+#LDCXXDEBUGFLAGS_="-g -Minform=info"
+LDCXXLIBS_=
+
+
+#optimized version
+MEX=$(MEXBIN) -v LD=$(_LD) CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#optimized version
+MEX_F90=$(MEXBIN) -v CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC90_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#debug version 
+#MEX_DEBUG=$(MEXBIN) -v -g CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#optimized version
+#MEX_F90=$(MEXBIN) -v -g CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC90_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ROOT" >
+<xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:sequence xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="gaz" default="3" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+1 -&gt; H, 2 -&gt; D , 3 -&gt; DT &amp; 4 -&gt; He
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="1"/>
+<xs:enumeration value="2"/>
+<xs:enumeration value="3"/>
+<xs:enumeration value="4"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="etalh" default="0.8" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LHCD efficiency or directivity:
+if lhmode = 2, value of normalised LHCD efficiency (etaLH in A/Wm^2);
+otherwise launcher directivity defined as the fraction of total LH power in the co-current peak;
+if lhmode = 5,   multiplication factor applied to ECRH current drive efficiency for the second EC system (gives also sign of current source: if &gt; 0, co-current and if &lt; 0 counter-current)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-3e+19"/>
+<xs:maxInclusive value="3e+19"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="wlh" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LH power deposition model:
+if = 0, LH source profile is computed with xlh et dlh;
+otherwise wlh is the width of LH antenna active part (m);
+in this case, the source shape is computed with a simple model;
+ if lhmode = 5, must be set to 0
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="npar_neg" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+LH power deposition model:parallel refractive index of negative peak in the spectrum at the launcher; if = 0, used npar_neg = -npar0
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="-10"/>
+<xs:maxInclusive value="0"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="fupshift" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+parallel refractive index upshift model: parameter for upshift model.
+When upshiftmode = 'newmodel', then factor applied to kinetic resonance position: n_par_Landau = fupshift * 6.5 / sqrt(Te).
+In this case, for backward compatibility, if fupshift=0, then fupshift is reset internally to 1
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:schema>

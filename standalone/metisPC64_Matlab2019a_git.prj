@@ -1,0 +1,170 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="3166942309" file="C:\Users\JA132999.INTRA\Documents\Metis64\metisPC64_Matlab2019a_git.prj" location="C:\Users\JA132999.INTRA\Documents\Metis64" name="metisPC64_Matlab2019a_git" preferred-package-location="C:\Users\JA132999.INTRA\Documents\Metis64\metisPC64_Matlab2019a_git\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>metisPC64_Matlab2019a_git_9167310cdaeb884f5a724aabb6aa3c7c38</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.3001</param.version>
+    <param.authnamewatermark>Artaud Jean-François</param.authnamewatermark>
+    <param.email>jean-francois.artaud@cea.fr</param.email>
+    <param.company>CEA</param.company>
+    <param.summary>Standalone verion of METIS for Windows
+From SVN Git hash 9167310cdaeb884f5a724aabb6aa3c7c38ca37a3</param.summary>
+    <param.description>METIS is a numerical code aiming at fast full tokamak plasma analyses and predictions. It
+combines 0D scaling-law normalised heat and particle transport with 1D current diffusion
+modelling and 2D equilibria. It contains several heat, particle and impurities transport models,
+as well as heat, particle, current and momentum sources, which allow faster than real time
+scenario simulations. This paper gives a first comprehensive description of the METIS suite:
+overall structure of the code, main available models, details on the simulation workflow and
+numerical implementation. Some examples of applications to the analysis of experimental
+discharges and the predictions of ITER scenarios are also given.</param.description>
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>metisPC64</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\metisPC64_Matlab2019a_git\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\metisPC64_Matlab2019a_git\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\metisPC64_Matlab2019a_git\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\metisPC64_Matlab2019a_git</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>true</param.create.log>
+    <param.log.file>MetisPC64.log</param.log.file>
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text>Syntax 
+	  -? 
+	 
+ Input Arguments 
+	 -?  print help on how to use the application 
+	 input arguments</param.help.text>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.combo />
+      <param.logo />
+      <param.install.notes />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
+    </unset>
+    <fileset.main>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\metis.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\acces</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\coef</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\coef\neuralnet_repo</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\extract_data4fbe.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\import_create_lcfs_data.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\import_feeqs_lcfs_data.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\metis_create_link.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\metis_feeqs_link.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\z0separatrix_fromfbetometis.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\graphe</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\import</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\import\sampling\pchipslopest_mex.mexw64</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\import\sampling\tsample.mexw64</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\import\sampling\tsplinet.mexw64</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\init</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\interface</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\op</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\solver</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\source</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\trait</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\zerod</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\Metis_splash_screen3.png</file>
+      <file>${PROJECT_ROOT}\mdsPlus_2019\matlab</file>
+      <file>${PROJECT_ROOT}\mex2019</file>
+    </fileset.resources>
+    <fileset.package>
+      <file>${MATLAB_ROOT}\toolbox\compiler\deploy\win64\MCRInstaller.exe</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\JT-60SA_LCFS</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\licence _utilisation_METIS_FINAL.pdf</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\acces\JT-60SA\jt60sawall.mat</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\acces\JT-60SA\LCFS_JT-60SA_Scenario2_from_CREATE.mat</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\acces\JT-60SA\reference_scenario_jt60-sa</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\acces\west\configuration</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\acces\west\ref_equilibrium</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\certification</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\doc</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\doc\Howto_METIS_final.pdf</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\graphe\gettsinfo.mat</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\zerod\METIS_HELP.pdf</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\Metis_splash_screen3.png</file>
+      <file>${PROJECT_ROOT}\mex\tslib64.dll</file>
+    </fileset.package>
+    <fileset.depfun>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\compatibility\signal\filter_matrix_B.mat</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\compatibility\signal\medfilt1.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\compatibility\signal\sgolayfilt.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\prepare_equi_ext.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\resample_time_fbe.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\resample_time_space_fbe.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\fbe\z0curdiff_external.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\getidprocess.m</file>
+      <file>C:\Users\JA132999.INTRA\Documents\metis4itm\metis\zineb_path.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\metisPC64_Matlab2019a_git\for_testing" name="metisPC64_Matlab2019a_git_9167310cdaeb884f5a724aabb6aa3c7c38.exe" optional="false">C:\Users\JA132999.INTRA\Documents\Metis64\metisPC64_Matlab2019a_git\for_testing\metisPC64_Matlab2019a_git_9167310cdaeb884f5a724aabb6aa3c7c38.exe</file>
+      <file location="${PROJECT_ROOT}\metisPC64_Matlab2019a_git\for_testing" name="readme.txt" optional="true">C:\Users\JA132999.INTRA\Documents\Metis64\metisPC64_Matlab2019a_git\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\metisPC64_Matlab2019a_git\for_testing" name="splash.png" optional="false">C:\Users\JA132999.INTRA\Documents\Metis64\metisPC64_Matlab2019a_git\for_testing\splash.png</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2019a</root>
+      <toolboxes>
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

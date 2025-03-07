@@ -1,0 +1,12 @@
+ 
+==================================================
+??? Undefined function or variable 'time'.
+
+Error in ==> metis_test at 144
+fprintf('Start of %s @ %s\n',testfilename,time);
+
+dbcont
+??? Error using ==> dbcont
+Debugging commands are only allowed in debug mode.
+
+exit

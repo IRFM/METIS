@@ -1,0 +1,28 @@
+ALL= iround  tsample  tsplinet 
+
+OPTIONS = -DUSE_FUNCTION_PROTOTYPES # -g -DDEBUG
+INCLUDES = -I$./ -I/home/Matlab/matlab6/extern/include
+COPTS = -c
+FOPTS = -g -c 
+CMEX = /home/Matlab/matlab6/bin/mex -f ./mexopts_tsample.sh -I/usr/include -I./
+LIB =  
+
+all:	${ALL}
+
+.c.o:
+	gcc $(COPTS) $(INCLUDES) $(OPTIONS) $<
+iround:
+	$(CMEX) $(OPTIONS) iround.c
+tsample:
+	$(CMEX) $(OPTIONS) tsample.c ctable1.o cround.o cspline.o
+tsplinet:
+	$(CMEX) $(OPTIONS) tsplinet.c
+
+iround : iround.o
+tsample : tsample.o ctable1.o cround.o cspline.o
+tstablet : tstablet.o
+tsplinet : tsplinet.o
+
+clean:
+	rm -f *.o *.BAK *.sav *.old a.out core  *~ *.mexaxp
+

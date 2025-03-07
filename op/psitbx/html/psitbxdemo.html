@@ -1,0 +1,963 @@
+<HTML>
+<HEAD>
+<TITLE> The TCV Psi-Toolbox tutorial 02-Jun-2004</TITLE>
+</HEAD>
+
+<BODY>
+
+<H1> The TCV Psi-Toolbox tutorial</H1>
+
+<H2><A NAME=TOP>Contents</A></H2>
+
+<OL>
+<LI><A HREF=#1> Introduction</A>
+<LI><A HREF=#2> Coordinate systems</A>
+<LI><A HREF=#3> Functions of the spatial coordinates and others</A>
+<LI><A HREF=#4> Equilibrium geometry description</A>
+<LI><A HREF=#5> Diagnostic chords</A>
+</OL></OL></OL></OL></OL></OL>
+
+<H2><A NAME=1></A><A HREF=#TOP>&lt;&lt;</A> 
+ Introduction</H2>
+
+<H3> History and future</H3>
+
+<P> <STRONG>The Psi-Toolbox provides tools for manipulating space and time dependant quantities in the variable geometry of TCV.</STRONG> Targeted tasks are the analysis of the diagnostic data, analysis and simulation for transport and heating,... In summer 1995, extensive discussions with the potential users allowed to define the various wishes. Then in collaboration with Mathias Anton, we proposed a set of basic functionalities. In 1996, Christian Deschenaux coded a first version of these basic routines, which I later published as version 1. The result was pretty well described by Richard's words: <CITE>I have spent the whole morning battling against the Psi-Toolbox.</CITE> The fact is that the functionality was certainly adequat but the lack of detailed documentation made it unusable.</P>
+
+<P> The advent of Matlab 5 encouraged me to completely revisite the Psi-Toolbox. Having written the first version, I realised that the various functionalities could be unified in a couple of simple concepts and the new capabilities of Matlab 5 would make the use of these concepts very clear. So users, if any, of the first Psi-Toolbox should forget their old coding habits and only retain what they want to achieve before starting reading this tutorial.</P>
+
+<P> Although as you will see the concepts are very simple, the number of possibilities and combinations they generate is hughe. So please let me know if you feel at some point that this tutorial is not clear enough. I will try to find better or more explicite examples. Also be tolerant with the numerous bugs you certainly will discover. </P>
+
+<P> <P ALIGN=CENTER><IMG SRC=richard.jpg></P></P>
+
+<P> <P ALIGN=CENTER>Staring Richard A. Pitts<BR>Thanks to Basil for giffing the figures</P></P>
+
+<H3> Classes, objects and methods</H3>
+
+<P> Version 2.0 of the TCV Psi-Toolbox intensively uses the capability of Matlab 5 for object oriented programming. Thus to better understand how to use this toolbox and how to get profit from it, you need to acquire a few concepts.</P>
+
+<P> A <DFN>class</DFN> is a new data type reserved for a specific purpose. An <DFN>ojbect</DFN> is an instance of a class. The fisrt main step in the definition of a class is the choice of its data structure. In Matlab, objects are stored in structures whose fields contain the various information specific to the class. However these fields are neither visible nor accessible for the user. Instead, together with a class, <DFN>methods</DFN> are created which in principle safely manipulate these fields to perform operations specific to the class. One of these methods, the most fundamental, is the <DFN>class constructor</DFN> which creates the corresponding objects. In Matlab, the methods for a given class are gathered in a directory whose name is the class name preceeded by the string <SAMP>$8A</SAMP> and the constructor is the method with the same name as the class.</P>
+
+<P> Some basic methods, such as <SAMP>size</SAMP> or <SAMP>ndims</SAMP>, may apply to different classes. In such cases Matlab calls the appropriate method on the basis of the class of its arguments. Such methods are called <DFN>overloaded</DFN>.</P>
+
+<P> A class can also be the <DFN>child</DFN> or a <DFN>parent</DFN> class. In that case, the child class inherits the fields and methods of its parent, to which specific fields and/or methods are added. It means that if a method is not defined for the child but only for the parent, the parent method will be used.</P>
+
+<P> This is almost all what you need to know to use the Psi-Toolbox but if necessary further details can be found in chapter 14 of <CITE>Using Matlab</CITE>.</P>
+
+<H2><A NAME=2></A><A HREF=#TOP>&lt;&lt;</A> 
+ Coordinate systems</H2>
+
+<H3> Coordinate systems: the psitbxgrid class</H3>
+
+<P> The first basic tools to take out from the Psi-Toolbox are the different coordinate systems. The information defining the systems you will use are stored in objects of class <SAMP>psitbxgrid</SAMP>. There are different coordinate systems and we will start with the <SAMP>'Cylindrical'</SAMP> coordinates (r,z,phi) whose axis corresponds to the main vertical axis of the tokamak. Suppose Richard, an edge physicist, wants to study in details what happens around an inner wall tile. It is certainly a good idea for him to define a spatial grid in cylindrical coordinates around his tile, let say from 0.62 to 0.7 m in radial direction, from -0.05 to 0.05 m in vertical direction and from -3 to 3 degrees in toroidal angle. Thus he needs to construct an object of class <SAMP>psitbxgrid</SAMP>.</P>
+
+<PRE><FONT COLOR=RED>rzphi = {0.62:.02:0.7,-.05:.02:.05,pi/180*(-3:2:3)};
+GridCyl = psitbxgrid('Cylindrical','Grid',rzphi)
+ GridCyl is a PsiTbx-Grid object =
+       type: 'Cylindrical'
+      label: {'R'  'Z'  'Phi'}
+    storage: 'Grid'
+          x: {1x3 cell}
+          t: []
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(GridCyl)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo001.png></P>
+<H3> How to manipulate psitbxgrid objects: some methods for that class</H3>
+
+<P> You see that Matlab displays for Richard the fields of the <SAMP>psitbxgrid</SAMP> object and the corresponding contents. To use these fields, access with the usual dot syntax is defined. However to protect the integrity of the object, Richard is not allowed to directly modify them. The different methods applying on a <SAMP>psitbxgrid</SAMP> object will do that safely.</P>
+
+<P> For example the field <SAMP>x</SAMP> is a cell array, each cell being the vector of the mesh points in each spatial direction. I will discuss the other fields later.</P>
+
+<P> The function <SAMP>size</SAMP> has been redefined to give the effective size of the grid defined by the <SAMP>psitbxgrid</SAMP> object. It is a method of the <SAMP>psitbxgrid</SAMP> class.</P>
+
+<PRE><FONT COLOR=RED>GridCyl.label
+ans = 
+    'R'    'Z'    'Phi'
+GridCyl.x
+ans = 
+    [1x5 double]    [1x6 double]    [1x4 double]
+GridCyl.x{1},GridCyl.x{2},GridCyl.x{3}
+ans =
+    0.6200    0.6400    0.6600    0.6800    0.7000
+ans =
+   -0.0500   -0.0300   -0.0100    0.0100    0.0300    0.0500
+ans =
+   -0.0524   -0.0175    0.0175    0.0524
+size(GridCyl)
+ans =
+     5     6     4
+which size -all
+size is a built-in function.
+/home/moret/psitbxdvpt/@psitbxdcd/size.m                  % psitbxdcd method
+/home/moret/psitbxdvpt/@psitbxfun/size.m                  % psitbxfun method
+/home/moret/psitbxdvpt/@psitbxgrid/size.m                 % psitbxgrid method
+/home/matlab/crpptbx-6.5.0/general/@dxml/size.m           % dxml method
+/home/matlab/crpptbx-6.5.0/mds/@tdi/size.m                % tdi method
+/home/matlab/crpptbx-6.5.0/psitbx/@psitbxgrid/size.m      % Shadowed psitbxgrid method
+/home/matlab/crpptbx-6.5.0/psitbx/@psitbxfun/size.m       % Shadowed psitbxfun method
+/home/matlab/crpptbx-6.5.0/psitbx/@psitbxdcd/size.m       % Shadowed psitbxdcd method
+/usr/local/matlabR13/toolbox/matlab/iofun/@timer/size.m   % timer method
+/usr/local/matlabR13/toolbox/matlab/iofun/@serial/size.m  % serial method
+/usr/local/matlabR13/toolbox/comm/comm/@gf/size.m         % gf method
+/usr/local/matlabR13/toolbox/control/control/@zpk/size.m  % zpk method
+/usr/local/matlabR13/toolbox/control/control/@tf/size.m   % tf method
+/usr/local/matlabR13/toolbox/control/control/@ss/size.m   % ss method
+/usr/local/matlabR13/toolbox/control/control/@frd/size.m  % frd method
+/usr/local/matlabR13/toolbox/ident/ident/@idmodel/size.m  % idmodel method
+/usr/local/matlabR13/toolbox/ident/ident/@idfrd/size.m    % idfrd method
+/usr/local/matlabR13/toolbox/ident/ident/@iddata/size.m   % iddata method
+/usr/local/matlabR13/toolbox/matlab/elmat/size.m          % Shadowed
+help psitbxgrid/size
+
+  PSITBXGRID/SIZE	Grid size
+
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo002.png></P>
+<H3> When things do not align on a grid: the storage field</H3>
+
+<P> Richard has also installed on his tile two sets of ten probes of some kind. Of course these do not lie on a regular grid as the previously defined abstract points. So their position is specified by a triplet of coordinates, named <SAMP>'Points'</SAMP>. It is the meaning of the <SAMP>storage</SAMP> field of a <SAMP>psitbxgrid</SAMP> object. In such a case the organisation of each cell can be arbitrary, for example here 2 by 10 matrices to represent the two sets of two probes. In addition, the numbers come from the drawing workshop and are specified on a cartesian <SAMP>'Orthogonal'</SAMP> system, whose z-axis coincides with the machine main axis and whose x-z plane is at phi = 0.</P>
+
+<PRE><FONT COLOR=RED>xyz = {repmat(.625,2,10),[zeros(1,10);linspace(-.01,.01,10)],[linspace(-.01,.01,10);zeros(1,10)]};
+ProbePointsOrt = psitbxgrid('Orthogonal','Points',xyz)
+ ProbePointsOrt is a PsiTbx-Grid object =
+       type: 'Orthogonal'
+      label: {'X'  'Y'  'Z'}
+    storage: 'Points'
+          x: {[2x10 double]  [2x10 double]  [2x10 double]}
+          t: []
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(GridCyl), hold on, plot(ProbePointsOrt,'ob'), hold off
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo003.png></P>
+<H3> When things move: the Time-Points storage</H3>
+
+<P> Richard will tell you that things are never so simple. In fact his probes move in time. So the position of Richard's probe should be stored in multi-dimensional arrays whose last index is the time index. In this example each three spatial coordinate should be a 2 by 10 by number of times array. Then Richard must build a <SAMP>psitbxgrid</SAMP> object with <SAMP>'Time-Points'</SAMP> storage:</P>
+
+<PRE><FONT COLOR=RED>vx = .1;
+t = [.1,.3,.5];
+dim = [ones(1,ndims(xyz{1})),length(t)];
+xyzt = {repmat(xyz{1},dim)+vx*repmat(reshape(t,dim),[size(xyz{1}),1]),repmat(xyz{2},dim),repmat(xyz{3},dim)};
+MovingProbePointsOrt = psitbxgrid('Orthogonal','Time-Points',xyzt,t)
+ MovingProbePointsOrt is a PsiTbx-Grid object =
+       type: 'Orthogonal'
+      label: {'X'  'Y'  'Z'}
+    storage: 'Time-Points'
+          x: {[2x10x3 double]  [2x10x3 double]  [2x10x3 double]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(GridCyl), hold on, plot(MovingProbePointsOrt,'ob'), hold off
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo004.png></P>
+<H3> Coordinate transformation: the psitbxg2g method</H3>
+
+<P> Of course the first thing Richard wants to know is: where are my probes in cylindrical coordinates. The arithmetic is to be found in text book. The receipe to be used is the <SAMP>psitbxg2g</SAMP> method, which will hopefully do the job for him.</P>
+
+<PRE><FONT COLOR=RED>ProbePointsCyl = psitbxg2g(ProbePointsOrt,'Cylindrical')
+ ProbePointsCyl is a PsiTbx-Grid object =
+       type: 'Cylindrical'
+      label: {'R'  'Z'  'Phi'}
+    storage: 'Points'
+          x: {[2x10 double]  [2x10 double]  [2x10 double]}
+          t: []
+        par: [1x1 struct]
+        csp: [1x1 struct]
+ProbePointsCyl.x{1},ProbePointsCyl.x{2},ProbePointsCyl.x{3}
+ans =
+  Columns 1 through 7 
+    0.6250    0.6250    0.6250    0.6250    0.6250    0.6250    0.6250
+    0.6251    0.6250    0.6250    0.6250    0.6250    0.6250    0.6250
+  Columns 8 through 10 
+    0.6250    0.6250    0.6250
+    0.6250    0.6250    0.6251
+ans =
+  Columns 1 through 7 
+   -0.0100   -0.0078   -0.0056   -0.0033   -0.0011    0.0011    0.0033
+         0         0         0         0         0         0         0
+  Columns 8 through 10 
+    0.0056    0.0078    0.0100
+         0         0         0
+ans =
+  Columns 1 through 7 
+         0         0         0         0         0         0         0
+   -0.0160   -0.0124   -0.0089   -0.0053   -0.0018    0.0018    0.0053
+  Columns 8 through 10 
+         0         0         0
+    0.0089    0.0124    0.0160
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo005.png></P>
+<H3> One more step toward the tokamak: the toroidal coordinate system</H3>
+
+<P> Toroidal coordinates is quite natural for a toroidal device. To transform orthogonal cartesian or cylindrical coordinates to toroidal coordinates, Richard must specify the position of the todoidal axis. This is achieved with an additional argument to the <SAMP>psitbxgrid</SAMP> constructor. This argument can take several form. The one shown here is a cell array with the (r,z) position of the axis. This information is then stored in the <SAMP>par</SAMP> field of the <SAMP>psitbxgrid</SAMP> object.</P>
+
+<PRE><FONT COLOR=RED>athetaphi = {linspace(0,.2,6),linspace(-pi,pi,7),linspace(0,2*pi,25)};
+r0z0 = {1,0};
+GridTor = psitbxgrid('Toroidal','Grid',athetaphi,r0z0)
+ GridTor is a PsiTbx-Grid object =
+       type: 'Toroidal'
+      label: {'A'  'Theta'  'Phi'}
+    storage: 'Grid'
+          x: {1x3 cell}
+          t: [1x0 double]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+GridTor.par
+ans = 
+     r0: 1
+     z0: 0
+    psi: []
+    fsd: []
+    dcd: []
+plot(GridTor)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo006.png></P>
+<H3> Parameter in coordinate transformation</H3>
+
+<P> The same kind of additional parameter may be necessary for transformation to toroidal coordinate. In this example a <SAMP>psitbxgrid</SAMP> object with toroidal coordinates is used, which contains in its <SAMP>par</SAMP> field the necessary information:</P>
+
+<PRE><FONT COLOR=RED>MovingProbePointsTor = psitbxg2g(MovingProbePointsOrt,'Toroidal',GridTor)
+ MovingProbePointsTor is a PsiTbx-Grid object =
+       type: 'Toroidal'
+      label: {'A'  'Theta'  'Phi'}
+    storage: 'Time-Points'
+          x: {[2x10x3 double]  [2x10x3 double]  [2x10x3 double]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo007.png></P>
+<H3> One more step toward variable configuration: moving magnetic axis</H3>
+
+<P> In TCV configuration varies in time, in particular the magnetic axis moves. In the Psi-Toolbox, this motion can be taken into account with a time vector for the radial and vertical position of the axis. In this case the coordinate system changes at each time step. Note for ECH people that relativistic effect are not included.</P>
+
+<PRE><FONT COLOR=RED>r0z0 = {ones(1,length(t)),t*10-1};
+MovingGridTor = psitbxgrid('Toroidal','Grid',athetaphi,r0z0,t)
+ MovingGridTor is a PsiTbx-Grid object =
+       type: 'Toroidal'
+      label: {'A'  'Theta'  'Phi'}
+    storage: 'Grid'
+          x: {1x3 cell}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(MovingGridTor)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo008.png></P>
+<H3> Points in a time dependant coordinate system</H3>
+
+<P> However relativity tells us that even a static point can have varying coordinates if the coordinate system moves. So points stored as <SAMP>'Points'</SAMP> must be transformed in <SAMP>'Time-Points'</SAMP>. Note that in this example Richard has used directly the <SAMP>psitbxgrid</SAMP> object <SAMP>GridTor</SAMP> instead of the axis radial and vertical positions.</P>
+
+<PRE><FONT COLOR=RED>ProbePointsTor = psitbxg2g(ProbePointsOrt,'Toroidal',GridTor)
+ ProbePointsTor is a PsiTbx-Grid object =
+       type: 'Toroidal'
+      label: {'A'  'Theta'  'Phi'}
+    storage: 'Points'
+          x: {[2x10 double]  [2x10 double]  [2x10 double]}
+          t: [1x0 double]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo009.png></P>
+<H3> Time-Points in a time dependant coordinate system</H3>
+
+<P> If your points are already stored as <SAMP>'Time-Points'</SAMP>, transformation to a time dependant coordinate system can be achieved only if the number of points in time are the same for both. The rule is that the Psi-Toolbox only handles a unique time base.</P>
+
+<PRE><FONT COLOR=RED>MovingProbePointsTor = psitbxg2g(MovingProbePointsOrt,'Toroidal',GridTor)
+ MovingProbePointsTor is a PsiTbx-Grid object =
+       type: 'Toroidal'
+      label: {'A'  'Theta'  'Phi'}
+    storage: 'Time-Points'
+          x: {[2x10x3 double]  [2x10x3 double]  [2x10x3 double]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo010.png></P>
+<H3> Now something simpler: 0-D, 1-D and 2-D coordinate systems</H3>
+
+<P> Now that the difficult situation have been treated, we can come back to simpler things. Very often, the quantity you are dealing with does not depend on all spatial coordinates. For this purpose you can place a <SAMP>NaN</SAMP> on the implied spatial direction:</P>
+
+<PRE><FONT COLOR=RED>rzphi = {0.62:.02:0.7,-.05:.02:.05,NaN};
+Grid2DCyl = psitbxgrid('Cylindrical','Grid',rzphi)
+ Grid2DCyl is a PsiTbx-Grid object =
+       type: 'Cylindrical'
+      label: {'R'  'Z'  'Phi'}
+    storage: 'Grid'
+          x: {[0.6200 0.6400 0.6600 0.6800 0.7000]  [1x6 double]  [NaN]}
+          t: []
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(Grid2DCyl)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo011.png></P>
+<H3> Finaly the ultimate complexity: N-D coordinate systems</H3>
+
+<P> Having gone from 2D to 3D and then to time dependant coordinates, it was nothing for me to generalise. For example if Richard wants to study edge parameter fluctuation at different frequencies, he can define an additional dimension to his already complicated problem:</P>
+
+<PRE><FONT COLOR=RED>rzphifreq = {0.62:.02:0.7,-.05:.02:.05,pi/180*(-3:2:3),[1e4,2e4,5e4,1e5]};
+Grid4DCyl = psitbxgrid('Cylindrical','Grid',rzphifreq)
+ Grid4DCyl is a PsiTbx-Grid object =
+       type: 'Cylindrical'
+      label: {'R'  'Z'  'Phi'}
+    storage: 'Grid'
+          x: {1x4 cell}
+          t: []
+        par: [1x1 struct]
+        csp: [1x1 struct]
+Grid4DOrt = psitbxg2g(Grid4DCyl,'Orthogonal')
+ Grid4DOrt is a PsiTbx-Grid object =
+       type: 'Orthogonal'
+      label: {'X'  'Y'  'Z'}
+    storage: 'Points'
+          x: {[4-D double]  [4-D double]  [4-D double]  [4-D double]}
+          t: []
+        par: [1x1 struct]
+        csp: [1x1 struct]
+Grid4DOrt.x{4}(1,1,1,:)
+ans(:,:,1,1) =
+       10000
+ans(:,:,1,2) =
+       20000
+ans(:,:,1,3) =
+       50000
+ans(:,:,1,4) =
+      100000
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo012.png></P>
+<H2><A NAME=3></A><A HREF=#TOP>&lt;&lt;</A> 
+ Functions of the spatial coordinates and others</H2>
+
+<H3> Functions of the spatial position: the psitbxfun class</H3>
+
+<P> It is highly improbable that Richard will spend his life with coordinate systems. So it is time for him to open the Psi-Toolbox and take the <SAMP>psitbxfun</SAMP> class. This class will allow Richard to represent quantity that depend on the spatial position. Let us go back to the first grid Richard defined in cylindrical coordinates and suppose for simplicity that Richard's moving probes measure a given simple quantity. A <SAMP>psitbxfun</SAMP> object is then constructed by specifying the value of this function at the grid points and the grid where it is evaluated:</P>
+
+<PRE><FONT COLOR=RED>rzphi = GridCyl.x
+rzphi = 
+    [1x5 double]    [1x6 double]    [1x4 double]
+[rzphi{:}] = ndgrid(rzphi{:})
+rzphi = 
+    [5x6x4 double]    [5x6x4 double]    [5x6x4 double]
+x = exp(-300*(rzphi{1} - GridCyl.x{1}(1)).^2) .* exp(-3000*rzphi{2}.^2);
+FunCyl = psitbxfun(x,GridCyl)
+ FunCyl is a PsiTbx-Function object =
+       x: [5x6x4 double]
+    grid: [5x6x4 psitbxgrid]
+       t: [1x0 double]
+plot(FunCyl)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo013.png></P>
+<H3> Overloaded math operators for psitbxfun class</H3>
+
+<P> Almost all applicable mathematical operators <SAMP>+ - * / .* ./ \ .\ '</SAMP>, relational operators <SAMP>== ~= > < >= <=</SAMP>, logical operators <SAMP>~ & |</SAMP>, mathematical function <SAMP>sin cos ...</SAMP> are overloaded for <SAMP>psitbxfun</SAMP> objects. Experience:</P>
+
+<PRE><FONT COLOR=RED>plot(log(10*FunCyl))
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo014.png></P>
+<H3> Functions of the spatial position and of the time</H3>
+
+<P> Quantities that varies also in time can be represented by 4-D arrays whos first three dimensions correspond to the spatial coordinates and the last one to time samples. The time array is then also passed to the <SAMP>psitbxfun</SAMP> constructor and stored in the appropriate field. Of course the last dimension and the length of the time vector must agree.</P>
+
+<PRE><FONT COLOR=RED>rzphi = GridCyl.x
+rzphi = 
+    [1x5 double]    [1x6 double]    [1x4 double]
+rzphit = {rzphi{:},t};
+[rzphit{:}] = ndgrid(rzphit{:})
+rzphit = 
+    [4-D double]    [4-D double]    [4-D double]    [4-D double]
+x = exp(-300*(rzphit{1} - GridCyl.x{1}(1)).^2) .* exp(-3000*rzphit{2}.^2) .* exp(3*rzphit{4});
+FunTimeCyl = psitbxfun(x,GridCyl,t)
+ FunTimeCyl is a PsiTbx-Function object =
+       x: [4-D double]
+    grid: [5x6x4 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo015.png></P>
+<H3> General forms from 0-D to N-D functions</H3>
+
+<P> As for the grid, generalisation is straitforward. On an N-D grid <SAMP>GridND</SAMP> a function can have the size <SAMP>[size(GridND),np1,np2,...[,nt]]</SAMP>. However I have no real example available yet. In addition if one of the grid coordinate is degenerated, being <SAMP>NaN</SAMP> or scalar, the corresponding singleton in the function value can be ommited. One common example are functions on a 2-D grid:</P>
+
+<PRE><FONT COLOR=RED>rz = Grid2DCyl.x
+rz = 
+    [1x5 double]    [1x6 double]    [NaN]
+[rz{:}] = ndgrid(rz{:})
+rz = 
+    [5x6 double]    [5x6 double]    [5x6 double]
+x = ((rz{1} - mean(Grid2DCyl.x{1})).^2 + (rz{2} - mean(Grid2DCyl.x{2})).^2);
+Fun2DCyl = psitbxfun(x,Grid2DCyl)
+ Fun2DCyl is a PsiTbx-Function object =
+       x: [5x6 double]
+    grid: [5x6x1 psitbxgrid]
+       t: [1x0 double]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo016.png></P>
+<H3> Function mapping: the psitbxf2f method</H3>
+
+<P> Now this obvious question is: what does Richard measures with his probes.  This can easily be answered using the <SAMP>psitbxf2f</SAMP> method: the quantity defined in cylindrical coordinates must be estimated at the position of the probes. Let us start with fixed probes and a quantity constant in time:</P>
+
+<PRE><FONT COLOR=RED>FunProbePointsOrt = psitbxf2f(FunCyl,ProbePointsOrt)
+ FunProbePointsOrt is a PsiTbx-Function object =
+       x: [2x10 double]
+    grid: [2x10 psitbxgrid]
+       t: [1x0 double]
+FunProbePointsOrt.x
+ans =
+  Columns 1 through 7 
+    0.7370    0.7826    0.8169    0.8397    0.8511    0.8511    0.8397
+    0.8524    0.8524    0.8525    0.8525    0.8526    0.8526    0.8525
+  Columns 8 through 10 
+    0.8169    0.7826    0.7370
+    0.8525    0.8524    0.8524
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo017.png></P>
+<H3> Mapping of a function on Time-Points</H3>
+
+<P> Now a quantity constant in time measured by moving probes:</P>
+
+<PRE><FONT COLOR=RED>FunMovingProbeOrt = psitbxf2f(FunCyl,MovingProbePointsOrt)
+ FunMovingProbeOrt is a PsiTbx-Function object =
+       x: [2x10x3 double]
+    grid: [2x10x3 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(FunMovingProbeOrt,'o','markersize',12)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo018.png></P>
+<H3> Mapping of a time dependant function on Time-Points</H3>
+
+<P> Finaly a time dependant quantity measured by moving probes:</P>
+
+<PRE><FONT COLOR=RED>FunTimeMovingProbeOrt = psitbxf2f(FunTimeCyl,MovingProbePointsOrt)
+ FunTimeMovingProbeOrt is a PsiTbx-Function object =
+       x: [2x10x3 double]
+    grid: [2x10x3 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(FunTimeMovingProbeOrt,'o','markersize',12)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo019.png></P>
+<H3> A last extra: spatial derivative of functions</H3>
+
+<P> The <SAMP>psitbxf2f</SAMP> method can also be used to compute the spatial derivative of functions, by specifying the derivation order along each spatial coordinate. Note that since functions are interpolated by cubic spline, the third derivative is the last non zero derivatives.</P>
+
+<PRE><FONT COLOR=RED>DerDRFunTimeMovingProbeOrt = psitbxf2f(FunTimeCyl,MovingProbePointsOrt,[1,0,0])
+ DerDRFunTimeMovingProbeOrt is a PsiTbx-Function object =
+       x: [2x10x3 double]
+    grid: [2x10x3 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(DerDRFunTimeMovingProbeOrt,'o','markersize',12)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo020.png></P>
+<H3> Function integrals: the sum method</H3>
+
+<P> Integration along the definition variables of functions defined on a <SAMP>'Grid'</SAMP> is the task of the <SAMP>sum</SAMP> method. Summation along a dimension corresponding to one of the grid coordinates or the time results in an integration. Along the other dimensions, it is a simple summation. The dimension argument can be <SAMP>'t'</SAMP> with obvious effect. As an example take the <SAMP>psitbxtcv</SAMP> function with mode <SAMP>'JPHI'</SAMP>, which will return a <SAMP>psitbxfun</SAMP> object containing the toroidal current distribution.</P>
+
+<PRE><FONT COLOR=RED>jphi = psitbxtcv(10000,t,'JPHI')
+ jphi is a PsiTbx-Function object =
+       x: [28x65x3 double]
+    grid: [28x65x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(jphi)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo021.png></P>
+<P> Certainly the most non trivial way to obtain the plasma current is:</P>
+
+<PRE><FONT COLOR=RED>Ip = sum(jphi,[1,2])
+ Ip is a PsiTbx-Function object =
+       x: [1.9170e+05 2.8147e+05 2.8277e+05]
+    grid: [1x1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+Ip.grid.x
+ans = 
+    [NaN]
+    [NaN]
+    [NaN]
+plot(Ip) 
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo022.png></P>
+<H3> Function average: the mean method</H3>
+
+<P> Average is the task of the <SAMP>mean</SAMP> method, which works more or less like <SAMP>sum</SAMP>. However it accepts an optional argument, a <SAMP>psitbxfun</SAMP> object which will play the role of a weigthing function. In fact in that case <SAMP>mean</SAMP> is simply <SAMP>sum(x.*w)./sum(w)</SAMP>:</P>
+
+<PRE><FONT COLOR=RED>javg = mean(jphi,[1,2],jphi>0)
+ javg is a PsiTbx-Function object =
+       x: [7.5580e+05 9.0686e+05 9.7908e+05]
+    grid: [1x1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(javg)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo023.png></P>
+<H2><A NAME=4></A><A HREF=#TOP>&lt;&lt;</A> 
+ Equilibrium geometry description</H2>
+
+<P> Tokamak equilibrium is very often described with the spatial distribution of the poloidal flux in cylindrical coordinate. Of course since Tokamak is axisymetric, this flux does not depend on the aximuthal coordinate.</P>
+
+<H3> First description of the equilibrium: the psitbxpsi class</H3>
+
+<P> It is pretty obvious that the poloidal flux used to describe the Tokamak equilibrium could be stored in a <SAMP>psitbxfun</SAMP> object with cylindrical coordinates. However to add some functionality I defined a new class, the <SAMP>psitbxpsi</SAMP> class, child of the <SAMP>psitbxfun</SAMP> class. This means that all methods defined for the <SAMP>psitbxfun</SAMP> class apply to the <SAMP>psitbxpsi</SAMP> class and that a <SAMP>psitbxpsi</SAMP> object contains all the fields of a <SAMP>psitbxfun</SAMP> object plus others. The first additional field is the <SAMP>format</SAMP> field which specifies the way the poloidal flux is stored. It is a two character string each with possible values of <SAMP>'-'</SAMP>, <SAMP>'0'</SAMP> or <SAMP>'+'</SAMP>. The first character gives the sign of the poloidal flux in the plasma center, the second on the plasma edge. A useless example of a <SAMP>psitbxpsi</SAMP> object would be:</P>
+
+<PRE><FONT COLOR=RED>psi = psitbxpsi(ndgrid(Grid2DCyl.x{1},Grid2DCyl.x{2}),Grid2DCyl,[],'-0')
+ psi is a PsiTbx-Poloidal-Flux object =
+       format: '-0'
+         rmag: []
+         zmag: []
+       psimag: []
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [5x6x1 psitbxfun]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo024.png></P>
+<H3> Equilibrium description from TCV shot file</H3>
+
+<P> Much more usefull is the description of a real TCV shot. This can be easily built with the <SAMP>psitbxtcv</SAMP> function. Here Richard selected times in his favorite standard shot #10000:</P>
+
+<PRE><FONT COLOR=RED>psi = psitbxtcv(10000,t)
+ psi is a PsiTbx-Poloidal-Flux object =
+       format: '+0'
+         rmag: []
+         zmag: []
+       psimag: []
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [4-D psitbxfun]
+plot(psi)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo025.png></P>
+<H3> Oh how easy it is now</H3>
+
+<P> A long time ago Richard wanted to know the poloidal magnetic field near his tiles, basicaly given by the derivative of the poloidal flux along the radial and vertical directions. At this point you realise how easy it is:</P>
+
+<PRE><FONT COLOR=RED>drpsi = psitbxf2f(psi,Grid2DCyl,[1 0])
+ drpsi is a PsiTbx-Function object =
+       x: [5x6x3 double]
+    grid: [5x6x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+dzpsi = psitbxf2f(psi,Grid2DCyl,[0 1])
+ dzpsi is a PsiTbx-Function object =
+       x: [5x6x3 double]
+    grid: [5x6x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(drpsi)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo026.png></P>
+<H3> Normalised poloidal flux and magnetic axis: the psitbxp2p method</H3>
+
+<P> Most of the Psi-Toolbox functions requires normalised poloidal flux which will later serve as radial coordinate: A normalised poloidal flux is one on the last close flux surface and zero on magnetic axis. Normalisation is achieved with the method <SAMP>psitbxp2p</SAMP> on a <SAMP>psitbxpsi</SAMP> object. It locates the magnetic axis position stored in <SAMP>rmag</SAMP> and <SAMP>zmag</SAMP> fields and modifies the value of psi:</P>
+
+<PRE><FONT COLOR=RED>psi = psitbxp2p(psi,'01')
+ psi is a PsiTbx-Poloidal-Flux object =
+       format: '01'
+         rmag: [0.8877 0.8941 0.8977]
+         zmag: [0.2352 0.2450 0.2530]
+       psimag: [0.2051 0.2738 0.2758]
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [4-D psitbxfun]
+plot(psi)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo027.png></P>
+<P> Note that specifying the format in the <SAMP>psitbxtcv</SAMP> call would yield the same result:</P>
+
+<PRE><FONT COLOR=RED>psi = psitbxtcv(10000,t,'01')
+ psi is a PsiTbx-Poloidal-Flux object =
+       format: '01'
+         rmag: [0.8877 0.8941 0.8977]
+         zmag: [0.2352 0.2450 0.2530]
+       psimag: [0.2051 0.2738 0.2758]
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [4-D psitbxfun]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo028.png></P>
+<H3> The Flux coordinate system</H3>
+
+<P> Let me go back to the coordinate systems and introduce the very important flux coordinate system. This is basicaly a toroidal coordinate system in which the distance from the axis is replaced by the squaroot of the normalised poloidal flux. Although not mandatory, it may be very useful to associate to such a coordinate system the value of the normalised poloidal flux stored in a <SAMP>psitbxpsi</SAMP> object:</P>
+
+<PRE><FONT COLOR=RED>GridFluxPsi = psitbxgrid('Flux','Grid','Default',psi)
+ GridFluxPsi is a PsiTbx-Grid object =
+       type: 'Flux-Coordinate'
+      label: {'Rho'  'Theta'  'Phi'}
+    storage: 'Grid'
+          x: {[1x41 double]  [1x129 double]  [NaN]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+size(GridFluxPsi)
+ans =
+    41   129     1
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo029.png></P>
+<H3> Quantities depending only on the flux: profiles</H3>
+
+<P> A very common concept in Tokamak physics is the profile, that is a quantity constant on a flux surface and therefor depending only on the flux coordinate. Such a profile is trivialy represented by a function on a 1-D grid, here the canonical parabolic profile:</P>
+
+<PRE><FONT COLOR=RED>Grid1DRho = psitbxgrid('Flux','Grid',{linspace(0,1,41),NaN,NaN},psi)
+ Grid1DRho is a PsiTbx-Grid object =
+       type: 'Flux-Coordinate'
+      label: {'Rho'  'Theta'  'Phi'}
+    storage: 'Grid'
+          x: {[1x41 double]  [NaN]  [NaN]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+ParabolicRho = psitbxfun(1-linspace(0,1,41)'.^2,Grid1DRho)
+ ParabolicRho is a PsiTbx-Function object =
+       x: [41x1 double]
+    grid: [41x1x1 psitbxgrid]
+       t: [1x0 double]
+plot(ParabolicRho)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo030.png></P>
+<H3> Coordinate transformation to flux coordinate system</H3>
+
+<P> Of course discovering this new coordinate system, Richard wants to know where his moving probes lies in term of flux coordinate. The <SAMP>psitbxg2g</SAMP> method applies. Transformation from any coordinate system to flux coordinate requires a normalised poloidal flux description:</P>
+
+<PRE><FONT COLOR=RED>MovingProbePointsFlux = psitbxg2g(MovingProbePointsOrt,'Flux',psi)
+ MovingProbePointsFlux is a PsiTbx-Grid object =
+       type: 'Flux-Coordinate'
+      label: {'Rho'  'Theta'  'Phi'}
+    storage: 'Time-Points'
+          x: {[2x10x3 double]  [2x10x3 double]  [2x10x3 double]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+MovingProbePointsFlux.x{1}
+ans(:,:,1) =
+  Columns 1 through 7 
+    1.0544    1.0536    1.0529    1.0522    1.0514    1.0507    1.0499
+    1.0510    1.0510    1.0510    1.0510    1.0511    1.0511    1.0510
+  Columns 8 through 10 
+    1.0492    1.0484    1.0477
+    1.0510    1.0510    1.0510
+ans(:,:,2) =
+  Columns 1 through 7 
+    0.9978    0.9977    0.9975    0.9974    0.9972    0.9970    0.9968
+    0.9970    0.9970    0.9971    0.9971    0.9971    0.9971    0.9971
+  Columns 8 through 10 
+    0.9967    0.9965    0.9963
+    0.9971    0.9970    0.9970
+ans(:,:,3) =
+  Columns 1 through 7 
+    1.0063    1.0061    1.0058    1.0055    1.0052    1.0049    1.0046
+    1.0050    1.0050    1.0050    1.0050    1.0050    1.0050    1.0050
+  Columns 8 through 10 
+    1.0042    1.0039    1.0035
+    1.0050    1.0050    1.0050
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo031.png></P>
+<H3> Flux surface description</H3>
+
+<P> An alternative but very important representation of the equilibrium geometry in the Psi-Toolbox is the description of the flux surfaces themselves. These are contours of constant poloidal flux; this is formalised as the distance from the magnetic axis as a function of the squaroot of the normalised flux and the poloidal angle. It can be stored in a <SAMP>psitbxfun</SAMP> object with a flux coordinate grid. But here once more to get addional functionality, it is stored in a <SAMP>psitbxpsi</SAMP> object with format <SAMP>'FS'</SAMP>. Conversion from a <SAMP>psitbxpsi</SAMP> object containing the distribution of the poloidal flux is achieved with the <SAMP>psitbxp2p</SAMP> method:</P>
+
+<PRE><FONT COLOR=RED>fsd = psitbxp2p(psi,'FS')
+ fsd is a PsiTbx-Poloidal-Flux object =
+       format: 'FS'
+         rmag: [0.8877 0.8941 0.8977]
+         zmag: [0.2352 0.2450 0.2530]
+       psimag: [0.2051 0.2738 0.2758]
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [4-D psitbxfun]
+plot(fsd)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo032.png></P>
+<P> Now try to catch this:</P>
+
+<PRE><FONT COLOR=RED>plot(fsd.psitbxfun)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo033.png></P>
+<H3> Flux surface description from the TCV shot file</H3>
+
+<P> Richard will very soon realise that the <SAMP>psitbxp2p</SAMP> method takes a lot of time. To spare Richard's time, the necessary information is stored in the TCV shot file once the equilibrium has been reconstructed. Thus a fast way to recover the flux surface contour for an old shot is to use the <SAMP>psitbxtcv</SAMP> function with format <SAMP>'FS'</SAMP>:</P>
+
+<PRE><FONT COLOR=RED>fsd = psitbxtcv(10000,t,'FS')
+ fsd is a PsiTbx-Poloidal-Flux object =
+       format: 'FS'
+         rmag: [0.8877 0.8941 0.8977]
+         zmag: [0.2352 0.2450 0.2530]
+       psimag: [0.2051 0.2738 0.2758]
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [4-D psitbxfun]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo034.png></P>
+<H3> Coordinate transformation from flux coordinate system</H3>
+
+<P> The first usage of a <SAMP>psitbxpsi</SAMP> object of format <SAMP>FS</SAMP> is for coordinate transformation from flux coordinates:</P>
+
+<PRE><FONT COLOR=RED>rhothetaphi = {[0,.5,1],linspace(-pi,pi,9),linspace(0,pi/2,4)};
+plot(psitbxg2g(psitbxgrid('Flux','Grid',rhothetaphi),'Orthogonal',fsd),'-or','markersize',12)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo035.png></P>
+<H3> Flux coordinate metric</H3>
+
+<P> The main difficulty with flux coordinates is that it is not an orthogonal coordinate system, which renders its metric non trivial. The Psi-Toolbox provides a method for taking the appropriate metric into account, simply called <SAMP>metric</SAMP>. It applies to a <SAMP>psitbxgrid</SAMP> object with <SAMP>'Grid'</SAMP> storage or a <SAMP>psitbxpsi</SAMP> object with format <SAMP>'FS'</SAMP> and takes as second argument the combination of dimension for which you need the metric. For example if you want the metric on the flux surface, use <SAMP>[2,3]</SAMP> to get the unit area on (theta,phi) planes; for unit volume, use <SAMP>[1,2,3]</SAMP>. You can also get the norm of the coordinate gradient with a corresponding negative dimension. In the example the very important gradient of rho entering the expression of the SEF (Shape Enhancement Factor) is plotted. This method returns a <SAMP>psitbxfun</SAMP> object and also works for coordinate systems with diagonal metric.</P>
+
+<PRE><FONT COLOR=RED>GradRho = metric(fsd,-1)
+ GradRho is a PsiTbx-Function object =
+       x: [41x129x3 double]
+    grid: [41x129x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(GradRho)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo036.png></P>
+<H3> Function integrals with metric</H3>
+
+<P> Using the <SAMP>sum</SAMP> method with the option <SAMP>'metric'</SAMP> allows to perform spatial integrals with the correct metric. In the example the toroidal current distribution in cylindrical coordinates is first mapped in flux coordinates and then surface averaged:</P>
+
+<PRE><FONT COLOR=RED>GridFluxFSD = psitbxgrid('Flux','Grid','Default',fsd)
+ GridFluxFSD is a PsiTbx-Grid object =
+       type: 'Flux-Coordinate'
+      label: {'Rho'  'Theta'  'Phi'}
+    storage: 'Grid'
+          x: {[1x41 double]  [1x129 double]  [NaN]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+jphiFlux = psitbxf2f(jphi,GridFluxFSD)
+ jphiFlux is a PsiTbx-Function object =
+       x: [41x129x3 double]
+    grid: [41x129x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+IpFlux = sum(jphiFlux,[1,2],'metric')
+ IpFlux is a PsiTbx-Function object =
+       x: [1.9163e+05 2.8128e+05 2.8258e+05]
+    grid: [1x1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(Ip), hold on, plot(IpFlux,'-og'), hold off
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo037.png></P>
+<H3> Function average with metric</H3>
+
+<P> The <SAMP>mean</SAMP> method can also be used with a <SAMP>'metric'</SAMP> option. The simplified definitions are: <DL><DT> <SAMP>mean(f,dim,w,'metric')</SAMP> <DD> <SAMP>sum(f.*w.*metric(f.grid,dim),dim)./sum(w.*metric(f.grid,dim),dim)</SAMP></DL></P>
+
+<PRE><FONT COLOR=RED>mean(jphiFlux,[1,2],'metric')
+ ans is a PsiTbx-Function object =
+       x: [7.5539e+05 9.0259e+05 9.7001e+05]
+    grid: [1x1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+mean(jphi,[1,2],jphi > 0)
+ ans is a PsiTbx-Function object =
+       x: [7.5580e+05 9.0686e+05 9.7908e+05]
+    grid: [1x1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo038.png></P>
+<H3> Flux surface geometrical parameters</H3>
+
+<P> Quantities such as the flux surface area, cross section, inside volume or the volume or cross-section between two adjacent flux surfaces are widely used. Also very important since it enters in the expression of the SEF is the flux surface average of the gradient of rho. They are now obvious to compute using the following definitions: <DL><DT> <SAMP>grho</SAMP> flux surface average of the gradient of rho <DD> mean(metric(g,-1),[2,3]) <DT> <SAMP>surf</SAMP> flux surface area <DD> <SAMP>sum(metric(g,[2,3]),[2,3])</SAMP> <DT> <SAMP>area</SAMP> flux surface cross-section <DD> <SAMP>cumsum(sum(metric(g,[1,2]),2),1)</SAMP> <DT> <SAMP>vol</SAMP> flux surface inside volume <DD> <SAMP>cumsum(sum(metric(g,[1,2,3]),[2,3]),1)</SAMP> <DT> <SAMP>darea</SAMP> cross-section between two flux surfaces divided by the flux coordinate increment <DD> <SAMP>sum(metric(g,[1,2]),2)</SAMP> <DT> <SAMP>dvol</SAMP> volume between two flux surfaces divided by the flux coordinate increment <DD> <SAMP>sum(metric(g,[1,2,3]),[2,3])</SAMP> </DL> All these quantities are returned in a structure by the method <SAMP>psitbxfsg</SAMP>:</P>
+
+<PRE><FONT COLOR=RED>fsg = psitbxfsg(fsd)
+fsg = 
+     grho: [4-D psitbxfun]
+     surf: [4-D psitbxfun]
+     area: [4-D psitbxfun]
+      vol: [4-D psitbxfun]
+    darea: [4-D psitbxfun]
+     dvol: [4-D psitbxfun]
+plot(fsg.grho)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo039.png></P>
+<H2><A NAME=5></A><A HREF=#TOP>&lt;&lt;</A> 
+ Diagnostic chords</H2>
+
+<H3> Diagnostic Chord Description: the psitbxdcd class</H3>
+
+<P> Describing the geometry of a multi-chord diagnostic require to gather some information. This will be arranged in a <SAMP>psitbxdcd</SAMP> object with the following properties:</P>
+
+<P> <DL COMPATCT></P>
+
+<P> <DT><SAMP>rd</SAMP><DD>The radial position in cylindrical coordinate of a reference point along the chord, very often the pin-hole</P>
+
+<P> <DT><SAMP>zd</SAMP><DD>The vertical position of the same point <DT><SAMP>phid</SAMP><DD>The toroidal angle of the same point</P>
+
+<P> <DT><SAMP>pvd</SAMP><DD>The poloidal viewing angle, measured between the horizontal plane and the chord, positive if the chord is pointing above the plane </P>
+
+<P> <DT><SAMP>tvd</SAMP><DD>The toroidal viewing angle, measured between the vertical plane containing the machine axis and the chord reference point and the vertical plane containing the chord itself, positive if the chord is looking in the direction of increasing toroidal angle</P>
+
+<P> <DT><SAMP>nd</SAMP><DD>The number of points used to discretise the chord</P>
+
+<P> <DT><SAMP>t</SAMP><DD>The time base for moving chords</P>
+
+<P> </DL></P>
+
+<P> Here is an example with two <SAMP>cameras</SAMP> with 20 detectors each, the first one with a poloidal coverage, the second one with a toroidal coverage. Note that the fields of a <SAMP>psitbxdcd</SAMP> object can retain an appropriate organisation, here 2 by 20, or 1028 by 1028 for CCD fans.</P>
+
+<PRE><FONT COLOR=RED>rd = 1.2;
+zd = 0;
+phid = pi/8;
+pvd = [linspace(-pi/3,pi/3,20);zeros(1,20)];
+tvd = [zeros(1,20);linspace(-pi/3,pi/3,20)];
+dcd = psitbxdcd(rd,zd,phid,pvd,tvd);
+plot(dcd)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo040.png></P>
+<H3> Moving chords</H3>
+
+<P> The possibility to have real-time scaning diagnostic or beam is included. In that case the last dimension of the fields of the <SAMP>psitbxdcd</SAMP> object represents the time base. Given as an example <CITE>Le cauchemar du gyrotroniste</CITE>:</P>
+
+<PRE><FONT COLOR=RED>td = linspace(0,1,73);
+rd = 1.2;
+zd = 0;
+phid = pi/2;
+pvd = pi/6*cos(pi*td);
+tvd = pi/6*sin(2*pi*td);
+LeCauchemarDuGyrotroniste = psitbxdcd(rd,zd,phid,pvd,tvd,[],td);
+plot(LeCauchemarDuGyrotroniste)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo041.png></P>
+<H3> Diagnostic-Chords coordinate</H3>
+
+<P> In essence a diagnostic chord is an object with only one dimension, defined as the distance from the reference point. Although certainly possible, I have not left the possibility to have a constant grid along all the chords. Only <SAMP>'Points'</SAMP> or <SAMP>'Time-Points'</SAMP> storage is possible. The size of the array representing the chord coordinate must be <SAMP>[dcd.nd,size(dcd.rd)]</SAMP>. Since it is somehow fastidious to chose a good grid for each chord, I have made the <SAMP>intersect</SAMP> method which returns the chord coordinate so that it covers the intersection of the chords and a cylindrical coordinate grid.</P>
+
+<PRE><FONT COLOR=RED>GridDiagChords = psitbxgrid('Diagnostic-Chords','Points',{intersect(dcd,psi.grid)},dcd)
+ GridDiagChords is a PsiTbx-Grid object =
+       type: 'Diagnostic-Chords'
+      label: {'s'}
+    storage: 'Points'
+          x: {[81x2x20 double]}
+          t: [1x0 double]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(psitbxgrid('Cylindrical','Grid',{[.614,1.147],[-.76,.76],linspace(-pi/2,pi,10)}))
+hold on, plot(GridDiagChords,'-b'), hold off
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo042.png></P>
+<H3> Coordinate transformation from Diagnostic-Chords coordinates</H3>
+
+<P> Any coordinate transformation from Diagnostic-Chords coordinate is possible. The inverse is not possible since chords are discrete and do not cover the whole space.</P>
+
+<PRE><FONT COLOR=RED>GridDiagChordsFlux = psitbxg2g(GridDiagChords,'Flux',psi)
+ GridDiagChordsFlux is a PsiTbx-Grid object =
+       type: 'Flux-Coordinate'
+      label: {'Rho'  'Theta'  'Phi'}
+    storage: 'Time-Points'
+          x: {[4-D double]  [4-D double]  [4-D double]}
+          t: [0.1000 0.3000 0.5000]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+subplot(211)
+plot(squeeze(GridDiagChords.x{1}(:,1,:)),squeeze(GridDiagChordsFlux.x{1}(:,1,:,1)))
+subplot(212)
+plot(squeeze(GridDiagChords.x{1}(:,2,:)),squeeze(GridDiagChordsFlux.x{1}(:,2,:,1)))
+xlabel('S'), ylabel('Rho')
+drawnow
+subplot
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo043.png></P>
+<H3> Function mapping on a Diagnostic-Chords coordinates</H3>
+
+<P> Mapping a function of the position on the chords of a diagnostic is a very essential operation in the Psi-Toolbox. The example shows the value of the canonical parabolic profile along the various chords of the diagnostic. Note that the value at the points along the chord and outside the definition domain of the function are set to <SAMP>NaN</SAMP>.</P>
+
+<PRE><FONT COLOR=RED>ParabolicRhoDiagChords = psitbxf2f(ParabolicRho,GridDiagChords)
+ ParabolicRhoDiagChords is a PsiTbx-Function object =
+       x: [4-D double]
+    grid: [81x2x20 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+plot(ParabolicRhoDiagChords,'-')
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo044.png></P>
+<P> or in another representation</P>
+
+<PRE><FONT COLOR=RED>plot(ParabolicRhoDiagChords)
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo045.png></P>
+<H3> Line integrals and averages</H3>
+
+<P> A function defined along Diagnostic-Chords can be integrated or averaged along the line with the <SAMP>sum</SAMP> and <SAMP>mean</SAMP> methods. In the example the line integral and average of the parabolic profile seen by each camera at different times is ploted as a function of the detector number.</P>
+
+<PRE><FONT COLOR=RED>ParabolicRhodInt = sum(ParabolicRhoDiagChords,1)
+ ParabolicRhodInt is a PsiTbx-Function object =
+       x: [2x20x3 double]
+    grid: [1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+ParabolicRhodAvg = mean(ParabolicRhoDiagChords,1)
+Warning: Divide by zero.
+(Type "warning off MATLAB:divideByZero" to suppress this warning.)
+> In /home/moret/psitbxdvpt/@psitbxfun/private/operator.m at line 17
+  In /home/moret/psitbxdvpt/@psitbxfun/rdivide.m at line 5
+  In /home/moret/psitbxdvpt/@psitbxfun/mean.m at line 20
+  In /home/moret/psitbxdvpt/demo2html046.m at line 2
+  In /home/moret/matlab/demo2html.m at line 70
+ ParabolicRhodAvg is a PsiTbx-Function object =
+       x: [2x20x3 double]
+    grid: [1x1 psitbxgrid]
+       t: [0.1000 0.3000 0.5000]
+subplot(121), plot(reshape(permute(ParabolicRhodAvg.x,[2,1,3]),[20,6]))
+subplot(122), plot(reshape(permute(ParabolicRhodInt.x,[2,1,3]),[20,6]))
+drawnow
+subplot
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo046.png></P>
+<H3> Transfer matrix and image reconstruction</H3>
+
+<P> The transfer matrix from a local emissivity defined on a cylindrical grid and chords can also be computed by the <SAMP>tmat</SAMP> method. In the following example an attractive plasma emitting the &psi; letter is seen by a 64 by 64 pixel CCD camera:</P>
+
+<PRE><FONT COLOR=RED>t = linspace(0,60,64)/180*pi;
+p = linspace(-30,30,64)'/180*pi;
+tvd = repmat(t,length(p),1);
+pvd = repmat(p,1,length(t));
+dcd = psitbxdcd(1,0,0,pvd,tvd);
+grid = psitbxgrid('c','g',{linspace(.3,.9,21),linspace(-.6,.6,41),NaN});
+T = tmat(dcd,grid);
+x = repmat(' ',20,40);
+x(:,15:32) = [
+' ++     ++     ++   '
+'  +++   ++   +++    '
+'   ++   ++   ++     '
+'   +++  ++  +++     '
+'   +++  ++  +++     '
+'   +++  ++  +++     '
+'   +++  ++  +++     '
+'   +++  ++  +++     '
+'   +++  ++  +++     '
+'    ++  ++  ++      '
+'    ++  ++  ++      '
+'     ++ ++ ++       '
+'      ++++++        '
+'        ++          '
+'        ++          '
+'        ++          '
+'        ++          '
+'        ++          '
+]';
+x = x == '+';
+x = reshape(T*x(:),size(dcd));
+set(image(x),'cdatamapping','scaled'), axis equal off
+drawnow
+</FONT></PRE>
+<P><IMG SRC=psitbxdemo047.png></P>
+<P> <SAMP>intersect</SAMP> may also precalculate matrices that allow fast reconstruction of the emmissivity profile.</P>
+
+
+</BODY>
+</HTML>

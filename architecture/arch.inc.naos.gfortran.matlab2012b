@@ -1,0 +1,242 @@
+###################
+# GLOBAL VARIABLES#
+###################
+#MATLAB library
+MATLABHOME=/Applications/Matlab_2012B
+MATLABLIBDIR=$(MATLABHOME)/bin/glnxa64
+
+ATLAS_DIR=/usr/lib64/atlas
+#BLAS library
+#BLASLIB=,-rpath,/usr/local/pgi/linux86-64/7.1-6/libso -L/usr/local/pgi/linux86-64/7.1-6/libso -lacml -lacml_mv
+BLASLIB=-L/usr/lib64/atlas/  $(ATLAS_DIR)/libatlas.so.3 $(ATLAS_DIR)/libcblas.so.3.0 $(ATLAS_DIR)/libclapack.so.3.0 $(ATLAS_DIR)/liblapack.so.3
+
+#LAPACK library
+LAPACKLIB=$(BLASLIB)
+
+#make executable
+MAKE=make
+
+#mex executable
+MEXBIN=$(MATLABLIBDIR)/../mex
+
+#Temporary working directory for writting temporary files
+#blank means that we use the same directory of the data cronos file
+#put the absolute path
+CRONOSTEMPDIR=/data
+
+#Temporary working directory for writting temporary files accessible from all nodes for // computation
+#blank means that we use the same directory of the data cronos file
+#put the absolute path
+CRONOSTEMPDIR_EXCHANGE=/data
+
+#this key allows or not cronos to write in CRONOS simulation data base
+#uncomment one (default is YES)
+CRONOS_DATABASE_WRITE=YES
+#CRONOS_DATABASE_WRITE=NO
+
+
+####################
+#PLATFORM VARIABLES#
+####################
+#preprocessing for matlab version
+#if you use a version later than MATLAB 7.3
+#then put MATLABVERSION=-DMATLAB73
+#else put nothing
+MATLABVERSION=-DMATLAB73
+
+#preprocessing for CRONOSINT variables
+#CRONOSINT=integer*8 for 64 bits machine
+#         =integer*4 for 32 bits machine
+DEF=-DCRONOSINT=integer*8 $(MATLABVERSION) -DSLEEP_INT -DGFORTRAN -DMATLABINOUTDIM=integer*4  -DLAPACKINT=integer*4
+
+#preprocessing executable
+CPP=cpp
+
+##################
+#PARALLEL VERSION#
+##################
+#if use MPI  put MPI=-DMPI else put MPI=
+#be carfull no space before and after =
+MPI=-DMPI
+
+ifeq ($(MPI),-DMPI)
+   #if you use MPI code
+   #mpi include directory 
+   INCLUDE_MPI=-I/usr/include/openmpi-x86_64
+   #mpi library
+   LIB_MPI=-L/usr/lib64/openmpi/lib -lmpi -lmpi_cxx -lmpi_f90 
+
+   #flags for openmp
+   OPENMP=-fopenmp
+else
+   INCLUDE_MPI=
+   LIB_MPI=
+   OPENMP=
+endif
+
+
+#########################################
+#    TOOLBOX FOR REMOTE CALCULATIONS    #
+#########################################
+
+MATREMOTE_CVS=:pserver:$(USER)@altair.partenaires.cea.fr:/usr/local/cvs/gcgc # CVS root for MatRemote 
+MATTOOLS_CVS=:pserver:$(USER)@altair.partenaires.cea.fr:/usr/local/cvs/gcgc # CVS root for MatTools
+
+MATREMOTE_PATH=MatRemote # Module name for MatRemote on repository
+MATTOOLS_PATH=MatTools # Module name for MatTools on repository
+
+
+#########################################
+#                LUKE                   #
+#########################################
+
+# local LUKE installation (leave empty if LUKE is not installed)
+luke_root=
+#luke_root=/home/JD211098/LUKE_1_11/
+
+# remote profiles (see existing list in libs/MatRemote/Profiles/) for LUKE
+#
+# syntax : profile name in MATREMOTE_PATH, scheduler, profile name, luke_root
+#   - NOTE : you can leave luke_root empty if it is set up automatically in startup.m file on remote machine
+#
+# ex : REMOTELUKEPROFILE=CEA_ANDROMEDE,pbs,joan,/home/JD211098/LUKE_CRONOS/
+#
+# first profile is profile by default
+
+#REMOTELUKEPROFILE=CEA_ANDROMEDE,pbs,joan,/home/JD211098/LUKE_1_11/
+#REMOTELUKEPROFILE=macpro_YVES_PEYSSON,condor,yves,/Users/yvespeysson/Projets/LUKE/
+#REMOTELUKEPROFILE=macpro_YVES_PEYSSON,xgrid,yves,/Users/yvespeysson/Projets/LUKE/
+#REMOTELUKEPROFILE=ASIPP_SHENMA,torque,yves,/home/PEYSSON/LUKE/
+
+#########################################
+#COMPILERS OPTIONS for compiling modules#
+#########################################
+F90=gfortran -cpp
+F90FLAGS=  -fPIC  -fdefault-real-8 -fdefault-double-8  $(MPI) $(INCLUDE_MPI) $(DEF) -fno-align-commons -fmax-errors=1 -ffixed-line-length-none
+F90DEBUGFLAGS=-g -O0 -fPIC -cpp -fdefault-real-8 -fdefault-double-8  $(MPI) $(INCLUDE_MPI) $(DEF)
+F90LIBS=$(LIB_MPI) 
+NETCDF_DIR=/Applications/netcdf
+#NETCDF_ALTERNATIVE=$(MATLABHOME)/bin/glnxa64
+FORTLIBS=-L/usr/lib64 -lgfortran
+LDFLAGS=-L/usr/lib -L/usr/lib64
+
+CC=gcc
+CFLAGS= -fPIC $(MPI) $(INCLUDE_MPI)
+CLIBS=$(LIB_MPI)
+
+#specific flags for module
+
+#compiling GLF23
+CPU=PGI64
+FFLAGS_GLF23=-fPIC -fdefault-real-8 -fdefault-double-8
+
+
+#for compiling SAMPLING
+CFLAGS_SAMPLING= -fPIC -I$(MATLABHOME)/extern/include
+
+#DEF_HOULBERG=-DCRONOSINT=integer*4
+
+#for compiling REMA
+FFLAGS_REMA=-fdefault-integer-8
+
+#for compiling HELENA fileversion
+FFLAGS_HELENA=-O2 -fdefault-real-8 -fdefault-double-8 -lgfortran
+
+#for compiling SPOT
+FFLAGS_SPOT= -Mcache_align -DRANDOM_SEED_12
+FC=gfortran
+MPIFC=/usr/lib64/openmpi/bin/mpif90
+
+#for compiling LIBS
+FFLAGS_MUMPS=  -fPIC  $(DEF)  -fdefault-integer-8
+FCFLAGS_MUMPS= -fPIC -lgfortran
+MUMPS_NO_MAIN=t
+
+MACOSXREADLINEHACK=&& sed -i  -e 's/-dynamic/-dynamiclib/' shlib/Makefile
+
+FFLAGS_NEMO=-fPIC  -fdefault-real-8 -fdefault-double-8  $(MPI) $(INCLUDE_MPI) -fno-align-commons -fmax-errors=1 -ffixed-line-length-none -DGFORTRAN 
+FFLAGS_NEMO= -g -fbounds-check -fdefault-real-8   $(MPI) $(INCLUDE_MPI) -fno-align-commons -fmax-errors=1 -ffixed-line-length-none -DGFORTRAN 
+
+PSP_COMP=GCC
+
+RISK_F90=gfortran
+RISK_FFLAGS=$(F90FLAGS)
+
+##########################################
+#COMPILER OPTIONS for compiling mex-files#
+##########################################
+#Name of the mexfile extension
+EXT=mexa64
+
+#C options 
+CC_="gcc"
+CFLAGS_="-fPIC $(INCLUDE_MPI) $(DEF) "
+COPTIMFLAGS_="-O3"
+CDEBUGFLAGS_="-g " 
+CLIBS_=" -L$(MATLABLIBDIR) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lm"
+
+#FORTRAN options 
+FC_="gfortran-mp-4.7"
+FC_="gcc"
+FC_="gfortran"
+FC90_="gfortran"
+FFLAGS_="-fPIC  -cpp $(DEF) -fdefault-real-8 -fdefault-integer-8 -fdefault-double-8 -DMX_COMPAT_32 -I/${MATLABHOME}/extern/include -fmax-errors=1 -ffixed-line-length-none"
+FOPTIMFLAGS_="-O3"
+FDEBUGFLAGS_= "-g "
+FLIBS_=" -L$(MATLABLIBDIR) $(LAPACKLIB) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lgfortran "
+
+#C++ options
+CXX_="gcc"
+CXXFLAGS_="-fPIC $(DEF)"
+CXXOPTIMFLAGS_="-O3"
+CXXDEBUGFLAGS_="-g "
+CXXLIBS_=",--version-script,$(MATLABHOME)/extern/lib/glnxa64/mexFunction.map -Wl -L$(MATLABLIBDIR) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lm -lstdc++"
+
+#LD options 
+LDFLAGS_="-fPIC -shared -lgfortran -L/usr/lib64"
+LDOPTIMFLAGS_="-O3 "
+LDDEBUGFLAGS_="-g "
+LDLIBS_=
+
+#C++ LD options
+LDCXX_="gfortran" 
+LDCXXFLAGS_="-fPIC -shared -lgfortran -L/usr/lib64"
+LDCXXOPTIMFLAGS_="-O3"
+LDCXXDEBUGFLAGS_="-g "
+LDCXXLIBS_=
+
+#optimized version
+MEX=$(MEXBIN) -v CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#optimized version
+MEX_F90=$(MEXBIN) -v CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC90_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#debug version 
+MEX_DEBUG=$(MEXBIN) -v -g CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#debug version
+MEX_F90_DEBUG=$(MEXBIN) -v -g CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC90_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#MEX=$(MEX_DEBUG)
+
+
+
+
+
+
+# Spot remote cluster, remote logname, remote working directory, remote executable path
+SPOT_CLUSTER=local
+SPOT_REMOTE_LOGNAME=edmundhighcock
+SPOT_REMOTE_WORKDIR=/Users/edmundhighcock/zineb/data
+SPOT_REMOTE_CRONOS_PATH=/Users/edmundhighcock/Code/Projet_Cronos
+SPOT_PROJECT_NAME=12b011
+
+SPOT_DEBUG = -g
+
+
+# Qualikiz remote cluster, remote logname, remote working directory, remote executable path
+QLK_CLUSTER=local
+QLK_REMOTE_LOGNAME=edmundhighcock
+QLK_REMOTE_WORKDIR=/Users/edmundhighcock/zineb/data
+QLK_REMOTE_CRONOS_PATH=/Users/edmundhighcock/Code/Projet_Cronos
+QLK_PROJECT_NAME=12a003

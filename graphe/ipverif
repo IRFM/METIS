@@ -1,0 +1,6 @@
+% plot des IP
+t=data.gene.temps;
+figure('color',[1 1 1]);
+subplot(2,1,1)
+plot(t,data.gene.ip,'r',t,data.gene.ipepar,'om',t,data.gene.ipjmoy,'c+', ...
+     t,data.gene.ipohm,'k',t,data.exp.ip,'or');

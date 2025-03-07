@@ -1,0 +1,130 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="1404967095" file="C:\Users\JA132999\Documents\metis4itm\trunk\metis.prj" location="C:\Users\JA132999\Documents\metis4itm\trunk" name="metis" preferred-package-location="C:\Users\JA132999\Documents\metis4itm\trunk\standalone\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>metis</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>6.1362</param.version>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company>CEA</param.company>
+    <param.summary>Compiled METIS version</param.summary>
+    <param.description>Standalone version of METIS.
+This version not allowes to access to Simulink features.</param.description>
+    <param.screenshot>C:\Users\JA132999\Documents\metis4itm\Metis_splash_screen3.png</param.screenshot>
+    <param.guid />
+    <param.installpath.string>\CEA\metis\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\standalone\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\standalone\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\standalone\for_redistribution</param.output>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.required.mcr.products>
+      <item>35000</item>
+      <item>35010</item>
+      <item>35001</item>
+    </param.required.mcr.products>
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>true</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>true</param.create.log>
+    <param.log.file>metis.log</param.log.file>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.authnamewatermark />
+      <param.email />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.target.install.notes />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.embed.ctf />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\metis.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}\acces</file>
+      <file>${PROJECT_ROOT}\coef</file>
+      <file>${PROJECT_ROOT}\compatibility</file>
+      <file>${PROJECT_ROOT}\graphe</file>
+      <file>${PROJECT_ROOT}\import</file>
+      <file>${PROJECT_ROOT}\init</file>
+      <file>${PROJECT_ROOT}\interface</file>
+      <file>${PROJECT_ROOT}\libs</file>
+      <file>${PROJECT_ROOT}\op</file>
+      <file>${PROJECT_ROOT}\solver</file>
+      <file>${PROJECT_ROOT}\source</file>
+      <file>${PROJECT_ROOT}\trait</file>
+      <file>${PROJECT_ROOT}\zerod</file>
+      <file>${PROJECT_ROOT}\zineb_path.m</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mdsPlus\bin_x86_64\mdsipmex.mexw64</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mdsPlus\bin_x86_64\mdsipshr.dll</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mdsPlus\bin_x86_64\mdsshr.dll</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mdsPlus\MATLAB</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mex\tsbase.mexw64</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mex\tsdernier_choc.mexw64</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mex\tslib64.dll</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mex\tslib64.lib</file>
+      <file>C:\Users\JA132999\Documents\Metis64\mex\tsmat.mexw64</file>
+    </fileset.resources>
+    <fileset.package>
+      <file>C:\Users\JA132999\Documents\metis4itm\JT-60SA_LCFS</file>
+      <file>C:\Users\JA132999\Documents\metis4itm\licence _utilisation_METIS_FINAL.pdf</file>
+      <file>C:\Users\JA132999\Documents\metis4itm\Metis_splash_screen3.png</file>
+      <file>C:\Users\JA132999\Documents\metis4itm\reference_scenario_jt60-sa</file>
+      <file>${PROJECT_ROOT}\certification</file>
+      <file>${PROJECT_ROOT}\zerod\Howto_METIS_final.pdf</file>
+      <file>${PROJECT_ROOT}\zerod\METIS_HELP.pdf</file>
+    </fileset.package>
+    <fileset.depfun>
+      <file>${MATLAB_ROOT}\toolbox\local\tsbase.mexw64</file>
+      <file>${MATLAB_ROOT}\toolbox\local\tsmat.mexw64</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\standalone\for_testing" name="readme.txt" optional="true">C:\Users\JA132999\Documents\metis4itm\trunk\standalone\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\standalone\for_testing" name="metis.exe" optional="false">C:\Users\JA132999\Documents\metis4itm\trunk\standalone\for_testing\metis.exe</file>
+      <file location="${PROJECT_ROOT}\standalone\for_testing" name="splash.png" optional="false">C:\Users\JA132999\Documents\metis4itm\trunk\standalone\for_testing\splash.png</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2015b</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.1</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

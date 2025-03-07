@@ -1,0 +1,14 @@
+exit_flag = 0
+shot = 1
+run  = 1
+occurrence =
+method =
+time = 10
+codeparam_xml =
+interpolation_method =
+tokamak =
+user =
+dataversion =
+shot_ref =
+run_ref  =
+

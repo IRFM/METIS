@@ -1,0 +1,271 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="257806371" file="/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk/metis_matlab2017b_linux64bits.prj" location="/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk" name="metis_matlab2017b_linux64bits" preferred-package-location="/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk/standalone/standalone/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>METIS_matlab2017B_linux_64bits</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.2133</param.version>
+    <param.authnamewatermark>Artaud Jean-François</param.authnamewatermark>
+    <param.email>jean-francois.artaud@cea.fr</param.email>
+    <param.company>CEA</param.company>
+    <param.summary>Standalone verion of METIS for linux 64 bits</param.summary>
+    <param.description>METIS is a numerical code aiming at fast full tokamak plasma analyses and predictions. It
+combines 0D scaling-law normalised heat and particle transport with 1D current diffusion
+modelling and 2D equilibria. It contains several heat, particle and impurities transport models,
+as well as heat, particle, current and momentum sources, which allow faster than real time
+scenario simulations. This paper gives a first comprehensive description of the METIS suite:
+overall structure of the code, main available models, details on the simulation workflow and
+numerical implementation. Some examples of applications to the analysis of experimental
+discharges and the predictions of ITER scenarios are also given.</param.description>
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>/CEA/METIS_matlab2017B_linux_64bits/</param.installpath.string>
+    <param.installpath.combo>option.installpath.userlocal</param.installpath.combo>
+    <param.logo>${PROJECT_ROOT}/Metis_splash_screen.png</param.logo>
+    <param.install.notes>In the following directions, replace MCR_ROOT by the directory where the MATLAB Runtime is installed on the target machine.
+
+(1) Set the environment variable XAPPLRESDIR to this value:
+
+    MCR_ROOT/v90/X11/app-defaults
+
+
+(2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the concatenation of the following strings:
+
+    MCR_ROOT/v90/runtime/glnxa64:
+    MCR_ROOT/v90/bin/glnxa64:
+    MCR_ROOT/v90/sys/os/glnxa64:
+    MCR_ROOT/v90/sys/opengl/lib/glnxa64
+
+    If it is defined, set it to the concatenation of these strings:
+
+    ${LD_LIBRARY_PATH}: 
+    MCR_ROOT/v90/runtime/glnxa64:
+    MCR_ROOT/v90/bin/glnxa64:
+    MCR_ROOT/v90/sys/os/glnxa64:
+    MCR_ROOT/v90/sys/opengl/lib/glnxa64</param.install.notes>
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}/standalone/standalone/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/standalone/standalone/for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}/standalone/standalone/for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}/standalone/metis_matlab2017b_linux64bits</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>true</param.create.log>
+    <param.log.file>metis.log</param.log.file>
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text />
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.string />
+      <param.target.install.notes />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
+      <param.help.text />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/metis.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}/Metis_splash_screen.png</file>
+      <file>${PROJECT_ROOT}/acces</file>
+      <file>${PROJECT_ROOT}/coef</file>
+      <file>${PROJECT_ROOT}/compatibility</file>
+      <file>${PROJECT_ROOT}/graphe</file>
+      <file>${PROJECT_ROOT}/import</file>
+      <file>${PROJECT_ROOT}/init</file>
+      <file>${PROJECT_ROOT}/op</file>
+      <file>${PROJECT_ROOT}/solver</file>
+      <file>${PROJECT_ROOT}/source</file>
+      <file>${PROJECT_ROOT}/trait</file>
+      <file>${PROJECT_ROOT}/zerod</file>
+      <file>${PROJECT_ROOT}/zineb_path.m</file>
+    </fileset.resources>
+    <fileset.package>
+      <file>${PROJECT_ROOT}/Metis_splash_screen.png</file>
+      <file>${PROJECT_ROOT}/acces/JT-60SA/LCFS</file>
+      <file>${PROJECT_ROOT}/acces/JT-60SA/reference_scenario_jt60-sa</file>
+      <file>${PROJECT_ROOT}/certification</file>
+      <file>${PROJECT_ROOT}/doc</file>
+      <file>${PROJECT_ROOT}/doc/Howto_METIS_final.pdf</file>
+      <file>${PROJECT_ROOT}/doc/METIS_HELP.pdf</file>
+      <file>${PROJECT_ROOT}/doc/METIS_installation_guide.pdf</file>
+    </fileset.package>
+    <fileset.depfun>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/ifloor1.mexa64</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsbase.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsbase.mexa64</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsbase_cert.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsdate.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsdate.mexa64</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsdeclenche.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsdernier_choc.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsdernier_choc.mexa64</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsmat.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsmat.mexa64</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsrfile.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/acces/tsrfile.mexa64</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/coordonnees/tsefitgeo.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/ifloor.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/imin.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/menuTS.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/one.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/rmag.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/samplets.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/sizec.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/sizel.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/textsc.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/divers/zero.m</file>
+      <file>${MATLAB_ROOT}/toolboxdrfc/tomographie/scenario.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsFromMatlab.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsInfo.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsToMatlab.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsclose.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsconnect.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsdisconnect.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsopen.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsput.m</file>
+      <file>/Applications/mdsplus/mdsplus-7.92-0/mdsplus/matlab/mdsvalue.m</file>
+      <file>/Applications/tools_dc/equimap/equimap_get.m</file>
+      <file>/Applications/tools_dc/interferopolarimetry/TINTimasinterfero.m</file>
+      <file>/Applications/tools_dc/tools/BFD_Coordinate.mat</file>
+      <file>/Applications/tools_dc/tools/BOLO2em.m</file>
+      <file>/Applications/tools_dc/tools/OP2019_BP.m</file>
+      <file>/Applications/tools_dc/tools/Trace_WEST_Geometry.m</file>
+      <file>/Applications/tools_dc/tools/West_reflec_prof_slider.m</file>
+      <file>/Applications/tools_dc/tools/bmex.m</file>
+      <file>/Applications/tools_dc/tools/bmex.mexa64</file>
+      <file>/Applications/tools_dc/tools/compute_energy_west.m</file>
+      <file>/Applications/tools_dc/tools/compute_pohm.m</file>
+      <file>/Applications/tools_dc/tools/compute_uncorrected_diamagnetic.m</file>
+      <file>/Applications/tools_dc/tools/consistency_te_q.m</file>
+      <file>/Applications/tools_dc/tools/cphys.m</file>
+      <file>/Applications/tools_dc/tools/find_plateau.m</file>
+      <file>/Applications/tools_dc/tools/ftplusdip.m</file>
+      <file>/Applications/tools_dc/tools/get_imas_equilibrium.m</file>
+      <file>/Applications/tools_dc/tools/gui/gui_compute_energy_west.m</file>
+      <file>/Applications/tools_dc/tools/gui/legend_add.m</file>
+      <file>/Applications/tools_dc/tools/gui/superimposed_tools_dc.m</file>
+      <file>/Applications/tools_dc/tools/imas_west/imas_last_run.m</file>
+      <file>/Applications/tools_dc/tools/imas_west_get.m</file>
+      <file>/Applications/tools_dc/tools/isidsready.m</file>
+      <file>/Applications/tools_dc/tools/partial_get_wrapper.m</file>
+      <file>/Applications/tools_dc/tools/plot_Lang_dc.m</file>
+      <file>/Applications/tools_dc/tools/pulse_settings.m</file>
+      <file>/Applications/tools_dc/tools/radpwr10.m</file>
+      <file>/Applications/tools_dc/tools/radpwr9.m</file>
+      <file>/Applications/tools_dc/tools/rigidity_length.m</file>
+      <file>/Applications/tools_dc/tools/twopts_dc.m</file>
+      <file>/Applications/tools_dc/tools/z0polygeom.m</file>
+      <file>/Home/JA132999/matlab/equilTS.m</file>
+      <file>/Home/JA132999/matlab/visu2_bragg.m</file>
+      <file>/Home/JA132999/zineb/dynamique/zadd1t.m</file>
+      <file>/Home/JA132999/zineb/dynamique/zget1t.m</file>
+      <file>/Home/JA132999/zineb/dynamique/zineb_mots_reserves.mat</file>
+      <file>/Home/JA132999/zineb/dynamique/zput1t.m</file>
+      <file>${PROJECT_ROOT}/getidprocess.m</file>
+      <file>${PROJECT_ROOT}/interface/zinitequi.m</file>
+      <file>${PROJECT_ROOT}/interface/zinputdlg.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicloseone.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicr.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicreeform.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicreefunform.m</file>
+      <file>${PROJECT_ROOT}/interface/zuidownloadform.m</file>
+      <file>${PROJECT_ROOT}/interface/zuieditcons.m</file>
+      <file>${PROJECT_ROOT}/interface/zuifaitfunaction.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiformhandle.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiformreset.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiformvisible.m</file>
+      <file>${PROJECT_ROOT}/interface/zuilistepoint.m</file>
+      <file>${PROJECT_ROOT}/interface/zuimenuliste.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiplotin.m</file>
+      <file>${PROJECT_ROOT}/interface/zuireset.m</file>
+      <file>${PROJECT_ROOT}/interface/zuisavedata.m</file>
+      <file>${PROJECT_ROOT}/interface/zuisavenonok.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiuploadform.m</file>
+      <file>${PROJECT_ROOT}/interface/zverifexecution.m</file>
+      <file>${PROJECT_ROOT}/interface/zveriffilename.m</file>
+      <file>${PROJECT_ROOT}/interface/zverifversion.m</file>
+      <file>/usr/local/mdsplus/matlab/@mdscvt/mdscvt.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_get.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_get.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_get_slice.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_get_slice.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_put.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_put.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_put_slice.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/ids_put_slice.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_close.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_close.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_create_env.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_create_env.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_open_env.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_open_env.mexa64</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_set_mex_params.m</file>
+      <file>/work/imas/core/IMAS/3.31.0-4.8.7-matlab2017b/mex/imas_set_mex_params.mexa64</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}/standalone/standalone/for_testing" name="run_METIS_matlab2017B_linux_64bits.sh" optional="false">/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk/standalone/standalone/for_testing/run_METIS_matlab2017B_linux_64bits.sh</file>
+      <file location="${PROJECT_ROOT}/standalone/standalone/for_testing" name="readme.txt" optional="true">/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk/standalone/standalone/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/standalone/standalone/for_testing" name="splash.png" optional="false">/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk/standalone/standalone/for_testing/splash.png</file>
+      <file location="${PROJECT_ROOT}/standalone/standalone/for_testing" name="METIS_matlab2017B_linux_64bits" optional="false">/ZONE_TRAVAIL/JA132999/METIS4ITM/metis4itm/trunk/standalone/standalone/for_testing/METIS_matlab2017B_linux_64bits</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/Matlab_2017B</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>2.6.32-754.35.1.el6.x86_64</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

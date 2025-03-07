@@ -1,0 +1,520 @@
+===========================================
+MUMPS version 4.7.3
+===========================================
+
+MUMPS 4.7.3 solves a sparse system of linear equations A x = b
+using Gaussian elimination. Please read this README file and
+the documentation (in ./doc/) for a complete list of
+functionalities. Documentation and publications related to
+MUMPS can also be found at http://mumps.enseeiht.fr/
+or at http://graal.ens-lyon.fr/MUMPS
+
+For installation problems, bug reports, and to report your
+experience/feedback with the package, please contact
+mumps@cerfacs.fr.
+
+
+This version of MUMPS is provided to you free of charge. It is public
+domain, based on public domain software developed during the Esprit IV
+european project PARASOL (1996-1999) by CERFACS, ENSEEIHT-IRIT and RAL.
+Since this first public domain version in 1999, the developments are
+supported by the following institutions: CERFACS, ENSEEIHT-IRIT, and
+INRIA Rhone-Alpes.
+
+Main contributors are Patrick Amestoy, Iain Duff, Abdou Guermouche,
+Jacko Koster, Jean-Yves L'Excellent, and Stephane Pralet.
+
+We are also grateful to C. Bousquet, C. Daniel, V. Espirat, A. Fèvre,
+C. Puglisi, G. Richard, M. Tuma, and C. Voemel who have been contributing
+to this work.
+
+
+Contents of the distribution :
+----------------------------
+
+COPYRIGHT  Makefile  README   doc/      lib/     src/
+Make.inc/  PORD/     VERSION  include/  libseq/  test/
+
+Make.inc contains some template Makefiles
+
+doc      contains the users' guide in postscript and pdf formats.
+
+src      contains the source files (for all precisions 's','d','c' or 'z')
+         necessary to generate the MUMPS library.
+
+lib      is the place where the MUMPS libraries libxmumps.a
+         (x='s','d','c' or 'z') are generated.
+
+libseq   contains a sequential MPI library used by the purely sequential
+         version of MUMPS.
+
+include  contains xmumps_struc.h and xmumps_root.h (where x is one
+         of 'd','c','s','z' depending on the precision desired), two
+         files that must be available at compile time in order to
+         use MUMPS from external programs.
+
+test     contains an illustrative test program showing
+         an example of how MUMPS can be used.
+
+PORD     contains the PORD package (not part of MUMPS) from University
+         of Paderborn. See PORD/README for more info.
+
+
+Installation
+------------
+
+The following steps can be applied.
+
+% tar zxvf MUMPS_4.7.3.tar.gz
+% cd MUMPS_4.7.3
+
+You then need to build a file called Makefile.inc corresponding
+to your achitecture. Various examples are available in the
+directory Make.inc :
+
+ Makefile.SGI.SEQ : default Makefile.inc for an Origin, sequential version.
+ Makefile.SGI.PAR : default Makefile.inc for an Origin, parallel version.
+ Makefile.SUN.SEQ : default Makefile.inc for a SUN, sequential version.
+ Makefile.SUN.PAR : default Makefile.inc for a SUN, parallel version.
+ Makefile.SP.SEQ : default for SP (32 bits), sequential version.
+ Makefile.SP.PAR : default for SP (32 bits), parallel version.
+ Makefile.SP64.SEQ : default for SP (64 bits), sequential version.
+ Makefile.SP64.PAR : default for SP (64 bits), parallel version.
+ Makefile.PC.SEQ : default for PC (linux, pgf90, lam), seq. version.
+ Makefile.PC.PAR : default for PC (linux, pgf90, lam), parallel version.
+ Makefile.INTEL.SEQ : default for PC (linux, intel compiler, lam), sequential.
+ Makefile.INTEL.PAR : default for PC (linux, intel compiler, lam), parallel.
+ Makefile.ALPHA_linux.SEQ : default for ALPHA linux (compiler:fort), sequential.
+ Makefile.ALPHA_linux.PAR : default for ALPHA linux (compiler:fort), parallel.
+ Makefile.ALPHA_true64.SEQ : default for ALPHA true 64 (compiler:f90), sequential.
+ Makefile.ALPHA_true64.PAR : default for ALPHA true 64 (compiler:f90), parallel.
+
+For a parallel version of MUMPS on an IBM SP machine, copy
+Make.inc/Makefile.SP.PAR into Makefile.inc
+
+% cp Make.inc/Makefile.SP.PAR ./Makefile.inc
+
+In certain cases, Makefile.inc should be adapted to fit with
+your architecture, libraries and compiler (see comments in
+the Makefile.inc.generic or Makefile.inc.generic.SEQ for details).
+The variables LIBBLAS (BLAS library), SCALAP (ScaLAPACK library),
+INCPAR (include files for MPI), LIBPAR
+(library files for MPI) are concerned.
+
+By default, only the double precision version of MUMPS
+will be installed. make <PREC> will build the version for
+a specific precision, where <PREC> can be one of "simple",
+"cmplx", "cmplx16", or "double". "make all" will compile
+versions of MUMPS for all 4 precisions.
+
+After issuing the command
+% make
+, ./include will contain the include files [sdcz]mumps_struc.h
+and [sdcz]mumps_root.h while ./lib will contain the mumps libraries.
+
+A simple Fortran test driver in ./test (see ./test/README) will also be
+compiled as well as an example of using MUMPS from a C main program.
+
+
+Preprocessing options
+---------------------
+
+-DMAIN_COMP:
+Note that some Fortran runtime libraries define the "main" symbol.
+This can cause problems when using MUMPS from C if Fortran is used
+for the link phase. One approach is to use a specific flag (such
+as -nofor_main for Intel ifort compiler). Another approach is to
+use the C linker (gcc, etc...) and add manually the Fortran runtime
+libraries (that should not define the symbol "main"). Finally, if
+the previous approaches do not work, compile the C example with
+"-DMAIN_COMP". This might not work well with some MPI implementations
+(see options in Makefiles and FAQ
+at http://graal.ens-lyon.fr/MUMPS and
+http://mumps.enseeiht.fr/).
+
+-DAdd_ , -DAdd__ and -DUPPER:
+These options are used for defining the calling
+convention from C to Fortran or Fortran to C. 
+
+-DALLOW_NON_INIT:
+This option can be used to speed up the code for
+symmetric matrices by allowing non initialization of
+data area that will modified but are not significant
+for the computation.
+
+Some other preprocessing options correspond to default
+architectures and are defined in specific Makefiles.
+
+
+
+Sequential version
+------------------
+
+You can use the parallel MPI version of MUMPS on a single
+processor. If you only plan to use MUMPS on a uniprocessor
+machine, and do not want to install parallel libraries
+such as MPI, ScaLAPACK, etc... then it might be more convenient
+to use one of the Makefile.<ARCH>.SEQ to build a sequential
+version of MUMPS instead of a parallel one.
+
+For that, a dummy MPI library (available in ./libseq) defining
+all symbols related to parallel libraries is used at the link
+phase.
+
+Note that you should use 'make clean' before building the
+MUMPS sequential library if you had previously built a parallel
+version. And vice versa.
+
+
+Compiling and linking your program with MUMPS
+---------------------------------------------
+
+Basically, ./lib/libxmumps.a contains the MUMPS
+libraries and ./include/*.h contains the include files. Also,
+some BLAS, ScaLAPACK, BLACS, and MPI are needed. (Except for
+the sequential version where ./libseq/libmpiseq.a is used.)
+Refer to the Makefile available in the directory ./test for
+an example of how to link your program with MUMPS. We
+advise to use the same compiler alignment options for
+compiling your program as were used for compiling MUMPS.
+Otherwise some derived datatypes may not match.
+
+
+Platform dependencies
+---------------------
+
+Versions of MUMPS have been tested on CRAY, IBM, SGI,
+COMPAQ, and Linux systems.  We could potentially generate
+versions for any other platform with Fortran 90, MPI, BLACS,
+and ScaLAPACK installed, but the code has only been tested
+on the above-mentionned platforms.
+
+
+* IBM SP
+  ------
+On SP machines, use of pessl(p2), blacs(p2), mpi and essl is made.
+
+Note that MUMPS requires PESSL release 2 or greater. The version
+of MUMPS based on PESSL release 1.1 (that used descriptors of
+size 8) is no longer available. If PESSL release 2 is not
+available on your system, the public domain version of
+ScaLAPACK should be used instead.
+
+* COMPAQ
+  ------
+The option -nopipeline is required, otherwise, the version of the
+compiler we have used performs software pipeline over iterations
+of loops with potential dependencies. Also the option -O3 should
+not be used on mumps_cv.F as it seems to create erroneous code.
+
+* LAM
+  ---
+lam version 6.5.6 or later is required for the double complex
+version of MUMPS to work correctly.
+
+* MPICH
+  -----
+MUMPS has been tested and works correctly with various versions of MPICH.
+The double complex version does not work correctly with MPICH2 v 1.0.3,
+due to truncated messages when using double complex types.
+
+* CRAY
+  ----
+On the CRAY, we recommend to link with the standard BLACS
+library from netlib, based on MPI. We observed problems
+(deadlock) when using the CRAY BLACS in host-node mode or
+when MUMPS is used on a subcommunicator of MPI_COMM_WORLD
+of more than 1 processor.
+
+
+
+Release history
+---------------
+
+Release 4.7.3           : May 2007
+Release 4.7.2           : April 2007
+Release 4.7.1           : April 2007
+Release 4.7             : April 2007
+Release 4.6.4           : January 2007
+Release 4.6.3           : June 2006
+Release 4.6.2           : April 2006
+Release 4.6.1           : February 2006
+Release 4.6             : January 2006
+Release 4.5.6           : December 2005, internal release
+Release 4.5.5           : October 2005
+Release 4.5.4           : September 2005
+Release 4.5.3           : September 2005
+Release 4.5.2           : September 2005
+Release 4.5.1           : September 2005
+Release 4.5.0           : July 2005
+Releases 4.3.3 -- 4.4.3 : internal releases
+Release 4.3.2           : November 2003
+Release 4.3.1           : October 2003
+Release 4.3             : July 2003
+Release 4.2 (beta)      : December 2002
+Release 4.1.6           : March  2000 
+Release 4.0.4           : Wed Sept 22, 1999 <-- Final version from PARASOL
+
+Parasol versions
+----------------
+Version 4.0.2     : June 7, 1999
+Version 4.0.1     : May 26, 1999
+Version 4.0.0     : May  7, 1999
+Version 3.2.0     : Mar  2, 1999
+Version 3.1.1     : Feb 24, 1999
+Version 3.1.0     : Feb 19, 1999
+Version 2.2.3.2   : Jan 11, 1999
+Version 2.2.3.1   : Jan  7, 1999
+Version 2.2.3     : Dec 21, 1998
+Version 2.2.2     : Nov 30, 1998
+Version 2.2.1     : Nov  7, 1998
+Version 2.2.0     : Sep 22, 1998
+Version 2.1.3     : Jul 20, 1998
+Version 2.1.2     : Jun 22, 1998
+Version 2.1.1     : Jun  9, 1998
+Version 2.1.0     : Jun  5, 1998
+Version 2.0.4     : Mar 24, 1998
+Version 2.0.3     : Feb 28, 1998
+Version 2.0.1     : Feb 20, 1998
+Version 2.0       : Feb 11, 1998
+
+
+Changes from Version 4.7.2 to Version 4.7.3
+* detection of null pivots for unsymmetric matrices corrected
+* improved pivoting in parallel symmetric solver
+* possible problem when Schur on and out-of-core : Schur was splitted
+* type of parameters of intrinsic function MAX not compatible in 
+  single precision arithmetic versions.
+* minor changes for Windows
+* correction with reduced RHS functionality in parallel case
+
+Changes from Version 4.7.1 to Version 4.7.2
+* negative loads suppressed in mumps distribution
+
+Changes from Version 4.7 to Version 4.7.1
+* Release number in Fortran interface corrected
+* "Negative load !!" message replaced by a warning
+
+Changes from Version 4.6.4 to Version 4.7
+* New functionality: build reduced RHS / use partial solution
+* New functionality: detection of zero pivots
+* Memory reduced (especially communication buffers)
+* Problem of integer overflow "MEMORY_SENT" corrected
+* Error code -20 used when receive buffer too small
+  (instead of -17 in some cases)
+* Erroneous memory access with singular matrices (since 4.6.3) corrected
+* Minor bug correction in hybrid scheduler
+* Parallel solution step uses less memory
+* Performance and memory usage of solution step improved
+* String containing the version number now available as a
+  component of the MUMPS structure
+* Case of error "-9964" has disappeared
+
+Changes from Version 4.6.3 to Version 4.6.4
+* Avoid name clashes (F_INT, ...) when C interface is used and
+  user wants to include, say, smumps_c.h, zmumps_c.h (etc.) at
+  the same time
+* Avoid large array copies (by some compilers) in distributed
+  matrix entry functionality
+* Default ordering less dependent on number of processors
+* New garbage collector for contribution blocks
+* Original matrix in "arrowhead form" on candidate processors
+  only (assembled case)
+* Corrected bug occurring rarely, on large number of
+  processors, and that depended on value of uninitialized
+  data
+* Parallel LDL^t factorization numerically improved
+* Less memory allocation in mapping phase (in some cases)
+
+
+Changes from Version 4.6.2 to Version 4.6.3
+* Reduced memory usage for symmetric matrices (compressed CB)
+* Reduced memory allocation for parallel executions
+* Scheduler parameters for parallel executions modified
+* Memory estimates (that were too large) corrected with
+  2Dcyclic Schur complement option
+* Portability improved (C/Fortran interfacing for strings)
+* The situation leading to Warning "RHS associated in MUMPS_301"
+  no more occurs.
+* Parameters INFO/RINFO from the Scilab/Matlab API are now called
+  INFOG/RINFOG in order to match the MUMPS user's guide.
+
+Changes from Version 4.6.1 to Version 4.6.2
+* Metis ordering now available with Schur option
+* Schur functionality correctly working with Scilab interface
+* Occasional SIGBUS problem on single precision versions corrected
+
+Changes from Version 4.6 to Version 4.6.1
+* Problem with hybrid scheduler and elemental matrix entry corrected
+* Improved numerical processing of symmetric matrices with quasi-dense rows
+* Better use of Blacs/Scalapack on processor grids smaller than MPI_COMM_WORLD
+* Block sizes improved for large symmetric matrices
+
+Changes from Version 4.5.6 to Version 4.6
+* Official release with Scilab and Matlab interfaces available
+* Correction in 2x2 pivots for symmetric indefinite complex matrices
+* New hybrid scheduler active by default
+
+Changes from Version 4.5.5 to Version 4.5.6
+* Preliminary developments for an out-of-core code (not yet available)
+* Improvement in parallel symmetric indefinite solver
+* Preliminary distribution of a SCILAB and a MATLAB interface
+  to MUMPS.
+
+Changes from Version 4.5.4 to Version 4.5.5
+* Improved tree management
+* Improved weighted matching preprocessing:
+  duplicates allowed, overflow avoided, dense rows
+* Improved strategy for selecting default ordering
+* Improved node amalgamation
+
+Changes from Version 4.5.3 to Version 4.5.4
+* Double complex version no more depends on
+  double precision version.
+* Simplification of some complex indirections in
+  mumps_cv.F that were causing difficultiels to
+  some compilers.
+
+Changes from Version 4.5.2 to Version 4.5.3
+* Correction of a minor problem leading to
+  INFO(1)=-135 in some cases.
+
+Changes from Version 4.5.1 to Version 4.5.2
+* correction of two uninitialized variables in
+  proportional mapping
+
+Changes from Version 4.5.0 to Version 4.5.1
+* better management of contribution messages
+* minor modifications in symmetric preprocessing step
+
+Changes from Version 4.4.0 to Version 4.5.0
+* improved numerical features for symmetric indefinite matrices
+    - two-by-two pivots
+    - symmetric scaling
+    - ordering based on compressed graph prserving two by two pivots
+    - constrained ordering
+* 2D cyclic Schur better validated
+* problems resulting from automatic array copies done by compiler corrected
+* reduced memory requirement for maximum transversal features
+
+Changes from Version 4.3.4 to Version 4.4.0
+* 2D block cyclic Schur complement matrix
+* symmetric indefinite matrices better handled
+* Right-hand side vectors can be sparse
+* Solution can be kept distributed on the processors
+* METIS allowed for element-entry
+* Parallel performance and memory usage improved:
+   - load is updated more often for type 2 nodes
+   - scheduling under memory constraints
+   - reduced message sizes in symmetric case
+   - some linear searches avoided when sending contributions
+* Avoid array copies in the call to the partial mapping routine
+(candidates); such copies appeared with intel compiler version 8.0.
+* Workaround MPI_AllReduce problem with booleans if mpich
+  and MUMPS are compiled with different compilers
+* Reduced message sizes for CB blocks in symmetric case
+* Various minor improvements
+
+Changes from Version 4.3.3 to Version 4.3.4
+
+* Copies of some large CB blocks suppressed
+  in local assemblies from child to parent
+* gathering of solution optimized in solve phase
+
+Changes from Version 4.3.2 to Version 4.3.3
+
+* Control parameters of symbolic factorization modified.
+* Global distribution time and arrowheads computation
+  slightly optimized.
+* Multiple Right-Hand-Side implemented.
+
+Changes from Version 4.3.1 to Version 4.3.2
+
+* Thresholds for symbolic factorization modified.
+* Use merge sort for candidates (faster)
+* User's communicator copied when entering MUMPS
+* Code to free CB areas factorized in various places
+* One array suppressed in solve phase
+
+
+Changes from Version 4.3 to Version 4.3.1
+
+* Memory leaks in PORD corrected
+* Minor compilation problem on T3E solved
+* Avoid taking into account absolute criterion
+  CNTL(3) for partial LDLt factorization when whole
+  column is known (relative stability is enough).
+* Symbol MPI_WTICK removed from mpif.h
+* Bug wrt inertia computation INFOG(12) corrected
+
+
+Changes from Version 4.2 (beta) to Version 4.3
+
+* C INTERFACE CHANGE: comm_fortran must be defined
+  from the calling program, since MUMPS uses a Fortran
+  communicator (see user guide).
+
+* LAPACK library is no more required
+* User guide improved
+* Default ordering changed
+* Return number of negative diagonal elements in LDLt
+  factorization (except for root node if treated in parallel)
+* Rank-revealing options no more available by default
+* Improved parallel performance
+    - new incremental mechanism for load information
+    - new communicator dedicated to load information
+    - improved candidate strategy
+    - improved management of SMP platforms
+* Include files can be used in both free and fixed forms
+* Bug fixes:
+    - some uninitialized values
+    - pbs with size of data on t3e
+    - minor problems corrected with distributed matrix entry
+    - count of negative pivots corrected
+    - AMD for element entries
+    - symbolic factorization
+    - memory leak in tree reordering and in solve step
+* Solve step uses less memory (and should be more efficient)
+
+
+
+Changes from Version 4.1.6 to Version 4.2 (beta)
+
+* More precisions available (single, double, complex, double complex).
+* Uniprocessor version available (doesn't require MPI installed)
+* Interface changes (Users of MUMPS 4.1.6 will have to slightly
+  modify their codes):
+     - MUMPS -> ZMUMPS, CMUMPS, SMUMPS, DMUMPS depending the precision
+     - the Schur complement matrix should now be allocated by the
+       user before the call to MUMPS
+     - NEW: C interface available.
+     - ICNTL(6)=6 in 4.1.6 (automatic choice) is now ICNTL(6)=7 in 4.2
+* Tighter integration of new ordering packages (for assembled matrices),
+  see the description of ICNTL(7):
+     - AMF, 
+     - Metis,
+     - PORD,
+* Memory usage decreased and memory scalability improved.
+* Problem when using multiple instances solved.
+* Various improvments and bug fixes.
+
+
+Changes from Version 4.1.4 to Version 4.1.6
+
+* Modifications/Tuning done by P.Amestoy during his
+  visit at NERSC.
+* Additional memory and communication statistics.
+* minor pbs solved.
+
+Changes from Version 4.0.4 to Version 4.1.4
+
+* Tuning on Cray T3e (and minor debugging)
+* Improved strategy for asynchronous 
+  communications 
+  (irecv during factorization) 
+* Improved Dynamic scheduling 
+  and splitting strategies
+* New maximal transversal strategies
+* New Option (default) automatic decision 
+  for scaling and maximum transversal
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ROOT>
+   <gaz>3</gaz>
+   <frhe0>0</frhe0>
+   <tauhemul>0</tauhemul>
+   <neasser>0</neasser>
+   <ane>0</ane>
+   <vane>1</vane>
+   <pix>0.7</pix>
+   <piw>0</piw>
+   <pif>0</pif>
+   <scaling>0</scaling>
+   <dilution>1</dilution>
+   <fprad>0.333333333333333</fprad>
+   <HH_li>0</HH_li>
+   <l2hscaling>0</l2hscaling>
+   <modeh>1</modeh>
+   <configuration>3</configuration>
+   <l2hmul>0</l2hmul>
+   <l2hslope>0</l2hslope>
+   <fpped>1</fpped>
+   <taurotmul>0</taurotmul>
+   <xiioxie>2</xiioxie>
+   <kishape>3</kishape>
+   <qdds>0</qdds>
+   <kidds>1</kidds>
+   <runaway>1</runaway>
+   <modeboot>1</modeboot>
+   <vloop>0</vloop>
+   <vref>0</vref>
+   <li>1</li>
+   <breakdown>0.03</breakdown>
+   <laochange>1</laochange>
+   <morphing>5</morphing>
+   <zeff>0</zeff>
+   <zmax>8</zmax>
+   <zimp>6</zimp>
+   <rimp>0.1</rimp>
+   <frad>1</frad>
+   <matthews>1</matthews>
+   <rw>0.7</rw>
+   <angle_ece>90</angle_ece>
+   <synergie>0</synergie>
+   <sens>0</sens>
+   <angle_nbi>70</angle_nbi>
+   <rtang>0</rtang>
+   <zext>0</zext>
+   <einj>1000000</einj>
+   <nbicdmul>1</nbicdmul>
+   <lhmode>2</lhmode>
+   <etalh>0.8</etalh>
+   <npar0>2</npar0>
+   <freqlh>3.7</freqlh>
+   <wlh>0</wlh>
+   <xlh>0</xlh>
+   <dlh>0</dlh>
+   <fwcd>0</fwcd>
+   <mino>H</mino>
+   <cmin>0.1</cmin>
+   <nphi>25</nphi>
+   <freq>57</freq>
+   <sitb>0</sitb>
+   <tae>0</tae>
+   <smhd>100</smhd>
+   <tmhd>0</tmhd>
+   <rip>0</rip>
+   <signe>1</signe>
+   <carnot>0.42</carnot>
+   <aux>0.05</aux>
+   <effinj>0.7</effinj>
+   <coreprof>1</coreprof>
+   <coretransp>1</coretransp>
+   <coresource_lhcd>1</coresource_lhcd>
+   <coresource_eccd>1</coresource_eccd>
+   <coresource_icrh>1</coresource_icrh>
+   <coresource_nbicd>1</coresource_nbicd>
+   <coresource_fusion>1</coresource_fusion>
+   <coreneutrals>1</coreneutrals>
+   <coresource_radiation>1</coresource_radiation>
+   <coresource_cyclotron>1</coresource_cyclotron>
+   <neoclassic>1</neoclassic>
+   <coresource_full>1</coresource_full>
+   <equilibrium>1</equilibrium>
+   <scenario_occurrence> </scenario_occurrence>
+   <coreprof_occurrence> </coreprof_occurrence>
+   <coretransp_occurrence> </coretransp_occurrence>
+   <coreneutrals_occurrence> </coreneutrals_occurrence>
+   <neoclassic_occurrence> </neoclassic_occurrence>
+   <equilibrium_occurrence> </equilibrium_occurrence>
+</ROOT>

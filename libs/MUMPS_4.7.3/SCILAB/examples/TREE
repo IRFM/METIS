@@ -1,0 +1,7 @@
+digraph G {
+      5[label="inode :      5\nfront:     2\n mapped on      0\n type :     1\nDist to leaf:     0\n"]
+      2->      5[label="CB     1\n"]
+      2[label="inode :      2\nfront:     3\n mapped on      0\n type :     1\nDist to leaf:     1\n"]
+      3->      2[label="CB     1\n"]
+      3[label="inode :      3\nfront:     2\n mapped on      0\n type :     1\nDist to leaf:     2\n"]
+}

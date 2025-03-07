@@ -1,0 +1,174 @@
+##################
+# GLOBAL VARIABLES#
+###################
+#HOME_CRONOS is the root directory of cronos
+HOME_CRONOS=/home/artaud/Projet_Cronos
+
+#MATLAB library
+MATLABHOME=/home/artaud/matlab2010b
+MATLABLIBDIR=/home/artaud/matlab2010b/bin/glnx86
+
+
+#NAG library
+NAGLIB=
+
+#BLAS library
+#BLASLIB=-Wl,-rpath,/opt/intel/mkl/10.0.011/lib/32 -L/opt/intel/mkl/10.0.011/lib/32 -lmkl_lapack -lmkl -lguide -lpthread
+BLASLIB=-Wl,-rpath,/opt/intel/mkl/10.0.011/lib/32 -L/opt/intel/mkl/10.0.011/lib/32 -lmkl_lapack -lmkl_intel -lmkl_intel_thread -lmkl_core /home-L/artaud/matlab2010b/sys/os/glnx86 -liomp5 -lpthread
+
+LAPACKLIB=$(BLASLIB)
+
+#make executable
+MAKE=make
+
+#mex executable
+MEXBIN=$(MATLABLIBDIR)/../mex
+
+#Temporary working directory for writting temporary files
+#blank means that we use the same directory of the data cronos file
+#put the absolute path
+CRONOSTEMPDIR=/home/artaud/zineb/data/rapsauve
+
+
+#Temporary working directory for writting temporary files accessible from all nodes for // computation
+#blank means that we use the same directory of the data cronos file
+#put the absolute path
+CRONOSTEMPDIR_EXCHANGE =/home/artaud/zineb/data/rapsauve 
+
+#this key allows or not cronos to write in CRONOS simulation data base
+#uncomment one (default is YES)
+#CRONOS_DATABASE_WRITE=YES
+CRONOS_DATABASE_WRITE=NO
+
+#mex executable
+MEXBIN=$(MATLABLIBDIR)/../mex
+
+
+
+####################
+#PLATFORM VARIABLES#
+####################
+#preprocessing for matlab version
+#if you use a version later than MATLAB 7.3
+#then put MATLABVERSION=-DMATLAB73
+#else put nothing
+MATLABVERSION=-DMATLAB73
+
+#preprocessing for CRONOSINT variables
+#CRONOSINT=integer*8 for 64 bits machine
+#         =integer*8 for 32 bits machine
+DEF=-DCRONOSINT=integer  $(MATLABVERSION)
+
+#preprocessing executable
+CPP=cpp -P
+
+##################
+#PARALLEL VERSION#
+##################
+#if use MPI  put MPI=-DMPI else put MPI=
+MPI=
+
+ifeq ($(MPI),-DMPI)
+   #if you use MPI code
+   #mpi include directory
+   INCLUDE_MPI=-I/usr/local/pgi/linux86-64/6.0/include
+
+   #mpi library
+   LIB_MPI=-Mmpi
+
+   #flags for openmp
+   OPENMP=-mp
+else
+   INCLUDE_MPI=
+   LIB_MPI=
+   OPENMP=
+endif
+
+#########################################
+#COMPILERS OPTIONS for compiling modules#
+#########################################
+F90=ifort
+F90FLAGS=-cpp -nodps -fpic -i4 -r8 -w95 -w90 -save -zero -132 $(MPI) $(INCLUDE_MPI) $(DEF)
+F90DEBUGFLAGS=-O0 -g -cpp -nodps -fpic -i4 -r8 -w95 -w90 -save -zero -132  $(MPI) $(INCLUDE_MPI) $(DEF)
+F90LIBS=$(LIB_MPI)
+
+CC=icc
+CFLAGS=-fPIC $(MPI) $(INCLUDE_MPI)
+CLIBS=$(LIB_MPI)
+
+#specific flags for module
+
+#compiling GLF23
+CPU=INTEL
+FFLAGS_GLF23=-nodps -fpic -i4 -r8 -w95 -w90 -save -zero -132 -Vaxlib
+
+#for compiling SAMPLING
+CFLAGS_SAMPLING=-fPIC -I$(MATLABHOME)/extern/include/
+
+#for compiling REMA
+FFLAGS_REMA=
+
+#for compiling HELENA fileversion
+FFLAGS_HELENA=-nodps -fpic -i4 -r8 -w95 -w90 -save -zero -132
+
+#for compiling SPOT
+FFLAGS_SPOT=
+
+#for compiling LIBS
+FFLAGS_MUMPS=-fpic -cpp $(DEF) -i4 $(DEF)
+FCFLAGS_MUMPS=-fpic
+
+
+##########################################
+#COMPILER OPTIONS for compiling mex-files#
+##########################################
+#Name of the mexfile extension
+EXT=mexglx
+
+#C options 
+CC_="icc -fpic"
+CFLAGS_="$(INCLUDE_MPI) $(DEF) -ansi"
+COPTIMFLAGS_=" "
+CDEBUGFLAGS_="-g -traceback -debug-g -traceback -debug" 
+CLIBS_="-Wl,-rpath-link,$(MATLABLIBDIR) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lm"
+
+#FORTRAN options 
+FC_="ifort"
+FC90_="ifort"
+FFLAGS_="-fpic -cpp $(DEF) -r8"
+FOPTIMFLAGS_="-w95 -w90 -save -zero -132"
+FDEBUGFLAGS_= "-g -traceback -debug"
+FLIBS_="-L$(MATLABLIBDIR) -lmx -lmex -lmat $(LAPACKLIB)"
+
+#C++ options
+CXX_="g++ -fPIC"
+CXXFLAGS_="$(DEF) -ansi"
+CXXOPTIMFLAGS_=" "
+CXXDEBUGFLAGS_="-g"
+CXXLIBS_="-Wl,-rpath-link,$(MATLABLIBDIR) -L$(MATLABLIBDIR) -lmx -lmex -lmat -lm -lstdc++"
+
+#LD options 
+LDFLAGS_="-shared"
+LDOPTIMFLAGS_=" "
+LDDEBUGFLAGS_="-g"
+LDLIBS_=
+
+#C++ LD options
+LDCXX_="g++ -fPIC" 
+LDCXXFLAGS_="-shared"
+LDCXXOPTIMFLAGS_=" "
+LDCXXDEBUGFLAGS_="-g -Minform=info"
+LDCXXLIBS_=
+
+#optimized version
+MEX=$(MEXBIN) -v CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#optimized version
+MEX_F90=$(MEXBIN) -v CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC90_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#debug version 
+MEX_DEBUG=$(MEXBIN) -v -g CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+
+#optimized version
+#MEX_F90=$(MEXBIN) -v -g CC=$(CC_) CFLAGS=$(CFLAGS_) COPTIMFLAGS=$(COPTIMFLAGS_) CDEBUGFLAGS=$(CDEBUGFLAGS_) CLIBS=$(CLIBS_) FC=$(FC90_) FFLAGS=$(FFLAGS_) FOPTIMFLAGS=$(FOPTIMFLAGS_) FDEBUGFLAGS=$(FDEBUGFLAGS_) FLIBS=$(FLIBS_) CXX=$(CXX_) CXXFLAGS=$(CXXFLAGS_) CXXDEBUGFLAGS=$(CXXDEBUGFLAGS_) CXXOPTIMFLAGS=$(CXXOPTIMFLAGS_) CXXLIBS=$(CXXLIBS_) LDFLAGS=$(LDFLAGS_) LDOPTIMFLAGS=$(LDOPTIMFLAGS_) LDDEBUGFLAGS=$(LDDEBUGFLAGS_) LDLIBS=$(LDLIBS_) LDCXX=$(LDCXX_) LDCXXFLAGS=$(LDCXXFLAGS_) LDCXXDEBUGFLAGS=$(LDCXXDEBUGFLAGS_) LDCXXOPTIMFLAGS=$(LDCXXOPTIMFLAGS_)
+

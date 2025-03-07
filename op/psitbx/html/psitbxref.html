@@ -1,0 +1,1084 @@
+<HTML>
+<HEAD>
+<TITLE> The TCV Psi-Toolbox reference guide 03-Jun-2004</TITLE>
+</HEAD>
+
+<BODY>
+
+<H1> The TCV Psi-Toolbox reference guide</H1>
+
+<H2><A NAME=TOP>Contents</A></H2>
+
+<OL>
+<LI><A HREF=#1> <SAMP>psitbxdcd</SAMP></A>
+<LI><A HREF=#2> <SAMP>psitbxdcd/intersect</SAMP></A>
+<LI><A HREF=#3> <SAMP>psitbxfun</SAMP></A>
+<LI><A HREF=#4> <SAMP>psitbxfun/cumsum</SAMP></A>
+<LI><A HREF=#5> <SAMP>psitbxfun/mean</SAMP></A>
+<LI><A HREF=#6> <SAMP>psitbxfun/psitbxf2f</SAMP></A>
+<LI><A HREF=#7> <SAMP>psitbxfun/sum</SAMP></A>
+<LI><A HREF=#8> <SAMP>psitbxfun</SAMP> Mathematical operators and functions</A>
+<LI><A HREF=#9> <SAMP>psitbxgrid</SAMP></A>
+<LI><A HREF=#10> <SAMP>psitbxgrid/metric</SAMP></A>
+<LI><A HREF=#11> <SAMP>psitbxgrid/psitbxg2g</SAMP></A>
+<LI><A HREF=#12> <SAMP>psitbxpsi</SAMP></A>
+<LI><A HREF=#13> <SAMP>psitbxpsi/psitbxfsd</SAMP> (private method)</A>
+<LI><A HREF=#14> <SAMP>psitbxpsi/psitbxfsg</SAMP></A>
+<LI><A HREF=#15> <SAMP>psitbxpsi/psitbxmag</SAMP> (private method)</A>
+<LI><A HREF=#16> <SAMP>psitbxpsi/psitbxp2p</SAMP></A>
+<LI><A HREF=#17> <SAMP>psitbxtcv</SAMP></A>
+<LI><A HREF=#18> <SAMP>psitbxtcv</SAMP></A>
+<LI><A HREF=#19> Cubic spline interpolation</A>
+</OL></OL></OL></OL></OL></OL>
+
+<P><HR></P>
+
+<H2><A NAME=1></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxdcd</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Creates a <SAMP>psitbxdcd</SAMP> object containing the description of the geometry of the chords of a diagnostic.</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE>dcd = psitbxdcd(rd,zd,phid,pvd,tvd,nd,t)</PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxdcd</SAMP> is used to create a <SAMP>psitbxdcd</SAMP> object that contains the description of the geometry of the chords of a diagnostic. The fields of a <SAMP>psitbxdcd</SAMP> object and the corresponding input arguments have the following meaning:</P>
+
+<P> <DL></P>
+
+<P> <DT><SAMP>rd</SAMP><DD>The radial position in cylindrical coordinate of a reference point along the chord, very often the pin-hole</P>
+
+<P> <DT><SAMP>zd</SAMP><DD>The vertical position of the same point</P>
+
+<P> <DT><SAMP>phid</SAMP><DD>The toroidal angle of the same point</P>
+
+<P> <DT><SAMP>pvd</SAMP><DD>The poloidal viewing angle, measured between the horizontal plane and the chord, positive if the chord is pointing above the plane </P>
+
+<P> <DT><SAMP>tvd</SAMP><DD>The toroidal viewing angle, measured between the vertical plane containing the machine axis and the chord reference point and the vertical plane containing the chord itself, positive if the chord is looking in the direction of increasing toroidal angle</P>
+
+<P> <DT><SAMP>nd</SAMP><DD>The number of points used to discretise the chord when building a <SAMP>psitbxgrid</SAMP> object of type <SAMP>'Diagnostic-Chords'</SAMP></P>
+
+<P> <DT><SAMP>t</SAMP><DD>The time base for moving chords</P>
+
+<P> </DL></P>
+
+<P> The size of <SAMP>rd</SAMP>,<SAMP>zd</SAMP>,<SAMP>phid</SAMP>,<SAMP>pvd</SAMP>,<SAMP>tvd</SAMP> follows the following rules:</P>
+
+<P> <UL></P>
+
+<P> <LI>The size can retain the organisation of the diagnostic, for example 20&times;10 for 10 cameras with 20 detectors each, or 1028&times;1028 for a CCD.</P>
+
+<P> <LI>All these arguments must have the same size unless</P>
+
+<P> <UL><LI>It is the same for all chords and can be summarised in a scalar</P>
+
+<P>     <LI>It is empty and will be replaced by a default value</UL></P>
+
+<P> <LI>For chords moving in time, the last dimension must correspond to the the length of <SAMP>t</SAMP>.</P>
+
+<P> </UL></P>
+
+<H3> Example</H3>
+
+<H4> Example 1</H4>
+
+<P> Here is an example with two cameras with 20 detectors each, the first one with a poloidal coverage, the second one with a toroidal coverage:</P>
+
+<PRE><FONT COLOR=RED>rd = 1.2;
+zd = 0;
+phid = pi/8;
+pvd = [linspace(-pi/3,pi/3,20);zeros(1,20)];
+tvd = [zeros(1,20);linspace(-pi/3,pi/3,20)];
+dcd = psitbxdcd(rd,zd,phid,pvd,tvd)
+ dcd is a PsiTbx-Diagnostic-Chord-Description object =
+      rd: [2x20 double]
+      zd: [2x20 double]
+    phid: [2x20 double]
+     pvd: [2x20 double]
+     tvd: [2x20 double]
+      nd: 81
+       t: [1x0 double]
+plot(dcd)
+</FONT></PRE>
+<P><IMG SRC=psitbxref001.png></P>
+<H4> Example 2: moving chord</H4>
+
+<P> The possibility to have real-time scaning diagnostic is included. In that case the last dimension of the fields of the <SAMP>psitbxdcd</SAMP> object represents the time base. Given as an example <CITE>Le cauchemar du gyrotroniste</CITE>:</P>
+
+<PRE><FONT COLOR=RED>td = linspace(0,1,73);
+rd = 1.2;
+zd = 0;
+phid = pi/2;
+pvd = pi/6*cos(pi*td);
+tvd = pi/6*sin(2*pi*td);
+LeCauchemarDuGyrotroniste = psitbxdcd(rd,zd,phid,pvd,tvd,[],td);
+plot(LeCauchemarDuGyrotroniste)
+</FONT></PRE>
+<P><IMG SRC=psitbxref002.png></P>
+<P><HR></P>
+
+<H2><A NAME=2></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxdcd/intersect</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Computes the intersection between diagnostic chords described by a <SAMP>psitbxdcd</SAMP> object and a cylindrical coordinate grid contained in a <SAMP>psitbxgrid</SAMP> object.</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE>s = intersect(dcd,g)</PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>intersect</SAMP> applies to a <SAMP>psitbxdcd</SAMP> object and computes the intersection between the chords and a grid in cylindrical coordinates. It returns an array of linear coordinates along the chords of size <SAMP>[dcd.nd,size(dcd)]</SAMP>. The main purpose of intersect is to provide the coordinate of the points for building a <SAMP>psitbxgrid</SAMP> object of type <SAMP>'Diagnostic-Chords'</SAMP>.</P>
+
+<P> For those chords who do not cross the domain of the grid, <SAMP>NaN</SAMP>'s are returned. For those chords who cross the domain twice, the first segment is considered.</P>
+
+<H3> Example</H3>
+
+<PRE><FONT COLOR=RED>dcd = psitbxdcd('Demo');
+s = intersect(dcd,psitbxgrid('Cylindrical','Grid','Default'));
+gdc = psitbxgrid('Diagnostic-Chords','Points',{s},dcd)
+ gdc is a PsiTbx-Grid object =
+       type: 'Diagnostic-Chords'
+      label: {'s'}
+    storage: 'Points'
+          x: {[81x2x20 double]}
+          t: [1x0 double]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+</FONT></PRE>
+<P><IMG SRC=psitbxref003.png></P>
+<H3> Algorithm</H3>
+
+<P> Only awfull calculation of intersections between lines, planes and cylinders using analytical geometry.</P>
+
+<P><HR></P>
+
+<H2><A NAME=3></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxfun</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Creates a <SAMP>psitbxfun</SAMP> object containing a function defined on a spatial grid.</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f = psitbxfun(x,g)</P>
+
+<P> f = psitbxfun(x,g,t)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxfun</SAMP> is used to create a <SAMP>psitbxfun</SAMP> object that contains a function defined on a spatial grid. If this function does not depend on time, <SAMP>psitbxfun(x,g)</SAMP> is used with <SAMP>x</SAMP> containing the function value(s) defined on the <SAMP>psitbxgrid</SAMP> g. If the function varies in time, use the form <SAMP>psitbxfun(x,g,t)</SAMP>.</P>
+
+<P> The size of the matrix <SAMP>x</SAMP> must be <SAMP>[size(g)[,n1,...][,nt]]</SAMP>. The optional dimension <SAMP>n1,...</SAMP> can be used for multi-value functions (for example the wave length for spectroscopic measurements). If the time argument is given, then the last dimension of <SAMP>x</SAMP>, <SAMP>nt</SAMP> must correspond to <SAMP>length(t)</SAMP>.</P>
+
+<P> For degenerated coordinates, that have a size of one, the following rules apply:</P>
+
+<P> <UL></P>
+
+<P> <LI>if this coordinate is a scalar, the function is defined only on the corresponding subspace and extrapolation outside this subspace is not possible</P>
+
+<P> <LI>if this coordinate is a <SAMP>nAN</SAMP>, the function is assumed to be independant of this spatial coordinate</P>
+
+<P> </UL></P>
+
+<P> Singleton dimension in <SAMP>x</SAMP> arising from degenerated coordinates can be omitted.</P>
+
+<H3> Example</H3>
+
+<H4> Example 1</H4>
+
+<P> A fairly simple function defined on a cylindrical coordinate grid:</P>
+
+<PRE><FONT COLOR=RED>rzphi = {0.62:.02:0.7,-.05:.02:.05,pi/180*(-3:2:3)};
+g = psitbxgrid('Orthogonal','Grid',rzphi);
+[rzphi{:}] = ndgrid(rzphi{:});
+x = exp(-300*(rzphi{1} - g.x{1}(1)).^2) .* exp(-3000*rzphi{2}.^2);
+f = psitbxfun(x,g)
+ f is a PsiTbx-Function object =
+       x: [5x6x4 double]
+    grid: [5x6x4 psitbxgrid]
+       t: [1x0 double]
+plot(f)
+</FONT></PRE>
+<P><IMG SRC=psitbxref004.png></P>
+<H4> Example 2</H4>
+
+<P> A very common concept in Tokamak physics is the profile, that is a quantity constant on a flux surface and therefore depending only on the flux coordinate. Such a profile is trivialy represented by a function on a 1-D grid, here the canonical parabolic profile:</P>
+
+<PRE><FONT COLOR=RED>g = psitbxgrid('Flux','Grid',{linspace(0,1,41),NaN,NaN});
+f = psitbxfun(1-linspace(0,1,41)'.^2,g)
+ f is a PsiTbx-Function object =
+       x: [41x1 double]
+    grid: [41x1x1 psitbxgrid]
+       t: [1x0 double]
+plot(f)
+</FONT></PRE>
+<P><IMG SRC=psitbxref005.png></P>
+<P><HR></P>
+
+<H2><A NAME=4></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxfun/cumsum</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to compute the indefinite integral of a <SAMP>psitbxfun</SAMP> object over spatial coordinates</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f = cumsum(f,dim)</P>
+
+<P> f = cumsum(f,dim,'metric')</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>cumsum</SAMP> applies on a <SAMP>psitbxfun</SAMP> object defined on grid with <SAMP>'Grid'</SAMP> storage and returns a <SAMP>psitbxfun</SAMP> containing its indefinite integral  along the specified dimensions <SAMP>dim</SAMP>. For example if <SAMP>dim = 1</SAMP>, the integral is performed along the first coordinate, if <SAMP>dim = [2,3]</SAMP>, the surface integral along coordinates 2 and 3 is returned, if <SAMP>dim = [1,2,3]</SAMP>, the volume integral is returned.</P>
+
+<P> By specifying the option <SAMP>'metric'</SAMP>, the appropriate metric will be taken into account; simply the function <SAMP>f.*metric(f.grid,dim)</SAMP> is integrated.</P>
+
+<H3> Algorithm</H3>
+
+<P> Uses a trapeze integration.</P>
+
+<P><HR></P>
+
+<H2><A NAME=5></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxfun/mean</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to average a <SAMP>psitbxfun</SAMP> object over spatial coordinates</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f = mean(f,dim)</P>
+
+<P> f = mean(f,dim,w)</P>
+
+<P> f = mean(f,dim,'metric')</P>
+
+<P> f = mean(f,dim,w,'metric')</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>mean</SAMP> applies on a <SAMP>psitbxfun</SAMP> object defined on grid with <SAMP>'Grid'</SAMP> storage and returns a <SAMP>psitbxfun</SAMP> containing the function averaged along the specified dimensions <SAMP>dim</SAMP>. For example if <SAMP>dim = 1</SAMP>, the average is performed along the first coordinate, if <SAMP>dim = [2,3]</SAMP>, the surface average along coordinates 2 and 3 is returned, if <SAMP>dim = [1,2,3]</SAMP>, the volume average is returned.</P>
+
+<P> Note that the grid on which the returned function is defined will become degenerated in the dimension along which average is carried out.</P>
+
+<P> In the call <SAMP>mean(f,dim,w)</SAMP>, <SAMP>w</SAMP> is a <SAMP>psitbxfun</SAMP> object playing the role of a weight in the average.</P>
+
+<P> By specifying the option <SAMP>'metric'</SAMP>, the appropriate metric will be taken into account; simply the function <SAMP>f.*metric(f.grid,dim)</SAMP> is average.</P>
+
+<H3> Example</H3>
+
+<P> Average plasma current density</P>
+
+<PRE><FONT COLOR=RED>jphi = psitbxtcv(10000,'JPHI');
+jphiavg = mean(jphi,[1,2],'metric');
+plot(jphiavg)
+</FONT></PRE>
+<P><IMG SRC=psitbxref006.png></P>
+<H3> Algorithm</H3>
+
+<P> <DL></P>
+
+<P> <DT>"mean(f,dim,w)<SAMP><DD></SAMP>sum(f.*w,dim)<SAMP>./sum(w,dim)</SAMP></P>
+
+<P> <DT><SAMP>mean(f,dim,w,'metric')</SAMP><DD><SAMP>sum(f.*w.*metric(f.grid,dim),dim)./sum(w.*metric(f.grid,dim),dim)</SAMP></P>
+
+<P> </DL></P>
+
+<P><HR></P>
+
+<H2><A NAME=6></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxfun/psitbxf2f</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to interpolate a <SAMP>psitbxfun</SAMP> object on a specified grid.</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f2 = psitbxf2f(f,g2)</P>
+
+<P> f2 = psitbxf2f(f,g2,der)</P>
+
+<P> f2 = psitbxf2f(f,der)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>psitbxf2f</SAMP> applies on a <SAMP>psitbxfun</SAMP> object to interpolate the embended function on new space points. In the call <SAMP>psitbxf2f(f,g2)</SAMP> the <SAMP>psitbxfun</SAMP> object represents a function defined on a <SAMP>psitbxgrid</SAMP> which must have <SAMP>'Grid'</SAMP> storage. <SAMP>g2</SAMP> is a <SAMP>psitbxgrid</SAMP> object specifying the new space points on which the function <SAMP>f</SAMP> must be interpolated. Those can be given in any coordinate systems. Points outside the definition domain of the function will be assigned a <SAMP>NaN</SAMP>. If any coordinate of <SAMP>g2</SAMP> is a <SAMP>NaN</SAMP>, which means that any function defined on <SAMP>g2</SAMP> is independant of this coordinate, then the function <SAMP>f</SAMP> must also be independant along the corresponding coordinate.</P>
+
+<P> The optional argument <SAMP>der</SAMP> is a three element vector that specifies the spatial derivative order to apply along each spatial coordinate. Note that since functions are interpolated with cubic spline, any order bigger than 3 will results in a zero function.</P>
+
+<H3> Example</H3>
+
+<H4> Example 1</H4>
+
+<P> How to compute the normalised flux coordinate along diagnostic chords:</P>
+
+<PRE><FONT COLOR=RED>dcd = psitbxdcd('Demo');
+psi = psitbxtcv(10000,.5,'01');
+gdc = psitbxgrid('Diagnostic-Chords','Points',{intersect(dcd,psi.grid)},dcd);
+rho = sqrt(psitbxf2f(psi,gdc));
+plot(rho)
+</FONT></PRE>
+<P><IMG SRC=psitbxref007.png></P>
+<H4> Example 2</H4>
+
+<P> How to compute the radial derivative of the poloidal flux which is related to the vertical magnetic field:</P>
+
+<PRE><FONT COLOR=RED>psi = psitbxtcv(10000);
+dpsidz = psitbxf2f(psi,[1,0,0]);
+plot(dpsidz)
+</FONT></PRE>
+<P><IMG SRC=psitbxref008.png></P>
+<H3> Algorithm</H3>
+
+<P> In a first step the points of <SAMP>g2</SAMP> where the function <SAMP>f</SAMP> must be interpolated are transformed to compute their coordinates in the coordinate system on which the function <SAMP>f</SAMP> is defined, using the method <SAMP>psitbxg2g</SAMP>. Then the function <SAMP>f</SAMP> is interpolated in each spatial direction with cubic splines. The edge conditions are <CITE>Not-A-Knot</CITE> conditions except along angular coordinates which span 2&times;pi, in which case <CITE>periodic</CITE> edge conditions are used. Finaly this cubic spline interpolant is evaluated at the new positions, to the appropriate derivative order.</P>
+
+<P> Note that interpolation requires the function to be smooth. For example interpolating the square-root of the poloidal flux defined in cylindrical coordinates yields problem on the magnetic axis where its first derivative is not continuous.</P>
+
+<P><HR></P>
+
+<H2><A NAME=7></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxfun/sum</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to integrate a <SAMP>psitbxfun</SAMP> object over spatial coordinates</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f = sum(f,dim)</P>
+
+<P> f = sum(f,dim,'metric')</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>sum</SAMP> applies on a <SAMP>psitbxfun</SAMP> object defined on grid with <SAMP>'Grid'</SAMP> storage and returns a <SAMP>psitbxfun</SAMP> containing the function integrated along the specified dimensions <SAMP>dim</SAMP>. For example if <SAMP>dim = 1</SAMP>, the integral is performed along the first coordinate, if <SAMP>dim = [2,3]</SAMP>, the surface integral along coordinates 2 and 3 is returned, if <SAMP>dim = [1,2,3]</SAMP>, the volume integral is returned.</P>
+
+<P> Note that the grid on which the returned function is defined will become degenerated in the dimension along which integration is carried out.</P>
+
+<P> By specifying the option <SAMP>'metric'</SAMP>, the appropriate metric will be taken into account; simply the function <SAMP>f.*metric(f.grid,dim)</SAMP> is integrated.</P>
+
+<H3> Example</H3>
+
+<P> A non trivial way to compute the plasma current</P>
+
+<PRE><FONT COLOR=RED>jphi = psitbxtcv(10000,'JPHI');
+ip = sum(jphi,[1,2]);
+plot(ip)
+</FONT></PRE>
+<P><IMG SRC=psitbxref009.png></P>
+<H3> Algorithm</H3>
+
+<P> Uses a trapeze integration.</P>
+
+<P><HR></P>
+
+<H2><A NAME=8></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxfun</SAMP> Mathematical operators and functions</H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Methods for mathematical operations on <SAMP>psitbxfun</SAMP> objects</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f = f + a</P>
+
+<P> f = f + g</P>
+
+<P> f = f .* a</P>
+
+<P> f = sqrt(f)</P>
+
+<P> f = f > 0</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> Most of the mathematical operators and functions have been overloaded for <SAMP>psitbxfun</SAMP> objects. For multi operand functions, the following rules apply:</P>
+
+<P> <UL></P>
+
+<P> <LI>Some of them can be of class double, either scalar or with the appropriate size</P>
+
+<P> <LI>If all operands of class <SAMP>psitbxfun</SAMP> are not defined on the same grid, they will be interpolated on the definition grid of the first one using the <SAMP>psitbxf2f</SAMP> method.</P>
+
+<P> </UL></P>
+
+<H3> Example</H3>
+
+<P> Express the current density in MA/m<SUP>2</SUP></P>
+
+<PRE><FONT COLOR=RED>jphi = psitbxtcv(10000,'JPHI')/1e6;
+</FONT></PRE>
+<P><IMG SRC=psitbxref010.png></P>
+<P><HR></P>
+
+<H2><A NAME=9></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxgrid</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Creates a <SAMP>psitbxgrid</SAMP> object containing the definition of a spatial grid</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> g = psitbxgrid(type,storage,x[,p1,...])</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxgrid</SAMP> is used to create a <SAMP>psitbxgrid</SAMP> object that contains the description of a spatial grid. The usual call is <SAMP>psitbxgrid(type,storage,x)</SAMP>.</P>
+
+<H4> <SAMP>type</SAMP></H4>
+
+<P> The character argument <SAMP>type</SAMP> specifies which coordinate system is used. Possible choices are:</P>
+
+<P> <DL></P>
+
+<P> <DT><SAMP>'Orhogonal'</SAMP><DD>This is the usual orthogonal cartesian coordinate system:<DL><DT><SAMP>X</SAMP><DD>This axis lies on the midplane at toroidal position zero between sector #16 and #1, zero on machine axis<DT><SAMP>Y</SAMP><DD>This axis lies on the midplane at toroidal position pi/2, zero on machine axis<DT><SAMP>Z</SAMP><DD>This axis coincides with machine axis pointing upward, zero on the midplane<DD></DL></P>
+
+<P> <DT><SAMP>'Cylindrical'</SAMP><DD>The cylindrical coordinate system whose axis coincides with the main axis of the machine:<DL><DT><SAMP>R</SAMP><DD>The radial coordinate<DT><SAMP>Z</SAMP><DD>The vertical coordinate, posivite upward, zero on the midplane<DT><SAMP>Phi</SAMP><DD>The azimutal coordinate, positive ccw seen from the top, zero between sector #16 and #1</DL></P>
+
+<P> <DT><SAMP>'Toroidal'</SAMP><DD>The toroidal coordinate system whose main axis coincides with the main axis of the machine:<DL><DT><SAMP>A</SAMP><DD>The minor radius measured from the axis whose cylindrical coordinates are (R<SUB>0</SUB>,Z<SUB>0</SUB>)<DT><SAMP>Theta</SAMP><DD>The poloidal angle, zero on the HFS midplane, positive cw (This strange definition to get a right handed system; this also corresponds to the magnetic probe ordering)<DT><SAMP>Phi</SAMP><DD>The toroidal angle, positive ccw seen from the top, zero between sector #16 and #1</DL></P>
+
+<P> <DT><SAMP>'Flux-coordinate'</SAMP><DL><DT><SAMP>Rho</SAMP><DD>The flux coordinate, usually the square-root of the poloidal flux normalised such that it is zero on magnetic axis and one on the last close flux surface. But can also be for example the toroidal flux<DT><SAMP>Theta</SAMP><DD>The poloidal angle, zero on the HFS midplane, positive cw (strange definition to get a right handed system; this also corresponds to the magnetic probe ordering)<DT><SAMP>Phi</SAMP><DD>The toroidal angle, positive ccw seen from the top, zero between sector #16 and #1</DL></P>
+
+<P> <DT><SAMP>'Diagnostic-Chords'</SAMP><DD>This one dimensional coordinate system allows to scan a chord of a diagnostic:<DL><DT><SAMP>S</SAMP><DD>The linear distance along the chord measured from the chord reference point (see <SAMP>psitbxdcd</SAMP>)</DL></P>
+
+<P> </DL></P>
+
+<H4> <SAMP>storage</SAMP></H4>
+
+<P> The character argument <SAMP>storage</SAMP> specifies the way the grid points are stored in the <SAMP>x</SAMP> field of the <SAMP>psitbxgrid</SAMP> object. This field and argument is a cell array containing three double arrays. Possible values for <SAMP>storage</SAMP> are:</P>
+
+<P> <DL></P>
+
+<P> <DT><SAMP>'Grid'</SAMP><DD>In this case the grid is made of the points of a mesh specified by the three vectors of <SAMP>x</SAMP>. Note that this storage method can not be used with <SAMP>Diagnostic-Chords</SAMP><DT><SAMP>'Points'</SAMP><DD>This storage method is used for points which does not align on a grid. In that case all the arrays of <SAMP>x</SAMP> must have the same size and the grid is made of the points whose coordinates by each triplet. Note that the shape of these arrays is free and can reflect the organisation of the problem<DT><SAMP>'Time-Points'</SAMP><DD>This form is used for points which move in time. All the arrays of <SAMP>x</SAMP> must also be of the same size but in addition their last dimension represents time samples</P>
+
+<P> </DL></P>
+
+<P> For 1-D or 2-D grids, the corresponding array in <SAMP>x</SAMP> can be replaced either by a constant, for example for things that lie entirely on a plane, or by a single <SAMP>NaN</SAMP> which means that the problem does not depend on this particular coordinate. A grid can also be extended to other dimension that the basic space and time coordinates. For example a fourth dimension can be added that would represents a frequency or a wave length if necessary.</P>
+
+<P> There are some combinations of <SAMP>type</SAMP> and <SAMP>storage</SAMP> for which the <SAMP>x</SAMP> argument can be given as the string <SAMP>'Default'</SAMP>, which will returns a predefined grid, in particular <SAMP>psitbxgrid('Flux-Coordinate','Grid','Default')</SAMP></P>
+
+<H4> Optional arguments</H4>
+
+<P> For its points to be absolutely positioned in space, some coordinate systems requires additional information. Such an information is given in a list of optional arguments to the function <SAMP>psitbxgrid</SAMP>. Here is a list of these pieces of information:</P>
+
+<P> <DL></P>
+
+<P> <DT><SAMP>t</SAMP><DD>The time base for <SAMP>'Time-Points'</SAMP> storage. It can be found in: <UL><LI>A double array<LI>The <SAMP>t</SAMP> field of a <SAMP>psitbxgrid</SAMP> object<LI>The <SAMP>t</SAMP> field of a <SAMP>psitbxfun</SAMP> object<LI>The <SAMP>t</SAMP> field of a <SAMP>psitbxpsi</SAMP> object<LI>The <SAMP>t</SAMP> field of a <SAMP>psitbxdcd</SAMP> object</UL></P>
+
+<P> <DT><SAMP>r0,z0</SAMP><DD>The position of the axis for a <SAMP>'Toroidal'</SAMP> coordinate system or of the magnetic axis for a <SAMP>'Flux-Coordinate'</SAMP> system. Note that this axis can move in time, in which case its size must be coherent with the time base. It can be found in: <UL><LI>A cell array made of two double array<LI>The <SAMP>r0</SAMP> and <SAMP>z0</SAMP> fields of a structure<LI>The <SAMP>r0</SAMP> and <SAMP>z0</SAMP> fields of the <SAMP>par</SAMP> field of a <SAMP>psitbxgrid</SAMP> object<LI>The <SAMP>rmag</SAMP> and <SAMP>zmag</SAMP> fields of a <SAMP>psitbxpsi</SAMP> object<LI>The <SAMP>r0</SAMP> and <SAMP>z0</SAMP> fields of the <SAMP>grid</SAMP> field of a <SAMP>psitbxfun</SAMP> object<LI>The <SAMP>r0</SAMP> and <SAMP>z0</SAMP> fields of the <SAMP>grid</SAMP> field of a <SAMP>psitbxpsi</SAMP> object</UL></P>
+
+<P> <DT><SAMP>psi</SAMP><DD>A <SAMP>psitbxpsi</SAMP> object containing the distribution in cylindrical coordinate of the normalised poloidal flux. This information can be optionaly given for a <SAMP>'Flux-Coordinate'</SAMP> grid. It can be found in: <UL><LI>A <SAMP>psitbxpsi</SAMP> object of format <SAMP>'01'</SAMP><LI>In the <SAMP>psi</SAMP> field of a structure</UL></P>
+
+<P> <DT><SAMP>fsd</SAMP><DD>A <SAMP>psitbxpsi</SAMP> object containing the description of the constant poloidal flux contour in toroidal coordinates. This information can be optionaly given for a <SAMP>'Flux-Coordinate'</SAMP> grid. It can be found in: <UL><LI>A <SAMP>psitbxpsi</SAMP> object of format <SAMP>'FS'</SAMP><LI>In the <SAMP>fsd</SAMP> field of a structure</UL></P>
+
+<P> <DT><SAMP>dcd</SAMP><DD>The description of diagnostic chords. This information is required for grid of type <SAMP>'Diagnostic-Chords'</SAMP> and can be found in: <UL><LI>A <SAMP>psitbxdcd</SAMP> object<LI>In the <SAMP>dcd</SAMP> field of a structure</UL></P>
+
+<P> </DL></P>
+
+<H3> Example</H3>
+
+<H4> Example 1</H4>
+
+<P> A <SAMP>'Toroidal'</SAMP> grid with <SAMP>'Grid'</SAMP> storage</P>
+
+<PRE><FONT COLOR=RED>x = {linspace(0,.2,6),linspace(-pi,pi,7),linspace(0,2*pi,25)};
+r0z0 = {1,0};
+g = psitbxgrid('Toroidal','Grid',x,r0z0)
+ g is a PsiTbx-Grid object =
+       type: 'Toroidal'
+      label: {'A'  'Theta'  'Phi'}
+    storage: 'Grid'
+          x: {1x3 cell}
+          t: [1x0 double]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(g)
+</FONT></PRE>
+<P><IMG SRC=psitbxref011.png></P>
+<H4> Example 2</H4>
+
+<P> Two probes moving along the Z direction</P>
+
+<PRE><FONT COLOR=RED>t = linspace(0,.1,11);
+x = {repmat([.6;.7],1,11),[t;t]-.75,pi/3};
+g = psitbxgrid('Cylindrical','Time-Points',x,t)
+ g is a PsiTbx-Grid object =
+       type: 'Cylindrical'
+      label: {'R'  'Z'  'Phi'}
+    storage: 'Time-Points'
+          x: {[2x11 double]  [2x11 double]  [1.0472]}
+          t: [1x11 double]
+        par: [1x1 struct]
+        csp: [1x1 struct]
+plot(g)
+</FONT></PRE>
+<P><IMG SRC=psitbxref012.png></P>
+<H3> Listing</H3>
+
+<PRE><FONT COLOR=RED>type psitbxgrid
+
+function g = psitbxgrid(type,storage,x,varargin)
+
+% PSITBXGRID   PsiTbx-Grid object constructor
+% PSITBXGRID(TYPE,STORAGE,X[,PAR])
+
+% template
+if nargin == 0
+ g.type = 'Undefined';
+ g.label = {};
+ g.storage = 'Undefined';
+ g.x = {};
+ [g.par,g.t] = gridpar;
+ [g.csp.xk,g.csp.Mx,g.csp.Mxs]  = deal(cell(1,3));
+ return
+end
+
+% type casting
+if nargin == 1 & isa(type,'psitbxgrid')
+ g = type;
+ return
+end
+
+if nargin < 3, error('Specify TYPE, STORAGE and X'); end
+
+% type
+switch upper(type(1))
+ case 'O', g.type = 'Orthogonal';        g.label = {'X','Y','Z'};
+ case 'C', g.type = 'Cylindrical';       g.label = {'R','Z','Phi'};
+ case 'T', g.type = 'Toroidal';          g.label = {'A','Theta','Phi'};
+ case 'F', g.type = 'Flux-Coordinate';   g.label = {'Rho','Theta','Phi'};
+ case 'D', g.type = 'Diagnostic-Chords'; g.label = {'s'};
+ otherwise, error('Invalid coordinate TYPE')
+end
+
+% storage
+switch upper(storage(1))
+ case 'G', g.storage = 'Grid';
+  if g.type(1) == 'D', error('"Diagnostic-Chords" cannot have "Grid" STORAGE'), end
+ case 'P', g.storage = 'Points';
+ case 'T', g.storage = 'Time-Points';
+ otherwise, error('Invalid STORAGE')
+end
+
+% x
+if ischar(x) & upper(x(1)) == 'D'%efault
+ switch [g.type(1) g.storage(1)]
+  case 'FG'
+   x = {linspace(0,1,41),linspace(-pi,pi,129),NaN};
+  case 'CG'
+   x = {linspace(.614,1.147,28),linspace(-.76,.76,65)};
+  otherwise
+   error('No default for this TYPE and STORAGE')
+ end 
+end
+if length(x) < 3 & g.type(1) ~= 'D', [x{end+1:3}] = deal(NaN); end
+switch g.storage(1)
+ case 'G'
+  for k = 1:length(x), x{k} = x{k}(:)'; end
+ case {'P','T'}
+  dim = [];
+  for k = 1:length(x)
+   if length(x{k}) > 1
+    if isempty(dim)
+     dim = size(x{k});
+    elseif ~isequal(dim,size(x{k}))
+     error('For "Points" or "Time-Points" all X{:} must have the same size unless scalar')
+    end
+   end
+  end
+end
+g.x = x;
+
+% par and t
+[par,t,nt] = gridpar(varargin{:});
+switch g.type(1)
+ case {'O','C'}
+  [par.r0,par.z0,par.psi,par.fsd,par.dcd] = deal([]);
+ case {'T'} % requires PAR and T
+  if isempty(par.r0), error('"Toroidal" coordinates require (R0,Z0)'), end
+  [par.psi,par.fsd,par.dcd] = deal([]);
+ case {'F'}
+  par.dcd = deal([]);
+ case {'D'}
+  if isempty(par.dcd), error('"Diagnostic-Chords" require a PSITBXDCD'), end
+  [par.r0,par.z0,par.psi,par.fsd] = deal([]);
+end
+switch g.storage(1)
+ case {'G','P'}, if any(g.type(1) == 'OC'), t = []; end
+ case 'T'
+  if nt > 1 & nt ~= dim(end)
+   error('For "Time-Points" length of T must match last dimension of X')
+  end
+end
+g.t = t; 
+g.par = par;
+
+% spline matrices
+[g.csp.xk,g.csp.Mx,g.csp.Mxs]  = deal(cell(1,3));
+if g.storage(1) == 'G'
+ switch g.type(1)
+  case 'O', ec = 'aaa';
+  case 'C', ec = 'aap';
+  case 'T', ec = 'spp';
+  case 'F', ec = 'spp';
+ end
+ for k = 1:min(length(x),length(ec))
+  if length(x{k}) > 1
+   if ec(k) == 'p' & g.x{k}(end) - g.x{k}(1) ~= 2*pi
+    ec(k) = 'a';
+   end
+   [g.csp.Mx{k},g.csp.xk{k}] = csdec(g.x{k},g.x{k},ec(k));
+   if ec(k) == 's'
+    g.csp.Mxs{k} = g.csp.Mx{k};
+    g.csp.Mx{k}  = csdec(g.x{k},g.x{k},'a');
+   end
+  end
+ end
+end
+
+g = class(g,'psitbxgrid');
+
+</FONT></PRE>
+<P><IMG SRC=psitbxref013.png></P>
+<P><HR></P>
+
+<H2><A NAME=10></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxgrid/metric</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to compute the metric of a <SAMP>psitbxgrid</SAMP> object</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> f = metric(g,dim)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>metric</SAMP> applies on a <SAMP>psitbxgrid</SAMP> object with <SAMP>'Grid'</SAMP> storage and returns a <SAMP>psitbxfun</SAMP> containing the metric along the specified dimensions <SAMP>dim</SAMP>. For example if <SAMP>dim = 1</SAMP>, the metric along the first coordinate is returned, if <SAMP>dim = [2,3]</SAMP>, the metric of the surface element along coordinates 2 and 3 is returned, if <SAMP>dim = [1,2,3]</SAMP>, the volume element is returned. In addition if <SAMP>dim</SAMP> is negative, the norm of the gradient of the specified coordinate is returned.</P>
+
+<H3> Example</H3>
+
+<P> The very important gradient of rho entering the expression of the SEF (Shape Enhancement Factor)</P>
+
+<PRE><FONT COLOR=RED>fsd = psitbxtcv(10000,'FS');
+grho = metric(fsd,-1);
+plot(grho)
+</FONT></PRE>
+<P><IMG SRC=psitbxref014.png></P>
+<H3> Algorithm</H3>
+
+<P> For the flux-coordinate system, the metric matrix is not diagonal; for the others it is trivial. Here are the formulae:</P>
+
+<P> <IMG SRC=PSITBXG2G-2.GIF></P>
+
+<P><HR></P>
+
+<H2><A NAME=11></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxgrid/psitbxg2g</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to transform a <SAMP>psitbxgrid</SAMP> object on a different coordinate system</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> g2 = psitbxg2g(g,type)</P>
+
+<P> g2 = psitbxg2g(g,type,p1,...)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>psitbxg2g</SAMP> applies on a <SAMP>psitbxgrid</SAMP> object to transform the coordinates of its points in a new coordinate system. In the call <SAMP>psitbxg2g(g,type)</SAMP>, <SAMP>g</SAMP> is a <SAMP>psitbxgrid</SAMP> object and <SAMP>type</SAMP> a character string that specifies the new coordinate system; it can take the value of the <SAMP>type</SAMP> argument of the <SAMP>psitbxgrid</SAMP> function. <SAMP>psitbxg2g</SAMP> returns a <SAMP>psitbxgrid</SAMP> object with the same spatial points but with coordinates expressed in the new system. </P>
+
+<P> Note that the <SAMP>storage</SAMP> may be altered; in particular <SAMP>'Grid'</SAMP> storage may be transformed in <SAMP>'Points'</SAMP> or <SAMP>'Time-Points'</SAMP> storage because points in the new system do not align on a grid anymore.</P>
+
+<P> It is impossible to map points on a <SAMP>'Diagnostic-Chords'</SAMP> system, since this system is discrete in space.</P>
+
+<P> Some transformations require additional information that will be sought in the <SAMP>par</SAMP> field of the <SAMP>g</SAMP> argument or in additional optional arguments, following the same rules as for the <SAMP>psitbxgrid</SAMP> function. These transformations are:</P>
+
+<P> <DL></P>
+
+<P> <DT>Cylindrical to toroidal and toroidal to cylindrical<DD>Requires <SAMP>r0</SAMP> and <SAMP>z0</SAMP></P>
+
+<P> <DT>Cylindrical to Flux coordinate<DD>Requires <SAMP>r0</SAMP>, <SAMP>z0</SAMP> and a <SAMP>psitbxpsi</SAMP> of form <SAMP>'01'</SAMP></P>
+
+<P> <DT>Flux coordinate to toroidal<DD>Requires a <SAMP>psitbxpsi</SAMP> of form <SAMP>'FS'</SAMP></DL></P>
+
+<H3> Example</H3>
+
+<P> Position of the chord points in toroidal coordinates:</P>
+
+<PRE><FONT COLOR=RED>dcd = psitbxdcd('Demo');
+s = intersect(dcd,psitbxgrid('Cylindrical','Grid','Default'));
+gdc = psitbxgrid('Diagnostic-Chords','Points',{s},dcd);
+g = psitbxg2g(gdc,'Toroidal',{.89,0});
+plot(g)
+</FONT></PRE>
+<P><IMG SRC=psitbxref015.png></P>
+<H3> Algorithm</H3>
+
+<P> There are a set of basic transformations defined. All the others are composed from the basic set, which is:</P>
+
+<P> <IMG SRC=PSITBXG2G-1.GIF></P>
+
+<P><HR></P>
+
+<H2><A NAME=12></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxpsi</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Creates a <SAMP>psitbxpsi</SAMP> object containing the poloidal flux description or the flux surface description.</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE>psi = psitbxpsi(x,grid,t,form)</PRE></P>
+
+<P> <PRE>psi = psitbxpsi(x,grid,t,form,[rmag,zmag,psimag])</PRE></P>
+
+<P> <PRE>psi = psitbxpsi(x,grid,t,form,[rmag,zmag,psimag],iter,tol)</PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxpsi</SAMP> is used to create a <SAMP>psitbxpsi</SAMP> object, which is a child of the <SAMP>psitbxfun</SAMP> class that contains either the poloidal flux in cylindrical coordinates or the flux surface contours in toroidal coordinates. In the call <SAMP>psitbxpsi(x,grid,t,form)</SAMP> depending on the <SAMP>form</SAMP> argument:</P>
+
+<P> <DL></P>
+
+<P> <DT><SAMP>'FS'</SAMP><DD><SAMP>x</SAMP> is the minor radius in toroidal geometry of the surfaces of constant poloidal flux. <SAMP>x</SAMP> must be defined on the <SAMP>psitbxgrid</SAMP> object <SAMP>grid</SAMP> of type <SAMP>'Flux-Coordinate'</SAMP> with storage <SAMP>'Grid'</SAMP>. <SAMP>t</SAMP> is the time base.</P>
+
+<P> <DT><SAMP>'10','+0','-0','01'</SAMP><DD><SAMP>x</SAMP> is the poloidal flux defined on the <SAMP>psitbxgrid</SAMP> object <SAMP>grid</SAMP> of type <SAMP>'Cylindrical'</SAMP> with storage <SAMP>'Grid'</SAMP>. The first character of <SAMP>form</SAMP> represents the value or the sign of the poloidal flux on the magnetic axis, the second on the last close flux surface. <SAMP>'+0'</SAMP> is the LIUQE representation, <SAMP>'01'</SAMP> the normalised flux used for flux coordinate.</P>
+
+<P> </DL></P>
+
+<P> Optional arguments allows to specify the position of the magnetic axis <SAMP>rmag</SAMP> and <SAMP>zmag</SAMP> and the axis flux <SAMP>psimag</SAMP> and convergence parameters for the method <SAMP>psitbxp2p</SAMP>, <SAMP>iter</SAMP> and <SAMP>tol</SAMP>.</P>
+
+<P><HR></P>
+
+<H2><A NAME=13></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxpsi/psitbxfsd</SAMP> (private method)</H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Find the magnetic surface radius from <SAMP>psitbxpsi</SAMP> object</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> a = psitbxfsd(psi)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxfsd</SAMP> is used to find the magnetic surface radius and return a <SAMP>psitbxfun</SAMP> on a <SAMP>'Flux-coordinate'</SAMP> grid which describes a(&rho;,&theta;).</P>
+
+<H3> Algorithm</H3>
+
+<P> The coefficients for the cubic spline base function combination are computed using the matrices stored with the grid of the <SAMP>psitbxpsi</SAMP> object as c<SUB>kl</SUB> = &sum;<SUB>ij</SUB> M<SUP>R</SUP><SUB>ki</SUB> &psi;<SUB>ij</SUB> M<SUP>Z</SUP><SUB>jl</SUB><SUP>t</SUP>. These coefficients are then used to estimate &psi; at any point with &psi;(R,Z) = &sum;<SUB>kl</SUB> c<SUB>kl</SUB>b<SUB>k</SUB>(R)b<SUB>l</SUB>(Z), the gradient of the &psi; distribution &nabla;&psi;(R,Z) = &sum;<SUB>kl</SUB> c<SUB>kl</SUB> [b<SUB>k</SUB>'(R)b<SUB>l</SUB>(Z),b<SUB>k</SUB>(R)b<SUB>l</SUB>'(Z)] and its Laplacian &Delta;&psi;(R,Z) = &sum;<SUB>kl</SUB> c<SUB>kl</SUB> [b<SUB>k</SUB>''(R)b<SUB>l</SUB>(Z),b<SUB>k</SUB>'(R)b<SUB>l</SUB>'(Z);b<SUB>k</SUB>'(R)b<SUB>l</SUB>'(Z),b<SUB>k</SUB>(R)b<SUB>l</SUB>''(Z)].</P>
+
+<P> The derivatives of &psi; along the radius are computed using d&psi;(R(a,&theta;),Z(a,&theta;))/da = &psi;'(a) = -&part;&psi;/&part;R cos&theta; + &part;&psi;/&part;Z sin&theta; and d<SUP>2</SUP>&psi;(R(a,&theta;),Z(a,&theta;))/da<SUP>2</SUP>/2 = &psi;''(a) = &part;<SUP>2</SUP>&psi;/&part;R<SUP>2</SUP> cos<SUP>2</SUP>&theta; - 2&part;<SUP>2</SUP>&psi;/&part;R&part;Z sin&theta; cos&theta; + &part;<SUP>2</SUP>&psi;/&part;Z<SUP>2</SUP> sin<SUP>2</SUP>&theta;</P>
+
+<P> The value of &psi; along a radius is approximated by &psi;(a+da) = &psi;(a) + &psi;'(a) da + &psi;''(a)/2 da<SUP>2</SUP>. Then the radius of the flux surface with label &psi;<SUB>0</SUB> is found by solving the equation &psi;(a+da) = &psi;<SUB>0</SUB> whose solution is da = (&plusmn;(&psi;'<SUP>2</SUP>+2&psi;''(&psi;<SUB>0</SUB>-&psi;))<SUP>1/2</SUP> - &psi;')/&psi;''. Then a is iteratively replaces by a &rarr; a + da until the update drops below a threshold given by <SAMP>psi.tol</SAMP>. Normaly the function &psi; in the format <SAMP>'01'</SAMP> increases along a radius, except in the private region of the divertor. To treat this case one of the two solutions for da is selected according to the sign of &psi;': da = (sign(&psi;')(&psi;'<SUP>2</SUP>+2&psi;''(&psi;<SUB>0</SUB>-&psi;))<SUP>1/2</SUP> - &psi;')/&psi;''.</P>
+
+<P><HR></P>
+
+<H2><A NAME=14></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxpsi/psitbxfsg</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to compute geometrical quantities from a <SAMP>psitbxpsi</SAMP> object</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> fsg = psitbxfsg(fsd)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>psitbxfsg</SAMP> applies on a <SAMP>psitbxpsi</SAMP> object with format <SAMP>'FS'</SAMP> and returns a structure with fields of class <SAMP>psitbxfun</SAMP>:</P>
+
+<P> <DL><DT><SAMP>grho</SAMP><DD>flux surface average of the gradient of rho<DT><SAMP>surf</SAMP><DD>flux surface area<DT><SAMP>area</SAMP><DD>flux surface cross-section<DT><SAMP>vol</SAMP><DD>volume inside a flux surface<DT><SAMP>darea</SAMP><DD>cross-section between two flux surfaces divided by the flux coordinate increment<DT><SAMP>dvol</SAMP><DD>volume between two flux surfaces divided by the flux coordinate increment</P>
+
+<P> </DL></P>
+
+<H3> Example</H3>
+
+<PRE><FONT COLOR=RED>fsd = psitbxtcv(10000,'FS');
+fsg = psitbxfsg(fsd);
+plot(fsg.grho)
+</FONT></PRE>
+<P><IMG SRC=psitbxref016.png></P>
+<H3> Algorithm</H3>
+
+<P> Uses the following definitions:</P>
+
+<P> <DL><DT><SAMP>grho</SAMP><DD><SAMP>mean(metric(g,-1),[2,3])</SAMP><DT><SAMP>surf</SAMP><DD> <SAMP>sum(metric(g,[2,3]),[2,3])</SAMP><DT><SAMP>area</SAMP><DD><SAMP>cumsum(sum(metric(g,[1,2]),2),1)</SAMP> <DT><SAMP>vol</SAMP><DD><SAMP>cumsum(sum(metric(g,[1,2,3]),[2,3]),1)</SAMP><DT><SAMP>darea</SAMP><DD><SAMP>sum(metric(g,[1,2]),2)</SAMP><DT><SAMP>dvol</SAMP><DD><SAMP>sum(metric(g,[1,2,3]),[2,3])</SAMP></P>
+
+<P> </DL></P>
+
+<P><HR></P>
+
+<H2><A NAME=15></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxpsi/psitbxmag</SAMP> (private method)</H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Find the magnetic axis and normalise a <SAMP>psitbxpsi</SAMP> object</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> p = psitbxmag(p)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxmag</SAMP> is used to find the magnetic axis for a given flux distribution and then to normalise the flux and return a <SAMP>psitbxpsi</SAMP> object with format <SAMP>'01'</SAMP>.</P>
+
+<H3> Algorithm</H3>
+
+<P> The coefficients for the cubic spline base function combination are computed using the matrices stored with the grid of the <SAMP>psitbxpsi</SAMP> object as c<SUB>kl</SUB> = &sum;<SUB>ij</SUB> M<SUP>R</SUP><SUB>ki</SUB> &psi;<SUB>ij</SUB> M<SUP>Z</SUP><SUB>jl</SUB><SUP>t</SUP>. These coefficients are then used to estimate &psi; at any point with &psi;(R,Z) = &sum;<SUB>kl</SUB> c<SUB>kl</SUB>b<SUB>k</SUB>(R)b<SUB>l</SUB>(Z), the gradient of the &psi; distribution &nabla;&psi;(R,Z) = &sum;<SUB>kl</SUB> c<SUB>kl</SUB> [b<SUB>k</SUB>'(R)b<SUB>l</SUB>(Z),b<SUB>k</SUB>(R)b<SUB>l</SUB>'(Z)] and its Laplacian &Delta;&psi;(R,Z) = &sum;<SUB>kl</SUB> c<SUB>kl</SUB> [b<SUB>k</SUB>''(R)b<SUB>l</SUB>(Z),b<SUB>k</SUB>'(R)b<SUB>l</SUB>'(Z);b<SUB>k</SUB>'(R)b<SUB>l</SUB>'(Z),b<SUB>k</SUB>(R)b<SUB>l</SUB>''(Z)].</P>
+
+<P> If the gradient at (R+&Delta;R,Z+&Delta;Z) is approximated with &nabla;&psi;(R+&Delta;R,Z+&Delta;Z) = &nabla;&psi;(R,Z) + &Delta;&psi;(R,Z)(&Delta;R,&Delta;Z), the extremum is found where the condition &nabla;&psi = 0 is satisfied, that is (&Delta;R,&Delta;Z) = -&Delta;&psi;(R,Z)<SUP>-1</SUP>&nabla;&psi;(R,Z). Thus (R,Z) is iteratively replaced by (R,Z) &rarr; (R,Z) - &Delta;&psi;(R,Z)<SUP>-1</SUP>&nabla;&psi;(R,Z) until the update falls bellow a critical threshold specified by <SAMP>p.tol</SAMP>.</P>
+
+<P><HR></P>
+
+<H2><A NAME=16></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxpsi/psitbxp2p</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Method to change the format of a <SAMP>psitbxpsi</SAMP> object</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE></P>
+
+<P> psi = psitbxp2p(psi,'01')</P>
+
+<P> fsd = psitbxp2p(psi,'FS')</P>
+
+<P> fsd = psitbxp2p(psi,'FS',g)</P>
+
+<P> </PRE></P>
+
+<H3> Description</H3>
+
+<P> The method <SAMP>psitbxp2p</SAMP> applies on a <SAMP>psitbxpsi</SAMP> object and returns a <SAMP>psitbxpsi</SAMP> object with the specified form:</P>
+
+<P> <DL><DT><SAMP>'01'</SAMP><DD>The poloidal flux contained in the <SAMP>psi</SAMP> argument wil be searched for its maximum, normalised and the location of the maximum stored in the <SAMP>rmag</SAMP> and <SAMP>zmag</SAMP> fields</P>
+
+<P> <DT><SAMP>'FS'</SAMP><DD>The contours of constant normalised poloidal flux will be searched. A third argument allows to specify the flux-coordinate grid on which these contours are to be sought.</DL></P>
+
+<H3> Example</H3>
+
+<PRE><FONT COLOR=RED>psi = psitbxtcv(10000,.5);
+fsd = psitbxp2p(psi,'FS');
+plot(fsd)
+</FONT></PRE>
+<P><IMG SRC=psitbxref017.png></P>
+<H3> Algorithm</H3>
+
+<P> Uses Gauss-Newton iterations to locate either the maximum or the contour level. Iteration convergence is controlled by the <SAMP>iter</SAMP> and <SAMP>tol</SAMP> fields of the <SAMP>psitbxpsi</SAMP> object.</P>
+
+<P><HR></P>
+
+<H2><A NAME=17></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxtcv</SAMP></H2>
+
+<P><HR></P>
+
+<H3> Purpose</H3>
+
+<P> Easy access to quantities relevant for the Psi-Toolbox directly from the TCV shot files</P>
+
+<H3> Syntax</H3>
+
+<P> <PRE>psitbxtcv(shot,form)</PRE></P>
+
+<P> <PRE>psitbxtcv(shot,time,form)</PRE></P>
+
+<H3> Description</H3>
+
+<P> The function <SAMP>psitbxtcv</SAMP> builds object compatible with the Psi-Toolbox from the TCV shot files. Depending on the <SAMP>form</SAMP> argument it returns:</P>
+
+<P> <DL></P>
+
+<P> <DT><SAMP>'+0'</SAMP><DD>A <SAMP>psitbxpsi</SAMP> object of form <SAMP>'+0'</SAMP> containing the poloidal flux from the equilibrium reconstruction by LIUQE</P>
+
+<P> <DT><SAMP>'01'</SAMP><DD>A <SAMP>psitbxpsi</SAMP> object of form <SAMP>'01'</SAMP> containing the poloidal flux from the equilibrium reconstruction by LIUQE normalised using the <SAMP>psitbxp2p</SAMP> method</P>
+
+<P> <DT><SAMP>'FS'</SAMP><DD>A <SAMP>psitbxpsi</SAMP> object of form <SAMP>'FS'</SAMP> containing the flux surface description as precalculated by the Psi-Toolbox and stored in the shot file</P>
+
+<P> <DT><SAMP>'JPHI'</SAMP><DD>A <SAMP>psitbxfun</SAMP> object containing the toroidal current density from the equilibrium reconstruction by LIUQE</P>
+
+<P> </DL></P>
+
+<P> An optional time argument can be specified. Only the times for which a sample in the shot file at most 1e-6 second away exists are returned.</P>
+
+<H3> Example</H3>
+
+<PRE><FONT COLOR=RED>psi = psitbxtcv(10000,'+0')
+ psi is a PsiTbx-Poloidal-Flux object =
+       format: '+0'
+         rmag: []
+         zmag: []
+       psimag: []
+         iter: 20
+          tol: 1.0000e-04
+    psitbxfun: [4-D psitbxfun]
+plot(psi)
+</FONT></PRE>
+<P><IMG SRC=psitbxref018.png></P>
+<P><HR></P>
+
+<H2><A NAME=18></A><A HREF=#TOP>&lt;&lt;</A> 
+ <SAMP>psitbxtcv</SAMP></H2>
+
+<P><HR></P>
+
+<H2><A NAME=19></A><A HREF=#TOP>&lt;&lt;</A> 
+ Cubic spline interpolation</H2>
+
+<P> In some operations, specificaly the interpolation of a <SAMP>psitbxfun</SAMP> on a new set of points or grid as well as the calculation of the flux surfaces or of the intersection of diagnostic chords with the flux surfaces, a function specified by values on a given grid must be interpolated on new points. This is done by fitting N-dimensional cubic splines on the data points.</P>
+
+<H3> Cubic spline base functions</H3>
+
+<P> For a given set of knots {t<SUB>1</SUB>,...,t<SUB>N</SUB>} a set of base functions {b<SUB>1</SUB>,...b<SUB>N+2</SUB>} can be derived which satisfy the following conditions:</P>
+
+<P> <DL></P>
+
+<P> <DD>b<SUB>i</SUB>(x) are piecewise cubic polynomials</P>
+
+<P> <DD>b<SUB>i</SUB>(x) = 0 for x &le; t<SUB>i-3</SUB> or x &ge; t<SUB>i+1</SUB></P>
+
+<P> <DD>b<SUB>i</SUB>(x), b<SUB>i</SUB>'(x) and b<SUB>i</SUB>''(x) are continuous</P>
+
+<P> </DL></P>
+
+<PRE><FONT COLOR=RED>t = (0:5)';
+x = linspace(0,5,51);
+b = bspbase(-3:8,4,x);
+plot(x,b), set(gca,'xtick',t)
+</FONT></PRE>
+<P><IMG SRC=psitbxref019.png></P>
+<H3> Cubic spline combination</H3>
+
+<P> A function of x can be approximated by a linear combination of these base functions with appropriate coefficients {c<SUB>1</SUB>,...,c<SUB>N+2</SUB>} as f(x) = &sum;<SUB>i</SUB> b<SUB>i</SUB>(x)c<SUB>i</SUB>. For a 2-D function, the coefficients form a matrix: f(x,y) = &sum;<SUB>ij</SUB> c<SUB>ij</SUB>b<SUB>i</SUB>(x)b<SUB>j</SUB>(y).</P>
+
+<H3> Edge conditions</H3>
+
+<P> Since there are 2 more base functions than knots, the exact interpolation of a function given by its values on the knots by a linear combination of cubic spline base functions requires two additional constraints. These are specified as two edge conditions with the following choice:</P>
+
+<P> <DL></P>
+
+<P> <DT>not-a-knot<DD>f''' is continuous at t<SUB>2</SUB> and t<SUB>N-1</SUB></P>
+
+<P> <DT>natural<DD>f''(t<SUB>1</SUB>) = 0 and f''(t<SUB>N</SUB>) = 0</P>
+
+<P> <DT>symetric<DD>f'(t<SUB>1</SUB>) = 0 and f'''(t<SUB>1</SUB>) = 0</P>
+
+<P> <DT>periodic<DD>f'(t<SUB>1</SUB>) = f'(t<SUB>N</SUB>) and f''(t<SUB>1</SUB>) = f''(t<SUB>N</SUB>)</P>
+
+<P> </DL></P>
+
+<H3> Fast calculation of the coefficients</H3>
+
+<P> So for a function given by its values on the knots f(t<SUB>j</SUB>) = f<SUB>j</SUB> and a selected edge condition pair, a set of coefficients {c<SUB>1</SUB>,...,c<SUB>N+2</SUB>} can be calcultated such that f<SUB>j</SUB> = &sum;<SUB>i</SUB> c<SUB>i</SUB>b<SUB>i</SUB>(t<SUB>j</SUB>). Inversely, the calculation of the coefficients can be casted in a matrix such that c<SUB>i</SUB> = &sum;<SUB>j</SUB> M<SUB>ij</SUB>f<SUB>j</SUB>. Then the interpolation of the function f(x) is easily performed by f(x) = &sum;<SUB>ij</SUB> b<SUB>i</SUB>(x)M<SUB>ij</SUB>f<SUB>j</SUB>. In addition the derivatives of b<SUB>i</SUB>(x) are very easy to compute, so are the derivatives of f, for example f'(x) = &sum;<SUB>ij</SUB> b<SUB>i</SUB>'(x)M<SUB>ij</SUB>f<SUB>j</SUB>. For a 2-D function defined on a grid (x<SUB>k</SUB>,y<SUB>l</SUB>) f(x<SUB>k</SUB>,y<SUB>l</SUB>) = f<SUB>kl</SUB>, the calculation of the coefficients requires two matrices c<SUB>ij</SUB> = &sum;<SUB>kl</SUB> M<SUB>ik</SUB>f<SUB>kl</SUB>M<SUB>lj</SUB><SUP>t</SUP></P>
+
+<PRE><FONT COLOR=RED>M = csdec(t,t);
+f = t.^3;
+plot(t,f,'or',x,bspsum(-3:8,M*f,x),'-r',x,bspsum(-3:8,M*f,x,2),'--r'), set(gca,'xtick',t)
+</FONT></PRE>
+<P><IMG SRC=psitbxref020.png></P>
+</BODY>
+</HTML>

@@ -1,0 +1,28 @@
+METIS is a whole device/shot fast simulator (0D & 1D).
+METIS is a Matlab code.
+METIS has been coupled to the UAL and can be called from Kepler using the Matlab actor.
+
+The documentation of the standelone  version of METIS can be find here: 
+      - .../trunk/zerod/Howto_METIS_final.pdf  
+      - .../trunk/zerod/METIS_HELP.pdf
+
+The interface between METIS an the UAL is metis4itm.m (more information, typing under matlab: help metis4itm)
+
+In Kepler, METIS is call by the matlab actor. An example of Kepler workflow using METIS can be found here:
+      - .../trunk/zerod/workflows_kepler
+ 
+
+Installation:
+
+   - put the matlab executable in your PATH (Already configured on Gateway, nothing to do)
+   - The arch.inc file contains all the informations for compiling METIS. Some arch.inc
+     examples can be found in architecture directory. It is parameterized for the ITM Gateway, so no need to change it.
+   - type (under trunk) :
+      make clean
+      make (or make all)
+      make testmetis (for testing if the installation is correct)
+      The test output is saved in a file named log
+ 
+Execution of standelone version of METIS
+   - put the metis directory in your PATH
+   - type metis

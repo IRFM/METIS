@@ -1,0 +1,11 @@
+#! /bin/bash
+#PBS -e QuaLiKiz.err
+#PBS -o QuaLiKiz.out
+#PBS -N qualikiz
+#PBS -V
+#PBS -q infinitq
+#PBS -r n
+#PBS -m n
+
+cd $PBS_O_WORKDIR
+mpiexec -np 8 ./QuaLiKiz

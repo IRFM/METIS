@@ -1,0 +1,14 @@
+MEX       = mex
+MUMPS_DIR = $(HOME)/MUMPS_4.7.3
+
+LMETISDIR = $(HOME)/METIS/metis
+LMETIS = -L$(LMETISDIR) -lmetis
+LPORDDIR = $(MUMPS_DIR)/PORD/lib
+LPORD = -L$(LPORDDIR) -lpord
+LORDERINGS = $(LPORD) $(LMETIS)
+
+LIBSEQ  = -L$(MUMPS_DIR)/libseq -lmpiseq
+
+LIBFORT = -L/opt2/SUNWspro7/lib -lsunperf -lfminvai -lfai2 -lfsu -lfmaxvai -lfmaxlai -lfai -lfsumai -lsunmath -lfui
+
+OPTC    = -g 

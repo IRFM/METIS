@@ -1,0 +1,114 @@
+% script de compilation des mexfiles de METIS pour Apple Macintosh
+%
+% par Yves Peysson et Jean-François Artaud, CEA/DRF/IRFM
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Librairies %%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+les librairies de gcc/gfortran doivent être placées préalablement dans le dossier libs/mac
+
+libgcc_s.1.dylib (ou libgcc_s_1.dylib selon)
+libgfortranbegin.a
+libquadmath.a
+libgfortran.a
+
+Mettre les dossiers metis et MUMPS_4.10.0 dans libs.
+
+Compiler la librairie metis en allant dans le dossier metis et en tapant make
+
+Compiler MUMPS en allant dans le dossier MUMPS_4.10.0. Editer le fichier Makefile.inc pour le mac, et changer le chemin d’accès  au dossier metis
+
+LMETISDIR =  ${HOME}/Projets/METIS/libs/metis/
+
+et sauvegarder Makefile.inc. Taper
+
+make clean
+
+puis
+
+make d
+
+Quand la compilation est terminée, vérifier que les lirairies sont bien présentes dans 
+
+/lib
+/libseq
+/PORD/lib
+
+Ensuite, renommer partout dans METIS 
+
+MUMPS_4.7.3 par MUMPS_4.10.0 (ou la dermière version de MUMPS)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Compilation separatrice.f %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd acces/iter
+cp separatrice.f separatrice.F
+
+puis éditer separatrice.F et remplacer toutes les occurences
+
+CRONOSINT par mwPointer
+MATLABINOUTDIM par integer
+
+puis taper
+
+/Applications/MATLAB_R201xy.app/bin/mex -largeArrayDims /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libBLAS.dylib /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libLAPACK.dylib  ../../libs/mac/libgfortran.a ../../libs/mac/libgcc_s.1.dylib ../../libs/mac/libgfortranbegin.a ../../libs/mac/libquadmath.a  separatrice.F
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Compilation tsample.c cround.c cspline.c ctable1.c, tsplinet.c, pchipslopest_mex.c %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd import/sampling
+/Applications/MATLAB_R201xy.app/bin/mex tsample.c cround.c cspline.c ctable1.c
+/Applications/MATLAB_R201xy.app/bin/mex tsplinet.c
+/Applications/MATLAB_R201xy.app/bin/mex pchipslopest_mex.c
+%
+% Compilation metis et MUMPS 4.10.0
+%
+mettre dans le dossier libs les dossiers MUMPS 4.10.0 et metis-4.0. Compiler toutes les fonctions de MUMPS (make all) et de metis (make). Effectuer les tests de bon fonctionnement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% Compilation interpos.f90 %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd solver
+cp interpos.f90 interpos_old.f90
+rm -f interpos.f90
+cp interpos_old.f90 interpos.F90
+
+puis editer interpos.F90 et ajouter 
+
+#include "fintrf.h" 
+
+en debut de fichier et remplacer toutes les occurences
+
+CRONOSINT par mwPointer
+MATLABINOUTDIM par integer
+LAPACKINT par integer
+
+Sauvegarder puis compiler
+
+/Applications/MATLAB_R2016a.app/bin/mex ../libs/mac/libgfortran.a ../libs/mac/libgcc_s.1.dylib ../libs/mac/libgfortranbegin.a ../libs/mac/libquadmath.a interpos.F90
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% Compilation mexpde1dsolver.c %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cd solver
+cp ../libs/MUMPS_4.10.0/libseq/mpif.h mpif.h
+%
+/Applications/MATLAB_R201xy.app/bin/mex -fortran -largeArrayDims -O pde1solver.f90 -L../libs/MUMPS_4.10.0/libseq -lmpiseq -L../libs/MUMPS_4.10.0/lib -ldmumps -lmumps_common -lpord -I../libs/MUMPS_4.10.0/include /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libBLAS.dylib /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libLAPACK.dylib -L../libs/metis -lmetis -c 
+
+puis éditer  mexpde1dsolver.c et changer la ligne 24
+
+const int 
+
+par 
+
+const unsigned long
+
+
+
+
+/Applications/MATLAB_R2016a.app/bin/mex -largeArrayDims -O  mexpde1dsolver.c -L../libs/MUMPS_4.10.0/libseq -lmpiseq -L../libs/MUMPS_4.10.0/lib -ldmumps -lmumps_common -lpord -I../libs/MUMPS_4.10.0/include /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libBLAS.dylib /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libLAPACK.dylib -L../libs/metis -lmetis -c
+
+/Applications/MATLAB_R2016a.app/bin/mex mexpde1dsolver.o pde1solver.o ../libs/mac/libgfortran.a  ../libs/mac/libgcc_s.1.dylib ../libs/mac/libgfortranbegin.a ../libs/mac/libquadmath.a -L../libs/MUMPS_4.10.0/libseq -lmpiseq -L../libs/MUMPS_4.10.0/lib -ldmumps -lmumps_common -lpord -I../libs/MUMPS_4.10.0/include /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libBLAS.dylib /System/Library/Frameworks/Accelerate.framework/Frameworks/vecLib.framework/Versions/Current/libLAPACK.dylib -L../libs/metis -lmetis
+
+Dans Matlab, taper 
+
+testpde1dsolver
+
+et tous les tests doivent passer (à noter qu’il faut peut-être changer time par date dans le script)

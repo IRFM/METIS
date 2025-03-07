@@ -1,0 +1,14 @@
+#!/bin/sh
+#set -x
+export METIS_INITIAl_DIR=`pwd`
+if [ "$0" = "metis" ]; then
+   DIR=` which metis |  awk -F "/" '{$NF="."; for ( i = 1 ; i <= NF ; i++ ) { printf "%s%s",$(i),FS } }' `
+   cd $DIR
+else
+   DIR=`echo $0 | awk -F "/" '{$NF="."; for ( i = 1 ; i <= NF ; i++ ) { printf "%s%s",$(i),FS } }' `
+   cd $DIR
+fi
+#echo $DIR
+#pwd
+matlab -nodesktop -nosplash -r "metis"
+

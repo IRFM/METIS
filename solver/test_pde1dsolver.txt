@@ -1,0 +1,677 @@
+20-Jan-05   11:31:15
+/usr/deneb/gcgc/cgc/matlab5/zineb/v3.0/solver
+total 1093
+drwxr-xr-x   2 cgc      cgc         8192 Jan 20 11:31 .
+drwxr-xr-x  42 cgc      cgc         8192 Jan 20 10:36 ..
+-rw-rw-r--   1 cgc      cgc          806 Nov 24 15:16 Contents.m
+-rw-r--r--   1 cgc      cgc          806 Nov 24 15:16 Contents.old
+-rw-r--r--   1 cgc      cgc       115904 Jun 15  2001 compile_details.html
+-rw-r--r--   1 cgc      cgc        20602 Jun 15  2001 compile_summary.html
+-rw-r--r--   1 cgc      cgc        18287 Jan 20 11:23 pde1dsolver.m
+-rw-r--r--   1 cgc      cgc        17486 Jun 14  2001 pde1dsolver.m.mem
+-rw-r--r--   1 cgc      cgc        10094 May 14  2001 pdederive.m
+-rw-r--r--   1 cgc      cgc         2496 Jun 25  1999 reference1.mat
+-rw-r--r--   1 cgc      cgc        33952 Jun 25  1999 reference2.mat
+-rw-r--r--   1 cgc      cgc        33952 Jun 25  1999 reference3.mat
+-rw-r--r--   1 cgc      cgc        33952 Jun 25  1999 reference4.mat
+-rw-r--r--   1 cgc      cgc        67776 Jun 25  1999 reference5.mat
+-rw-r--r--   1 cgc      cgc       371413 Jun 14  2001 rpde1dsolver.c
+-rw-r--r--   1 cgc      cgc        17706 Jun 15  2001 rpde1dsolver.m
+-rw-r--r--   1 cgc      cgc       164986 Jun 14  2001 rpdederive.c
+-rw-r--r--   1 cgc      cgc        10269 Jun 14  2001 rpdederive.m
+-rw-r--r--   1 cgc      cgc       118624 Jun 14  2001 rpdederive.mexaxp
+-rw-r--r--   1 cgc      cgc          338 Jun 14  2001 squeeze.h
+-rw-r--r--   1 cgc      cgc         3487 Jun 30  1999 test0_pde1dsolver.m
+-rw-r--r--   1 cgc      cgc         2597 Jun 30  1999 test1_pde1dsolver.m
+-rw-r--r--   1 cgc      cgc         2620 Jun 30  1999 test2_pde1dsolver.m
+-rw-r--r--   1 cgc      cgc         3674 Jun 25  1999 test2eq_ip_pde1dsolver.m
+-rw-r--r--   1 cgc      cgc         4200 Jun 25  1999 test2eq_pde1dsolver.m
+-rw-r--r--   1 cgc      cgc         2619 Jun 30  1999 test3_pde1dsolver.m
+-rw-rw-r--   1 cgc      cgc            0 Jan 20 11:31 test_pde1dsolver.txt
+-rw-r--r--   1 cgc      cgc         1209 Jun 14  2001 testdim_pde1dsolver.m
+-rw-r--r--   1 cgc      cgc         4575 Jun 25  1999 testpde1dsolver.m
+-rw-r--r--   1 cgc      cgc          368 Jun 14  2001 zverbose.h
+
+Script de test automatique du solveur de PDE 1D
+ 
+-------------------------------------------------------------------
+Premier test : test informatique sur les dimensions des matrices
+Passage # 1
+Test de la fonction pde1dsolver
+test des dimensions
+K = 8, M = 5, f = 0.994172
+dx = 0.694183, dt = 0.435061 
+mode :
+     0
+     0
+     0
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A              8x5x5         1600  double array
+  ALPHA         40x40          4820  sparse array
+  ALPHAP        40x40          5120  sparse array
+  AP             8x5x5         1600  double array
+  B              8x5x5         1600  double array
+  BP             8x5x5         1600  double array
+  C              8x5x5         1600  double array
+  CP             8x5x5         1600  double array
+  D              8x5            320  double array
+  DP             8x5            320  double array
+  F              8x5            320  double array
+  FP             8x5            320  double array
+  FS            40x1            320  double array
+  IDENTITE      40x40           644  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             40x1            320  double array
+  T0             2x5x3          240  double array
+  T1             2x5x3          240  double array
+  V0             2x5             80  double array
+  V1             2x5             80  double array
+  d2fpdx2        8x5            320  double array
+  dfpdx          8x5            320  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp             8x5            320  double array
+  mode           5x1             40  double array (logical)
+
+Grand total is 2491 elements using 23784 bytes
+
+ 
+Passage # 2
+Test de la fonction pde1dsolver
+test des dimensions
+K = 9, M = 1, f = 0.935146
+dx = 0.132703, dt = 0.524425 
+mode :
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A              9x1             72  double array
+  ALPHA          9x9            244  sparse array
+  ALPHAP         9x9            256  sparse array
+  AP             9x1             72  double array
+  B              9x1             72  double array
+  BP             9x1             72  double array
+  C              9x1             72  double array
+  CP             9x1             72  double array
+  D              9x1             72  double array
+  DP             9x1             72  double array
+  F              9x1             72  double array
+  FP             9x1             72  double array
+  FS             9x1             72  double array
+  IDENTITE       9x9            148  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S              9x1             72  double array
+  T0             2x1x3           48  double array
+  T1             2x1x3           48  double array
+  V0             2x1             16  double array
+  V1             2x1             16  double array
+  d2fpdx2        9x1             72  double array
+  dfpdx          9x1             72  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp             9x1             72  double array
+  mode           1x1              8  double array (logical)
+
+Grand total is 201 elements using 1904 bytes
+
+ 
+Passage # 3
+Test de la fonction pde1dsolver
+test des dimensions
+K = 23, M = 5, f = 0.396847
+dx = 0.242396, dt = 0.789657 
+mode :
+     1
+     1
+     0
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A             23x5x5         4600  double array
+  ALPHA        115x115         5600  sparse array
+  ALPHAP       115x115         5840  sparse array
+  AP            23x5x5         4600  double array
+  B             23x5x5         4600  double array
+  BP            23x5x5         4600  double array
+  C             23x5x5         4600  double array
+  CP            23x5x5         4600  double array
+  D             23x5            920  double array
+  DP            23x5            920  double array
+  F             23x5            920  double array
+  FP            23x5            920  double array
+  FS           115x1            920  double array
+  IDENTITE     115x115         1844  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S            115x1            920  double array
+  T0             2x5x3          240  double array
+  T1             2x5x3          240  double array
+  V0             2x5             80  double array
+  V1             2x5             80  double array
+  d2fpdx2       23x5            920  double array
+  dfpdx         23x5            920  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp            23x5            920  double array
+  mode           5x1             40  double array (logical)
+
+Grand total is 5566 elements using 49884 bytes
+
+ 
+Passage # 4
+Test de la fonction pde1dsolver
+test des dimensions
+K = 7, M = 5, f = 0.275106
+dx = 0.346685, dt = 0.325154 
+mode :
+     0
+     0
+     1
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A              7x5x5         1400  double array
+  ALPHA         35x35          2640  sparse array
+  ALPHAP        35x35          2868  sparse array
+  AP             7x5x5         1400  double array
+  B              7x5x5         1400  double array
+  BP             7x5x5         1400  double array
+  C              7x5x5         1400  double array
+  CP             7x5x5         1400  double array
+  D              7x5            280  double array
+  DP             7x5            280  double array
+  F              7x5            280  double array
+  FP             7x5            280  double array
+  FS            35x1            280  double array
+  IDENTITE      35x35           564  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             35x1            280  double array
+  T0             2x5x3          240  double array
+  T1             2x5x3          240  double array
+  V0             2x5             80  double array
+  V1             2x5             80  double array
+  d2fpdx2        7x5            280  double array
+  dfpdx          7x5            280  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp             7x5            280  double array
+  mode           5x1             40  double array (logical)
+
+Grand total is 1925 elements using 17712 bytes
+
+ 
+Passage # 5
+Test de la fonction pde1dsolver
+test des dimensions
+K = 8, M = 5, f = 0.919543
+dx = 0.841935, dt = 0.982006 
+mode :
+     0
+     0
+     0
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A              8x5x5         1600  double array
+  ALPHA         40x40          5072  sparse array
+  ALPHAP        40x40          4820  sparse array
+  AP             8x5x5         1600  double array
+  B              8x5x5         1600  double array
+  BP             8x5x5         1600  double array
+  C              8x5x5         1600  double array
+  CP             8x5x5         1600  double array
+  D              8x5            320  double array
+  DP             8x5            320  double array
+  F              8x5            320  double array
+  FP             8x5            320  double array
+  FS            40x1            320  double array
+  IDENTITE      40x40           644  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             40x1            320  double array
+  T0             2x5x3          240  double array
+  T1             2x5x3          240  double array
+  V0             2x5             80  double array
+  V1             2x5             80  double array
+  d2fpdx2        8x5            320  double array
+  dfpdx          8x5            320  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp             8x5            320  double array
+  mode           5x1             40  double array (logical)
+
+Grand total is 2487 elements using 23736 bytes
+
+ 
+Passage # 6
+Test de la fonction pde1dsolver
+test des dimensions
+K = 19, M = 1, f = 0.766123
+dx = 0.197090, dt = 0.046788 
+mode :
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A             19x1            152  double array
+  ALPHA         19x19           584  sparse array
+  ALPHAP        19x19           584  sparse array
+  AP            19x1            152  double array
+  B             19x1            152  double array
+  BP            19x1            152  double array
+  C             19x1            152  double array
+  CP            19x1            152  double array
+  D             19x1            152  double array
+  DP            19x1            152  double array
+  F             19x1            152  double array
+  FP            19x1            152  double array
+  FS            19x1            152  double array
+  IDENTITE      19x19           308  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             19x1            152  double array
+  T0             2x1x3           48  double array
+  T1             2x1x3           48  double array
+  V0             2x1             16  double array
+  V1             2x1             16  double array
+  d2fpdx2       19x1            152  double array
+  dfpdx         19x1            152  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp            19x1            152  double array
+  mode           1x1              8  double array (logical)
+
+Grand total is 410 elements using 3932 bytes
+
+ 
+Passage # 7
+Test de la fonction pde1dsolver
+test des dimensions
+K = 19, M = 5, f = 0.541350
+dx = 0.744574, dt = 0.534957 
+mode :
+     0
+     0
+     0
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A             19x5x5         3800  double array
+  ALPHA         95x95         12360  sparse array
+  ALPHAP        95x95         12288  sparse array
+  AP            19x5x5         3800  double array
+  B             19x5x5         3800  double array
+  BP            19x5x5         3800  double array
+  C             19x5x5         3800  double array
+  CP            19x5x5         3800  double array
+  D             19x5            760  double array
+  DP            19x5            760  double array
+  F             19x5            760  double array
+  FP            19x5            760  double array
+  FS            95x1            760  double array
+  IDENTITE      95x95          1524  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             95x1            760  double array
+  T0             2x5x3          240  double array
+  T1             2x5x3          240  double array
+  V0             2x5             80  double array
+  V1             2x5             80  double array
+  d2fpdx2       19x5            760  double array
+  dfpdx         19x5            760  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp            19x5            760  double array
+  mode           5x1             40  double array (logical)
+
+Grand total is 5880 elements using 56532 bytes
+
+ 
+Passage # 8
+Test de la fonction pde1dsolver
+test des dimensions
+K = 8, M = 2, f = 0.754847
+dx = 0.908523, dt = 0.717413 
+mode :
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A              8x2x2          256  double array
+  ALPHA         16x16           824  sparse array
+  ALPHAP        16x16           932  sparse array
+  AP             8x2x2          256  double array
+  B              8x2x2          256  double array
+  BP             8x2x2          256  double array
+  C              8x2x2          256  double array
+  CP             8x2x2          256  double array
+  D              8x2            128  double array
+  DP             8x2            128  double array
+  F              8x2            128  double array
+  FP             8x2            128  double array
+  FS            16x1            128  double array
+  IDENTITE      16x16           260  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             16x1            128  double array
+  T0             2x2x3           96  double array
+  T1             2x2x3           96  double array
+  V0             2x2             32  double array
+  V1             2x2             32  double array
+  d2fpdx2        8x2            128  double array
+  dfpdx          8x2            128  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp             8x2            128  double array
+  mode           2x1             16  double array (logical)
+
+Grand total is 526 elements using 5016 bytes
+
+ 
+Passage # 9
+Test de la fonction pde1dsolver
+test des dimensions
+K = 18, M = 5, f = 0.331045
+dx = 0.185393, dt = 0.159368 
+mode :
+     0
+     0
+     0
+     0
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A             18x5x5         3600  double array
+  ALPHA         90x90         11956  sparse array
+  ALPHAP        90x90         11740  sparse array
+  AP            18x5x5         3600  double array
+  B             18x5x5         3600  double array
+  BP            18x5x5         3600  double array
+  C             18x5x5         3600  double array
+  CP            18x5x5         3600  double array
+  D             18x5            720  double array
+  DP            18x5            720  double array
+  F             18x5            720  double array
+  FP            18x5            720  double array
+  FS            90x1            720  double array
+  IDENTITE      90x90          1444  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S             90x1            720  double array
+  T0             2x5x3          240  double array
+  T1             2x5x3          240  double array
+  V0             2x5             80  double array
+  V1             2x5             80  double array
+  d2fpdx2       18x5            720  double array
+  dfpdx         18x5            720  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp            18x5            720  double array
+  mode           5x1             40  double array (logical)
+
+Grand total is 5604 elements using 53940 bytes
+
+ 
+Passage # 10
+Test de la fonction pde1dsolver
+test des dimensions
+K = 7, M = 1, f = 0.179466
+dx = 0.658780, dt = 0.073157 
+mode :
+     0
+
+ 
+  Name           Size         Bytes  Class
+
+  A              7x1             56  double array
+  ALPHA          7x7            200  sparse array
+  ALPHAP         7x7            164  sparse array
+  AP             7x1             56  double array
+  B              7x1             56  double array
+  BP             7x1             56  double array
+  C              7x1             56  double array
+  CP             7x1             56  double array
+  D              7x1             56  double array
+  DP             7x1             56  double array
+  F              7x1             56  double array
+  FP             7x1             56  double array
+  FS             7x1             56  double array
+  IDENTITE       7x7            116  sparse array
+  K              1x1              8  double array
+  M              1x1              8  double array
+  S              7x1             56  double array
+  T0             2x1x3           48  double array
+  T1             2x1x3           48  double array
+  V0             2x1             16  double array
+  V1             2x1             16  double array
+  d2fpdx2        7x1             56  double array
+  dfpdx          7x1             56  double array
+  dt             1x1              8  double array
+  dx             1x1              8  double array
+  f              1x1              8  double array
+  fp             7x1             56  double array
+  mode           1x1              8  double array (logical)
+
+Grand total is 159 elements using 1496 bytes
+
+ 
+Le test des dimensions a ete effectue avec succes
+ 
+-------------------------------------------------------------------
+Test des operateurs :
+Test de la fonction pde1dsolver
+Premier test : test des operateurs
+ test pour une equation seule
+operateur derivee 2
+    -2     1     0     0     0
+     1    -2     1     0     0
+     0     1    -2     1     0
+     0     0     1    -2     1
+     0     0     0     1    -2
+
+    -2     1     0     0     0
+     1    -2     1     0     0
+     0     1    -2     1     0
+     0     0     1    -2     1
+     0     0     0     1    -2
+
+operateur derivee 1
+     0     1     0     0     0
+    -1     0     1     0     0
+     0    -1     0     1     0
+     0     0    -1     0     1
+     0     0     0    -1     0
+
+     0     1     0     0     0
+    -1     0     1     0     0
+     0    -1     0     1     0
+     0     0    -1     0     1
+     0     0     0    -1     0
+
+operateur * 
+     1     0     0     0     0
+     0     1     0     0     0
+     0     0     1     0     0
+     0     0     0     1     0
+     0     0     0     0     1
+
+     1     0     0     0     0
+     0     1     0     0     0
+     0     0     1     0     0
+     0     0     0     1     0
+     0     0     0     0     1
+
+operateur derivee 2 croisees
+     0     0     0     0     0    -2     1     0     0     0
+     0     0     0     0     0     1    -2     1     0     0
+     0     0     0     0     0     0     1    -2     1     0
+     0     0     0     0     0     0     0     1    -2     1
+     0     0     0     0     0     0     0     0     1    -2
+    -2     1     0     0     0     0     0     0     0     0
+     1    -2     1     0     0     0     0     0     0     0
+     0     1    -2     1     0     0     0     0     0     0
+     0     0     1    -2     1     0     0     0     0     0
+     0     0     0     1    -2     0     0     0     0     0
+
+     0     0     0     0     0    -2     1     0     0     0
+     0     0     0     0     0     1    -2     1     0     0
+     0     0     0     0     0     0     1    -2     1     0
+     0     0     0     0     0     0     0     1    -2     1
+     0     0     0     0     0     0     0     0     1    -2
+    -2     1     0     0     0     0     0     0     0     0
+     1    -2     1     0     0     0     0     0     0     0
+     0     1    -2     1     0     0     0     0     0     0
+     0     0     1    -2     1     0     0     0     0     0
+     0     0     0     1    -2     0     0     0     0     0
+
+operateur derivee 1 croisee 
+     0     0     0     0     0     0     1     0     0     0
+     0     0     0     0     0    -1     0     1     0     0
+     0     0     0     0     0     0    -1     0     1     0
+     0     0     0     0     0     0     0    -1     0     1
+     0     0     0     0     0     0     0     0    -1     0
+     0     1     0     0     0     0     0     0     0     0
+    -1     0     1     0     0     0     0     0     0     0
+     0    -1     0     1     0     0     0     0     0     0
+     0     0    -1     0     1     0     0     0     0     0
+     0     0     0    -1     0     0     0     0     0     0
+
+     0     0     0     0     0     0     1     0     0     0
+     0     0     0     0     0    -1     0     1     0     0
+     0     0     0     0     0     0    -1     0     1     0
+     0     0     0     0     0     0     0    -1     0     1
+     0     0     0     0     0     0     0     0    -1     0
+     0     1     0     0     0     0     0     0     0     0
+    -1     0     1     0     0     0     0     0     0     0
+     0    -1     0     1     0     0     0     0     0     0
+     0     0    -1     0     1     0     0     0     0     0
+     0     0     0    -1     0     0     0     0     0     0
+
+operateur * croise
+     0     0     0     0     0     1     0     0     0     0
+     0     0     0     0     0     0     1     0     0     0
+     0     0     0     0     0     0     0     1     0     0
+     0     0     0     0     0     0     0     0     1     0
+     0     0     0     0     0     0     0     0     0     1
+     1     0     0     0     0     0     0     0     0     0
+     0     1     0     0     0     0     0     0     0     0
+     0     0     1     0     0     0     0     0     0     0
+     0     0     0     1     0     0     0     0     0     0
+     0     0     0     0     1     0     0     0     0     0
+
+     0     0     0     0     0     1     0     0     0     0
+     0     0     0     0     0     0     1     0     0     0
+     0     0     0     0     0     0     0     1     0     0
+     0     0     0     0     0     0     0     0     1     0
+     0     0     0     0     0     0     0     0     0     1
+     1     0     0     0     0     0     0     0     0     0
+     0     1     0     0     0     0     0     0     0     0
+     0     0     1     0     0     0     0     0     0     0
+     0     0     0     1     0     0     0     0     0     0
+     0     0     0     0     1     0     0     0     0     0
+
+L'operateur derivee 2 explicite ok
+L'operateur derivee 2 implicite ok
+L'operateur derivee 1 explicite ok
+L'operateur derivee 1 implicite ok
+L'operateur * explicite ok
+L'operateur * implicite ok
+L'operateur derivee 2 explicite croise pour 2 equations ok
+L'operateur derivee 2 implicite  croise pour 2 equations  ok
+L'operateur derivee 1 explicite  croise pour 2 equations  ok
+L'operateur derivee 1 implicite  croise pour 2 equations  ok
+L'operateur * explicite croise pour 2 equations  ok 
+L'operateur * implicite croise pour 2 equations  ok 
+ 
+-------------------------------------------------------------------
+Test des conditions aux limites -> valeur donnees
+Test de la fonction pde1dsolver
+test une equation
+Valeurs aux bornes donnees
+................................................................................
+................................................................................
+........................................
+Le test des conditions aux limites, valeurs donnees, est ok
+ 
+-------------------------------------------------------------------
+Test des conditions aux limites -> derivees donnees
+Test de la fonction pde1dsolver
+test une equation
+Valeurs aux bornes de la derivee donnees
+................................................................................
+................................................................................
+........................................
+Le test des conditions aux limites, derivees donnees, est ok
+ 
+-------------------------------------------------------------------
+Test des conditions aux limites -> derivees 2 donnees
+Test de la fonction pde1dsolver
+test une equation
+Valeurs aux bornes de la derivee 2 donnees
+................................................................................
+................................................................................
+........................................
+Le test des conditions aux limites, derivees 2 donnees, est ok
+ 
+-------------------------------------------------------------------
+Test de 2 equations non lineaires couplees
+Test de la fonction pde1dsolver
+test 2 equations
+Probleme non lineaire de la diffusion d'un produit concentre dans un liquide
+en presence d'un gradient de temperature et d'une source de chauffage.
+La conductance thermique du liquide est modifiee par la concentration du produit.
+................................................................................
+................................................................................
+........................................
+Probleme lors du test des equations non lineaires couplees
+ 
+-------------------------------------------------------------------
+Test intpretatif/predictif
+Test de la fonction pde1dsolver
+test 2 equations
+Probleme non lineaire de la diffusion d'un produit concentre dans un liquide
+en presence d'un gradient de temperature et d'une source de chauffage.
+La conductance thermique du liquide est modifiee par la concentration du produit.
+................................................................................
+................................................................................
+........................................
+Le test intpretatif/predictif  est ok
+ 
+-------------------------------------------------------------------
+Fin

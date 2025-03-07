@@ -1,0 +1,3 @@
+function zplotbench
+
+load /usr/drfc/cgc/matlab5/zineb/test/benchdata

@@ -1,0 +1,16 @@
+# Files and directories to exclude from Git repository
+*~
+*.[oa]
+*.mod
+*.exe
+*.mexa64
+zsimpletest
+c_example
+dsimpletest
+arch.inc
+data
+libs/MUMPS_4.7.3/test/c_example
+libs/MUMPS_4.7.3/test/dsimpletest
+libs/MUMPS_4.7.3/test/zsimpletest
+python/__pycache__
+*.pyc

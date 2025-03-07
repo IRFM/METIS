@@ -1,0 +1,2750 @@
+Model {
+  Name			  "flux_control_example"
+  Version		  6.3
+  MdlSubVersion		  0
+  GraphicalInterface {
+    NumRootInports	    0
+    NumRootOutports	    0
+    ParameterArgumentNames  ""
+    ComputedModelVersion    "1.45"
+    NumModelReferences	    0
+    NumTestPointedSignals   0
+  }
+  SavedCharacterEncoding  "UTF-8"
+  SaveDefaultBlockParams  on
+  SampleTimeColors	  off
+  LibraryLinkDisplay	  "none"
+  WideLines		  off
+  ShowLineDimensions	  off
+  ShowPortDataTypes	  off
+  ShowLoopsOnError	  on
+  IgnoreBidirectionalLines off
+  ShowStorageClass	  off
+  ShowTestPointIcons	  on
+  ShowViewerIcons	  on
+  SortedOrder		  off
+  ExecutionContextIcon	  off
+  ShowLinearizationAnnotations on
+  RecordCoverage	  off
+  CovPath		  "/"
+  CovSaveName		  "covdata"
+  CovMetricSettings	  "dw"
+  CovNameIncrementing	  off
+  CovHtmlReporting	  on
+  covSaveCumulativeToWorkspaceVar on
+  CovSaveSingleToWorkspaceVar on
+  CovCumulativeVarName	  "covCumulativeData"
+  CovCumulativeReport	  off
+  CovReportOnPause	  on
+  ScopeRefreshTime	  0.035000
+  OverrideScopeRefreshTime on
+  DisableAllScopes	  off
+  DataTypeOverride	  "UseLocalSettings"
+  MinMaxOverflowLogging	  "UseLocalSettings"
+  MinMaxOverflowArchiveMode "Overwrite"
+  BlockNameDataTip	  off
+  BlockParametersDataTip  off
+  BlockDescriptionStringDataTip	off
+  ToolBar		  on
+  StatusBar		  on
+  BrowserShowLibraryLinks off
+  BrowserLookUnderMasks	  off
+  Created		  "Fri Oct 12 05:05:33 2007"
+  Creator		  "JA132999"
+  UpdateHistory		  "UpdateHistoryNever"
+  ModifiedByFormat	  "%<Auto>"
+  LastModifiedBy	  "JA132999"
+  ModifiedDateFormat	  "%<Auto>"
+  LastModifiedDate	  "Mon Oct 15 07:37:40 2007"
+  ModelVersionFormat	  "1.%<AutoIncrement:45>"
+  ConfigurationManager	  "None"
+  LinearizationMsg	  "none"
+  Profile		  off
+  ParamWorkspaceSource	  "MATLABWorkspace"
+  AccelSystemTargetFile	  "accel.tlc"
+  AccelTemplateMakefile	  "accel_default_tmf"
+  AccelMakeCommand	  "make_rtw"
+  TryForcingSFcnDF	  off
+  ExtModeBatchMode	  off
+  ExtModeEnableFloating	  on
+  ExtModeTrigType	  "manual"
+  ExtModeTrigMode	  "normal"
+  ExtModeTrigPort	  "1"
+  ExtModeTrigElement	  "any"
+  ExtModeTrigDuration	  1000
+  ExtModeTrigDurationFloating "auto"
+  ExtModeTrigHoldOff	  0
+  ExtModeTrigDelay	  0
+  ExtModeTrigDirection	  "rising"
+  ExtModeTrigLevel	  0
+  ExtModeArchiveMode	  "off"
+  ExtModeAutoIncOneShot	  off
+  ExtModeIncDirWhenArm	  off
+  ExtModeAddSuffixToVar	  off
+  ExtModeWriteAllDataToWs off
+  ExtModeArmWhenConnect	  on
+  ExtModeSkipDownloadWhenConnect off
+  ExtModeLogAll		  on
+  ExtModeAutoUpdateStatusClock off
+  BufferReuse		  off
+  StrictBusMsg		  "Warning"
+  ProdHWDeviceType	  "32-bit Generic"
+  ShowModelReferenceBlockVersion off
+  ShowModelReferenceBlockIO off
+  Array {
+    Type		    "Handle"
+    Dimension		    1
+    Simulink.ConfigSet {
+      $ObjectID		      1
+      Version		      "1.1.0"
+      Array {
+	Type			"Handle"
+	Dimension		7
+	Simulink.SolverCC {
+	  $ObjectID		  2
+	  Version		  "1.1.0"
+	  StartTime		  "0.0"
+	  StopTime		  "2"
+	  AbsTol		  "auto"
+	  FixedStep		  "0.02"
+	  InitialStep		  "1e-2"
+	  MaxNumMinSteps	  "-1"
+	  MaxOrder		  5
+	  ExtrapolationOrder	  4
+	  NumberNewtonIterations  1
+	  MaxStep		  "0.1"
+	  MinStep		  "1e-2"
+	  RelTol		  "1e-2"
+	  SolverMode		  "SingleTasking"
+	  Solver		  "ode3"
+	  SolverName		  "ode3"
+	  ZeroCrossControl	  "UseLocalSettings"
+	  AlgebraicLoopSolver	  "TrustRegion"
+	  SolverResetMethod	  "Fast"
+	  PositivePriorityOrder	  off
+	  AutoInsertRateTranBlk	  off
+	  SampleTimeConstraint	  "Unconstrained"
+	  RateTranMode		  "Deterministic"
+	  Array {
+	    Type		    "Struct"
+	    Dimension		    2
+	    MATStruct {
+	      SampleTime	      "0.01"
+	      Offset		      "0"
+	      Priority		      [1.0]
+	    }
+	    MATStruct {
+	      SampleTime	      "0.1"
+	      Offset		      "0"
+	      Priority		      [1.0]
+	    }
+	    PropName		    "SampleTimeProperty"
+	  }
+	}
+	Simulink.DataIOCC {
+	  $ObjectID		  3
+	  Version		  "1.1.0"
+	  Decimation		  "1"
+	  ExternalInput		  "[t, u]"
+	  FinalStateName	  "xFinal"
+	  InitialState		  "xInitial"
+	  LimitDataPoints	  on
+	  MaxDataPoints		  "1000"
+	  LoadExternalInput	  off
+	  LoadInitialState	  off
+	  SaveFinalState	  off
+	  SaveFormat		  "Array"
+	  SaveOutput		  on
+	  SaveState		  off
+	  SignalLogging		  on
+	  InspectSignalLogs	  off
+	  SaveTime		  on
+	  StateSaveName		  "xout"
+	  TimeSaveName		  "tout"
+	  OutputSaveName	  "yout"
+	  SignalLoggingName	  "logsout"
+	  OutputOption		  "RefineOutputTimes"
+	  OutputTimes		  "[]"
+	  Refine		  "1"
+	}
+	Simulink.OptimizationCC {
+	  $ObjectID		  4
+	  Array {
+	    Type		    "Cell"
+	    Dimension		    5
+	    Cell		    "ZeroExternalMemoryAtStartup"
+	    Cell		    "ZeroInternalMemoryAtStartup"
+	    Cell		    "InitFltsAndDblsToZero"
+	    Cell		    "OptimizeModelRefInitCode"
+	    Cell		    "NoFixptDivByZeroProtection"
+	    PropName		    "DisabledProps"
+	  }
+	  Version		  "1.1.0"
+	  BlockReduction	  off
+	  BooleanDataType	  off
+	  ConditionallyExecuteInputs off
+	  InlineParams		  off
+	  InlineInvariantSignals  off
+	  OptimizeBlockIOStorage  off
+	  BufferReuse		  off
+	  EnforceIntegerDowncast  on
+	  ExpressionFolding	  off
+	  FoldNonRolledExpr	  on
+	  LocalBlockOutputs	  off
+	  ParameterPooling	  on
+	  RollThreshold		  5
+	  SystemCodeInlineAuto	  off
+	  StateBitsets		  off
+	  DataBitsets		  off
+	  UseTempVars		  off
+	  ZeroExternalMemoryAtStartup on
+	  ZeroInternalMemoryAtStartup on
+	  InitFltsAndDblsToZero	  on
+	  NoFixptDivByZeroProtection off
+	  EfficientFloat2IntCast  off
+	  OptimizeModelRefInitCode off
+	  LifeSpan		  "inf"
+	  BufferReusableBoundary  on
+	}
+	Simulink.DebuggingCC {
+	  $ObjectID		  5
+	  Version		  "1.1.0"
+	  RTPrefix		  "error"
+	  ConsistencyChecking	  "none"
+	  ArrayBoundsChecking	  "none"
+	  SignalInfNanChecking	  "none"
+	  ReadBeforeWriteMsg	  "UseLocalSettings"
+	  WriteAfterWriteMsg	  "UseLocalSettings"
+	  WriteAfterReadMsg	  "UseLocalSettings"
+	  AlgebraicLoopMsg	  "warning"
+	  ArtificialAlgebraicLoopMsg "warning"
+	  CheckSSInitialOutputMsg on
+	  CheckExecutionContextPreStartOutputMsg off
+	  CheckExecutionContextRuntimeOutputMsg	off
+	  SignalResolutionControl "TryResolveAllWithWarning"
+	  BlockPriorityViolationMsg "warning"
+	  MinStepSizeMsg	  "warning"
+	  SolverPrmCheckMsg	  "warning"
+	  InheritedTsInSrcMsg	  "warning"
+	  DiscreteInheritContinuousMsg "warning"
+	  MultiTaskDSMMsg	  "warning"
+	  MultiTaskRateTransMsg	  "error"
+	  SingleTaskRateTransMsg  "none"
+	  TasksWithSamePriorityMsg "warning"
+	  SigSpecEnsureSampleTimeMsg "warning"
+	  CheckMatrixSingularityMsg "none"
+	  IntegerOverflowMsg	  "warning"
+	  Int32ToFloatConvMsg	  "warning"
+	  ParameterDowncastMsg	  "error"
+	  ParameterOverflowMsg	  "error"
+	  ParameterUnderflowMsg	  "none"
+	  ParameterPrecisionLossMsg "warning"
+	  UnderSpecifiedDataTypeMsg "none"
+	  UnnecessaryDatatypeConvMsg "none"
+	  VectorMatrixConversionMsg "none"
+	  InvalidFcnCallConnMsg	  "error"
+	  FcnCallInpInsideContextMsg "Use local settings"
+	  SignalLabelMismatchMsg  "none"
+	  UnconnectedInputMsg	  "warning"
+	  UnconnectedOutputMsg	  "warning"
+	  UnconnectedLineMsg	  "warning"
+	  SFcnCompatibilityMsg	  "none"
+	  UniqueDataStoreMsg	  "none"
+	  BusObjectLabelMismatch  "warning"
+	  RootOutportRequireBusObject "warning"
+	  AssertControl		  "UseLocalSettings"
+	  EnableOverflowDetection off
+	  ModelReferenceIOMsg	  "none"
+	  ModelReferenceVersionMismatchMessage "none"
+	  ModelReferenceIOMismatchMessage "none"
+	  ModelReferenceCSMismatchMessage "none"
+	  ModelReferenceSimTargetVerbose off
+	  UnknownTsInhSupMsg	  "warning"
+	  ModelReferenceDataLoggingMessage "warning"
+	  ModelReferenceSymbolNameMessage "warning"
+	  ModelReferenceExtraNoncontSigs "error"
+	}
+	Simulink.HardwareCC {
+	  $ObjectID		  6
+	  Version		  "1.1.0"
+	  ProdBitPerChar	  8
+	  ProdBitPerShort	  16
+	  ProdBitPerInt		  32
+	  ProdBitPerLong	  32
+	  ProdIntDivRoundTo	  "Undefined"
+	  ProdEndianess		  "Unspecified"
+	  ProdWordSize		  32
+	  ProdShiftRightIntArith  on
+	  ProdHWDeviceType	  "32-bit Generic"
+	  TargetBitPerChar	  8
+	  TargetBitPerShort	  16
+	  TargetBitPerInt	  32
+	  TargetBitPerLong	  32
+	  TargetShiftRightIntArith on
+	  TargetIntDivRoundTo	  "Undefined"
+	  TargetEndianess	  "Unspecified"
+	  TargetWordSize	  32
+	  TargetTypeEmulationWarnSuppressLevel 0
+	  TargetPreprocMaxBitsSint 32
+	  TargetPreprocMaxBitsUint 32
+	  TargetHWDeviceType	  "Specified"
+	  TargetUnknown		  off
+	  ProdEqTarget		  on
+	}
+	Simulink.ModelReferenceCC {
+	  $ObjectID		  7
+	  Version		  "1.1.0"
+	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
+	  CheckModelReferenceTargetMessage "error"
+	  ModelReferenceNumInstancesAllowed "Multi"
+	  ModelReferencePassRootInputsByReference on
+	  ModelReferenceMinAlgLoopOccurrences off
+	}
+	Simulink.RTWCC {
+	  $BackupClass		  "Simulink.RTWCC"
+	  $ObjectID		  8
+	  Array {
+	    Type		    "Cell"
+	    Dimension		    1
+	    Cell		    "IncludeHyperlinkInReport"
+	    PropName		    "DisabledProps"
+	  }
+	  Version		  "1.1.0"
+	  SystemTargetFile	  "grt.tlc"
+	  GenCodeOnly		  off
+	  MakeCommand		  "make_rtw"
+	  TemplateMakefile	  "grt_default_tmf"
+	  GenerateReport	  off
+	  SaveLog		  off
+	  RTWVerbose		  on
+	  RetainRTWFile		  off
+	  ProfileTLC		  off
+	  TLCDebug		  off
+	  TLCCoverage		  off
+	  TLCAssert		  off
+	  ProcessScriptMode	  "Default"
+	  ConfigurationMode	  "Optimized"
+	  ConfigAtBuild		  off
+	  IncludeHyperlinkInReport off
+	  LaunchReport		  off
+	  TargetLang		  "C"
+	  Array {
+	    Type		    "Handle"
+	    Dimension		    2
+	    Simulink.CodeAppCC {
+	      $ObjectID		      9
+	      Array {
+		Type			"Cell"
+		Dimension		9
+		Cell			"IgnoreCustomStorageClasses"
+		Cell			"InsertBlockDesc"
+		Cell			"SFDataObjDesc"
+		Cell			"SimulinkDataObjDesc"
+		Cell			"DefineNamingRule"
+		Cell			"SignalNamingRule"
+		Cell			"ParamNamingRule"
+		Cell			"InlinedPrmAccess"
+		Cell			"CustomSymbolStr"
+		PropName		"DisabledProps"
+	      }
+	      Version		      "1.1.0"
+	      ForceParamTrailComments off
+	      GenerateComments	      on
+	      IgnoreCustomStorageClasses on
+	      IncHierarchyInIds	      off
+	      MaxIdLength	      31
+	      PreserveName	      off
+	      PreserveNameWithParent  off
+	      ShowEliminatedStatement off
+	      IncAutoGenComments      off
+	      SimulinkDataObjDesc     off
+	      SFDataObjDesc	      off
+	      IncDataTypeInIds	      off
+	      PrefixModelToSubsysFcnNames on
+	      CustomSymbolStr	      "$R$N$M"
+	      MangleLength	      1
+	      DefineNamingRule	      "None"
+	      ParamNamingRule	      "None"
+	      SignalNamingRule	      "None"
+	      InsertBlockDesc	      off
+	      SimulinkBlockComments   on
+	      EnableCustomComments    off
+	      InlinedPrmAccess	      "Literals"
+	      ReqsInCode	      off
+	    }
+	    Simulink.GRTTargetCC {
+	      $BackupClass	      "Simulink.TargetCC"
+	      $ObjectID		      10
+	      Array {
+		Type			"Cell"
+		Dimension		12
+		Cell			"IncludeMdlTerminateFcn"
+		Cell			"CombineOutputUpdateFcns"
+		Cell			"SuppressErrorStatus"
+		Cell			"ERTCustomFileBanners"
+		Cell			"GenerateSampleERTMain"
+		Cell			"MultiInstanceERTCode"
+		Cell			"PurelyIntegerCode"
+		Cell			"SupportNonFinite"
+		Cell			"SupportComplex"
+		Cell			"SupportAbsoluteTime"
+		Cell			"SupportContinuousTime"
+		Cell			"SupportNonInlinedSFcns"
+		PropName		"DisabledProps"
+	      }
+	      Version		      "1.1.0"
+	      TargetFcnLib	      "ansi_tfl_tmw.mat"
+	      TargetLibSuffix	      ""
+	      TargetPreCompLibLocation ""
+	      GenFloatMathFcnCalls    "ANSI_C"
+	      UtilityFuncGeneration   "Auto"
+	      GenerateFullHeader      on
+	      GenerateSampleERTMain   off
+	      IsPILTarget	      off
+	      ModelReferenceCompliant on
+	      IncludeMdlTerminateFcn  on
+	      CombineOutputUpdateFcns off
+	      SuppressErrorStatus     off
+	      IncludeFileDelimiter    "Auto"
+	      ERTCustomFileBanners    off
+	      SupportAbsoluteTime     on
+	      LogVarNameModifier      "rt_"
+	      MatFileLogging	      on
+	      MultiInstanceERTCode    off
+	      SupportNonFinite	      on
+	      SupportComplex	      on
+	      PurelyIntegerCode	      off
+	      SupportContinuousTime   on
+	      SupportNonInlinedSFcns  on
+	      ExtMode		      off
+	      ExtModeStaticAlloc      off
+	      ExtModeTesting	      off
+	      ExtModeStaticAllocSize  1000000
+	      ExtModeTransport	      0
+	      ExtModeMexFile	      "ext_comm"
+	      RTWCAPISignals	      off
+	      RTWCAPIParams	      off
+	      RTWCAPIStates	      off
+	      GenerateASAP2	      off
+	    }
+	    PropName		    "Components"
+	  }
+	}
+	PropName		"Components"
+      }
+      Name		      "Configuration"
+      SimulationMode	      "normal"
+      CurrentDlgPage	      "Solver"
+    }
+    PropName		    "ConfigurationSets"
+  }
+  Simulink.ConfigSet {
+    $PropName		    "ActiveConfigurationSet"
+    $ObjectID		    1
+  }
+  BlockDefaults {
+    Orientation		    "right"
+    ForegroundColor	    "black"
+    BackgroundColor	    "white"
+    DropShadow		    off
+    NamePlacement	    "normal"
+    FontName		    "Aharoni CLM"
+    FontSize		    10
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+    ShowName		    on
+  }
+  BlockParameterDefaults {
+    Block {
+      BlockType		      Constant
+      Value		      "1"
+      VectorParams1D	      on
+      OutDataTypeMode	      "Inherit from 'Constant value'"
+      OutDataType	      "sfix(16)"
+      ConRadixGroup	      "Use specified scaling"
+      OutScaling	      "2^0"
+      SampleTime	      "inf"
+    }
+    Block {
+      BlockType		      Demux
+      Outputs		      "4"
+      DisplayOption	      "none"
+      BusSelectionMode	      off
+    }
+    Block {
+      BlockType		      Display
+      Format		      "short"
+      Decimation	      "10"
+      Floating		      off
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      FromWorkspace
+      VariableName	      "simulink_input"
+      SampleTime	      "-1"
+      Interpolate	      on
+      ZeroCross		      off
+      OutputAfterFinalValue   "Extrapolation"
+    }
+    Block {
+      BlockType		      Gain
+      Gain		      "1"
+      Multiplication	      "Element-wise(K.*u)"
+      ParameterDataTypeMode   "Same as input"
+      ParameterDataType	      "sfix(16)"
+      ParameterScalingMode    "Best Precision: Matrix-wise"
+      ParameterScaling	      "2^0"
+      OutDataTypeMode	      "Same as input"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Ground
+    }
+    Block {
+      BlockType		      Inport
+      Port		      "1"
+      UseBusObject	      off
+      BusObject		      "BusObject"
+      BusOutputAsStruct	      off
+      PortDimensions	      "-1"
+      SampleTime	      "-1"
+      DataType		      "auto"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      SignalType	      "auto"
+      SamplingMode	      "auto"
+      LatchByDelayingOutsideSignal off
+      LatchByCopyingInsideSignal off
+      Interpolate	      on
+    }
+    Block {
+      BlockType		      Integrator
+      ExternalReset	      "none"
+      InitialConditionSource  "internal"
+      InitialCondition	      "0"
+      LimitOutput	      off
+      UpperSaturationLimit    "inf"
+      LowerSaturationLimit    "-inf"
+      ShowSaturationPort      off
+      ShowStatePort	      off
+      AbsoluteTolerance	      "auto"
+      IgnoreLimit	      off
+      ZeroCross		      on
+    }
+    Block {
+      BlockType		      Mux
+      Inputs		      "4"
+      DisplayOption	      "none"
+      UseBusObject	      off
+      BusObject		      "BusObject"
+      NonVirtualBus	      off
+    }
+    Block {
+      BlockType		      Outport
+      Port		      "1"
+      UseBusObject	      off
+      BusObject		      "BusObject"
+      BusOutputAsStruct	      off
+      PortDimensions	      "-1"
+      SampleTime	      "-1"
+      DataType		      "auto"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      SignalType	      "auto"
+      SamplingMode	      "auto"
+      OutputWhenDisabled      "held"
+      InitialOutput	      "[]"
+    }
+    Block {
+      BlockType		      Scope
+      ModelBased	      off
+      TickLabels	      "OneTimeTick"
+      ZoomMode		      "on"
+      Grid		      "on"
+      TimeRange		      "auto"
+      YMin		      "-5"
+      YMax		      "5"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitDataPoints	      on
+      MaxDataPoints	      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      "S-Function"
+      FunctionName	      "system"
+      SFunctionModules	      "''"
+      PortCounts	      "[]"
+    }
+    Block {
+      BlockType		      SubSystem
+      ShowPortLabels	      on
+      Permissions	      "ReadWrite"
+      PermitHierarchicalResolution "All"
+      SystemSampleTime	      "-1"
+      RTWFcnNameOpts	      "Auto"
+      RTWFileNameOpts	      "Auto"
+      SimViewingDevice	      off
+      DataTypeOverride	      "UseLocalSettings"
+      MinMaxOverflowLogging   "UseLocalSettings"
+    }
+    Block {
+      BlockType		      Sum
+      IconShape		      "rectangular"
+      Inputs		      "++"
+      InputSameDT	      on
+      OutDataTypeMode	      "Same as first input"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Switch
+      Criteria		      "u2 >= Threshold"
+      Threshold		      "0"
+      InputSameDT	      on
+      OutDataTypeMode	      "Inherit via internal rule"
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      ZeroCross		      on
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Terminator
+    }
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    "center"
+    VerticalAlignment	    "middle"
+    ForegroundColor	    "black"
+    BackgroundColor	    "white"
+    DropShadow		    off
+    FontName		    "Aharoni CLM"
+    FontSize		    10
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+  }
+  LineDefaults {
+    FontName		    "Aharoni CLM"
+    FontSize		    9
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+  }
+  System {
+    Name		    "flux_control_example"
+    Location		    [869, 53, 2045, 866]
+    Open		    on
+    ModelBrowserVisibility  off
+    ModelBrowserWidth	    200
+    ScreenColor		    "white"
+    PaperOrientation	    "landscape"
+    PaperPositionMode	    "auto"
+    PaperType		    "usletter"
+    PaperUnits		    "inches"
+    ZoomFactor		    "100"
+    ReportName		    "simulink-default.rpt"
+    Block {
+      BlockType		      Demux
+      Name		      "Demux"
+      Ports		      [1, 3]
+      Position		      [945, 363, 950, 507]
+      BackgroundColor	      "black"
+      ShowName		      off
+      Outputs		      "3"
+      DisplayOption	      "bar"
+      Port {
+	PortNumber		1
+	Name			"ip"
+	RTWStorageClass		"Auto"
+	DataLoggingNameMode	"SignalName"
+      }
+      Port {
+	PortNumber		2
+	Name			"flux"
+	RTWStorageClass		"Auto"
+	DataLoggingNameMode	"SignalName"
+      }
+      Port {
+	PortNumber		3
+	Name			"wth"
+	RTWStorageClass		"Auto"
+	DataLoggingNameMode	"SignalName"
+      }
+    }
+    Block {
+      BlockType		      Display
+      Name		      "Display1"
+      Ports		      [1]
+      Position		      [230, 740, 320, 770]
+      Decimation	      "1"
+      Lockdown		      off
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Embedded\nMATLAB Function"
+      Ports		      [1, 1]
+      Position		      [515, 37, 585, 83]
+      TreatAsAtomicUnit	      off
+      MinAlgLoopOccurrences   off
+      RTWSystemCode	      "Auto"
+      Array {
+	Type			"Handle"
+	Dimension		0
+	PropName		"AvailSigsLoadSave"
+      }
+      MaskHideContents	      off
+      MaskType		      "Stateflow"
+      MaskDescription	      "Embedded MATLAB block"
+      MaskDisplay	      "disp('fcn');"
+      MaskSelfModifiable      on
+      MaskIconFrame	      on
+      MaskIconOpaque	      off
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      System {
+	Name			"Embedded\nMATLAB Function"
+	Location		[257, 457, 812, 717]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "u"
+	  Position		  [20, 101, 40, 119]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Demux
+	  Name			  " Demux "
+	  Ports			  [1, 1]
+	  Position		  [270, 160, 320, 200]
+	  Outputs		  "1"
+	}
+	Block {
+	  BlockType		  "S-Function"
+	  Name			  " SFunction "
+	  Tag			  "Stateflow S-Function flux_control_example 2"
+	  Ports			  [1, 2]
+	  Position		  [180, 100, 230, 160]
+	  FunctionName		  "sf_sfun"
+	  PortCounts		  "[1 2]"
+	  Port {
+	    PortNumber		    2
+	    Name		    "y"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Terminator
+	  Name			  " Terminator "
+	  Position		  [460, 171, 480, 189]
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "y"
+	  Position		  [460, 101, 480, 119]
+	  IconDisplay		  "Port number"
+	  BusOutputAsStruct	  off
+	}
+	Line {
+	  SrcBlock		  " SFunction "
+	  SrcPort		  1
+	  Points		  [0, 65]
+	  DstBlock		  " Demux "
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  " Demux "
+	  SrcPort		  1
+	  DstBlock		  " Terminator "
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "u"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "y"
+	  Labels		  [0, 0]
+	  SrcBlock		  " SFunction "
+	  SrcPort		  2
+	  DstBlock		  "y"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain"
+      Position		      [245, 480, 275, 510]
+      Gain		      "-1"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain1"
+      Position		      [470, 45, 500, 75]
+      Gain		      "2e-5"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain2"
+      Position		      [1010, 420, 1040, 450]
+      Gain		      "2*pi"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Ground
+      Name		      "Ground"
+      Position		      [285, 175, 305, 195]
+      BackgroundColor	      "green"
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "Integrator"
+      Ports		      [1, 2]
+      Position		      [610, 42, 640, 73]
+      ShowSaturationPort      on
+      IgnoreLimit	      off
+      ZeroCross		      off
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Ip refrence & Ip"
+      Ports		      [1]
+      Position		      [675, 804, 705, 836]
+      Floating		      off
+      Location		      [30, 449, 354, 688]
+      Open		      on
+      NumInputPorts	      "1"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      YMin		      "0"
+      YMax		      "800000"
+      SaveName		      "ScopeData3"
+      DataFormat	      "StructureWithTime"
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "Metis interface"
+      Ports		      [18, 1]
+      Position		      [375, 197, 870, 668]
+      BackgroundColor	      "lightBlue"
+      AncestorBlock	      "library_simmetis/Metis interface"
+      TreatAsAtomicUnit	      on
+      MinAlgLoopOccurrences   off
+      RTWSystemCode	      "Auto"
+      MaskHideContents	      off
+      System {
+	Name			"Metis interface"
+	Location		[247, 163, 1263, 989]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "iso"
+	  Position		  [465, 313, 495, 327]
+	  BackgroundColor	  "green"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "xece"
+	  Position		  [465, 403, 495, 417]
+	  BackgroundColor	  "green"
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "ip"
+	  Position		  [465, 473, 495, 487]
+	  BackgroundColor	  "cyan"
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "nbar"
+	  Position		  [465, 538, 495, 552]
+	  BackgroundColor	  "yellow"
+	  Port			  "4"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "icrh"
+	  Position		  [465, 608, 495, 622]
+	  BackgroundColor	  "red"
+	  Port			  "5"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "lh"
+	  Position		  [470, 683, 500, 697]
+	  BackgroundColor	  "red"
+	  Port			  "6"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "nbi"
+	  Position		  [470, 758, 500, 772]
+	  BackgroundColor	  "red"
+	  Port			  "7"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "ecrh"
+	  Position		  [470, 828, 500, 842]
+	  BackgroundColor	  "red"
+	  Port			  "8"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "hmore"
+	  Position		  [465, 898, 495, 912]
+	  BackgroundColor	  "green"
+	  Port			  "9"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "zeff"
+	  Position		  [470, 968, 500, 982]
+	  BackgroundColor	  "yellow"
+	  Port			  "10"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "ftnbi"
+	  Position		  [465, 1043, 495, 1057]
+	  BackgroundColor	  "green"
+	  Port			  "11"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "flux"
+	  Position		  [465, 1108, 495, 1122]
+	  BackgroundColor	  "cyan"
+	  Port			  "12"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "a"
+	  Position		  [465, 1178, 495, 1192]
+	  BackgroundColor	  "magenta"
+	  Port			  "13"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "R0"
+	  Position		  [465, 1243, 495, 1257]
+	  BackgroundColor	  "magenta"
+	  Port			  "14"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "K"
+	  Position		  [460, 1313, 490, 1327]
+	  BackgroundColor	  "magenta"
+	  Port			  "15"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "d"
+	  Position		  [460, 1388, 490, 1402]
+	  BackgroundColor	  "magenta"
+	  Port			  "16"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "B0"
+	  Position		  [455, 1458, 485, 1472]
+	  BackgroundColor	  "magenta"
+	  Port			  "17"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "Z0"
+	  Position		  [460, 1543, 490, 1557]
+	  BackgroundColor	  "magenta"
+	  Port			  "18"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "\n"
+	  Ports			  [2, 1]
+	  Position		  [820, 292, 850, 328]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.iso"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "1e19"
+	  Position		  [670, 530, 700, 560]
+	  BackgroundColor	  "orange"
+	  Gain			  "1e19"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "MA -> A"
+	  Position		  [680, 465, 710, 495]
+	  BackgroundColor	  "orange"
+	  Gain			  "1e6"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "MW -> W ecrh"
+	  Position		  [655, 820, 685, 850]
+	  BackgroundColor	  "orange"
+	  Gain			  "1e6"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "MW -> W icrh"
+	  Position		  [665, 600, 695, 630]
+	  BackgroundColor	  "orange"
+	  Gain			  "1e6"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "MW -> W lh"
+	  Position		  [655, 675, 685, 705]
+	  BackgroundColor	  "orange"
+	  Gain			  "1e6"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "MW -> W nbi"
+	  Position		  [655, 750, 685, 780]
+	  BackgroundColor	  "orange"
+	  Gain			  "1e6"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Model Info"
+	  Ports			  []
+	  Position		  [1281, 339, 2079, 755]
+	  ShowName		  off
+	  FontName		  "Arial"
+	  FontSize		  32
+	  SourceBlock		  "simulink/Model-Wide\nUtilities/Model Info"
+	  SourceType		  "CMBlock"
+	  ShowPortLabels	  on
+	  InitialBlockCM	  "None"
+	  BlockCM		  "None"
+	  Frame			  "on"
+	  DisplayStringWithTags	  "Interface_SimMetis : Library simmetis inter"
+"face\n%<Created>\n%<ModifiedBy>\n%<ModifiedDate>\n%<ModifiedComment>\n%<Descr"
+"iption>"
+	  MaskDisplayString	  "Interface_SimMetis : Library simmetis inter"
+"face\\nFri Oct 12 05:05:33 2007\\nJA132999\\nMon Oct 15 07:31:05 2007\\n\\n"
+	  HorizontalTextAlignment "Center"
+	  LeftAlignmentValue	  "0.5"
+	  SourceBlockDiagram	  "flux_control_example"
+	  TagMaxNumber		  "20"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Model Info1"
+	  Ports			  []
+	  Position		  [68, 34, 719, 232]
+	  ShowName		  off
+	  FontName		  "Arial"
+	  FontSize		  32
+	  SourceBlock		  "simulink/Model-Wide\nUtilities/Model Info"
+	  SourceType		  "CMBlock"
+	  ShowPortLabels	  on
+	  InitialBlockCM	  "None"
+	  BlockCM		  "None"
+	  Frame			  "on"
+	  DisplayStringWithTags	  "when an input is set to NaN, \nthe correspo"
+"ndant reference value\nis read from Metis file (or data) \nand linearely inte"
+"rpolate in time."
+	  MaskDisplayString	  "when an input is set to NaN, \\nthe corresp"
+"ondant reference value\\nis read from Metis file (or data) \\nand linearely i"
+"nterpolate in time."
+	  HorizontalTextAlignment "Center"
+	  LeftAlignmentValue	  "0.5"
+	  SourceBlockDiagram	  "flux_control_example"
+	  TagMaxNumber		  "20"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "Model Info2"
+	  Ports			  []
+	  Position		  [1281, 1098, 2196, 1520]
+	  ShowName		  off
+	  FontName		  "Arial"
+	  FontSize		  32
+	  SourceBlock		  "simulink/Model-Wide\nUtilities/Model Info"
+	  SourceType		  "CMBlock"
+	  ShowPortLabels	  on
+	  InitialBlockCM	  "None"
+	  BlockCM		  "None"
+	  Frame			  "on"
+	  DisplayStringWithTags	  "Simmetis parameters :\n* Metis_file_name : "
+"used to parametring Metis in simmetis \n(if empty used z0dinput in workspace,"
+"\n that allow to tune simulation configuration form Metis interface)\n* list_"
+"output : cell array of output names\n* save_file : results filename (optionne"
+"l)\n* verbose  : if = 1 turn on information writing "
+	  MaskDisplayString	  "Simmetis parameters :\\n* Metis_file_name :"
+" used to parametring Metis in simmetis \\n(if empty used z0dinput in workspac"
+"e,\\n that allow to tune simulation configuration form Metis interface)\\n* l"
+"ist_output : cell array of output names\\n* save_file : results filename (opt"
+"ionnel)\\n* verbose  : if = 1 turn on information writing "
+	  HorizontalTextAlignment "Left"
+	  LeftAlignmentValue	  "0.02"
+	  SourceBlockDiagram	  "flux_control_example"
+	  TagMaxNumber		  "20"
+	}
+	Block {
+	  BlockType		  Mux
+	  Name			  "Mux"
+	  Tag			  "Metis refererences"
+	  Ports			  [18, 1]
+	  Position		  [975, 297, 1235, 1603]
+	  BackgroundColor	  "green"
+	  ShowName		  off
+	  Inputs		  "18"
+	  DisplayOption		  "signals"
+	  Port {
+	    PortNumber		    1
+	    Name		    "Metis references"
+	    PropagatedSignals	    "cons.iso, cons.xece, cons.ip, cons.nbar, "
+"cons.picrh, cons.plh, cons.pnbi, cons.pecrh, cons.hmore, cons.zeff, cons.ftnb"
+"i, cons.flux, geo.a, geo.R, geo.K, geo.d, geo.b0, geo.z0"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  "S-Function"
+	  Name			  "S-Function"
+	  Ports			  [1, 1]
+	  Position		  [1755, 884, 1895, 1016]
+	  BackgroundColor	  "red"
+	  FunctionName		  "simmetis"
+	  Parameters		  "'',{'ip','psi@21','wth'},'',0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "Metis Output"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "T-> T"
+	  Position		  [670, 1450, 700, 1480]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "Wb -> Wb/2/pi"
+	  Position		  [680, 1100, 710, 1130]
+	  BackgroundColor	  "orange"
+	  Gain			  "1/2/pi"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Constant
+	  Name			  "externe"
+	  Position		  [745, 215, 775, 245]
+	  BackgroundColor	  "orange"
+	  Value			  "NaN"
+	  Port {
+	    PortNumber		    1
+	    Name		    "ext"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain K"
+	  Position		  [675, 1305, 705, 1335]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain R0"
+	  Position		  [680, 1235, 710, 1265]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain a"
+	  Position		  [680, 1170, 710, 1200]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain d"
+	  Position		  [675, 1380, 705, 1410]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain ftnbi"
+	  Position		  [665, 1035, 695, 1065]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain hmore"
+	  Position		  [665, 890, 695, 920]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain iso"
+	  Position		  [680, 305, 710, 335]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain xece"
+	  Position		  [665, 395, 695, 425]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain z0"
+	  Position		  [675, 1535, 705, 1565]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Gain
+	  Name			  "gain zeff"
+	  Position		  [675, 960, 705, 990]
+	  BackgroundColor	  "orange"
+	  ParameterDataTypeMode	  "Inherit via internal rule"
+	  OutDataTypeMode	  "Inherit via internal rule"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_K"
+	  Ports			  [2, 1]
+	  Position		  [810, 1292, 840, 1328]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "geo.K"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_R"
+	  Ports			  [2, 1]
+	  Position		  [815, 1222, 845, 1258]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "geo.R"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_a"
+	  Ports			  [2, 1]
+	  Position		  [815, 1157, 845, 1193]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "geo.a"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_b0"
+	  Ports			  [2, 1]
+	  Position		  [805, 1437, 835, 1473]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "geo.b0"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_d"
+	  Ports			  [2, 1]
+	  Position		  [810, 1367, 840, 1403]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "geo.d"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_ecrh"
+	  Ports			  [2, 1]
+	  Position		  [805, 807, 835, 843]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.pecrh"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_flux"
+	  Ports			  [2, 1]
+	  Position		  [815, 1087, 845, 1123]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "0"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.flux"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_ftnbi"
+	  Ports			  [2, 1]
+	  Position		  [805, 1022, 835, 1058]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.ftnbi"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_hmore"
+	  Ports			  [2, 1]
+	  Position		  [805, 877, 835, 913]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.hmore"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_icrh"
+	  Ports			  [2, 1]
+	  Position		  [805, 587, 835, 623]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.picrh"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_ip"
+	  Ports			  [2, 1]
+	  Position		  [815, 452, 845, 488]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.ip"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_lh"
+	  Ports			  [2, 1]
+	  Position		  [805, 662, 835, 698]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.plh"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_nbar"
+	  Ports			  [2, 1]
+	  Position		  [810, 517, 840, 553]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.nbar"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_nbi"
+	  Ports			  [2, 1]
+	  Position		  [805, 737, 835, 773]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.pnbi"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_xece"
+	  Ports			  [2, 1]
+	  Position		  [805, 382, 835, 418]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.xece"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_z0"
+	  Ports			  [2, 1]
+	  Position		  [810, 1522, 840, 1558]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "geo.z0"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "s_zeff"
+	  Ports			  [2, 1]
+	  Position		  [805, 947, 835, 983]
+	  SourceBlock		  "simulink/Signal\nRouting/Manual Switch"
+	  SourceType		  "Manual Switch"
+	  ShowPortLabels	  on
+	  sw			  "1"
+	  action		  "0"
+	  Port {
+	    PortNumber		    1
+	    Name		    "cons.zeff"
+	    RTWStorageClass	    "Auto"
+	    DataLoggingNameMode	    "SignalName"
+	  }
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "Metis\nOutput"
+	  Position		  [2080, 943, 2110, 957]
+	  IconDisplay		  "Port number"
+	  BusOutputAsStruct	  off
+	}
+	Line {
+	  Name			  "geo.z0"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_z0"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 5]
+	  DstBlock		  "Mux"
+	  DstPort		  18
+	}
+	Line {
+	  Name			  "geo.b0"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_b0"
+	  SrcPort		  1
+	  Points		  [60, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  17
+	}
+	Line {
+	  SrcBlock		  "gain z0"
+	  SrcPort		  1
+	  DstBlock		  "s_z0"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Z0"
+	  SrcPort		  1
+	  DstBlock		  "gain z0"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "geo.d"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_d"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  16
+	}
+	Line {
+	  SrcBlock		  "gain d"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_d"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "d"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain d"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "geo.K"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_K"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 25]
+	  DstBlock		  "Mux"
+	  DstPort		  15
+	}
+	Line {
+	  SrcBlock		  "gain K"
+	  SrcPort		  1
+	  DstBlock		  "s_K"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "K"
+	  SrcPort		  1
+	  DstBlock		  "gain K"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "geo.R"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_R"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 25]
+	  DstBlock		  "Mux"
+	  DstPort		  14
+	}
+	Line {
+	  SrcBlock		  "gain R0"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_R"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "R0"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain R0"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "geo.a"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_a"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  13
+	}
+	Line {
+	  SrcBlock		  "T-> T"
+	  SrcPort		  1
+	  DstBlock		  "s_b0"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "B0"
+	  SrcPort		  1
+	  DstBlock		  "T-> T"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "gain a"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_a"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "a"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain a"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.flux"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_flux"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  12
+	}
+	Line {
+	  SrcBlock		  "Wb -> Wb/2/pi"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_flux"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "flux"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "Wb -> Wb/2/pi"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.ftnbi"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_ftnbi"
+	  SrcPort		  1
+	  Points		  [0, 10; 60, 0; 0, 5]
+	  DstBlock		  "Mux"
+	  DstPort		  11
+	}
+	Line {
+	  SrcBlock		  "gain ftnbi"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_ftnbi"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "ftnbi"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain ftnbi"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.zeff"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_zeff"
+	  SrcPort		  1
+	  Points		  [60, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  10
+	}
+	Line {
+	  SrcBlock		  "gain zeff"
+	  SrcPort		  1
+	  DstBlock		  "s_zeff"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "zeff"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain zeff"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.hmore"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_hmore"
+	  SrcPort		  1
+	  Points		  [60, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  9
+	}
+	Line {
+	  SrcBlock		  "gain hmore"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_hmore"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "hmore"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain hmore"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.pecrh"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_ecrh"
+	  SrcPort		  1
+	  Points		  [60, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  8
+	}
+	Line {
+	  SrcBlock		  "MW -> W ecrh"
+	  SrcPort		  1
+	  DstBlock		  "s_ecrh"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "ecrh"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "MW -> W ecrh"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.pnbi"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_nbi"
+	  SrcPort		  1
+	  Points		  [60, 0; 0, 20]
+	  DstBlock		  "Mux"
+	  DstPort		  7
+	}
+	Line {
+	  SrcBlock		  "MW -> W nbi"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_nbi"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "nbi"
+	  SrcPort		  1
+	  DstBlock		  "MW -> W nbi"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.plh"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_lh"
+	  SrcPort		  1
+	  Points		  [55, 0; 0, 25]
+	  DstBlock		  "Mux"
+	  DstPort		  6
+	}
+	Line {
+	  SrcBlock		  "MW -> W lh"
+	  SrcPort		  1
+	  DstBlock		  "s_lh"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "lh"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "MW -> W lh"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.picrh"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_icrh"
+	  SrcPort		  1
+	  Points		  [45, 0; 0, 30]
+	  DstBlock		  "Mux"
+	  DstPort		  5
+	}
+	Line {
+	  SrcBlock		  "MW -> W icrh"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_icrh"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "icrh"
+	  SrcPort		  1
+	  DstBlock		  "MW -> W icrh"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.nbar"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_nbar"
+	  SrcPort		  1
+	  Points		  [40, 0; 0, 30]
+	  DstBlock		  "Mux"
+	  DstPort		  4
+	}
+	Line {
+	  SrcBlock		  "1e19"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_nbar"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "nbar"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "1e19"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.ip"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_ip"
+	  SrcPort		  1
+	  Points		  [0, 25]
+	  DstBlock		  "Mux"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "MA -> A"
+	  SrcPort		  1
+	  DstBlock		  "s_ip"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "ip"
+	  SrcPort		  1
+	  DstBlock		  "MA -> A"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "gain xece"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "s_xece"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "xece"
+	  SrcPort		  1
+	  Points		  [0, 0]
+	  DstBlock		  "gain xece"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.xece"
+	  Labels		  [0, 0]
+	  SrcBlock		  "s_xece"
+	  SrcPort		  1
+	  Points		  [120, 0]
+	  DstBlock		  "Mux"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "gain iso"
+	  SrcPort		  1
+	  DstBlock		  "\n"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "iso"
+	  SrcPort		  1
+	  DstBlock		  "gain iso"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "cons.iso"
+	  Labels		  [0, 0]
+	  SrcBlock		  "\n"
+	  SrcPort		  1
+	  Points		  [105, 0]
+	  DstBlock		  "Mux"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "ext"
+	  Labels		  [0, 0]
+	  SrcBlock		  "externe"
+	  SrcPort		  1
+	  Points		  [10, 0; 0, 55]
+	  Branch {
+	    Points		    [0, 100]
+	    Branch {
+	      Points		      [0, 75]
+	      Branch {
+		Points			[0, 60]
+		Branch {
+		  Points		  [0, 70]
+		  Branch {
+		    Points		    [0, 65]
+		    Branch {
+		    Points		    [0, 80]
+		    Branch {
+		    Points		    [0, 75]
+		    Branch {
+		    Points		    [0, 70]
+		    Branch {
+		    Points		    [0, 70]
+		    Branch {
+		    Points		    [0, 65]
+		    Branch {
+		    Points		    [0, 70]
+		    Branch {
+		    Points		    [0, 70]
+		    Branch {
+		    Points		    [0, 70]
+		    Branch {
+		    Points		    [0, 70]
+		    Branch {
+		    Points		    [0, 80]
+		    Branch {
+		    Points		    [-1, 0; 0, -15; 1, 0; 0, 65]
+		    Branch {
+		    Points		    [0, 105]
+		    DstBlock		    "s_z0"
+		    DstPort		    1
+		    }
+		    Branch {
+		    DstBlock		    "s_b0"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_d"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    Points		    [0, 5]
+		    DstBlock		    "s_K"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    Points		    [0, 5]
+		    DstBlock		    "s_R"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    Points		    [0, 10]
+		    DstBlock		    "s_a"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    Points		    [0, 10]
+		    DstBlock		    "s_flux"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_ftnbi"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_zeff"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_hmore"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_ecrh"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_nbi"
+		    DstPort		    1
+		    }
+		    }
+		    Branch {
+		    DstBlock		    "s_lh"
+		    DstPort		    1
+		    }
+		  }
+		  Branch {
+		    DstBlock		    "s_icrh"
+		    DstPort		    1
+		  }
+		}
+		Branch {
+		  Points		  [0, 5]
+		  DstBlock		  "s_nbar"
+		  DstPort		  1
+		}
+	      }
+	      Branch {
+		DstBlock		"s_ip"
+		DstPort			1
+	      }
+	    }
+	    Branch {
+	      DstBlock		      "s_xece"
+	      DstPort		      1
+	    }
+	  }
+	  Branch {
+	    DstBlock		    "\n"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  Name			  "Metis references"
+	  Labels		  [0, 0]
+	  SrcBlock		  "Mux"
+	  SrcPort		  1
+	  Points		  [225, 0; 0, -1; 275, 0]
+	  DstBlock		  "S-Function"
+	  DstPort		  1
+	}
+	Line {
+	  Name			  "Metis Output"
+	  Labels		  [0, 0]
+	  SrcBlock		  "S-Function"
+	  SrcPort		  1
+	  DstBlock		  "Metis\nOutput"
+	  DstPort		  1
+	}
+	Annotation {
+	  Position		  [681, 869]
+	  UseDisplayTextAsClickCallback	off
+	}
+	Annotation {
+	  Position		  [686, 863]
+	  UseDisplayTextAsClickCallback	off
+	}
+	Annotation {
+	  Position		  [681, 799]
+	  UseDisplayTextAsClickCallback	off
+	}
+	Annotation {
+	  Position		  [686, 793]
+	  UseDisplayTextAsClickCallback	off
+	}
+	Annotation {
+	  Name			  "s_iso"
+	  Position		  [820, 337]
+	  UseDisplayTextAsClickCallback	off
+	}
+      }
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux"
+      Ports		      [2, 1]
+      Position		      [585, 801, 590, 839]
+      ShowName		      off
+      Inputs		      "2"
+      DisplayOption	      "bar"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux1"
+      Ports		      [2, 1]
+      Position		      [1025, 616, 1030, 654]
+      Orientation	      "left"
+      ShowName		      off
+      Inputs		      "2"
+      DisplayOption	      "bar"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Subtract"
+      Ports		      [2, 1]
+      Position		      [385, 42, 415, 73]
+      Inputs		      "+-"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutScaling	      "2^-10"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Wth"
+      Ports		      [1]
+      Position		      [1090, 469, 1120, 501]
+      Floating		      off
+      Location		      [32, 171, 356, 410]
+      Open		      on
+      NumInputPorts	      "1"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      YMin		      "0"
+      YMax		      "100000"
+      DataFormat	      "StructureWithTime"
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      FromWorkspace
+      Name		      "cons.ip"
+      Position		      [15, 23, 285, 67]
+      VariableName	      "[z0dinput.cons.temps,z0dinput.cons.ip]"
+      SampleTime	      "0"
+      ZeroCross		      on
+    }
+    Block {
+      BlockType		      Display
+      Name		      "dip"
+      Ports		      [1]
+      Position		      [495, 145, 585, 175]
+      Decimation	      "1"
+      Lockdown		      off
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "flux"
+      Ports		      [1]
+      Position		      [965, 619, 995, 651]
+      Orientation	      "left"
+      Floating		      off
+      Location		      [30, 750, 354, 989]
+      Open		      on
+      NumInputPorts	      "1"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      YMin		      "-2"
+      YMax		      "0.25"
+      SaveName		      "ScopeData1"
+      DataFormat	      "StructureWithTime"
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Display
+      Name		      "ip"
+      Ports		      [1]
+      Position		      [1020, 105, 1110, 135]
+      Decimation	      "1"
+      Lockdown		      off
+    }
+    Block {
+      BlockType		      Display
+      Name		      "reference"
+      Ports		      [1]
+      Position		      [505, 875, 595, 905]
+      Decimation	      "1"
+      Lockdown		      off
+    }
+    Block {
+      BlockType		      Display
+      Name		      "saturation"
+      Ports		      [1]
+      Position		      [800, 50, 890, 80]
+      Decimation	      "1"
+      Lockdown		      off
+    }
+    Line {
+      SrcBlock		      "Ground"
+      SrcPort		      1
+      Points		      [25, 0; 0, 35]
+      Branch {
+	DstBlock		"Metis interface"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 25]
+	Branch {
+	  DstBlock		  "Metis interface"
+	  DstPort		  2
+	}
+	Branch {
+	  Points		  [0, 25]
+	  Branch {
+	    DstBlock		    "Metis interface"
+	    DstPort		    3
+	  }
+	  Branch {
+	    Points		    [0, 25]
+	    Branch {
+	      DstBlock		      "Metis interface"
+	      DstPort		      4
+	    }
+	    Branch {
+	      Points		      [0, 25]
+	      Branch {
+		DstBlock		"Metis interface"
+		DstPort			5
+	      }
+	      Branch {
+		Points			[0, 20]
+		Branch {
+		  Points		  [0, 5]
+		  DstBlock		  "Metis interface"
+		  DstPort		  6
+		}
+		Branch {
+		  Points		  [0, 30]
+		  Branch {
+		    DstBlock		    "Metis interface"
+		    DstPort		    7
+		  }
+		  Branch {
+		    Points		    [0, 20]
+		    Branch {
+		    Points		    [0, 5]
+		    DstBlock		    "Metis interface"
+		    DstPort		    8
+		    }
+		    Branch {
+		    Points		    [0, 25]
+		    Branch {
+		    Points		    [0, 5]
+		    DstBlock		    "Metis interface"
+		    DstPort		    9
+		    }
+		    Branch {
+		    Points		    [0, 25]
+		    Branch {
+		    Points		    [0, 5]
+		    DstBlock		    "Metis interface"
+		    DstPort		    10
+		    }
+		    Branch {
+		    Points		    [0, 30]
+		    Branch {
+		    DstBlock		    "Metis interface"
+		    DstPort		    11
+		    }
+		    Branch {
+		    Points		    [0, 50]
+		    Branch {
+		    DstBlock		    "Metis interface"
+		    DstPort		    13
+		    }
+		    Branch {
+		    Points		    [0, 25]
+		    Branch {
+		    Points		    [0, 75]
+		    DstBlock		    "Metis interface"
+		    DstPort		    17
+		    }
+		    Branch {
+		    Points		    [0, 25]
+		    Branch {
+		    Points		    [0, -25]
+		    DstBlock		    "Metis interface"
+		    DstPort		    14
+		    }
+		    Branch {
+		    Points		    [0, 20]
+		    Branch {
+		    Points		    [0, -20]
+		    DstBlock		    "Metis interface"
+		    DstPort		    15
+		    }
+		    Branch {
+		    Points		    [0, 30]
+		    Branch {
+		    Points		    [0, 25]
+		    DstBlock		    "Metis interface"
+		    DstPort		    18
+		    }
+		    Branch {
+		    Points		    [0, -25]
+		    DstBlock		    "Metis interface"
+		    DstPort		    16
+		    }
+		    }
+		    }
+		    }
+		    }
+		    }
+		    }
+		    }
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Metis interface"
+      SrcPort		      1
+      DstBlock		      "Demux"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "cons.ip"
+      SrcPort		      1
+      Points		      [20, 0]
+      Branch {
+	Points			[60, 0]
+	DstBlock		"Subtract"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 50; -245, 0; 0, 735; 420, 0]
+	Branch {
+	  DstBlock		  "Mux"
+	  DstPort		  2
+	}
+	Branch {
+	  Points		  [0, 60]
+	  DstBlock		  "reference"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      Name		      "ip"
+      Labels		      [0, 0]
+      SrcBlock		      "Demux"
+      SrcPort		      1
+      Points		      [30, 0; 0, -265]
+      Branch {
+	Points			[-640, 0; 0, 0]
+	Branch {
+	  Points		  [0, -55]
+	  DstBlock		  "Subtract"
+	  DstPort		  2
+	}
+	Branch {
+	  Points		  [-215, 0; 0, 690]
+	  DstBlock		  "Mux"
+	  DstPort		  1
+	}
+      }
+      Branch {
+	DstBlock		"ip"
+	DstPort			1
+      }
+    }
+    Line {
+      Name		      "wth"
+      Labels		      [0, 0]
+      SrcBlock		      "Demux"
+      SrcPort		      3
+      DstBlock		      "Wth"
+      DstPort		      1
+    }
+    Line {
+      Name		      "flux"
+      Labels		      [0, 0]
+      SrcBlock		      "Demux"
+      SrcPort		      2
+      DstBlock		      "Gain2"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Integrator"
+      SrcPort		      1
+      Points		      [30, 0; 0, 80; -470, 0; 0, 360]
+      Branch {
+	Points			[0, 5]
+	DstBlock		"Gain"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 265]
+	DstBlock		"Display1"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Integrator"
+      SrcPort		      2
+      DstBlock		      "saturation"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Gain"
+      SrcPort		      1
+      Points		      [10, 0]
+      Branch {
+	DstBlock		"Metis interface"
+	DstPort			12
+      }
+      Branch {
+	Points			[0, 230; 775, 0; 0, -80]
+	DstBlock		"Mux1"
+	DstPort			2
+      }
+    }
+    Line {
+      SrcBlock		      "Mux"
+      SrcPort		      1
+      DstBlock		      "Ip refrence & Ip"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Subtract"
+      SrcPort		      1
+      Points		      [25, 0]
+      Branch {
+	DstBlock		"Gain1"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 100]
+	DstBlock		"dip"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Mux1"
+      SrcPort		      1
+      Points		      [0, 0]
+      DstBlock		      "flux"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Gain2"
+      SrcPort		      1
+      Points		      [15, 0; 0, 190]
+      DstBlock		      "Mux1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Gain1"
+      SrcPort		      1
+      DstBlock		      "Embedded\nMATLAB Function"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Embedded\nMATLAB Function"
+      SrcPort		      1
+      DstBlock		      "Integrator"
+      DstPort		      1
+    }
+  }
+}
+
+# Finite State Machines
+#
+#    Stateflow Version 6.2 (R14SP2) dated Aug  4 2005, 07:04:47
+#
+#
+
+Stateflow {
+
+	machine {
+		id                   		1
+		name                 		"flux_control_example"
+		created              		"12-Oct-2007 08:13:19"
+		isLibrary            		0
+		firstTarget          		9
+		sfVersion            		62014000
+	}
+
+	chart {
+		id                                        		2
+		name                                      		"Embedded\n"
+					"MATLAB Function"
+		windowPosition                            		[318.282 264.123 200.25 189.75]
+		viewLimits                                		[0 156.75 0 153.75]
+		screen                                    		[1 1 1280 1024 1.180555555555556]
+		treeNode                                  		[0 3 0 0]
+		firstTransition                           		5
+		firstJunction                             		4
+		viewObj                                   		2
+		machine                                   		1
+		decomposition                             		CLUSTER_CHART
+		type                                      		EML_CHART
+		firstData                                 		6
+		chartFileNumber                           		2
+		disableImplicitCasting                    		1
+		eml {
+			name       		"fcn"
+		}
+	}
+
+	state {
+		id                           		3
+		labelString                  		"eML_blk_kernel()"
+		position                     		[18 64.5 118 66]
+		fontSize                     		12
+		chart                        		2
+		treeNode                     		[2 0 0 0]
+		superState                   		SUBCHART
+		subviewer                    		2
+		type                         		FUNC_STATE
+		decomposition                		CLUSTER_STATE
+		eml {
+			isEML           		1
+			script          		"function y = fcn(u)\n"
+						"% This block supports an embeddable subset of the MATLAB la"
+						"nguage.\n"
+						"% See the help menu for details. \n"
+						"\n"
+						"y = max(-20,min(20,u));"
+			editorLayout    		"100 M4x1[265 279 671 364]"
+			fimathString    		"fimath(...\n"
+								"'RoundMode', 'floor',...\n"
+								"'OverflowMode', 'wrap',...\n"
+								"'ProductMode', 'KeepLSB', 'ProductWordLength', 32,..."
+								"\n"
+								"'SumMode', 'KeepLSB', 'SumWordLength', 32,...\n"
+								"'CastBeforeSum', false)"
+			treatIntsAsFixpt		0
+		}
+	}
+
+	junction {
+		id         		4
+		position   		[23.5747 49.5747 7]
+		chart      		2
+		linkNode   		[2 0 0]
+		subviewer  		2
+		type       		CONNECTIVE_JUNCTION
+	}
+
+	transition {
+		id             		5
+		labelString    		"{eML_blk_kernel();}"
+		labelPosition  		[32.125 19.875 102.544 14.964]
+		fontSize       		12
+		src {
+			intersection		[0 0 1 0 23.5747 14.625 0 0]
+		}
+		dst {
+			id          		4
+			intersection		[7 0 -1 -1 23.5747 42.5747 0 0]
+		}
+		midPoint       		[23.5747 24.9468]
+		chart          		2
+		linkNode       		[2 0 0]
+		dataLimits     		[21.175 25.975 14.625 42.575]
+		subviewer      		2
+		drawStyle      		SMART
+		executionOrder 		1
+	}
+
+	data {
+		id                            		6
+		name                          		"u"
+		linkNode                      		[2 0 7]
+		scope                         		INPUT_DATA
+		machine                       		1
+		props {
+			array {
+				size      		"-1"
+			}
+			type {
+				method    		SF_INHERITED_TYPE
+			}
+			complexity  		SF_COMPLEX_INHERITED
+		}
+		dataType                      		"inherited"
+		fixptType {
+			slope   		1
+			baseType		SF_INT16_TYPE
+		}
+		complexity                    		SF_COMPLEX_INHERITED
+	}
+
+	data {
+		id                            		7
+		name                          		"y"
+		linkNode                      		[2 6 0]
+		scope                         		OUTPUT_DATA
+		machine                       		1
+		props {
+			array {
+				size      		"-1"
+			}
+			type {
+				method    		SF_INHERITED_TYPE
+			}
+			complexity  		SF_COMPLEX_INHERITED
+		}
+		dataType                      		"inherited"
+		fixptType {
+			slope   		1
+			baseType		SF_INT16_TYPE
+		}
+		complexity                    		SF_COMPLEX_INHERITED
+	}
+
+	instance {
+		id     		8
+		name   		"Embedded\n"
+					"MATLAB Function"
+		machine		1
+		chart  		2
+	}
+
+	target {
+		id                        		9
+		name                      		"sfun"
+		description               		"Default Simulink S-Function Target."
+		machine                   		1
+		linkNode                  		[1 0 0]
+	}
+}

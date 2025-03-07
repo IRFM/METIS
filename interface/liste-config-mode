@@ -1,0 +1,72 @@
+impur		: {1,2}		mode de calcul de la composition du plasma (zeff, ae, nj ...)
+psi		: {1,2}		mode de calcul du flux poloidal (courant)
+nel		: {1,2}		mode de calcul de la densite electronique
+pe		: {1,2}		mode de calcul de la pression electronique
+pion		: {1,2}		mode de calcul de la pression ionique
+equi		: {1,2}		mode de calcul de l'equilibre magnetique
+neo		: {1,2}		mode de calcul des grandeurs neoclassique
+fluce		: {0,1,2}	mode de calcul de l'amplitude de la turbulence electronique
+flucion		: {0,1,2}	mode de calcul de l'amplitude de la turbulence ionique
+rot		: {0,1,2}	mode de calcul coef equation rotation plasma couplant rot
+cons.psi	: {0,1,2}	mode  Ip (0), Vloop (1) ou psi au bord (2) donne pour la diffusion du courant (psi)
+cons.ne		: {0,1}		mode Ne_bord (0) ou flux de matiere (1) donne au bord
+cons.pe		: {0,1}		mode Te_bord (0) ou flux de chaleur electonique (1) donne au bord
+cons.pion	: {0,1}		mode Ti_bord (0) ou flux de chaleur ionique  (1)donne au bord
+cons.fluce	: {0,1}		mode amplitude (0) ou flux de turbulence electronique (1) donne au bord
+cons.flucion	: {0,1}		mode amplitude (0) ou flux de turbulence ionique  (1)donne au bord
+cons.rot	: {0,1}		mode vitesse (0) ou flux  (1) de rotation ionique donne au bord
+cons.zeffm	: {0,1}		zeffm est donne en consigne externe (0) ou par le modele 0d (1)
+consbord.ne	: {0,1}		nebord est donne en entree (0) ou par la fonction de bord (1)
+consbord.te	: {0,1}		tebord est donne en entree (0) ou par la fonction de bord (1)
+consbord.ti	: {0,1}		tibord est donne en entree (0) ou par la fonction de bord (1)
+consbord.fluxge	: {0,1}		le flux de ne est donne en entree (0) ou par la fonction de bord (1)
+consbord.fluxqe	: {0,1}		le flux de chaleur electronique  est donne en entree (0) ou par la fonction de bord (1)
+consbord.fluxqi	: {0,1}		le flux de chaleur ionique est donne en entree (0) ou par la fonction de bord (1)
+mhd.dds		: {0,1}		mode de calcul des dent de scie
+mhd.elm		: {0,1}		mode de calcul des elm
+mhd.limite	: {0,1}		mode de calcul des limites de stabilite
+fci		: {0,1,2,3}	mode de calcul des sources du a fci
+fce		: {0,1,2,3}	mode de calcul des sources du a fce
+hyb		: {0,1,2,3}	mode de calcul des sources du a hybride
+idn		: {0,1,2,3}	mode de calcul des sources du a ind
+n0		: {0,1,2,3}	mode de calcul de la source de neutre au bord
+bord		: {0,1,2,3}	mode de calcul des parametres de la fonction de bord
+glacon		: {0,1}		mode de calcul du depot des glacons
+fus		: {0,1,2}	mode de calcul de la puissance de fusion + alpha
+ohm		: {0,1,2}	mode de calcul de la puissance ohmique
+qneo		: {0,1,2}	mode de calcul de l'equipartition du au gradient de pression ionique
+qei		: {0,1,2}	mode de calcul de l'equipartition ion - electron
+prad		: {0,1,2}	mode de calcul de la puissance rayonnee
+brem		: {0,1,2}	mode de calcul du rayonnement de frainage
+cyclo		: {0,1,2}	mode de calcul du rayonnement cyclotron
+ee		: {0,1,2}	mode de calcul coef equation Pe couplant Pe (Te)
+ei		: {0,1,2}	mode de calcul coef equation Pe couplant Pi
+en		: {0,1,2}	mode de calcul coef equation Pe couplant ne
+ej		: {0,1,2}	mode de calcul coef equation Pe couplant j
+ve		: {0,1,2}	mode de calcul coef equation Pe, vitesse de convection
+ep		: {0,1,2}	mode de calcul coef equation Pe couplant Pe (Pe)
+ie		: {0,1,2}	mode de calcul coef equation Pi couplant Pe
+ii		: {0,1,2}	mode de calcul coef equation Pi couplant Pi (Ti)
+in		: {0,1,2}	mode de calcul coef equation Pi couplant ne
+ij		: {0,1,2}	mode de calcul coef equation Pi couplant j
+vi		: {0,1,2}	mode de calcul coef equation Pi, vitesse de convection
+ip		: {0,1,2}	mode de calcul coef equation Pi couplant Pi (Pi)
+ne		: {0,1,2}	mode de calcul coef equation Ne couplant Pe
+ni		: {0,1,2}	mode de calcul coef equation Ne couplant Pi
+nn		: {0,1,2}	mode de calcul coef equation Ne couplant ne
+nj		: {0,1,2}	mode de calcul coef equation Ne couplant j
+vn		: {0,1,2}	mode de calcul coef equation Ne, vitesse de convection
+fefe		: {0,1,2}	mode de calcul coef equation fluce couplant fluce
+fev		: {0,1,2}	mode de calcul coef equation fluce, vitesse de convection
+fifi		: {0,1,2}	mode de calcul coef equation flucion couplant flucion
+fiv		: {0,1,2}	mode de calcul coef equation flucion, vitesse de convection
+rotv		: {0,1,2}	mode de calcul coef equation rotation plasma, vitesse de convection
+eta		: {1,2}		mode resistivite
+jboot		: {1,2}		mode courant de bootstrap
+plot		: {0,1}		parametre de la fonction de plot durant les calculs
+zeff		: {1,2}		zeff est calcule ou donne en entree
+ae		: {1,2}		alphae est calcule ou donne en entree
+asser		: {1,2}		mode des asservissement (0,1) = consignes donnees en entrees / 2 = calcul des consignes gerees par un asservissement
+premiertemps	: {}		1 pour le premier temps, zero ailleurs (change le fonctionnement de certains modules, initialise automatiquement)
+
+

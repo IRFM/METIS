@@ -1,0 +1,165 @@
+				Wednesday 13 April 2005
+			--------------------------------------
+Donnees reduites  de tous les Producteurs selectionnes
+Selection  : tous
+			--------------------------------------
+
+EXP-T-S     		: 
+	num_choc    	: Numero du Choc; doit toujours etre la donnee de rang 1 (table version) (?)
+
+				----------------------
+
+TBRAGG      		: Traitement des donnees du spectro X a cristal
+	RDTBRAG     	: Temps d'integration pour un spectre
+
+				----------------------
+
+TCALOR      		: Calorimetrie.
+	RWCALB30    	: Energie calorimetrique sur boucle 30.
+	RWCALTOT    	: Energie calorimetrique totale.
+	RWCHAUF     	: energie recuperee sur toutes les antennes de chauffage
+	RWDIVN      	: Energie totale neutraliseurs.
+	RWDIVP      	: Energie totale divertor pompe titane.
+	RWDIVS      	: Energie totale structures divertor.
+	RWLPM       	: Energie limiteur pompe median.
+	RWLV        	: Energie totale limiteurs verticaux.
+	RWPPE       	: Energie totale premiere paroi externe.
+	RWPPI       	: Energie totale premiere paroi interne.
+	RWPRQ       	: Energie protection de queusot.
+	RWTHYB      	: Energie totale antennes hybride
+	RWWCI       	: Energie totale antennes FCI.
+
+				----------------------
+
+TCHOCRED    		: Production des données réduites
+	AMORCAGE    	: = 1 pour amorcage seul
+	ANNULE      	: = 1 pour choc annule avant lancement
+	CHOC_OK     	: = 1 pour absence de probleme
+	CHOC_RATE   	: = 1 pour choc rate
+	DECH_NETT   	: = 1 pour decharge de nettoyage
+	DISRUPTION  	: = 1 pour disruption
+	DIVERTOR    	: = 1 pour divertor present
+	ESSAI_INFO  	: = 1 pour essai informatique
+	ESSAI_TECH  	: = 1 pour essai technique
+	HYBRIDE     	: = 1 pour hybride  present
+	IDN         	: = 1 pour neutres  present
+	PELLET      	: = 1 pour glacons  present
+	RBTOR       	: Champ toroidal a 2.37 m                      T
+	RDIPMAX     	: Pente maximale courant plasma    (MA/s)  [ DMAG / SBZERO ]  (32 points autour de TDISRUPT)
+	RDIPMOY     	: Pente moyenne courant plasma   (MA/s)  [ DMAG / SBZERO ]   ( moyenne sur n points de TDISRIPT a TFINCP )
+	RDURDIS     	: Duree totale courant plasma   (ms)    [ DMAG / SBZERO ]     ( difference )
+	REIDN4      	: Energie d'acceleration de l'injecteur 4
+	RFNOYDIS    	: Integrale tension par tour en disruption.                 Wb
+	RFNOYMAX    	: Flux noyau initial                           Wb
+	RFNOYMIN    	: Flux noyau final                             Wb
+	RGAZ1       	: Nature gaz ballon 1
+	RGAZ2       	: Nature gaz ballon 2
+	RGAZ3       	: Nature gaz ballon 3
+	RGAZ4       	: Nature gaz ballon 4
+	RGAZCHOC    	: Gaz injecte en cours de choc                 Pa.m3
+	RGAZINIT    	: Gaz  de remplissage avant choc          Pa.m3
+	RGLACONS    	: Nb total glacons
+	RIPDIS      	: Courant plasma avant disruption  (MA)  [ DMAG / SBZERO ]   (1 point avant TDISRUPT)
+	RIPMAX      	: Valeur maximale courant plasma               MA
+	RITOR       	: Courant bobines toroidales                   kA
+	RNEDIS      	: Densite electronique avt disruption          E19m-3
+	RNEMAX      	: Valeur max. densite elect. moy.              E19m-3
+	RNEUTRON    	: Nb total neutrons                            E12
+	RNTN1DIS    	: Nb total photoneutrons Q1B                   E12
+	RNTN2DIS    	: Nb total photoneutrons Q4A                   E12
+	RNTN3DIS    	: Nb total photoneutrons Q5B                   E12
+	RPFCI1BMAX  	: Puissance maximale FCI antenne Q1B
+	RPFCI4AMAX  	: Puissance maximale FCI antenne Q4A
+	RPFCI5BMAX  	: Puissance maximale FCI antenne Q5B
+	RPFCIMAX    	: Puissance maximale totale FCI injectee
+	RPHYB6AMAX  	: Puissance maximale hybride coupleur Q6A
+	RPHYB6BMAX  	: Puissance maximale hybride coupleur Q6B
+	RPHYBMAX    	: Puissance maximale totale hybride injectee
+	RPOHMMAX    	: Puissance maximale ohmique
+	RPRFIN      	: Pression residuelle 1.5 s apres le plasma    mPa
+	RPRINIT     	: Pression d"amorcage                          mPa
+	RPRVIDE     	: Pression residuelle entre chocs              microPa
+	RPTOTMAX    	: Puissance maximale injectee                  MW
+	RQGCHOC     	: Quantite gaz injectee pendant choc.
+	RQGINIT     	: Quantite gaz injectee avant choc.
+	RRFCI1B     	: Rayon antenne FCI Q1B
+	RRFCI4A     	: Rayon antenne FCI Q4A
+	RRFCI5B     	: Rayon antenne FCI Q5B
+	RRHYB6A     	: Rayon coupleur hyb 1 Q6A
+	RRHYB6B     	: Rayon coupleur hyb 1 Q6B
+	RRLPM       	: Rayon limiteur exterieur
+	RTDIS       	: Temps de la disruption
+	RTPLAT      	: Temps debut plateau                           s
+	RTTGAZ1     	: Quantite gaz injecte ballon 1                Pa.m3
+	RTTGAZ2     	: Quantite gaz injecte ballon 2                Pa.m3
+	RTTGAZ3     	: Quantite gaz injecte ballon 3                Pa.m3
+	RTTGAZ4     	: Quantite gaz injecte ballon 4               Pa.m3
+	RTTORE      	: Temperature du Tore.            degres
+	RVAMORCE    	: Tension par tour d'amorcage.
+	RVPIC       	: Tension par tour maximale                    V
+	RWFCI       	: Energie totale FCI       (MJ) [ DFCI / SPUISS ]
+	RWFCI1B     	: Energie FCI antenne Q1B  (MJ) [ DFCI / GPTRA 5 et 6 ]
+	RWFCI4A     	: Energie FCI antenne Q4A  (MJ) [ DFCI / GPTRA 1 et 2 ]
+	RWFCI5B     	: Energie FCI antenne Q5B  (MJ) [ DFCI / GPTRA 3 et 4 ]
+	RWHYB       	: Energie totale hybride  injectee                     MJ
+	RWHYB6A     	: Energie hybride coupleur Q6A
+	RWHYB6B     	: Energie hybride coupleur Q6B
+	RWOHM       	: Energie Ohmique utilisee                     MJ
+	RZLHAUT     	: Hauteur limiteur vertical haut en Q6B
+	RZLPVQ1     	: Hauteur limiteur vertical bas en Q1B
+	RZLPVQ2     	: Hauteur limiteur vertical bas en Q2A
+	RZLPVQ3     	: Hauteur limiteur vertical bas en Q3B
+	RZLPVQ4     	: Hauteur limiteur vertical base en Q4A
+	RZLPVQ5     	: Hauteur limiteur vertical en Q5A
+	RZLPVQ6     	: Hauteur limiteur vertical en Q6B
+	RZMIN       	: Limiteur vertical le plus proche du plan equatorial
+	WCE         	: = 1 pour wce  present
+	WCI         	: = 1 pour wci  present
+
+				----------------------
+
+TDESIR      		: 
+	RMAXC4      	: Maximum de l'integrale Carbone 4
+	RMAXC5A     	: Maximum de l'integrale Carbone 5 A
+	RMAXC5B     	: Maximum de l'integrale Carbone 5 B
+	RMAXC6      	: Maximun de l'integrale Carbone 6
+	RMAXCU19    	: Maximun de l'integrale Cuivre 19
+	RMAXCl14    	: Maximum de l'integrale Chlore 14
+	RMAXFE15    	: Maximum de l'integrale Fer 15
+	RMAXHE2     	: Maximum de l'integrale Helium 2
+	RMAXN7      	: Maximum de l'integrale Azote 7
+	RMAXNE10    	: Maximum de l'integrale Neon 10
+	RMAXNI18    	: Maximum de l'integrale Nickel 18
+	RMAXO8      	: Maximum de l'integrale Oxygene 8
+	RPOSGL      	: Position standard grand Lambda (1:OK, 0:non standard)
+	RPOSPL      	: Position standard petit Lambda (1;OK, 0:non standard)
+
+				----------------------
+
+TDUO        		: Calcul du nombre de photons detectes emis par les ions issus des elements (Ne, Ni, Fe, Cu et O)
+	RDUOANGLE   	: Angle de visee du spectrometre  en  position fixe
+	RDUOMODE    	: Mode de fonctionnement du spectrometre  ( 1 : oscillant,  0 : fixe )
+
+				----------------------
+
+TENERE      		: Calcul de la temperature et de la densite eletronique par diffusion THOMSON
+	RTEDIS      	: Temperature electronique avant disruption            keV
+	RTHOMLAS    	: rayon de la visee laser, mesure par rapport axe machine
+
+				----------------------
+
+THYB        		: Chauffage Hybride
+	RDPHI1      	: Dephasage moyen Coupleur 1   (moyenne sur creneau HF)
+	RDPHI2      	: Dephasage moyen Coupleur 2   (moyenne sur creneau HF)
+	RERRPHI1    	: Ecart type Dephasage moyen Coupleur 1   (moyenne sur creneau HF)
+	RERRPHI2    	: Ecart type Dephasage moyen Coupleur 2   (moyenne sur creneau HF)
+	RPIMOY      	: Puissance totale injectee moyenne
+	RQUALIHYB   	: Facteur de qualite de la puissance HF
+
+				----------------------
+
+TIGNI       		: Calcul du temps IGNITRON et de la duree du plasma.
+	RDUREE      	: Duree totale du plasma (s)
+	RIGNITRON   	: Temps de l'ignitron (s)
+
+				----------------------

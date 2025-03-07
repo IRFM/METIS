@@ -1,0 +1,4458 @@
+				Wednesday 09 December 
+			--------------------------------------
+Donnees reduites  de tous les Producteurs selectionnes
+Selection  : tous
+			--------------------------------------
+
+DBFCE       		: 
+	GTEST_BFCE  	: 
+			  Nb maxi de signaux = 32
+	SDEBCOLBT   	: 
+	SDEBCOLBT   	: 
+	SDEBMOUBT   	: 
+	SDEBMOUBT   	: 
+	SDTFSCBT    	: 
+	SDTHTBT     	: 
+	SDTRFBT     	: 
+	SETATGYRBT  	: 
+	SETATMEBT   	: 
+	SETATMODBT  	: 
+	SHTDEBLOCKBT	: 
+	SIABT       	: 
+	SIABT       	: 
+	SIACALBT    	: 
+	SIKBT       	: 
+	SIKBT       	: 
+	SIKCALBT    	: 
+	SIVIDEGYRBT 	: 
+	SIVIDEGYRBT 	: 
+	SIVIDGYCALBT	: 
+	SMADEBLOCKBT	: 
+	SMAPREDEBBT 	: 
+	SPIBT       	: 
+	SPICALBT    	: 
+	SPRBT       	: 
+	SPRBT       	: 
+	SPRCALBT    	: 
+	SVABT       	: 
+	SVABT       	: 
+	SVACALBT    	: 
+	SVACONBT    	: 
+	SVHTCONBT   	: 
+	SVIDELIGNEBT	: 
+	SVIDELIGNEBT	: 
+	SVIDLIGCALBT	: 
+	SVKBT       	: 
+	SVKCALBT    	: 
+	SVKCONBT    	: 
+
+				----------------------
+
+DBOLO       		: 
+	GBOLOC1     	: Caméras 1 et 2 en Q2Am
+			  Nb maxi de signaux = 16
+	GBOLOC3     	: Caméras 5 et 6 en Q4Ah
+			  Nb maxi de signaux = 16
+	GBOLOC5     	: Caméra 8 en Q4Ah position centrale
+			  Nb maxi de signaux = 8
+	GBOLOCC2    	: Caméra 3    Q4Am
+			  Nb maxi de signaux = 8
+	GDATBOLO    	: Voies de datation
+			  Nb maxi de signaux = 2
+	GDATTHERM   	: Voies de datation pour thermocouples IR
+			  Nb maxi de signaux = 2
+	GTHERM      	: Groupe pour les thermocouples IR
+			  Nb maxi de signaux = 15
+	GTRPRAD     	: Puissance rayonnee en temps réel
+			  Nb maxi de signaux = 2
+	SCYCBOLO    	: temps de cycle du CPU2  de dbolo
+
+				----------------------
+
+DBRAGG      		: SPECTROMETRIE HAUTE ENERGIE
+	FDATE_N110  	: 
+	FN110       	: 
+	SBIDONBRAGG 	: 
+
+				----------------------
+
+DCALOR      		: 
+	GCALTAXI6   	: 
+			  Nb maxi de signaux = 240
+	GDATECALOR  	: 
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+DCAMIR      		: acquisition caméras infrarouge
+	FFENETRE01  	: Fichier masque camera 01 pour PC
+	FFENETRE02  	: Fichier masque camera 02 pour PC
+	FFENETRE03  	: Fichier masque camera 03 pour PC
+	FFENETRE04  	: Fichier masque camera 04 pour PC
+	FFENETRE05  	: Fichier masque camera 05 pour PC
+	FFENETRE06  	: Fichier masque camera 06 pour PC
+	FFENETRE07  	: Fichier masque camera 07 pour PC
+	FFENETRE08  	: Fichier masque camera 08 pour PC
+	FFENETRE09  	: Fichier masque camera 09 pour PC
+	FFENETRE10  	: Fichier masque camera 10 pour PC
+	FFENETRE11  	: Fichier masque camera 11 pour PC
+	FFENETRE12  	: Fichier masque camera 12 pour PC
+	FIRCAM1     	: 
+	FIRCAM10    	: 
+	FIRCAM11    	: 
+	FIRCAM12    	: 
+	FIRCAM2     	: 
+	FIRCAM3     	: 
+	FIRCAM4     	: 
+	FIRCAM5     	: 
+	FIRCAM6     	: 
+	FIRCAM7     	: 
+	FIRCAM8     	: 
+	FIRCAM9     	: 
+	FLUT1CAM_01 	: Fichier LUT1 pour  camera 01
+	FLUT1CAM_02 	: Fichier LUT1 pour  camera 02
+	FLUT1CAM_03 	: Fichier LUT1 pour  camera 03
+	FLUT1CAM_04 	: Fichier LUT1 pour  camera 04
+	FLUT1CAM_05 	: Fichier LUT1 pour  camera 05
+	FLUT1CAM_06 	: Fichier LUT1 pour  camera 06
+	FLUT1CAM_07 	: Fichier LUT1 pour  camera 07
+	FLUT1CAM_08 	: Fichier LUT1 pour  camera 08
+	FLUT1CAM_09 	: Fichier LUT1 pour  camera 09
+	FLUT1CAM_10 	: Fichier LUT1 pour  camera 10
+	FLUT1CAM_11 	: Fichier LUT1 pour  camera 11
+	FLUT1CAM_12 	: Fichier LUT1 pour  camera 12
+	FLUT2CAM_01 	: Fichier LUT2 pour  camera 01
+	FLUT2CAM_02 	: Fichier LUT2 pour  camera 02
+	FLUT2CAM_03 	: Fichier LUT2 pour  camera 03
+	FLUT2CAM_04 	: Fichier LUT2 pour  camera 04
+	FLUT2CAM_05 	: Fichier LUT2 pour  camera 05
+	FLUT2CAM_06 	: Fichier LUT2 pour  camera 06
+	FLUT2CAM_07 	: Fichier LUT2 pour  camera 07
+	FLUT2CAM_08 	: Fichier LUT2 pour  camera 08
+	FLUT2CAM_09 	: Fichier LUT2 pour  camera 09
+	FLUT2CAM_10 	: Fichier LUT2 pour  camera 10
+	FLUT2CAM_11 	: Fichier LUT2 pour  camera 11
+	FLUT2CAM_12 	: Fichier LUT2 pour  camera 12
+	FLUT3CAM_01 	: Fichier LUT3 pour  camera 01
+	FLUT3CAM_02 	: Fichier LUT3 pour  camera 02
+	FLUT3CAM_03 	: Fichier LUT3 pour  camera 03
+	FLUT3CAM_04 	: Fichier LUT3 pour  camera 04
+	FLUT3CAM_05 	: Fichier LUT3 pour  camera 05
+	FLUT3CAM_06 	: Fichier LUT3 pour  camera 06
+	FLUT3CAM_07 	: Fichier LUT3 pour  camera 07
+	FLUT3CAM_08 	: Fichier LUT3 pour  camera 08
+	FLUT3CAM_09 	: Fichier LUT3 pour  camera 09
+	FLUT3CAM_10 	: Fichier LUT3 pour  camera 10
+	FLUT3CAM_11 	: Fichier LUT3 pour  camera 11
+	FLUT3CAM_12 	: Fichier LUT3 pour  camera 12
+	GDATECAMIR  	: sgnal date trames dcamir
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+DCEDRE      		: 
+	FTST        	: 
+	GDATEDD     	: 
+			  Nb maxi de signaux = 2
+	GDATEDD     	: 
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+DCO2        		: 
+	SCAMACA     	: SINK1
+	SCAMACB     	: COSK1
+	SCAMACC     	: SINK2
+	SCAMACD     	: COSK2
+	SI0DET      	: Courant detecteur
+	SMOTK       	: Lecture du module du vecteur K2 en volt sur table de translation
+	SRMS1       	: Turbulence moyenne sur k1
+	SRMS2       	: Turbulence moyenne sur k2
+	SROTK       	: controle de la rotation de k
+	SSPEC1      	: Balayage du spectre k1 en frequence
+	SSPEC2      	: balayage du spectre k2 en frequence
+
+				----------------------
+
+DCX         		: Flux de neutres rapides (E>1keV) sortant du plasma. 
+5 Analyseurs de Neutres Rapides dans un plan à 10 degre du plan poloidal Q3A.
+1 ANR (dit ANP) a 45 degre en Q5A.
+Acquisition (copmtage) par 3 cartes ICM100.
+	GBCXD1      	: comptage analyseur 1 , deuterium
+			  Nb maxi de signaux = 48
+	GBCXD2      	: comptage analyseur 2 , deuterium
+			  Nb maxi de signaux = 48
+	GBCXD3      	: comptage analyseur 3 , deuterium
+			  Nb maxi de signaux = 48
+	GBCXD4      	: comptage analyseur 4 , deuterium
+			  Nb maxi de signaux = 48
+	GBCXD5      	: comptage analyseur 5, deuterium
+			  Nb maxi de signaux = 48
+	GBCXD6      	: comptage analyseur 6, deuterium
+			  Nb maxi de signaux = 48
+	GBCXH1      	: comptage analyseur 1 , hydrogene
+			  Nb maxi de signaux = 48
+	GBCXH2      	: comptage analyseur 2 , hydrogene
+			  Nb maxi de signaux = 48
+	GBCXH3      	: comptage analyseur 3 , hydrogene
+			  Nb maxi de signaux = 48
+	GBCXH4      	: comptage analyseur 4 , hydrogene
+			  Nb maxi de signaux = 48
+	GBCXH5      	: comptage analyseur 5, hydrogene
+			  Nb maxi de signaux = 48
+	GBCXH6      	: comptage analyseur 6, hydrogene
+			  Nb maxi de signaux = 48
+	GDATE1CX    	: date carte 1 - analyseur 1 et 2
+			  Nb maxi de signaux = 2
+	GDATE2CX    	: date Carte 2 - analyseur 3 et 4
+			  Nb maxi de signaux = 2
+	GPCION1     	: Pression cellule ionisation Anr 1 et 2
+			  Nb maxi de signaux = 2
+	GPCION2     	: Pression cellule ionisation Anr 3 et 4
+			  Nb maxi de signaux = 2
+	GPCION3     	: Pression cellule ionisation Anr 5 et 6
+			  Nb maxi de signaux = 2
+	GVBHAZ1     	: VB Hazemeyer Anr 1 et 2
+			  Nb maxi de signaux = 2
+	GVBHAZ2     	: VB Hazemeyer Anr 3 et 4
+			  Nb maxi de signaux = 2
+	GVBHAZ3     	: VB Hazemeyer Anr 5 et 6
+			  Nb maxi de signaux = 2
+	GVIHAZ1     	: VI Hazemeyer Anr 1 et 2
+			  Nb maxi de signaux = 2
+	GVIHAZ2     	: VI Hazemeyer Anr 3 et 4
+			  Nb maxi de signaux = 2
+	GVIHAZ3     	: VI Hazemeyer Anr 5 et 6
+			  Nb maxi de signaux = 2
+	SIUV        	: Courant Lampe UV
+	SPIEZ6      	: Tension vanne piezo Anr 6
+	SPVRAIE     	: Pression Jauge Baratron
+
+				----------------------
+
+DDUO        		: Duochromateur en mode miroir fixe
+	GDATEDUO    	: Voie date de la carte ICV101
+			  Nb maxi de signaux = 2
+	GHT         	: signaux de suivi des HT  (Vpl, Vgl, Ipl, Igl)
+			  Nb maxi de signaux = 4
+	GUVGL       	: raies spectrales UV grand lambda
+			  Nb maxi de signaux = 10
+	GUVPL       	: raies spectrales UV petit lambda
+			  Nb maxi de signaux = 20
+	SDUOANGLE   	: Signal codeur miroir oscillant
+
+				----------------------
+
+DECE        		: Mesure de Te par superheterodyne
+	GSH1        	: Groupe de 8 voies de 78.5 a 92.2 GHz
+			  Nb maxi de signaux = 8
+	GSH2        	: Groupe de 8 voies de 95.5 a 109.5 GHz
+			  Nb maxi de signaux = 8
+	GSHR1       	: groupe des 8 voies  rapides(gsh1)
+			  Nb maxi de signaux = 8
+	GSHR2       	: GROUPE  DES  VOIES RAPIDES (gsh2)
+			  Nb maxi de signaux = 8
+	GSHTEM      	: GROUPE DE MESURE DE TEMPERATURE 2 VOIE
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+DECERAP     		: DECERAP
+	FECERAP     	: fichier de sortie des données.
+	GDATEECERAP 	: Datation des données
+			  Nb maxi de signaux = 2
+	SECERAPTEST 	: 
+	SECERAPTEST 	: 
+
+				----------------------
+
+DEQUI       		: 
+	GDATE_EQUI  	: 
+			  Nb maxi de signaux = 2
+	GEQAEQUA    	: Aequateur for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQALPHA    	: Calculated Faraday Rotation ( 10 chords )
+			  Nb maxi de signaux = 10
+	GEQELONG    	: Elongation=B-A for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQFFPRIM   	: FFprim profile for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQNE       	: Electron Density profile for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQPPRIM    	: Pprim profile for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQPRESS    	: Pressure profile for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQQPROF    	: Q profile for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQRGEOM    	: Rcenter for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQTRIAN    	: Triangularity=(Rnorth+Rsouth)/2-Rcenter for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GEQUINOX    	: Ip, Qwall, Qaxe, Qmin, BetP, li, BetN, PsiA, PsiB, Perim, Area, Volume
+
+			  Nb maxi de signaux = 12
+	GEQZGEOM    	: Zcenter for Psi_bar=0.0,0.1,...,0.9,1.0
+			  Nb maxi de signaux = 11
+	GTEST_EQUI  	: 
+			  Nb maxi de signaux = 8
+
+				----------------------
+
+DFARAD      		:   Polarimetrie: C. Gil,  L. Toulouse, P Lotte
+	GDATEFARAD  	: Date
+			  Nb maxi de signaux = 2
+	GDATEFARAD3 	: Date carte 101 cpu1
+			  Nb maxi de signaux = 2
+	GDATFARAD2  	: Date
+			  Nb maxi de signaux = 2
+	GPOTAR      	: Voies potentiometres
+			  Nb maxi de signaux = 10
+	GSFAR1      	: ABcos, A, B, ABsin   voie 1
+			  Nb maxi de signaux = 4
+	GSFAR10     	: ABcos, A, B, ABsin   voie 10
+			  Nb maxi de signaux = 4
+	GSFAR2      	: ABcos, A, B, ABsin   voie 2
+			  Nb maxi de signaux = 4
+	GSFAR3      	: ABcos, A, B, ABsin   voie 3
+			  Nb maxi de signaux = 4
+	GSFAR4      	: ABcos, A, B, ABsin   voie 4
+			  Nb maxi de signaux = 4
+	GSFAR5      	: ABcos, A, B, ABsin   voie 5
+			  Nb maxi de signaux = 4
+	GSFAR6      	: ABcos, A, B, ABsin   voie 6
+			  Nb maxi de signaux = 4
+	GSFAR7      	: ABcos, A, B, ABsin   voie 7
+			  Nb maxi de signaux = 4
+	GSFAR8      	: ABcos, A, B, ABsin   voie 8
+			  Nb maxi de signaux = 4
+	GSFAR9      	: ABcos, A, B, ABsin   voie 9
+			  Nb maxi de signaux = 4
+	GTEST101    	: 4 voies sur 101 carte Cpu1
+			  Nb maxi de signaux = 4
+	GTRALPHA    	: Angles  Faraday calcules en temps reel (radian), ne pas utiliser pour l'analyse plasmas, utiliser à la place galpha
+			  Nb maxi de signaux = 10
+	SCYCFARAD   	: Temps de cycle. (valeur de TCALIB)
+	SRDCN       	: voie reference laser DCN
+	STRD0POL    	: Decentrement en temps reel
+	STRDJ0      	: Pente centrale du profil de courant  en temps reel
+	STRJ0       	: J0 en temps reel
+	STRPIQJ     	: piqage de la densite de courant (j0/<j>) en temps reel
+	STRQ0       	: Q0 en temps reel
+	STRQMIN     	: Qmin en temps reel
+	STRZ0POL    	: Z0 en temps reel  par les voies reflechies de la polarimetrie
+
+				----------------------
+
+DFCE        		: Parametres de commande du chauffage cyclotron electronique
+	GDATE_FCE   	: 
+			  Nb maxi de signaux = 2
+	SBASCAD     	: Position Cadre bas
+
+	SBASMIR     	: Position Miroir Bas
+
+	SCYCLE_VME  	: 
+	SDTCAVA1    	: 
+	SDTCAVA2    	: 
+	SDTCHARGE   	: 
+	SFCESPARE   	: Spare
+	SFCESPARE0  	: Spare
+	SFCESPARE1  	: Spare
+	SFCESPARE10 	: Spare
+	SFCESPARE2  	: Spare
+	SFCESPARE3  	: Spare
+	SFCESPARE4  	: Spare
+	SFCESPARE5  	: Spare
+	SFCESPARE6  	: Spare
+	SFCESPARE7  	: Spare
+	SFCESPARE8  	: Spare
+	SFCESPARE9  	: Spare
+	SHAUTCAD    	: Position Cadre Haut
+
+	SHAUTCADANG 	: Cadre Haut Angle
+	SHAUTCADCYC 	: Cadre  Haut  Cycles Totale
+	SHAUTCADFILT	: Cadre Haut  position potentiometre filtre
+	SHAUTCADLCOD	: Miroir  Haut  Mouvement Totale
+	SHAUTCADMOV 	: Cadre  Haut  Mouvement Totale
+	SHAUTCADREF 	: Position Cadre Haut  reference
+	SHAUTCADV   	: Cadre Haut  velocity
+
+	SHAUTCADVFB 	: Cadre Haut FeedBack velocity
+
+	SHAUTCADVFF 	: Cadre Haut FeedForward velocity
+
+	SHAUTMIR    	: Position Miroir Haut
+
+	SHAUTMIRANG 	: Miroir Haut Angle
+	SHAUTMIRCYC 	: Miroir  Haut  Cycles Totale
+	SHAUTMIRFILT	: Miroir Haut  position  potentiometre filtre
+	SHAUTMIRLCOD	: Miroir  Haut  Mouvement Totale
+	SHAUTMIRMOV 	: Miroir  Haut  Mouvement Totale
+	SHAUTMIRREF 	: Position Miroir Haut  reference
+	SHAUTMIRV   	: Miroir Haut  velocity
+
+	SHAUTMIRVFB 	: Miroir Haut FeedBack velocity
+
+	SHAUTMIRVFF 	:  Miroir Haut FeedForward velocity
+
+	SHAUTPOL    	: Angle Poloidal Miroir Haut
+	SHAUTPOLNEG 	: Angle Poloidal (hysterese negative ) Miroir Haut
+	SHAUTPOLPOS 	: Angle Poloidal (hysterese positive ) Miroir Haut
+	SHAUTPOLREF 	: Angle Poloidal (hysterese positive ) Miroir Haut
+	SHAUTTOR    	: Angle Toroidal Miroir Haut
+	SHAUTTORNEG 	: Angle Toroidal (hysterese negative ) Miroir Haut
+	SHAUTTORPOS 	: Angle Toroidal (hysterese positive ) Miroir Haut
+	SHAUTTORREF 	: Angle Toroidal haut  reference
+	SIAA1       	: Courant Anode A1
+
+	SIAA2       	: Courant Anode A1
+
+	SIKA1       	: Courant Cathode A1
+
+	SIKA2       	: Courant Cathode A2
+	SIVIDEA1    	: Vide Tube A1
+	SIVIDEA2    	: Vide Tube A2
+	SMILCADANG  	: Cadre Milieu angle
+	SMILCADCYC  	: Cadre  Milieu  Cycles Totale
+	SMILCADFILT 	: Cadre Milieu position potentiometre filtre
+	SMILCADLCOD 	: Miroir  Haut  Mouvement Totale
+	SMILCADMOV  	: Cadre Milieu Mouvement Totale
+	SMILCADREF  	: Position Cadre Milieu reference
+	SMILCADV    	: Cadre Milieu  velocity
+
+	SMILCADVFB  	: Cadre Milieu FeedBack velocity
+
+	SMILCADVFF  	: Cadre Milieu FeedForward velocity
+
+	SMILIEUCAD  	: Position Cadre Milieu
+
+	SMILIEUMIR  	: Position Miroir Milieu
+
+	SMILMIRANG  	: Miroir Milieu Angle
+	SMILMIRCYC  	: Miroir  Milieu Cycles Totale
+	SMILMIRFILT 	: Miroir Milieu position potentiometre filtre
+	SMILMIRLCOD 	: Miroir  Haut  Mouvement Totale
+	SMILMIRMOV  	: Miroir  Milieu Mouvement Totale
+	SMILMIRREF  	: Position Miroir Milieu reference
+	SMILMIRV    	: Miroir Milieu  velocity
+
+	SMILMIRVFB  	: Miroir Milieu FeedBack velocity
+
+	SMILMIRVFF  	:  Miroir Milieu FeedForward velocity
+
+	SMILPOL     	: Angle Poloidal Miroir Milieu
+	SMILPOLNEG  	: Angle Poloidal (hysterese negative ) Miroir Haut
+	SMILPOLPOS  	: Angle Poloidal (hysterese positive ) Miroir Haut
+	SMILPOLREF  	: Angle Poloidal  Miroir Milieu reference
+	SMILTOR     	: Angle Toroidal Miroir Milieu
+	SMILTORNEG  	: Angle Toroidal (hysterese negative ) Miroir Haut
+	SMILTORPOS  	: Angle Toroidal (hysterese positive ) Miroir Haut
+	SMILTORREF  	: Angle Toroidal milieu reference
+	SONDERF     	: Sonde RF sur Reflectometre Drefrap Q3m
+	SPFCE       	: Puissance FCE totale
+
+	SPIA1       	: Puissance HF Incidente A1
+
+	SPIA2       	: Puissance HF incidente A2
+
+	SPIA3       	: Puissance HF incidente A3
+
+	SPIC1DP     	: PI C1 Double Polarisation 
+	SPIC2DP     	: PI C2 Double Polarisation
+
+	SPRA1       	: Puissance HF Reflechie A1
+
+	SPRA2       	: Puissance HF reflechie A2
+
+	SPRA3       	: Puissance HF reflechie A3
+
+	SPRDP       	: PR Double Polaristion
+	SRFDREFLUC  	: Signal de la sonde RF FCE située sur le diag Drefluc en Q4am
+	SVAA1       	: Tension Anode A1
+
+	SVAA2       	: Tension Anode A2
+
+	SVACONA1    	:  A1 Consigne VA
+	SVACONA2    	: A2  Consigne VA
+	SVCATA      	: Tension Cathode Module A
+
+	SVHDCONA    	: Module A Consigne HT 
+	SVIDEA1     	: Vide Ligne A1
+	SVIDEA2     	: Vide Ligne A2
+	SVKCONA     	: Module A Consigne VK
+
+				----------------------
+
+DFCI        		: 
+	GASSFCI     	: AssFe - AssIR1- AssIR2 - AssIR5
+			  Nb maxi de signaux = 4
+	GCAPA       	: Position des capacites
+			  Nb maxi de signaux = 12
+	GCOMMU      	: Commutateurs HF
+			  Nb maxi de signaux = 6
+	GCOUP       	: Pi et Pr dans les lignes
+			  Nb maxi de signaux = 12
+	GDATEFCI    	: 2 voies date
+			  Nb maxi de signaux = 2
+	GDATEFCI2   	: 2 voies date
+			  Nb maxi de signaux = 2
+	GDATEFCI3   	: 2 voies date
+			  Nb maxi de signaux = 2
+	GMESUR      	: Signaux generateurs voies 1 à 4
+			  Nb maxi de signaux = 4
+	GMESUR2     	: Signaux Générateurs Voies 11 à 12
+			  Nb maxi de signaux = 2
+	GPHASE      	: Mesures de phases entre sondes et Vr/Vi
+			  Nb maxi de signaux = 12
+	GPHASE2     	: Mesures de phase de reserve
+			  Nb maxi de signaux = 4
+	GPOSANTFCI  	: Position des antennes en choc
+			  Nb maxi de signaux = 3
+	GPREF       	: Puissances reflechies generateurs
+			  Nb maxi de signaux = 6
+	GPTRA       	: Puissances transmises generateurs
+			  Nb maxi de signaux = 6
+	GPUIFCI     	: Puissance totale et par antennes
+			  Nb maxi de signaux = 4
+	GSOND       	: Tensions dans les antennes
+			  Nb maxi de signaux = 12
+	GSPP        	: Consignes de puissance
+			  Nb maxi de signaux = 6
+	GVITCAPA    	: Vitesse des moteurs
+			  Nb maxi de signaux = 4
+	GVPIN       	: Tensions des diodes PIN
+			  Nb maxi de signaux = 6
+	SCYCFCI     	: Temps de cycle vme
+	SPUISS      	: Puissance totale transmise par les genes
+
+				----------------------
+
+DFINIR      		: 
+	FBID_FINIR  	: Variable bidon car bug sur premier appel TSWFILE
+	FIR01       	: variable fichier pour DFINIR1 (maitre)
+	FIR02       	: variable fichier pour DFINIR2 (esclave)
+
+				----------------------
+
+DFINIR1     		: 
+	GDATE_FINIR1	: 
+			  Nb maxi de signaux = 2
+	SFINIR1     	: 
+
+				----------------------
+
+DFINIR2     		: 
+	GDATE_FINIR2	: 
+			  Nb maxi de signaux = 2
+	SFINIR2     	: 
+
+				----------------------
+
+DFLUC       		: Diagnostic FLUCTUATION LANGMUIR
+	GVL         	: groupe signaux voies lentes 1 a 16
+			  Nb maxi de signaux = 16
+	SI1         	: courant sonde 1 (ICM 101 num 1)
+
+
+	SI2         	: courant sonde 2 (ICM 101 num 1)
+
+	SI3         	: courant sonde 3 (ICM 101 num 2)
+
+	SI4         	: courant sonde 4 (ICM 101 num 2)
+
+	SI7         	: Courant sonde 5 (ICM 101 num 3)
+	SI8         	: Courant sonde 6 (ICM 101 num 3)
+
+
+				----------------------
+
+DFLUCTE     		: 
+	FLUCTE_ZIP  	: 
+	FLUCTE_ZIP  	: 
+	FTEST       	: 
+	SBID        	: 
+
+				----------------------
+
+DGAZ        		: Asservissement du gaz
+	GBARAT      	: Jauges Baratron : voie 1-2 = Caisson de Pompage (brut, avec corr. offset-lissage), voie 3-4 = Tore Q5, voie 5-6 =Tore 13Pa Q5, voie 7 = 0.2Pa Q5
+			  Nb maxi de signaux = 7
+	GDATEGAZ    	: Voies date1 et date2
+			  Nb maxi de signaux = 2
+	GDEBIT      	: Debitmetres (Signaux Calibres)
+			  Nb maxi de signaux = 16
+	GISPI       	: Signaux ISPI : Vb1, Vb2(PJ4), I(PJ4), Position(PJ4), Mano, Vb2(PJ5), I(PJ5), Position(PJ5), Vb2(Q4B), I(Q4B), Position(Q4B), Vb1(PJ1-50b).
+			  Nb maxi de signaux = 12
+	GMANO       	: Manometres (1:V1+V11, 2:V2, 3:V3, 4:V4, 5:V5+V10, 6:V6, 7:V7, 8:V13, 9:V8+V9, 10:V1+V11(10 Torr), 11:V2(10 Torr), 12:SupPJ1, 13:SupPJ4, 14:SupPJ5)
+			  Nb maxi de signaux = 16
+	GMESDEB     	: Debitmetres (Signaux Bruts)
+			  Nb maxi de signaux = 16
+	GPBALLON    	: Pression des ballons (Pa)
+			  Nb maxi de signaux = 11
+	GPTORE      	: Pression Tore (jauge pirani/penning Q5): voie 1 = mantisse, voie 2 = exposant
+			  Nb maxi de signaux = 2
+	GTBALLON    	: Temperature des ballons (degre C)
+			  Nb maxi de signaux = 11
+	GTENSION    	: Tensions Vannes Piezo
+			  Nb maxi de signaux = 16
+	GTESTGAZ    	: Voies de Test pour VME
+			  Nb maxi de signaux = 16
+	GVERIFA     	: Voies de Test pour VME (reserve)
+			  Nb maxi de signaux = 8
+	SDEB        	: Debit Total Mesure
+	SDEBCAL     	: Debit Total Calcule
+	SDIFDATE    	: Temps de Cycle
+	SEXT        	: Signal Exterieur
+	SNL         	: Densite consigne utilisee par AGAZ
+	SNLB        	: Densite Lineique BREMSSTRAHLUNG
+	SNLI        	: Densite Lineique INTERFEROMETRIE IR
+	SPR         	: Jauge de pression  baratron (0.2 Pa FS, Q5m)
+
+				----------------------
+
+DGENE       		: Generateurs du poloidal
+	GCONSGEN    	: 
+			  Nb maxi de signaux = 8
+	GCUGENE     	: 
+			  Nb maxi de signaux = 9
+	GDATGENE1   	: voies dates de la carte mgene1 (donnees rapides)
+			  Nb maxi de signaux = 2
+	GDATGENE2   	: voies dates de la carte mgene2 (donnees lentes)
+			  Nb maxi de signaux = 2
+	GDATGENE3   	: voies dates de la carte mgene3 (donnees lentes)
+			  Nb maxi de signaux = 2
+	GDATGENE4   	: voies dates de la carte mgene4 (donnees numeriques)
+			  Nb maxi de signaux = 2
+	GDIVGEN     	: 
+			  Nb maxi de signaux = 4
+	GENT13      	: entrees ICV196 carte 1 (connecteur J1, J2, J3) et 2  (connecteur J1, J2,J3)
+			  Nb maxi de signaux = 12
+	GENT14      	: entrees ICV196 carte 3(connecteur J1, J2, J3) et 4  (connecteur J1)
+			  Nb maxi de signaux = 8
+	GIBOBGEN    	: Mesures de courant
+			  Nb maxi de signaux = 10
+	GMIGENE     	: 
+			  Nb maxi de signaux = 10
+	GMUGENE     	: 
+			  Nb maxi de signaux = 10
+	GMXGENE     	: 
+			  Nb maxi de signaux = 10
+	GPHASGEN    	: 
+			  Nb maxi de signaux = 4
+	GSOR10      	: sorties ICV196 carte 4
+connecteur J1, J2, J3) et  6  (connecteur J1)
+			  Nb maxi de signaux = 8
+	GTENGEN     	: Mesures de tension generateur
+			  Nb maxi de signaux = 9
+	GTESTGEN    	: Acquisition G0
+			  Nb maxi de signaux = 8
+	GVOIEGENE   	: 22 voies CPU2  (donnees lentes) - carte MGENE2
+			  Nb maxi de signaux = 22
+	GVOIEGENE2  	: 26 voies CPU2  (donnees lentes) - carte MGENE3
+			  Nb maxi de signaux = 26
+	SCOAUX1     	: 
+	SCOAUX2     	: 
+	SCOAUX3     	: 
+	SCONSGEN0   	: 
+	SMRGENE     	: 
+	STENSBABA   	: 
+
+				----------------------
+
+DGLACON     		: ACQUI   PELIN et ISPI
+
+	GLUMPEL     	: mesures Halpha glacons
+			  Nb maxi de signaux = 5
+	GPMI1       	: mesures ISPI  (PM multianode)
+			  Nb maxi de signaux = 2
+	SBA400      	: Bayer Alper 400L
+	SBAHFS      	: Bayer Alper mi ligne HFS
+	SBARAT400   	: baratron 400L (V)
+	SBARATV     	: baratron chambre injection verticale
+	SELECTOR    	: position aiguillage : 0 non controle, 1 LFS, 2 vertical, 3 HFShaut, 4 HFSequa
+	SMASSINJ    	: masse sortie injecteur PELIN
+	SMASSINT    	: masse integree injecteur
+	SMASSV      	: masse chambre injection verticale
+	SPASSHFS    	: Detection passage HFS
+	SPASSV      	: Detection passage verticale
+	SPCHDIAG    	: pression chambre diagnostic injecteur (Pirani)
+	SVANNES     	: etat vannes injection: 1 tir sur plasma, 0 sur cible
+
+				----------------------
+
+DHYB        		: diagnostic DHYB
+	GCONSHYB    	: Command signals to klystrons: power (1-16), phase (17-32)
+			  Nb maxi de signaux = 32
+	GCREFC1     	: Reflection coefficients on launcher Q6A (FAM) 
+			  Nb maxi de signaux = 16
+	GCREFC2     	: Reflection coefficients on launcher Q6B (PAM)
+			  Nb maxi de signaux = 16
+	GDAT2HYB    	: Voies date carte PXI_6225
+			  Nb maxi de signaux = 2
+	GDAT3HYB    	: Voies date carte PXI_6229
+			  Nb maxi de signaux = 2
+	GDAT4HYB    	: Voies date carte PXI_7851_1
+			  Nb maxi de signaux = 2
+	GDAT5HYB    	: Voies date carte PXI_7851_2
+			  Nb maxi de signaux = 2
+	GDAT6HYB    	: Voies date carte PXI_7851_3
+			  Nb maxi de signaux = 2
+	GDAT7HYB    	: Voies date carte PXI_7851_4
+			  Nb maxi de signaux = 2
+	GDAT8HYB    	: Voies date carte PXI_7853_1
+			  Nb maxi de signaux = 2
+	GDAT9HYB    	: Voies date carte PXI_7853_2
+			  Nb maxi de signaux = 2
+	GDATHYB     	: Voies date carte PXI_0
+			  Nb maxi de signaux = 2
+	GHYBPLA     	: Consignes d'APLASMA
+			  Nb maxi de signaux = 6
+	GHYBPOL     	: Consignes d'APOLO
+			  Nb maxi de signaux = 2
+	GISLH       	: Ion saturation current on Langmuir probes
+			  Nb maxi de signaux = 8
+	GNPARDEM    	: Requested N//0 on launcher Q6A (FAM) and Q6B (PAM)
+			  Nb maxi de signaux = 2
+	GPFORWC1    	: Total injected power from the upper and lower modules of the launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPFORWC2    	: Total injected power from the upper and lower modules on launcher Q6B (PAM)
+			  Nb maxi de signaux = 16
+	GPFORWHYB   	: Total injected power from the launchers Q6A and Q6B
+			  Nb maxi de signaux = 2
+	GPGENEHYB   	: Total power from M1-M2 (FAM launched power at the transmitter) and M3-M4 (PAM launched power at the transmitter)
+			  Nb maxi de signaux = 2
+	GPHBC1      	: Forward phase at mouth of launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPHBC2      	: Forward phase at mouth of launcher Q6B (PAM)
+			  Nb maxi de signaux = 16
+	GPHIC1      	: Forward phase at input to launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPHIC2      	: Forward phase at input to launcher Q6B (PAM)
+			  Nb maxi de signaux = 16
+	GPHRC1      	: Reflected phase at input to launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPHRC2      	: Reflected phase at input to launcher Q6B (PAM)
+			  Nb maxi de signaux = 16
+	GPHYB       	: Coupled power from launchers: Q6A (FAM), Q6B (PAM) and total
+			  Nb maxi de signaux = 3
+	GPIKLY      	: Forward power from  the klystrons
+			  Nb maxi de signaux = 16
+	GPINJC1     	: Coupled power per module on launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPINJC2     	: Coupled power per module on launcher Q6B (PAM)
+			  Nb maxi de signaux = 16
+	GPOSHYB     	: Launcher positions: Q6A (FAM), Q6B (PAM)
+			  Nb maxi de signaux = 4
+	GPREFLC1    	: Reflected power in upper and lower modules on launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPREFLC2    	: Reflected power in upper and lower modules on launcher Q6A (FAM)
+			  Nb maxi de signaux = 16
+	GPREFLHYB   	: Total power reflected in launchers Q6A (FAM) and launcher Q6B (PAM)
+			  Nb maxi de signaux = 2
+	GPRESHYB    	: Pressure in vacuum tanks on launcher Q6A (FAM) and Q6B (PAM)
+			  Nb maxi de signaux = 2
+	GPRKLY      	: Reflected power of the klystrons 
+			  Nb maxi de signaux = 16
+	GREFHYB     	: Average reflection coefficient on launcher Q6A (FAM) and Q6B (PAM)
+			  Nb maxi de signaux = 2
+	GREFHYBB    	: Average refl. coeff. lower modules launcher Q6A (FAM) and Q6B (PAM) 
+			  Nb maxi de signaux = 2
+	GREFHYBH    	: Average refl. coeff. upper modules launcher Q6A (FAM) and Q6B (PAM)
+			  Nb maxi de signaux = 2
+	GSONDLH     	: Raw data from Langmuir probes
+			  Nb maxi de signaux = 10
+	GTEMPC1     	: Thermocouples measurements on the FAM launcher
+			  Nb maxi de signaux = 14
+	GTEMPC2     	: Mesures thermocouples sur coupleur 2
+			  Nb maxi de signaux = 14
+	GTEMPCH1    	: Temperature eau charges coupleur 1
+			  Nb maxi de signaux = 2
+	GTEMPCH2    	: Temperature eau charges coupleur 2
+			  Nb maxi de signaux = 2
+	GTESTHYB    	: Spare signals for debugging
+			  Nb maxi de signaux = 16
+	GUSLH       	: Maximum voltage on Langmuir probes (negative)
+			  Nb maxi de signaux = 2
+	SPRIPHYB    	: Puissance Hybride permise a cause du ripple
+	STOSHYB     	: Coupure T.O.S : 1 bit / klystron
+	STPSHYB     	: Temps de cycle
+
+				----------------------
+
+DIAS        		: 
+	GDATEDIAS   	: 
+			  Nb maxi de signaux = 2
+	SDIAS1      	: 
+	SDIAS2      	: 
+	SDIAS3      	: 
+	SDIAS4      	: 
+	SDIAS5      	: 
+
+				----------------------
+
+DIDN        		: 
+	GDTCVPT     	: mesure DT d'eau par Pt100 Cible en V (10 voies)
+			  Nb maxi de signaux = 10
+	GDTCVTU     	: mesure DT  tuiles cible en V par thermocouples  (56 voies)
+			  Nb maxi de signaux = 56
+	GDTQE       	: Temperature briquettes d'Entree du Queusot  (10 voies)
+			  Nb maxi de signaux = 10
+	GDTQS       	: Temperature briquettes de Sortie du Queusot (6 voies)
+			  Nb maxi de signaux = 6
+	GIDNDAT1    	: Carte datation 1
+			  Nb maxi de signaux = 2
+	GIDNDAT2    	: Carte datation 2
+			  Nb maxi de signaux = 2
+	GIDNDAT3    	: Carte datation 3
+			  Nb maxi de signaux = 2
+	GISONDE     	: courants sondes source (12 voies) (mA)
+			  Nb maxi de signaux = 12
+	GVCATH      	: tensions cathodiques (3 voies) (A)
+			  Nb maxi de signaux = 3
+	GVRK        	: chute de tension au  niveau des resistances cathodiques (6 voies) (V)
+			  Nb maxi de signaux = 8
+	SDBEAUCV    	: débit eau cible en V (l/s)
+
+	SDGAZ3      	: debit de gaz (Torr.l/s)
+	SDVG2       	: difference de potentiel entre g2 et neutraliseur
+
+	SIARC       	: courant d'arc carte 1 (A)
+
+	SIDN        	: Courant  HT extrait (A)  
+	SIG2        	: courant IG2 (A)
+
+	SINEUT      	: courant neutraliseur (A)
+
+	SIRECUP     	: courant de récupération:  Irecup(A)
+
+	SIRECUPALIM 	: Courant recup ; mesure dans l ' alim
+	SISUPM      	: courant  I sup -  (A)
+
+	SISUPP      	: courant  suppression : I sup +  (A)
+
+	SPC3        	: pression  caisson  (mTorr)
+	SPM         	: pression manchette (mTorr)
+	SPS3        	: pression  source  (mTorr)
+	SVARC       	: tension alim d'arc  Varc(V)
+	SVHT        	: tension d'accélération VHT (kV)
+
+	SVHTNEUT    	: tension neutraliseur
+	SVSVP       	: tension de L' ALIM de récupération (kV)
+
+
+				----------------------
+
+DIFDOP      		: reflectometre
+	FACQIRIS0_V1	: 
+	FACQIRIS0_V2	: 
+	FACQIRIS1_V1	: 
+	FACQIRIS1_V2	: 
+	FACQIRIS_DAT	: 
+	FCOS        	: 
+	FDATEDOP    	: 
+	FDOP1       	: 
+	FDOP2       	: 
+	FDOP3       	: 
+	FSIN        	: 
+	SFREQ       	: 
+	SPOSVERIN   	: 
+	SRMSCOS     	: 
+	SRMSCOS_W   	: 
+	SRMSVIDEO   	: 
+	SRMSVIDEO_W 	: 
+
+				----------------------
+
+DINTERF     		: INTERFEROMETRIE INFRAROUGE     C.GIL
+	GBNL1       	: GBNLi : SIGNAUX BRUTS D INTERFEROMETRE SUR LA VOIE i
+			  Nb maxi de signaux = 4
+	GBNL10      	: 
+			  Nb maxi de signaux = 4
+	GBNL2       	:   X1 : NOMBRE ENTIER DE FRANGES A 195 MICRONS (LASER DCN)
+			  Nb maxi de signaux = 4
+	GBNL2       	: X1 : NOMBRE ENTIER DE FRANGES A 195 MICRONS (LASER DCN)
+			  Nb maxi de signaux = 4
+	GBNL3       	:   X2 : DEUXCENTIEMES DE FRANGE A 195 MICRONS (LASER DCN)
+			  Nb maxi de signaux = 4
+	GBNL3       	: X2 : DEUXCENTIEMES DE FRANGE A 195 MICRONS (LASER DCN)
+			  Nb maxi de signaux = 4
+	GBNL4       	:   X3 : NOMBRE ENTIER DE FRANGES A 118 MICRONS (LASER H2O)
+			  Nb maxi de signaux = 4
+	GBNL4       	: X3 : NOMBRE ENTIER DE FRANGES A 118 MICRONS (LASER H2O)
+			  Nb maxi de signaux = 4
+	GBNL5       	:   X4 : DEUXCENTIEMES DE FRANGE A 118 MICRONS (LASER H2O)
+			  Nb maxi de signaux = 4
+	GBNL5       	: X4 : DEUXCENTIEMES DE FRANGE A 118 MICRONS (LASER H2O)
+			  Nb maxi de signaux = 4
+	GBNL6       	: 
+			  Nb maxi de signaux = 4
+	GBNL7       	: 
+			  Nb maxi de signaux = 4
+	GBNL8       	: 
+			  Nb maxi de signaux = 4
+	GBNL9       	: 
+			  Nb maxi de signaux = 4
+	GBNLR       	: 
+			  Nb maxi de signaux = 20
+	GDATEINTER2 	: VOIES DATE ACQUI LENTE CARTE 2
+			  Nb maxi de signaux = 2
+	GDATEINTER3 	: VOIES DATE ACQUI LENTE CARTE 2
+			  Nb maxi de signaux = 2
+	GDATEINTERFL	: VOIES DATE ACQUI LENTE
+			  Nb maxi de signaux = 2
+	GDATEIRAP   	: 
+			  Nb maxi de signaux = 2
+	GTESTAIG    	: groupe de test pour le nouvel aiguilleur - connecteur J3 196_5 (GR10 et GR11)
+			  Nb maxi de signaux = 2
+	GTESTAIG    	: voie test
+			  Nb maxi de signaux = 2
+	GTESTINF    	: groupe de signaux test interferometrie
+			  Nb maxi de signaux = 8
+	GTRNL       	: Densité linéïque :  10 voies  calculées  en temps réel  par le VME
+			  Nb maxi de signaux = 10
+	GTRNL       	: Densité linéïque :  10 voies  calculées  en temps réel  par le VME( ne pas utiliser  pour l'analyse des plasmas  , utiliser les GNL à la place )
+			  Nb maxi de signaux = 10
+	SCYCINTERF  	: temps de cycle de VINTERF
+	SNKDCN      	: NKDCN
+	SNKH2O      	: NKH2O
+	SRAP1       	: Calcule  par CPU Vme
+	STRNMOY     	: Calcul de la densité moyenne en temps réel , ne pas utiliser pour l'analyse des plasmas , utiliser snmoy à la place 
+	STRNMOY     	: Calcule  par CPU Vme
+
+				----------------------
+
+DINTMEG     		: Interferometrie Mega Hertz
+	FINTMEG     	: fichier d'acquisition 
+	GDATEINTMEG 	: Datation des donnees
+			  Nb maxi de signaux = 2
+	SINTMEGTEST 	: 
+
+				----------------------
+
+DINTRPOL    		: Diagnostic for interferometry-polarimetry
+	SBIDON1981  	: 
+
+				----------------------
+
+DLANG       		: Diagnostic Sonde de Langmuir
+	GDATEFIX    	: voies date de la carte ICV101 sondes FIXES (cpu1)
+			  Nb maxi de signaux = 2
+	GDATESMOB1  	: voies date de la carte ICV101 sondes mobiles (cpu2)
+			  Nb maxi de signaux = 2
+	GDATESMOB2  	: voies date de la carte ICV101 sondes mobiles (cpu2)
+			  Nb maxi de signaux = 2
+	GDATET150   	: voies date de la carte ICV101 sondes mobiles (cpu2)
+			  Nb maxi de signaux = 2
+	GICORFA     	: groupe courant collecteur sonde RFA
+			  Nb maxi de signaux = 2
+	GIFERFA     	: groupe courant fente d'entree sonde RFA
+			  Nb maxi de signaux = 2
+	GIG1RFA     	: groupe courant fente d'entree sonde RFA
+			  Nb maxi de signaux = 2
+	GIG2RFA     	: groupe courant fente d'entree sonde RFA
+			  Nb maxi de signaux = 2
+	GISLF2      	: groupe signaux courants sondes FIXES module 2
+			  Nb maxi de signaux = 3
+	GISLF4      	: groupe signaux courants sondes FIXES module 4
+			  Nb maxi de signaux = 3
+	GISLF5      	: groupe signaux courants sondes FIXES module 5
+			  Nb maxi de signaux = 3
+	GISLF6      	: groupe signaux courants sondes FIXES module 6
+			  Nb maxi de signaux = 3
+	GISM1       	: groupe signaux courant sonde mobile 1
+			  Nb maxi de signaux = 2
+	GISM2       	: groupe signaux courant sonde mobile 2
+			  Nb maxi de signaux = 4
+	GLANGTEST   	: groupe 8 voies de ICV150 pour test
+			  Nb maxi de signaux = 8
+	GPFSM1      	: groupe signaux potentiel flottant sonde mobile 2
+			  Nb maxi de signaux = 2
+	GPFSM2      	: groupe signaux potentiel flottant sonde mobile 2
+			  Nb maxi de signaux = 2
+	GTSE        	: groupe temperature sonde echantillons
+			  Nb maxi de signaux = 4
+	GUSLF       	: groupe signaux tension sondes FIXES
+			  Nb maxi de signaux = 4
+	GUSM1       	: groupe signaux tension sonde mobile 1
+			  Nb maxi de signaux = 1
+	GUSM2       	: groupe signaux tension sonde mobile 2
+			  Nb maxi de signaux = 1
+	GVOIESSMOB  	: groupe TEST 16 voies
+			  Nb maxi de signaux = 16
+	SCPOS1      	: valeur  en continu pendant le choc de la position SLM1 (ecrit par diagvme)
+	SCPOS2      	: valeur  en continu pendant le choc de la position SLM2 (ecrit par diagvme)
+	SIDRIV1     	: mesure courant circuit IDRIVE secteurs impairs
+	SIDRIV2     	: mesure courant circuit IDRIVE secteurs pairs
+	SIND2       	: 
+	SLANGTEST   	: diverses valeurs calculées en temps réel
+	SLANGTEST1  	: diverses valeurs calculées en temps réel
+	SLANGTEST2  	: diverses valeurs calculées en temps réel
+	SPOS1       	: mesure position  SLM1 en mm ecrit  par diagvme posonde
+	SPOS2       	: mesure position  SLM2 en mm ecrit  par diagvme posonde
+	SUDRIV1     	: mesure tension circuit IDRIVE secteurs impairs
+	SUDRIV2     	: mesure tension circuit IDRIVE secteurs pairs
+	SUFERFA     	: signal tension fente d'entree RFA
+	SUG1RFA     	: signal tension grill retardeur RFA
+	SUG2RFA     	: signal tension grill electron secondaire RFA
+	SUSLF2      	: signal tension FIXES module 2
+	SUSLF4      	: signal tension FIXES module 6
+	SUSLF5      	: signal tension FIXES module 6
+	SUSLF6      	: signal tension FIXES module 6
+	SUSMA       	: signal tension coté A
+	SUSMB       	: signal tension coté B
+
+				----------------------
+
+DMAG        		: Diagnostic des mesures magnetiques
+	GBBD        	: Mesure du champ toroidal (bobines BBD)
+			  Nb maxi de signaux = 8
+	GBBR1       	: Mesure du champ radial (bobines BBR PJ2a)
+			  Nb maxi de signaux = 26
+	GBBR2       	: Mesure du champ radial (bobines BBR PJ1a)
+			  Nb maxi de signaux = 25
+	GBBT1       	: Mesure du champ poloïdal (bobines BBT PJ2a)
+			  Nb maxi de signaux = 25
+	GBBT2       	: Mesure du champ poloïdal (bobines BBT PJ1a début)
+			  Nb maxi de signaux = 24
+	GBBT2B      	: Mesure du champ poloïdal (bobines BBT jante PJ1a fin)
+			  Nb maxi de signaux = 2
+	GBFD        	: boucles de flux diamagnetiques n° 2, 3 et 4
+			  Nb maxi de signaux = 3
+	GBFT        	: boucles de flux toroidal 303, 325, 35, 56 et 142°
+
+			  Nb maxi de signaux = 5
+	GBLOQ       	: modes bloques
+			  Nb maxi de signaux = 2
+	GDATMAG1    	: voies date de la carte 1
+			  Nb maxi de signaux = 2
+	GDATMAG2    	: voies date de la carte 2
+			  Nb maxi de signaux = 2
+	GDATMAG3    	: voies date de la carte 3
+			  Nb maxi de signaux = 2
+	GDATMAG4    	: voies date de la carte 4
+			  Nb maxi de signaux = 2
+	GDFD        	: difference de boucles de flux diamagnetiques
+			  Nb maxi de signaux = 2
+	GFNOY       	: flux noyau: Bas, Median, Haut
+			  Nb maxi de signaux = 3
+	GFOCS       	: Groupe fiber optical current sensor.  10 signaux
+IPM s1, s2, s3, DOP (%), Power (dBm); DPC s1, s2, s3, DOP (%), Power (dBm)
+Voies 6-10: DPC s1, s2, s3, DOP (%), Power (dBm)
+			  Nb maxi de signaux = 12
+	GLTCC       	: Mesure de champ pour effet hall (Bv, Br, Bt)
+			  Nb maxi de signaux = 4
+	GMAGLPT     	: Mesures LPT : 4 bobines types BBT (ext, haut, int et bas) et une boucle de flux
+04/02 : modif Rentree 100 ohms
+			  Nb maxi de signaux = 5
+	GMHD        	: Enveloppe de l'amplitude des modes MHD N=1; N=2; N=3
+			  Nb maxi de signaux = 3
+	GVPT        	: tension par tour 303, 325, 35, 56 et 142°
+
+			  Nb maxi de signaux = 5
+	SALIM       	: tension alim etalon
+	SBBH01      	: Bobine de mesure de modes MHD
+	SBBH02      	: Bobine de mesure de modes MHD
+	SBBH03      	: Bobine de mesure de modes MHD
+	SBBH04      	: Bobine de mesure de modes MHD
+	SBBH05      	: Bobine de mesure de modes MHD
+	SBBH06      	: Bobine de mesure de modes MHD
+	SBBH07      	: Bobine de mesure de modes MHD
+	SBBH08      	: Bobine de mesure de modes MHD
+	SBBH09      	: Bobine de mesure de modes MHD
+	SBBH10      	: Bobine de mesure de modes MHD
+	SBBH11      	: Bobine de mesure de modes MHD
+	SBBH12      	: Bobine de mesure de modes MHD
+	SBBH13      	: Bobine de mesure de modes MHD
+	SBBH14      	: Bobine de mesure de modes MHD
+	SBBH15      	: Bobine de mesure de modes MHD
+	SBBH16      	: Bobine de mesure de modes MHD
+	SBBH17      	: Bobine de mesure de modes MHD
+	SBBH18      	: Bobine de mesure de modes MHD
+	SBBH19      	: Bobine de mesure de modes MHD
+	SBBH20      	: Bobine de mesure de modes MHD
+	SBBH21      	: Bobine de mesure de modes MHD
+	SBBH22      	: Bobine de mesure de modes MHD
+	SBBH23      	: Bobine de mesure de modes MHD
+	SBBH24      	: Bobine de mesure de modes MHD
+	SBBH25      	: Bobine de mesure de modes MHD
+	SBBH26      	: Bobine de mesure de modes MHD
+	SBBH27      	: Bobine de mesure de modes MHD
+	SBBH28      	: Bobine de mesure de modes MHD
+	SBFD        	: Boucle de flux diamagnetique n° 1
+	SBFT        	: Boucle de flux toroidal 216°
+	SMHDFN1     	: frequence du mode MHD n=1
+	SMOD        	: enveloppe des modes MHD
+	SROGLPT     	: mesure de courant dans un soufflet (Q2B) du LPT par Rogowski
+	SSHLPT      	: mesure de tension aux bornes d'un soufflet (Q2B) du LPT par shunt
+	STBAIE      	: Mesure de la température dans la baie des intégrateurs
+06/02 : inversion du signe>
+	STORI       	: Courant toroidal
+	STORU       	: tension toroidale
+	STORVAR     	: Variations de courant toroidal
+	STSTRAP1    	: signal GBBR2(19) le 20/10/2004
+	STSTRAP2    	: signal GBBR1(20) le 20/10/2004
+	SVPT        	: Tension par tour boucle 216°
+
+				----------------------
+
+DMSE        		: 
+	GDATEMSE    	: Voies dates de la carte ICV101
+			  Nb maxi de signaux = 2
+	GDATEMSE2   	: Voies dates de la carte ICV102
+			  Nb maxi de signaux = 2
+	S1MSE1      	: VOIE 1 DE LA CARTE ICV122
+	S1MSE2      	: VOIE 2 DE LA CARTE ICV122
+	S1MSE3      	: VOIE 3 DE LA CARTE ICV122
+	S1MSE4      	: VOIE 4 DE LA CARTE ICV122
+	S1MSE5      	: VOIE 5 DE LA CARTE ICV122
+	S1MSE6      	: VOIE 6 DE LA CARTE ICV122
+	S1MSE7      	: VOIE 7 DE LA CARTE ICV122
+	S1MSE8      	: VOIE 8 DE LA CARTE ICV122
+	S2MSE1      	: VOIE 1 DE LA CARTE ICV122 2
+	S2MSE2      	: VOIE 2 DE LA CARTE ICV122 2
+	S2MSE3      	: VOIE 3 DE LA CARTE ICV122 2 
+	S2MSE4      	: VOIE 4 DE LA CARTE ICV122 2
+
+				----------------------
+
+DNEUTRON    		: 
+	FNTN        	: 
+	GDATENEUTRON	: SIGNAUX DATE NEUTRON
+			  Nb maxi de signaux = 2
+	GFLUNTN     	: FLUX CALCULES (1) au Q2A , (2) au Q4A
+			  Nb maxi de signaux = 2
+	GNTNMD2     	: SIGNAUX BRUTS Q2A (CFUL01, CFUM11, SPU801)
+			  Nb maxi de signaux = 3
+	GNTNMD4     	: SIGNAUX BRUTS Q4A (48NH30, CFUL01, CFUM21)
+			  Nb maxi de signaux = 3
+	GNTNMD6     	: SIGNAUX BRUTS : Q6A (CFUL01 ,CFUM21-Cd)
+			  Nb maxi de signaux = 2
+	GNTNQ1B     	: Utiles pour Intel Tps Reel
+			  Nb maxi de signaux = 2
+	GNTNQ4A     	: Utile pour Intel Tps Reel
+			  Nb maxi de signaux = 2
+	GNTNQ5B     	: Utile pour Intel Tps Reel
+			  Nb maxi de signaux = 2
+	GNTNU8      	: SIGNAUX DES CF(U8) Q2A: SPU811, SPU821; Q4A: SPU811, SPU821
+			  Nb maxi de signaux = 4
+
+				----------------------
+
+DPC1        		: 
+	GCARTEM1    	: 
+			  Nb maxi de signaux = 4
+	GDATEM1     	: 
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+DPLASMA     		: 
+	GAPMODIR    	: 1-Arc_Cp1, 2-Arc_Cp2, 3-Ions Cp1, 4-Ions Cp2, 5-Grill Cp1, 6-Grill Cp2, 7-Pos_Cp1, 8-Pos-Cp2, 9-PuissQ1, 10-PuissQ2, 11-Puiss-Q5, 12-LH/Q1, 
+13-LH/Q2, 14-LH/Q5, 15,16-Libres
+			  Nb maxi de signaux = 16
+	GAPMODPHIEC 	: FCE phase actuator: 1) global signal; 2) for rho*Te ctrl; 3-10) ...
+			  Nb maxi de signaux = 10
+	GAPMODPHILH 	: LH phase actuator: 1) global signal; 2) for HXR width ctrl; 3-10) ...
+			  Nb maxi de signaux = 10
+	GAPMODPIC   	: FCI power actuator: 1) global signal; 2) ... ; 3) for rho*Te ctrl; 4-10) ...
+			  Nb maxi de signaux = 10
+	GAPMODPLH   	: LH power actuator: 1) global signal; 2) for MHD ctrl; 3) for HXR width ctrl; 4) for rho*Te ctrl; 5-10) ...
+			  Nb maxi de signaux = 10
+	GAPSCRATEST 	: Signals for scramnet test 
+			  Nb maxi de signaux = 10
+	GAPTEST     	: Signals for test purposes
+			  Nb maxi de signaux = 16
+	GDATEPLASMA 	: Date of APLASMA
+			  Nb maxi de signaux = 2
+	SAPABORT    	: Flag for a general abort state of APLASMA: 0 = OK; 1 = problems.
+	SAPMHDFLAG  	: Sum of MHD Flag (1 when MHD signal is over the threshold) and MHD Freeze (1 after delayT_MHD seconds the setting to 1 of MHD Flag - if MHD-CTRL == 1 - otherwise it is always 0)
+	SAPRTAPOLO  	: If 1 then RT_CTRL signal sent by APOLO, else 0 and no RT_CTRL
+
+				----------------------
+
+DPOLO       		: Asservissement poloidal !
+	GALIM       	: Alimentations : Utor, DItor, Itor, Ulpt, Ilpt, venant du Poloidal
+			  Nb maxi de signaux = 5
+	GBILAN      	: Bilan : 
+Pohm, Phyb, Pfci, Pfce, Ptot, Wdia, Taudia, Loi-TS,Vsurf, Ptot lisse, Prad
+			  Nb maxi de signaux = 11
+	GBTANG      	: Champ tangent a la surface a 0, 90, 180, 270 deg.
+			  Nb maxi de signaux = 4
+	GBTHPL      	: Champ Btheta a la surface plasma suivant les angles pilote.
+			  Nb maxi de signaux = 24
+	GCARTE      	: Carte Magnetique : 3*Bth, 3*Brd, flux, Index (0 a 16)
+			  Nb maxi de signaux = 8
+	GCOUBOB     	: Courant dans les bobines : A,Bh,Dh,Eh,Fh,Fb,Eb,Db,Bd.
+			  Nb maxi de signaux = 9
+	GDATPOL1    	: Date des acquisitions carte 1.
+			  Nb maxi de signaux = 2
+	GDATPOL2    	: Date des acquisitions carte 2.
+			  Nb maxi de signaux = 2
+	GDATPOL4    	: Date des acquisitions carte 4.
+			  Nb maxi de signaux = 2
+	GDATRAP     	: Date des acquisitions carte 3
+			  Nb maxi de signaux = 2
+	GDIAM       	: Mesures Diamagnetiques : F2,dF12,dItor,Utor
+			  Nb maxi de signaux = 4
+	GDRO        	: Erreurs de positions : observee - pilote.
+			  Nb maxi de signaux = 24
+	GFLUXNOY    	: Flux noyau bas, median,haut + Flux Plasma 
+			  Nb maxi de signaux = 4
+	GPLASMA     	: Dimensions plasma : R, Z, a, eps,tau, Xest, Contact,Rcontact,Glpt,Gext,amoy,bsura
+			  Nb maxi de signaux = 12
+	GPOLHYB     	: Facteur de modulation de la puissance hybride.
+			  Nb maxi de signaux = 2
+	GPOSLIM     	: Position Limiteur :  LPA, libre
+			  Nb maxi de signaux = 2
+	GQBELI      	: Donnees magnetiques : qpsi, beta, li, beta+li/2, D0, piqD0, j0, piqj0, Sh1, Sh2, la, Fdiam
+			  Nb maxi de signaux = 12
+	GRECE       	: Rayons d'absorption aux frequences du superheterodyne
+			  Nb maxi de signaux = 16
+	GRHO        	: Rayons plasma mesures suivant les angles pilote.
+			  Nb maxi de signaux = 24
+	GRPBBR      	: Mesures Rapides  : 26 BBR jante 1
+			  Nb maxi de signaux = 26
+	GRPBBT      	: Mesures Rapides  : 25 BBT jante 1
+			  Nb maxi de signaux = 25
+	GRPLPT      	: Mesures Rapides  : 4 BBT  & 1 Vloop sur LPT, Rogowski & shunt LPT,1 libre
+			  Nb maxi de signaux = 8
+	GRPMAG      	: Mesures Rapides  : Flux217, SV217, SVARIT, Flux Toroidal, MHD
+			  Nb maxi de signaux = 5
+	GSRBBR      	: Mesures Semi-Rapides  : 51*Brd de 0 a 353.3 deg
+			  Nb maxi de signaux = 51
+	GSRBBT      	: Mesures Semi-Rapides  : 51*Bth de 0 a 353.3 deg
+			  Nb maxi de signaux = 51
+	GSRMAG      	: Mesures Semi-Rapides  : Flux, SV217, SItor, Sd2, MHD, Sd12, SUtor, 3*FluxNoy
+			  Nb maxi de signaux = 10
+	GSRPOL      	: Mesures Semi-Rapides  : IG0 & 9 Ibob & 9 Wmes.
+			  Nb maxi de signaux = 19
+	GTENGMES    	: Tensions mesurees : G0,G1h,G2h,G3h,G4h,G4b,G3b,G2b,G1b.
+			  Nb maxi de signaux = 9
+	GTENGREF    	: Tensions calculees : G0,G1h,G2h,G3h,G4h,G4b,G3b,G2b,G1b.
+			  Nb maxi de signaux = 9
+	GTESTPOL    	: Signaux variables utilises lors des tests.
+			  Nb maxi de signaux = 16
+	SCHRONO     	: Chronogramme du choc
+	SECURITE    	: Arrets et Securites (bit a bit)
+	SFLUXPL     	: Flux plasma a la frontiere.
+	SIG0        	: Courant du generateur G0.
+	SIPMES      	: Courant plasma calcule.
+	SMHD        	: Signal MHD (sonde de Mirnov).
+	STPSCYCL    	: Mesure temps de cycle CPU1.
+	SV217       	: Tension par Tour mesuree a 217 deg.
+
+				----------------------
+
+DPROCI      		: 
+	GDATEPROCI  	: 
+			  Nb maxi de signaux = 2
+	GTEST296    	: Groupement pour test des 24 voies (4 cartes icv296).
+			  Nb maxi de signaux = 24
+
+				----------------------
+
+DREFLEC     		: 
+	FMESURE1    	: Données VOIE 1 ETEP pour le 50-75.
+	FMESURE2    	: Données VOIE 2 ETEP pour le 50-75.
+	FMESURE3    	: Données VOIE 3 ETEP pour le 75-110.
+	FMESURE4    	: Données VOIE 4 ETEP pour le 75-110.
+	FTRIG       	: Données des triggers ETEP et LC334 .
+	FTRIG02     	: Données des triggers ETEP  voie 2 (datation) .
+	FTRIG03     	: Données des triggers ETEP  voie 3 (datation) .
+	FTRIG04     	: Données des triggers ETEP  voie 4 (datation) .
+
+				----------------------
+
+DREFLECH    		: 
+	FIQ1        	: Donnees voie 1 
+	FIQ2        	: Donnees voie 2 
+	FTRIGG      	: Donnees Trigger ETEP  voie1
+
+	FTRIGG2     	: Donnees Trigger ETEP  voie2
+
+
+				----------------------
+
+DREFLUC     		: 
+	FCOSD1      	: 
+	FCOSD2      	: 
+	FDATEETEP   	: 
+	FDATEETEP2  	: 
+	FDATEREFLUC 	: 
+	FETEPCOSD1  	: 
+	FETEPSIND1  	: 
+	FSIND1      	: 
+	FSIND2      	: 
+	SBIDON1     	: 
+
+				----------------------
+
+DREFRAP     		: 
+	FREFRAP     	: 
+	GDATEREFRAP 	: 
+			  Nb maxi de signaux = 2
+	GREFRAP1    	: 
+			  Nb maxi de signaux = 4
+
+				----------------------
+
+DREVE       		: 
+	GDATEREVE_L 	: 
+			  Nb maxi de signaux = 2
+	GTREVE      	: 
+			  Nb maxi de signaux = 4
+	GTREVE      	: 
+			  Nb maxi de signaux = 4
+
+				----------------------
+
+DRIPPLE     		: modification CIEL 15 mai 2001
+	GDATERIPPLE 	: VOIES DATE
+			  Nb maxi de signaux = 2
+	GELEC       	: courant electronique
+			  Nb maxi de signaux = 12
+	GKEPCO      	: Courant Alimentation + tension de polarisation
+1-2-3 : cote electronique
+			  Nb maxi de signaux = 3
+	GRAPI       	: acquisition rapide des courants
+			  Nb maxi de signaux = 8
+
+				----------------------
+
+DSIR        		: ACQUISITION DE SPECTRES UV
+	FDATEDSIR1  	: Datation spectres détecteur 1
+	FDATEDSIR2  	: Datation spectres détecteur 2
+	FDSIR1      	: Spectres détecteur 1
+	FDSIR2      	: Spectres détecteur 2
+	FSIR_SCRAM  	: 
+	FTRSIR      	: 
+	GDATEDSIR1  	: Datation haute tension
+			  Nb maxi de signaux = 2
+	GDATEDSIR2  	: Datation position verin
+			  Nb maxi de signaux = 2
+	GHTDSIR1    	: haute tension format  prétraité --> Volts HT
+			  Nb maxi de signaux = 4
+	STCAMDSIR   	: Temperature camera DSIR
+	SVERINDSIR1 	: Position verin
+
+				----------------------
+
+DSPX        		: SPECTROMETRIE HAUTE ENERGIE
+	GRX01       	: Detecteur numero 1  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX02       	: Detecteur numero 2  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX03       	: Detecteur numero 3  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX04       	: Detecteur numero 4  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX05       	: Detecteur numero 5  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX06       	: Detecteur numero 6  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX07       	: Detecteur numero 7  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX08       	: Detecteur numero 8  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX09       	: Detecteur numero 9  - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX10       	: Detecteur numero 10 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX11       	: Detecteur numero 11 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX12       	: Detecteur numero 12 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX13       	: Detecteur numero 13 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX14       	: Detecteur numero 14 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX15       	: Detecteur numero 15 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX16       	: Detecteur numero 16 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX17       	: Detecteur numero 17 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX18       	: Detecteur numero 18 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX19       	: Detecteur numero 19 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX20       	: Detecteur numero 20 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX21       	: Detecteur numero 21 - Camera verticale
+			  Nb maxi de signaux = 8
+	GRX22       	: Detecteur numero 22 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX23       	: Detecteur numero 23 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX24       	: Detecteur numero 24 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX25       	: Detecteur numero 25 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX26       	: Detecteur numero 26 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX27       	: Detecteur numero 27 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX28       	: Detecteur numero 28 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX29       	: Detecteur numero 29 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX30       	: Detecteur numero 30 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX31       	: Detecteur numero 31 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX32       	: Detecteur numero 32 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX33       	: Detecteur numero 33 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX34       	: Detecteur numero 34 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX35       	: Detecteur numero 35 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX36       	: Detecteur numero 36 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX37       	: Detecteur numero 37 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX38       	: Detecteur numero 38 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX39       	: Detecteur numero 39 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX40       	: Detecteur numero 40 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX41       	: Detecteur numero 41 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX42       	: Detecteur numero 42 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX43       	: Detecteur numero 43 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX44       	: Detecteur numero 44 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX45       	: Detecteur numero 45 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX46       	: Detecteur numero 46 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX47       	: Detecteur numero 47 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX48       	: Detecteur numero 48 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX49       	: Detecteur numero 49 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX50       	: Detecteur numero 50 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX51       	: Detecteur numero 51 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX52       	: Detecteur numero 52 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX53       	: Detecteur numero 53 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX54       	: Detecteur numero 54 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX55       	: Detecteur numero 55 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX56       	: Detecteur numero 56 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX57       	: Detecteur numero 57 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX58       	: Detecteur numero 58 - Camera horizontale
+			  Nb maxi de signaux = 8
+	GRX59       	: Detecteur numero 59 - Camera horizontale
+			  Nb maxi de signaux = 8
+
+				----------------------
+
+DSTARK      		: PS
+	FSTARK      	: Fichier de donnees pour le acquisitions
+	GDATESPARK  	: Datation des spectres
+			  Nb maxi de signaux = 2
+	SSTARKTEST  	: 
+
+				----------------------
+
+DSTD1       		: Diagnostic standard num1
+	GDATSTD1    	: 2 voies date
+
+			  Nb maxi de signaux = 2
+	GPARASIT    	: 
+			  Nb maxi de signaux = 2
+	GPOLARIS    	: mesures polarisation du LPT 
+			  Nb maxi de signaux = 30
+	GPOLARIS2   	: mesures polarisation du LPT  aprés casse LDC
+			  Nb maxi de signaux = 3
+	GTRIPFCI    	: 6 signaux sonde de langmuir FCI
+
+			  Nb maxi de signaux = 6
+	GVERIN      	: 7 signaux : 6 contraintes verins LPT, 1 contrainte referemce
+
+			  Nb maxi de signaux = 7
+	GXDURS      	: (I , J , O) ,I=1(NaI) ,2(CsI) , 3(verre); J=1(Q1),2(Q2) ,3(Q5)
+			  Nb maxi de signaux = 9
+	STEST1      	: SIGNAL TEST voie 43
+	STEST2      	: SIGNAL TEST voie 44
+
+
+				----------------------
+
+DSTD2       		: Diagnostic barometrie, Spectrometries de masse
+	GBARATLPT   	: signaux baratrons du LPT en Q6A Q6B Q2A Q2B  Q3B Q4A Q4B Q5A Q5B Q6B_N627 Q6B_P627
+
+			  Nb maxi de signaux = 20
+	GBARLPTP    	: signaux baratrons du LPT sur vide entretien TS Q3 et Q5
+			  Nb maxi de signaux = 4
+	GMASSP3Q6B  	: Signaux des 15 masses du spectro de masse n°3 localisé en Q6B (LPT)
+			  Nb maxi de signaux = 15
+	GPARA2      	: signaux  parasites FCI
+			  Nb maxi de signaux = 2
+	GPENLPT     	: Signaux du PM,Photodiode et courant Penning du LPT  en  Q6A et Q6B
+
+			  Nb maxi de signaux = 6
+	SBARASP3Q6B 	: Pression totale absolue dans l'enceinte Spectro 3 (Jauge Baratron)
+	SFCI        	: SIGNAL FCI  MESURE AVEC SONDE EN MODULE 6
+	SJBASP3Q6B  	: jauge BA spectro 3 Q6B
+	SRAMISP3Q6B 	: signal rampe de masse  du spectro 3 Q6B isole par conditionneur U=10 V  i 4-20 mA
+
+	SRAMPSP3Q6B 	: Signal de balayage en masse du Spectro 3 localisé en Q6B (LPT)
+	SSPECSP3Q6B 	: Signal voie 0 du spectro n°3 localisé en Q6B - LPT (spectre  continu)
+
+				----------------------
+
+DSURVIE     		: 
+	GDATESURVIE 	: Voie de date
+			  Nb maxi de signaux = 2
+	SC4         	: 
+	SCU19       	: 
+	SFC4        	: 
+	SFCU19      	: 
+	SFDC4       	: 
+	SFE15       	: 
+	SFFE15      	: 
+	SSURVIE1    	: 
+
+				----------------------
+
+DTHOM       		: DIFFUSION THOMSON (VME)
+	GBACK1      	: Signaux Thomson spectro 1 background +60.5Cm
+			  Nb maxi de signaux = 3
+	GBACK10     	: Signaux Thomson spectro 10 background -38.5Cm
+			  Nb maxi de signaux = 3
+	GBACK11     	: Signaux Thomson spectro 11 background -49.5Cm
+			  Nb maxi de signaux = 3
+	GBACK12     	: Signaux Thomson spectro 12 background -60.5Cm
+			  Nb maxi de signaux = 3
+	GBACK2      	: Signaux Thomson spectro 2 background  +49.5Cm
+			  Nb maxi de signaux = 3
+	GBACK3      	: Signaux Thomson spectro 3 background +38.5Cm
+			  Nb maxi de signaux = 3
+	GBACK4      	: Signaux Thomson spectro 4 background +27.5Cm
+			  Nb maxi de signaux = 3
+	GBACK5      	: Signaux Thomson spectro 5 background +16.5Cm
+			  Nb maxi de signaux = 3
+	GBACK6      	: Signaux Thomson spectro 6 background +5.5Cm
+			  Nb maxi de signaux = 3
+	GBACK7      	: Signaux Thomson spectro 7 background -5.5Cm
+			  Nb maxi de signaux = 3
+	GBACK8      	: Signaux Thomson spectro 8 background -16.5Cm
+			  Nb maxi de signaux = 3
+	GBACK9      	: Signaux Thomson spectro 9 background -27.5Cm
+			  Nb maxi de signaux = 3
+	GBMON       	: Voie moniteur laser offset
+			  Nb maxi de signaux = 1
+	GDATETHOMSON	: Voie Datation DTHOM (simul icv101)
+			  Nb maxi de signaux = 2
+	GMON        	: Voie moniteur laser
+			  Nb maxi de signaux = 1
+	GSPEC1      	: Signaux Thomson spectro 1 YAG +60.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC10     	: Signaux Thomson spectro 10 nv proto YAG -38.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC11     	: Signaux Thomson spectro 11 YAG -49.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC12     	: Signaux Thomson spectro 12 YAG -60.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC2      	: Signaux Thomson spectro 2 YAG +49.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC3      	: Signaux Thomson spectro 3 YAG +38.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC4      	: Signaux Thomson spectro 4 YAG +27.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC5      	: Signaux Thomson spectro 5 YAG +16.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC6      	: Signaux Thomson spectro 6 YAG +5.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC7      	: Signaux Thomson spectro 7 YAG -5.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC8      	: Signaux Thomson spectro 8 YAG -16.5Cm
+			  Nb maxi de signaux = 3
+	GSPEC9      	: Signaux Thomson spectro 9 YAG -27.5Cm
+			  Nb maxi de signaux = 3
+
+				----------------------
+
+DTOMOX      		: Diagnostic X mous
+	FDATETEP1   	: Fichier de donnees date pour carte ETEP 1 
+	FDATETEP2   	: Fichier de donnees date pour carte ETEP 2
+	FDATETEP3   	: Fichier de donnees date pour carte ETEP 3
+	FDATETEP4   	: Fichier de donnees date pour carte ETEP 4
+	FDATETEP5   	: Fichier de donnees date pour carte ETEP 5
+	FDATETEP6   	: Fichier de donnees date pour carte ETEP 6
+	FETEP1      	: Fichier de donnees pour voie de mesure pour carte ETEP 1 
+	FETEP2      	: Fichier de donnees pour voie de mesure pour carte ETEP 2
+	FETEP3      	: Fichier de donnees pour voie de mesure pour carte ETEP 3
+	FETEP4      	: Fichier de donnees pour voie de mesure pour carte ETEP 4
+	FETEP5      	: Fichier de donnees pour voie de mesure pour carte ETEP 5
+	FETEP6      	: Fichier de donnees pour voie de mesure pour carte ETEP 6
+	GDATETEP1   	: Date de la premiere carte ETEP
+			  Nb maxi de signaux = 2
+	GDATETEP2   	: Date de la seconde carte ETEP
+			  Nb maxi de signaux = 2
+	GDATETEP3   	: Date de la premiere carte ETEP
+			  Nb maxi de signaux = 2
+	GDATETEP4   	: Date de la seconde carte ETEP
+			  Nb maxi de signaux = 2
+	GDATETEP5   	: Date de la premiere carte ETEP
+			  Nb maxi de signaux = 2
+	GDATETEP6   	: Date de la seconde carte ETEP
+			  Nb maxi de signaux = 2
+	GDATETOMOX  	: Date de la premiere 101 virtuelle
+			  Nb maxi de signaux = 2
+	GTEMPCAM    	: 3 voies de mesure temperature camera
+			  Nb maxi de signaux = 3
+	GTESTETEP1  	: Valeurs possibles pour le gain : 1, 2, 5 ou 10.
+			  Nb maxi de signaux = 32
+	GTESTETEP2  	: Valeurs possibles pour le gain : 1, 2, 5 ou 10.
+			  Nb maxi de signaux = 32
+	GTESTETEP3  	: Valeurs possibles pour le gain : 1, 2, 5 ou 10.
+			  Nb maxi de signaux = 32
+	GTXMH1      	: Camera Horizontale partie 1 (gain : 1, 2, 5 ou 10).
+			  Nb maxi de signaux = 28
+	GTXMH2      	: Camera Horizontale partie 2 (gain : 1, 2, 5 ou 10).
+			  Nb maxi de signaux = 17
+	GTXMO       	: Camera Oblique (gain : 1, 2, 5 ou 10).
+			  Nb maxi de signaux = 6
+	GTXMTB      	: Mesures Temperature Baie.
+			  Nb maxi de signaux = 4
+	GTXMTEST    	: Voies de test.
+			  Nb maxi de signaux = 5
+	GTXMV       	: Camera verticale (gain : 1, 2, 5 ou 10).
+			  Nb maxi de signaux = 31
+	SPOLAR      	: tension de polarisation des detecteurs
+
+				----------------------
+
+DTORO       		: Systeme de champ Toroidal
+	GDATESECU   	: Voies date DTORO (carte secu)
+			  Nb maxi de signaux = 2
+	GDATETORO   	: Voes date DTORO (carte toroidal)
+			  Nb maxi de signaux = 2
+	GDELTAV     	: Tension Delta V BT4,BT5,BT6,BT11,BT14,BT16
+			  Nb maxi de signaux = 6
+	GIRP        	: Courants dans les branches paralleles ( IRP )
+			  Nb maxi de signaux = 18
+	GITORO      	: Courants alimentation et bobines toroïdales, masse machine
+			  Nb maxi de signaux = 3
+	GNIVL       	: Mesures Niveaux liquides
+			  Nb maxi de signaux = 24
+	GPRESSIONA  	: Mesures pressions A 
+			  Nb maxi de signaux = 18
+	GPRESSIONB  	: Mesures pressions  B
+			  Nb maxi de signaux = 18
+	GPRESSIONS  	: Mesures pressions A et B
+			  Nb maxi de signaux = 36
+	GSECU       	: Secus
+			  Nb maxi de signaux = 4
+	GTEJV       	: Températures Echangeurs et jonctions verticales
+			  Nb maxi de signaux = 5
+	GTEMP       	: Températures amenées de courant
+			  Nb maxi de signaux = 18
+	GVBT        	: Basses tensions sur les bobines toroidales
+			  Nb maxi de signaux = 18
+	GVHT        	: Hautes tensions sur les bobines toroidales
+			  Nb maxi de signaux = 18
+	SCYCTORO    	: temps cycle cpu2
+	SVALIM      	: Tension alimentation toroïdale
+
+				----------------------
+
+DTURB       		: 
+	FETEP101    	: 
+	FETEP102    	: 
+	FETEP103    	: 
+	FETEP104    	: 
+	FETEP105    	: 
+	FETEP106    	: 
+	FETEP107    	: 
+	FETEP108    	: 
+	FETEP109    	: 
+	FETEP110    	: 
+	FETEP111    	: 
+	FETEP112    	: 
+	FETEP113    	: 
+	FETEP114    	: 
+	FETEP115    	: 
+	FETEP116    	: 
+	FETEP1DATE  	: 
+	FETEP201    	: 
+	FETEP202    	: 
+	FETEP203    	: 
+	FETEP204    	: 
+	FETEP205    	: 
+	FETEP206    	: 
+	FETEP207    	: 
+	FETEP208    	: 
+	FETEP209    	: 
+	FETEP210    	: 
+	FETEP211    	: 
+	FETEP212    	: 
+	FETEP213    	: 
+	FETEP214    	: 
+	FETEP215    	: 
+	FETEP216    	: 
+	FETEP2DATE  	: 
+	GDATE150    	: 
+			  Nb maxi de signaux = 2
+	GDATEDTURBL1	: Datation voies CT carte ETEP 1
+			  Nb maxi de signaux = 2
+	GDATEDTURBL2	: Datation voies CT carte ETEP 2
+			  Nb maxi de signaux = 2
+	GDATEDTURBL3	: Datation voies gains et modes
+			  Nb maxi de signaux = 2
+	GETATPIV    	: etat sondes pivert
+			  Nb maxi de signaux = 2
+	GIBOB       	: courant bobine sondes pivert [A]
+			  Nb maxi de signaux = 2
+	GIFDC       	: courant etrier pour detection fin de course sondes pivert
+			  Nb maxi de signaux = 2
+	GRP1        	: groupe des 16 voies lentes ETEP1
+			  Nb maxi de signaux = 16
+	GRP2        	: groupe des 16 voies lentes ETEP2
+			  Nb maxi de signaux = 16
+	GTEST150    	: Groupe pour test 16 voies ICV150
+			  Nb maxi de signaux = 16
+	GTESTVL1    	: groupe des 16 voies lentes ETEP1
+			  Nb maxi de signaux = 16
+	GTESTVL2    	: groupe des 16 voies lentes ETEP2
+			  Nb maxi de signaux = 16
+	GUBOB       	: tension bobine (sortie KEPCO 36V/12A) sondes pivert
+			  Nb maxi de signaux = 2
+	GUCOMBOB    	: tension commande KEPCOs bobines pivert
+			  Nb maxi de signaux = 2
+	GVPIV       	: vitesse sondes pivert
+			  Nb maxi de signaux = 2
+	GXPIV       	: position sondes pivert [mm]
+			  Nb maxi de signaux = 2
+	SGAINS1     	: voie gains des 8 amplis Isat  connectés ETEP1
+	SGAINS2     	: voie gains des 8 amplis Isat  connectés ETEP2
+	SMODES1     	: voie du Mode des pinoches sonde 1
+	SUFDC       	: tension alim detection fin de course sondes pivert
+
+				----------------------
+
+DUST        		: 
+	GTDATE0     	: 
+			  Nb maxi de signaux = 2
+	GTDATE0-C   	: 
+			  Nb maxi de signaux = 2
+	GTDATE01    	: 
+			  Nb maxi de signaux = 2
+	GTDATE01-C  	: 
+			  Nb maxi de signaux = 2
+	GTDUST0     	: 
+			  Nb maxi de signaux = 48
+	GTDUST0-C   	: 
+			  Nb maxi de signaux = 48
+	GTDUST01    	: 
+			  Nb maxi de signaux = 48
+	GTDUST01-C  	: 
+			  Nb maxi de signaux = 48
+
+				----------------------
+
+DVCAMIR     		: 
+	FLUMV12_01  	: Fichier masque pour VME camera 01
+	FLUMV12_02  	: Fichier masque pour VME camera 02
+	FLUMV12_03  	: Fichier masque pour VME camera 03
+	FLUMV12_04  	: Fichier masque pour VME camera 04
+	FLUMV12_05  	: Fichier masque pour VME camera 05
+	FLUMV12_06  	: Fichier masque pour VME camera 06
+	FLUMV12_07  	: Fichier masque pour VME camera 07
+	FLUMV12_08  	: Fichier masque pour VME camera 08
+	FLUMV12_09  	: Fichier masque pour VME camera 09
+	FLUMV12_10  	: Fichier masque pour VME camera 10
+	FLUMV12_11  	: Fichier masque pour VME camera 11
+	FLUMV12_12  	: Fichier masque pour VME camera 12
+	GAL_LUMV01  	: Flags alarmes et pre-alarmes LUMV01
+			  Nb maxi de signaux = 2
+	GAL_LUMV02  	: Flags alarmes et pre-alarmes LUMV02
+			  Nb maxi de signaux = 2
+	GAL_LUMV03  	: Flags Alarmes et pre-alarmes LUMV03
+			  Nb maxi de signaux = 2
+	GAL_LUMV04  	: Flags alarmes et pre-alarmes LUMV04
+			  Nb maxi de signaux = 2
+	GAL_LUMV05  	: Flags alarmes et pre-alarmes LUMV05
+			  Nb maxi de signaux = 2
+	GAL_LUMV06  	: Flags alarmes et pre-alarmes LUMV06
+			  Nb maxi de signaux = 2
+	GAL_LUMV07  	: Flags alarmes et pre-alarmes LUMV07
+			  Nb maxi de signaux = 2
+	GAL_LUMV08  	: Flags alarmes et  pre-alarmes LUMV08
+			  Nb maxi de signaux = 2
+	GAL_LUMV09  	: Flags alarmes et pre-alarmes LUMV09
+			  Nb maxi de signaux = 2
+	GAL_LUMV10  	: Flags alarmes et pre-alarmes LUMV10
+			  Nb maxi de signaux = 2
+	GAL_LUMV11  	: Flags alarmes et pre-alarmes LUMV11
+			  Nb maxi de signaux = 2
+	GAL_LUMV12  	: Flags alarmes pre-alarmes LUMV12
+			  Nb maxi de signaux = 2
+	GARC        	: Detection d'arc sur coupleurs C3 et C4 (0/1)
+			  Nb maxi de signaux = 2
+	GDATEVCAMIR 	: Voies de datattion pour la remontée de données
+			  Nb maxi de signaux = 2
+	GNPM_LUMV01 	: Nombre de pixels max. des 16 zones de la carte LUMV01
+			  Nb maxi de signaux = 16
+	GNPM_LUMV02 	: Nombre de pixels max. des 16 zones de la carte LUMV02
+			  Nb maxi de signaux = 16
+	GNPM_LUMV03 	: Nombre de pixels max. des 16 zones de la carte LUMV03
+			  Nb maxi de signaux = 16
+	GNPM_LUMV04 	: Nombre de pixels max. des 16 zones de la carte LUMV04
+			  Nb maxi de signaux = 16
+	GNPM_LUMV05 	: Nombre de pixels max. des 16 zones de la carte LUMV05
+			  Nb maxi de signaux = 16
+	GNPM_LUMV06 	: Nombre de pixels max. des 16 zones de la carte LUMV06
+			  Nb maxi de signaux = 16
+	GNPM_LUMV07 	: Nombre de pixels max. des 16 zones de la carte LUMV07
+			  Nb maxi de signaux = 16
+	GNPM_LUMV08 	: Nombre de pixels max. des 16 zones de la carte LUMV08
+			  Nb maxi de signaux = 16
+	GNPM_LUMV09 	: Nombre de pixels max. des 16 zones de la carte LUMV09
+			  Nb maxi de signaux = 16
+	GNPM_LUMV10 	: Nombre de pixels max. des 16 zones de la carte LUMV10
+			  Nb maxi de signaux = 16
+	GNPM_LUMV11 	: Nombre de pixels max. des 16 zones de la carte LUMV11
+			  Nb maxi de signaux = 16
+	GNPM_LUMV12 	: Nombre de pixels max. des 16 zones de la carte LUMV12
+			  Nb maxi de signaux = 16
+	GNUP_LUMV01 	: Numéro pixel max. des 16 zones de la carte LUMV01
+			  Nb maxi de signaux = 32
+	GNUP_LUMV02 	: Numéro pixel max. des 16 zones de la carte LUMV02
+			  Nb maxi de signaux = 32
+	GNUP_LUMV03 	: Numéro pixel max. des 16 zones de la carte LUMV03
+			  Nb maxi de signaux = 32
+	GNUP_LUMV04 	: Numéro pixel max. des 16 zones de la carte LUMV04
+			  Nb maxi de signaux = 32
+	GNUP_LUMV05 	: Numéro pixel max. des 16 zones de la carte LUMV05
+			  Nb maxi de signaux = 32
+	GNUP_LUMV06 	: Numéro pixel max. des 16 zones de la carte LUMV06
+			  Nb maxi de signaux = 32
+	GNUP_LUMV07 	: Numéro pixel max. des 16 zones de la carte LUMV07
+			  Nb maxi de signaux = 32
+	GNUP_LUMV08 	: Numéro pixel max. des 16 zones de la carte LUMV08
+			  Nb maxi de signaux = 32
+	GNUP_LUMV09 	: Numéro pixel max. des 16 zones de la carte LUMV09
+			  Nb maxi de signaux = 32
+	GNUP_LUMV10 	: Numéro pixel max. des 16 zones de la carte LUMV10
+			  Nb maxi de signaux = 32
+	GNUP_LUMV11 	: Numéro pixel max. des 16 zones de la carte LUMV11
+			  Nb maxi de signaux = 32
+	GNUP_LUMV12 	: Numéro pixel max. des 16 zones de la carte LUMV12
+			  Nb maxi de signaux = 32
+	GTEST_VIR   	: Signaux test de DVCAMIR
+			  Nb maxi de signaux = 16
+	GVM_LUMV01  	: Valeur max. des 16 zones de la carte LUMV01
+			  Nb maxi de signaux = 16
+	GVM_LUMV02  	: Valeur max. des 16 zones de la carte LUMV02
+			  Nb maxi de signaux = 16
+	GVM_LUMV03  	: Valeur max. des 16 zones de la carte LUMV03
+			  Nb maxi de signaux = 16
+	GVM_LUMV04  	: Valeur max. des 16 zones de la carte LUMV04
+			  Nb maxi de signaux = 16
+	GVM_LUMV05  	: Valeur max. des 16 zones de la carte LUMV05
+			  Nb maxi de signaux = 16
+	GVM_LUMV06  	: Valeur max. des 16 zones de la carte LUMV06
+			  Nb maxi de signaux = 16
+	GVM_LUMV07  	: Valeur max. des 16 zones de la carte LUMV07
+			  Nb maxi de signaux = 16
+	GVM_LUMV08  	: Valeur max. des 16 zones de la carte LUMV08
+			  Nb maxi de signaux = 16
+	GVM_LUMV09  	: Valeur max. des 16 zones de la carte LUMV09
+			  Nb maxi de signaux = 16
+	GVM_LUMV10  	: Valeur max. des 16 zones de la carte LUMV10
+			  Nb maxi de signaux = 16
+	GVM_LUMV11  	: Valeur max. des 16 zones de la carte LUMV11
+			  Nb maxi de signaux = 16
+	GVM_LUMV12  	: Valeur max. des 16 zones de la carte LUMV12
+			  Nb maxi de signaux = 16
+	SDEFAUT_LUMV	: Signal qui passe a 1 si un code trop chaud n'a pas ete emit à ORIGINE
+
+				----------------------
+
+DVECE       		: Voies de datation carte CPU2 reelle 1
+	GDATEVECE2  	: Voies de datation carte CPU2 reelle 1
+			  Nb maxi de signaux = 2
+	GDATEVECE3  	: Voies de datation carte CPU2 reelle 1
+			  Nb maxi de signaux = 2
+	GDATEVECE4  	: Voies de datation carte CPU2 reelle 1
+			  Nb maxi de signaux = 2
+	GDDS        	: calcul des dents de scie 1-Flag   2- periode dent de scie   3- rayon inferieur             4- rayon superieur. ICV101_4
+			  Nb maxi de signaux = 4
+	GTRSHR      	: groupe de 32 voies de mesure temps reel du rayon plasma ICV101_4.
+			  Nb maxi de signaux = 32
+	GTRSHTE     	: groupe de 32 voies de mesure temps reel de la temperature plasma ICV101_3
+			  Nb maxi de signaux = 32
+	GVSH1       	: Groupe voies de mesure lentes cartes ICV128 CPU2 -> 1 à 8  ICV101_2
+			  Nb maxi de signaux = 8
+	GVSH2       	: Groupe voies de mesure lentes cartes ICV128 CPU2 -> 9 à 16. ICV101_2.
+			  Nb maxi de signaux = 8
+	GVSH3       	: Groupe voies de mesure lentes cartes ICV128 CPU2 -> 17 à 24. ICV101_2.
+			  Nb maxi de signaux = 8
+	GVSH4       	: Groupe voies de mesure lentes cartes ICV128 CPU2 -> 25 à 32. ICV101_2.
+			  Nb maxi de signaux = 8
+	GVSHTEMP    	: Température du radiométre carte ICV150 CPU2 ICV101_3
+			  Nb maxi de signaux = 2
+	SCODE_ERR   	: Code Error  calcul  du RhoTe ICV101_4
+	SRHOT       	: calcul temps reel  max RhoTe ICV101_4
+
+				----------------------
+
+DVIDEO      		: Acquisition avec compression MPEG1 d'une source video (IR ou visible)
+	FBIDON      	: 
+	FBIDON      	: 
+	FMPG01      	: Fichier MPEG generique numero 1 (camera et  endoscope indetermines)
+	FMPG02      	: Fichier MPEG generique numero 2(camera et  endoscope indetermines)
+	FMPG03      	: Fichier MPEG generique numero 3 (camera et  endoscope indetermines)
+	FMPG04      	: Fichier MPEG generique numero 4(camera et  endoscope indetermines)
+	FMPG05      	: Fichier MPEG generique numero 5(camera et  endoscope indetermines)
+	FMPG06      	: Fichier MPEG generique numero 6(camera et  endoscope indetermines)
+	FMPG07      	: Fichier MPEG generique numero 7(camera et  endoscope indetermines)
+	FMPG08      	: Fichier MPEG type2 pour CCD pilotage-glacons
+
+				----------------------
+
+DVIS        		: 
+	GDATEVIS2   	: 
+			  Nb maxi de signaux = 2
+	GDATE_VIS   	: date de la carte ICV101 --32 bits-- sur Horloge de base 8 Mhz si Hinterne)
+(1er element :16 bits de poids fort---deuxieme element : 16 bits de poids faible)
+			  Nb maxi de signaux = 2
+	GFIL        	: 32 VOIES SPECTRO A FILTRE
+configuration de la carte ICV120:
+J1: voies 97 a 112  --- J2: voies 113 a 128 --- J3: voies 129 a 144
+			  Nb maxi de signaux = 32
+	GTESTVIS2   	: 
+			  Nb maxi de signaux = 16
+	GTESTVIS2   	: Voies HALPHA 1 à 4 
+			  Nb maxi de signaux = 16
+	GZEFF       	: 24 VOIES :DE 1 A 9 Q5 HALPHA  :DE 11 A 19 Q1 ZEFF
+Un probleme sur le chassis de comptage (defaut de decodage d'adresse) impose un transfert des voies 17 a 24 vers les voies de 33 a 40 .
+			  Nb maxi de signaux = 24
+	GZEFF       	: 24 VOIES :DE 5 A 10 Q5 HALPHA  :DE 11 A 19 Q1 ZEFF
+Un probleme sur le chassis de comptage (defaut de decodage d'adresse) impose un transfert des voies 17 a 24 vers les voies de 33 a 40 .
+			  Nb maxi de signaux = 24
+
+				----------------------
+
+DVISB       		: PS
+	FVISB0      	: 
+	GDATEVISB   	: Datation des spectres du spectro bleu
+			  Nb maxi de signaux = 2
+	GDATEVISB   	: 
+			  Nb maxi de signaux = 2
+	SCAMPIB1    	: 
+	SCAMPIB1    	: 
+	SCAMPIB10   	: 
+	SCAMPIB11   	: 
+	SCAMPIB12   	: 
+	SCAMPIB13   	: 
+	SCAMPIB14   	: 
+	SCAMPIB15   	: 
+	SCAMPIB2    	: 
+	SCAMPIB2    	: 
+	SCAMPIB3    	: 
+	SCAMPIB3    	: 
+	SCAMPIB4    	: 
+	SCAMPIB4    	: 
+	SCAMPIB5    	: 
+	SCAMPIB5    	: 
+	SCAMPIB6    	: 
+	SCAMPIB6    	: 
+	SCAMPIB7    	: 
+	SCAMPIB7    	: 
+	SCAMPIB8    	: 
+	SCAMPIB8    	: 
+	SCAMPIB9    	: 
+	SCAMPIB9    	: 
+
+				----------------------
+
+DVISCCD     		: 
+	FB1         	: 
+	FB2         	: 
+	FB3         	: 
+	FB4         	: 
+	FBID        	: 
+	FDATEV0     	: 
+	FDATEV1     	: 
+	FDATEV2     	: 
+	FDATEV3     	: 
+	FVIS0       	: 
+	FVIS1       	: 
+	FVIS2       	: 
+	FVIS3       	: 
+	GTESTVIS    	: 
+			  Nb maxi de signaux = 3
+
+				----------------------
+
+DVISR       		: 
+	GDATEVISR   	: Datation des spectres du spectro rouge
+			  Nb maxi de signaux = 2
+	SCAMPIR1    	: 
+	SCAMPIR1    	: 
+	SCAMPIR2    	: 
+	SCAMPIR2    	: 
+	SCAMPIR3    	: 
+	SCAMPIR3    	: 
+	SCAMPIR4    	: 
+	SCAMPIR4    	: 
+	SCAMPIR5    	: 
+	SCAMPIR5    	: 
+	SCAMPIR6    	: 
+	SCAMPIR6    	: 
+	SCAMPIR7    	: 
+	SCAMPIR7    	: 
+	SCAMPIR8    	: 
+	SCAMPIR8    	: 
+	SCAMPIR9    	: 
+	SCAMPIR9    	: 
+
+				----------------------
+
+DVME1       		: Test de diagnostics en VME
+	GCARTE1     	: Voies PXI carte1
+			  Nb maxi de signaux = 4
+	GDATEC1     	: Date carte PXI 1
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+DVSPX       		: 
+	GCALVSPX    	: 1) Chord ratio (see Top for the chosen chords); 2) calSPX error code; 3) photon temperature of chord 41; 4) quality factor of the previous temp; 5) Quality flag for calPHT (0 = OK, 1 = problems); 6) calPHT error code.
+			  Nb maxi de signaux = 6
+	GDATEVSPXTST	: Voies de datation pour la remontee de donnees
+			  Nb maxi de signaux = 2
+	GPROFCHKVSPX	: 1) Quality flag of the HXR profile (0 = good, 1 = problems); 2) chi2 between the raw meas. and the rec. ones (derived from the not corrected profile, not saved into the database); 3) chi2 between the raw meas. and the rec. ones (derived from the corrected HXR profile, saved in the database.
+			  Nb maxi de signaux = 3
+	GPROFILEVSPX	: HXR profile. The profile is corrected, which means that the bump after 0.7 is removed.
+			  Nb maxi de signaux = 28
+	GRECVSPX    	: Reconstructed line integrated measurements, derived from the not corrected profile. 
+			  Nb maxi de signaux = 59
+	GTSTVSPX    	: Places for test signals.
+			  Nb maxi de signaux = 4
+	GVRX01      	: Signaux de comptage REJETEES carte 01 voie 01
+			  Nb maxi de signaux = 7
+	GVRX02      	: Signaux de comptage REJETEES carte 01 voie 02
+			  Nb maxi de signaux = 7
+	GVRX03      	: Signaux de comptage REJETEES carte 01 voie 03
+			  Nb maxi de signaux = 7
+	GVRX04      	: Signaux de comptage REJETEES carte 01 voie 04
+			  Nb maxi de signaux = 7
+	GVRX05      	: Signaux de comptage REJETEES carte 01 voie 05
+			  Nb maxi de signaux = 7
+	GVRX06      	: Signaux de comptage REJETEES carte 01 voie 06
+			  Nb maxi de signaux = 7
+	GVRX07      	: Signaux de comptage REJETEES carte 01 voie 07
+			  Nb maxi de signaux = 7
+	GVRX08      	: Signaux de comptage REJETEES carte 01 voie 08
+			  Nb maxi de signaux = 7
+	GVRX09      	: Signaux de comptage REJETEES carte 02 voie 01
+			  Nb maxi de signaux = 7
+	GVRX10      	: Signaux de comptage REJETEES carte 02 voie 02
+			  Nb maxi de signaux = 7
+	GVRX11      	: Signaux de comptage REJETEES carte 02 voie 03
+			  Nb maxi de signaux = 7
+	GVRX12      	: Signaux de comptage REJETEES carte 02 voie 04
+			  Nb maxi de signaux = 7
+	GVRX13      	: Signaux de comptage REJETEES carte 02 voie 05
+			  Nb maxi de signaux = 7
+	GVRX14      	: Signaux de comptage REJETEES carte 02 voie 06
+			  Nb maxi de signaux = 7
+	GVRX15      	: Signaux de comptage REJETEES carte 02 voie 07
+			  Nb maxi de signaux = 7
+	GVRX16      	: Signaux de comptage REJETEES carte 02 voie 08
+			  Nb maxi de signaux = 7
+	GVRX17      	: Signaux de comptage REJETEES carte 03 voie 01
+			  Nb maxi de signaux = 7
+	GVRX18      	: Signaux de comptage REJETEES carte 03 voie 02
+			  Nb maxi de signaux = 7
+	GVRX19      	: Signaux de comptage REJETEES carte 03 voie 03
+			  Nb maxi de signaux = 7
+	GVRX20      	: Signaux de comptage REJETEES carte 03 voie 04
+			  Nb maxi de signaux = 7
+	GVRX21      	: Signaux de comptage REJETEES carte 03 voie 05
+			  Nb maxi de signaux = 7
+	GVRX22      	: Signaux de comptage REJETEES carte 03 voie 06
+			  Nb maxi de signaux = 7
+	GVRX23      	: Signaux de comptage REJETEES carte 03 voie 07
+			  Nb maxi de signaux = 7
+	GVRX24      	: Signaux de comptage REJETEES carte 03 voie 08
+			  Nb maxi de signaux = 7
+	GVRX25      	: Signaux de comptage REJETEES carte 04 voie 01
+			  Nb maxi de signaux = 7
+	GVRX26      	: Signaux de comptage REJETEES carte 04 voie 02
+			  Nb maxi de signaux = 7
+	GVRX27      	: Signaux de comptage REJETEES carte 04 voie 03
+			  Nb maxi de signaux = 7
+	GVRX28      	: Signaux de comptage REJETEES carte 04 voie 04
+			  Nb maxi de signaux = 7
+	GVRX29      	: Signaux de comptage REJETEES carte 04 voie 05
+			  Nb maxi de signaux = 7
+	GVRX30      	: Signaux de comptage REJETEES carte 04 voie 06
+			  Nb maxi de signaux = 7
+	GVRX31      	: Signaux de comptage REJETEES carte 04 voie 07
+			  Nb maxi de signaux = 7
+	GVRX32      	: Signaux de comptage REJETEES carte 04 voie 08
+			  Nb maxi de signaux = 7
+	GVRX33      	: Signaux de comptage REJETEES carte 05 voie 01
+			  Nb maxi de signaux = 7
+	GVRX34      	: Signaux de comptage REJETEES carte 05 voie 02
+			  Nb maxi de signaux = 7
+	GVRX35      	: Signaux de comptage REJETEES carte 05 voie 03
+			  Nb maxi de signaux = 7
+	GVRX36      	: Signaux de comptage REJETEES carte 05 voie 04
+			  Nb maxi de signaux = 7
+	GVRX37      	: Signaux de comptage REJETEES carte 05 voie 05
+			  Nb maxi de signaux = 7
+	GVRX38      	: Signaux de comptage REJETEES carte 05 voie 06
+			  Nb maxi de signaux = 7
+	GVRX39      	: Signaux de comptage REJETEES carte 05 voie 07
+			  Nb maxi de signaux = 7
+	GVRX40      	: Signaux de comptage REJETEES carte 05 voie 08
+			  Nb maxi de signaux = 7
+	GVRX41      	: Signaux de comptage REJETEES carte 06 voie 01
+			  Nb maxi de signaux = 7
+	GVRX42      	: Signaux de comptage REJETEES carte 06 voie 02
+			  Nb maxi de signaux = 7
+	GVRX43      	: Signaux de comptage REJETEES carte 06 voie 03
+			  Nb maxi de signaux = 7
+	GVRX44      	: Signaux de comptage REJETEES carte 06 voie 04
+			  Nb maxi de signaux = 7
+	GVRX45      	: Signaux de comptage REJETEES carte 06 voie 05
+			  Nb maxi de signaux = 7
+	GVRX46      	: Signaux de comptage REJETEES carte 06 voie 06
+			  Nb maxi de signaux = 7
+	GVRX47      	: Signaux de comptage REJETEES carte 06 voie 07
+			  Nb maxi de signaux = 7
+	GVRX48      	: Signaux de comptage REJETEES carte 06 voie 08
+			  Nb maxi de signaux = 7
+	GVRX49      	: Signaux de comptage REJETEES carte 07 voie 01
+			  Nb maxi de signaux = 7
+	GVRX50      	: Signaux de comptage REJETEES carte 07 voie 02
+			  Nb maxi de signaux = 7
+	GVRX51      	: Signaux de comptage REJETEES carte 07 voie 03
+			  Nb maxi de signaux = 7
+	GVRX52      	: Signaux de comptage REJETEES carte 07 voie 04
+			  Nb maxi de signaux = 7
+	GVRX53      	: Signaux de comptage REJETEES carte 07 voie 05
+			  Nb maxi de signaux = 7
+	GVRX54      	: Signaux de comptage REJETEES carte 07 voie 06
+			  Nb maxi de signaux = 7
+	GVRX55      	: Signaux de comptage REJETEES carte 07 voie 07
+			  Nb maxi de signaux = 7
+	GVRX56      	: Signaux de comptage REJETEES carte 07 voie 08
+
+			  Nb maxi de signaux = 7
+	GVRX57      	: Signaux de comptage REJETEES carte 08 voie 01
+			  Nb maxi de signaux = 7
+	GVRX58      	: Signaux de comptage REJETEES carte 08 voie 02
+
+			  Nb maxi de signaux = 7
+	GVRX59      	: Signaux de comptage REJETEES carte 08 voie 03
+
+			  Nb maxi de signaux = 7
+	GVX01       	: Signaux de comptage NON REJETEES carte 01 voie 01
+			  Nb maxi de signaux = 8
+	GVX02       	: Signaux de comptage NON REJETEES carte 01 voie 02
+			  Nb maxi de signaux = 8
+	GVX03       	: Signaux de comptage NON REJETEES carte 01 voie 03
+			  Nb maxi de signaux = 8
+	GVX04       	: Signaux de comptage NON REJETEES carte 01 voie 04
+			  Nb maxi de signaux = 8
+	GVX05       	: Signaux de comptage NON REJETEES carte 01 voie 05
+			  Nb maxi de signaux = 8
+	GVX06       	: Signaux de comptage NON REJETEES carte 01 voie 06
+			  Nb maxi de signaux = 8
+	GVX07       	: Signaux de comptage NON REJETEES carte 01 voie 07
+			  Nb maxi de signaux = 8
+	GVX08       	: Signaux de comptage NON REJETEES carte 01 voie 08
+			  Nb maxi de signaux = 8
+	GVX09       	: Signaux de comptage NON REJETEES carte 02 voie 01
+			  Nb maxi de signaux = 8
+	GVX10       	: Signaux de comptage NON REJETEES carte 02 voie 02
+			  Nb maxi de signaux = 8
+	GVX11       	: Signaux de comptage NON REJETEES carte 02 voie 03
+			  Nb maxi de signaux = 8
+	GVX12       	: Signaux de comptage NON REJETEES carte 02 voie 04
+			  Nb maxi de signaux = 8
+	GVX13       	: Signaux de comptage NON REJETEES carte 02 voie 05
+			  Nb maxi de signaux = 8
+	GVX14       	: Signaux de comptage NON REJETEES carte 02 voie 06
+			  Nb maxi de signaux = 8
+	GVX15       	: Signaux de comptage NON REJETEES carte 02 voie 07
+			  Nb maxi de signaux = 8
+	GVX16       	: Signaux de comptage NON REJETEES carte 02 voie 08
+			  Nb maxi de signaux = 8
+	GVX17       	: Signaux de comptage NON REJETEES carte 03 voie 01
+			  Nb maxi de signaux = 8
+	GVX18       	: Signaux de comptage NON REJETEES carte 03 voie 02
+			  Nb maxi de signaux = 8
+	GVX19       	: Signaux de comptage NON REJETEES carte 03 voie 03
+
+			  Nb maxi de signaux = 8
+	GVX20       	: Signaux de comptage NON REJETEES carte 03 voie 04
+
+			  Nb maxi de signaux = 8
+	GVX21       	: Signaux de comptage NON REJETEES carte 03 voie 05
+
+			  Nb maxi de signaux = 8
+	GVX22       	: Signaux de comptage NON REJETEES carte 03 voie 06
+
+			  Nb maxi de signaux = 8
+	GVX23       	: Signaux de comptage NON REJETEES carte 03 voie 07
+
+			  Nb maxi de signaux = 8
+	GVX24       	: Signaux de comptage NON REJETEES carte 03 voie 08
+
+			  Nb maxi de signaux = 8
+	GVX25       	: Signaux de comptage NON REJETEES carte 04 voie 01
+			  Nb maxi de signaux = 8
+	GVX26       	: Signaux de comptage NON REJETEES carte 04 voie 02
+			  Nb maxi de signaux = 8
+	GVX27       	: Signaux de comptage NON REJETEES carte 04 voie 03
+			  Nb maxi de signaux = 8
+	GVX28       	: Signaux de comptage NON REJETEES carte 04 voie 04
+			  Nb maxi de signaux = 8
+	GVX29       	: Signaux de comptage NON REJETEES carte 04 voie 05
+			  Nb maxi de signaux = 8
+	GVX30       	: Signaux de comptage NON REJETEES carte 04 voie 06
+			  Nb maxi de signaux = 8
+	GVX31       	: Signaux de comptage NON REJETEES carte 04 voie 07
+			  Nb maxi de signaux = 8
+	GVX32       	: Signaux de comptage NON REJETEES carte 04 voie 08
+			  Nb maxi de signaux = 8
+	GVX33       	: Signaux de comptage NON REJETEES carte 05 voie 01
+			  Nb maxi de signaux = 8
+	GVX34       	: Signaux de comptage NON REJETEES carte 05 voie 02
+			  Nb maxi de signaux = 8
+	GVX35       	: Signaux de comptage NON REJETEES carte 05 voie 03
+			  Nb maxi de signaux = 8
+	GVX36       	: Signaux de comptage NON REJETEES carte 05 voie 04
+			  Nb maxi de signaux = 8
+	GVX37       	: Signaux de comptage NON REJETEES carte 05 voie 05
+			  Nb maxi de signaux = 8
+	GVX38       	: Signaux de comptage NON REJETEES carte 05 voie 06
+			  Nb maxi de signaux = 8
+	GVX39       	: Signaux de comptage NON REJETEES carte 05 voie 07
+			  Nb maxi de signaux = 8
+	GVX40       	: Signaux de comptage NON REJETEES carte 05 voie 08
+			  Nb maxi de signaux = 8
+	GVX41       	: Signaux de comptage NON REJETEES carte 06 voie 01
+			  Nb maxi de signaux = 8
+	GVX42       	: Signaux de comptage NON REJETEES carte 06 voie 02
+			  Nb maxi de signaux = 8
+	GVX43       	: Signaux de comptage NON REJETEES carte 06 voie 03
+			  Nb maxi de signaux = 8
+	GVX44       	: Signaux de comptage NON REJETEES carte 06 voie 04
+			  Nb maxi de signaux = 8
+	GVX45       	: Signaux de comptage NON REJETEES carte 06 voie 05
+			  Nb maxi de signaux = 8
+	GVX46       	: Signaux de comptage NON REJETEES carte 06 voie 06
+			  Nb maxi de signaux = 8
+	GVX47       	: Signaux de comptage NON REJETEES carte 06 voie 07
+			  Nb maxi de signaux = 8
+	GVX48       	: Signaux de comptage NON REJETEES carte 06 voie 08
+			  Nb maxi de signaux = 8
+	GVX49       	: Signaux de comptage NON REJETEES carte 07 voie 01
+			  Nb maxi de signaux = 8
+	GVX50       	: Signaux de comptage NON REJETEES carte 07 voie 02
+			  Nb maxi de signaux = 8
+	GVX51       	: Signaux de comptage NON REJETEES carte 07 voie 03
+			  Nb maxi de signaux = 8
+	GVX52       	: Signaux de comptage NON REJETEES carte 07 voie 04
+			  Nb maxi de signaux = 8
+	GVX53       	: Signaux de comptage NON REJETEES carte 07 voie 05
+			  Nb maxi de signaux = 8
+	GVX54       	: Signaux de comptage NON REJETEES carte 07 voie 06
+			  Nb maxi de signaux = 8
+	GVX55       	: Signaux de comptage NON REJETEES carte 07 voie 07
+			  Nb maxi de signaux = 8
+	GVX56       	: Signaux de comptage NON REJETEES carte 07 voie 08
+			  Nb maxi de signaux = 8
+	GVX57       	: Signaux de comptage NON REJETEES carte 08 voie 01
+
+			  Nb maxi de signaux = 8
+	GVX58       	: Signaux de comptage NON REJETEES carte 08 voie 02
+
+			  Nb maxi de signaux = 8
+	GVX59       	: Signaux de comptage NON REJETEES carte 08 voie 03
+			  Nb maxi de signaux = 8
+	SPROFMPVSPX 	: Maximum position of the suprathermal electrons local emissivity profile (with respect to the plasma normalised radius [0 .. 1]).
+	SPROFWVSPX  	: Width at half maximum of the suprathermal electrons local emissivity profile (with respect to the plasma normalised radius [0 .. 1]).
+
+				----------------------
+
+EXP-T-S     		: 
+	num_choc    	: Numero du Choc; doit toujours etre la donnee de rang 1 (table version) (?)
+
+				----------------------
+
+INTERFNE    		: Evolution temporelle du Ne moyen et piquage.
+	GNE         	: GNE     : Densite  (m-3) = f(t,rho) pour rho=0 à 1 pas de 0.1
+			  Nb maxi de signaux = 11
+	SINDICNE    	: Donnée utilisée par le diagnoticien
+	SNMOY       	: <ne>    : Densite moyenne volumique
+	SNTOT       	: Ne      : Nombre d'electrons
+	SPIQ        	: ne0/<ne>: Piquage
+
+				----------------------
+
+INTERFNL    		: Evolution temporelle des 10 NL.
+	GNL         	: GNL     : Densite lineique (m-2) 
+			  Nb maxi de signaux = 10
+	SINDICNL    	: donnée utilisée par le diagnosticien  
+
+				----------------------
+
+NEUTRES     		: Fonction de distribution, temperature ionique et rapport isotopique.
+	GD1         	: Nombre d'atomes D entrant dans ANR1 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GD2         	: Nombre atomes D entrant dans ANR2 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GD3         	: Nombre atomes D entrant dans ANR3 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GD4         	: Nombre atomes D entrant dans ANR4 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GD5         	: Nombre atomes D entrant dans ANR5 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GD6         	: Nombre atomes D entrant dans ANR6 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GH1         	: Nombre atomes H entrant dans ANR1 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GH2         	: Nombre d'atomes H entrant dans ANR2 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GH3         	: Nombre d'atomes H entrant dans ANR3 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GH4         	: Nombre d'atomes H entrant dans ANR4 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GH5         	: Nombre d'atomes H entrant dans ANR5 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	GH6         	: Nombre d'atomes H entrant dans ANR6 = f(temps,energie)
+			  Nb maxi de signaux = 48
+	SCNEUTRES   	: Commentaire concernant le parametrage des neutres
+	SERRI1      	: Ecart-type sur Rapport isotopique corde visee par ANR1
+	SERRI2      	: Ecart-type sur Rapport isotopique corde visee par ANR2
+	SERRI3      	: Ecart-type sur Rapport isotopique corde visee par ANR3
+	SERRI4      	: Ecart-type sur Rapport isotopique corde visee par ANR4
+	SERRI5      	: Ecart-type sur Rapport isotopique corde visee par ANR5
+	SERRI6      	: Ecart-type sur Rapport isotopique corde visee par ANR6
+	SERTID1     	: Ecart-type sur Ti D corde ANR1 = f(temps)
+	SERTID2     	: Ecart-type sur Ti D corde ANR2 = f(temps)
+	SERTID3     	: Ecart-type sur Ti D corde ANR3 = f(temps)
+	SERTID4     	: Ecart-type sur Ti D corde ANR4 = f(temps)
+	SERTID5     	: Ecart-type sur Ti D corde ANR5 = f(temps)
+	SERTID6     	: Ecart-type sur Ti D corde ANR6 = f(temps)
+	SERTIH1     	: Ecart-type sur Ti H corde ANR1 = f(temps)
+	SERTIH2     	: Ecart-type sur Ti H corde ANR2 = f(temps)
+	SERTIH3     	: Ecart-type sur Ti H corde ANR3 = f(temps)
+	SERTIH4     	: Ecart-type sur Ti H corde ANR4 = f(temps)
+	SERTIH5     	: Ecart-type sur Ti H corde ANR5 = f(temps)
+	SERTIH6     	: Ecart-type sur Ti H corde ANR6 = f(temps)
+	SRI1        	: Rapport isotopique suivant corde visee par ANR1
+	SRI2        	: Rapport isotopique suivant corde visee par ANR2
+	SRI3        	: Rapport isotopique suivant corde visee par ANR3
+	SRI4        	: Rapport isotopique suivant corde visee par ANR4
+	SRI5        	: Rapport isotopique suivant corde visee par ANR5
+	SRI6        	: Rapport isotopique suivant corde visee par ANR6
+	STIOND1     	: Ti D corde ANR1 = f(temps)
+	STIOND2     	: Ti D corde ANR2 = f(temps)
+	STIOND3     	: Ti D corde ANR3 = f(temps)
+	STIOND4     	: Ti D corde ANR4 = f(temps)
+	STIOND5     	: Ti D corde ANR5 = f(temps)
+	STIOND6     	: Ti D corde ANR6 = f(temps)
+	STIONH1     	: Ti H corde ANR1 = f(temps)
+	STIONH2     	: Ti H corde ANR2 = f(temps)
+	STIONH3     	: Ti H corde ANR3 = f(temps)
+	STIONH4     	: Ti H corde ANR4 = f(temps)
+	STIONH5     	: Ti H corde ANR5 = f(temps)
+	STIONH6     	: Ti H corde ANR6 = f(temps)
+
+				----------------------
+
+TBARO       		: Calcul des pressions totales et partielles He/D2 dans le LPT 
+	GPRESD2LPT  	: Pression partielle en Deuterium  dans le LPT  
+			  Nb maxi de signaux = 2
+	GPRESHELPT  	: Pression partielle en Helium  dans le LPT 
+			  Nb maxi de signaux = 2
+	GPRESLPT    	: Pression dans le LPT
+			  Nb maxi de signaux = 18
+	GPRESPLPT   	: Pression primaire dans le LPT
+			  Nb maxi de signaux = 4
+
+				----------------------
+
+TBOOTSTRAP  		: Calcul du profil de courant de bootstrap et d'autres grandeurs associees a une theorie neoclassique.
+	GBOOTFE1    	: Flux electronique  (hypothese Ti homothetique a Te)
+			  Nb maxi de signaux = 21
+	GBOOTFE2    	: Flux electronique  (hypothese Ti homothetique a ne)
+			  Nb maxi de signaux = 21
+	GBOOTFEMES  	: Flux electronique  (Ti mesure)
+			  Nb maxi de signaux = 21
+	GBOOTFI1    	: Flux ionique  (hypothese Ti homothetique a Te)
+			  Nb maxi de signaux = 21
+	GBOOTFI2    	: Flux ionique  (hypothese Ti homothetique a ne)
+			  Nb maxi de signaux = 21
+	GBOOTFIMES  	: Flux ionique  (Ti mesure)
+			  Nb maxi de signaux = 21
+	GBOOTJ1     	: Courant de bootstrap  (hypothese Ti homothetique a Te)
+			  Nb maxi de signaux = 21
+	GBOOTJ2     	: Courant de bootstrap  (hypothese Ti homothetique a ne)
+			  Nb maxi de signaux = 21
+	GBOOTJMES   	: Courant de bootstrap  ( Ti mesure)
+			  Nb maxi de signaux = 21
+	GBOOTQE1    	: Flux de chaleur conductif electronique  (hypothese Ti homothetique a Te)
+			  Nb maxi de signaux = 21
+	GBOOTQE2    	: Flux de chaleur conductif electronique  (hypothese Ti homothetique a ne)
+			  Nb maxi de signaux = 21
+	GBOOTQEMES  	: Flux de chaleur conductif electronique (Ti mesure)
+			  Nb maxi de signaux = 21
+	GBOOTQI1    	: Flux de chaleur conductif ionique  (hypothese Ti homothetique a Te)
+			  Nb maxi de signaux = 21
+	GBOOTQI2    	: Flux de chaleur conductif ionique  (hypothese Ti homothetique a ne)
+			  Nb maxi de signaux = 21
+	GBOOTQIMES  	: Flux de chaleur conductif ionique (Ti mesure)
+			  Nb maxi de signaux = 21
+	GBOOTRESP1  	: Resitivite  (hypothese Ti homothetique a Te)
+			  Nb maxi de signaux = 21
+	GBOOTRESP2  	: Resitivite  (hypothese Ti homothetique a ne)
+			  Nb maxi de signaux = 21
+	GBOOTRESPMES	: Resitivite  ( Ti mesure)
+			  Nb maxi de signaux = 21
+	SBOOTI1     	: Courant de bootstrap total  (hypothese Ti homothetique a Te)
+	SBOOTI2     	: Courant de bootstrap total  (hypothese Ti homothetique a ne)
+	SBOOTIMES   	: Courant de bootstrap total  (Ti mesure)
+	SBOOTRES1   	: Resistivite integree (hypothese Ti homothetique a Te)
+	SBOOTRES2   	: Resistivite integree (hypothese Ti homothetique a ne)
+	SBOOTRESMES 	: Resistivite integree (Ti mesure)
+
+				----------------------
+
+TBRAGG      		: Traitement des donnees du spectro X a cristal
+	GFEMW       	: Fonction d'emissivite de l'element
+			  Nb maxi de signaux = 25
+	RDTBRAG     	: Temps d'integration pour un spectre
+	SAMPLIW     	: Amplitude de la raie W
+	SCBRAG      	: Signal commentaire 
+	SCIONBRAG   	: Nom de l'elememt
+	SDEPLW      	: Decalage Doppler de la raie W
+	SDTBRAG     	: Temps d'integration utilise
+	SEAMPLIW    	: Incertitude sur l'amplitude de la raie W
+	SEDEPLW     	: Incertitude sur le decalage Doppler de la raie W
+	SEFOND      	: Incertitude sur le fond a gauche de la raie W
+	SETEBRAG    	: Incertitude sur la temperature electronique
+	SETIBRAG    	: Incertitude sur la temperature ionique
+	SFOND       	: Fond a gauche de la raie W
+	STEBRAG     	: Temperature electronique
+	STIBRAG     	: Temperature ionique
+
+				----------------------
+
+TCALOR      		: Calorimetrie.
+	GWDIVN      	: Energies neutraliseurs (1 a 6)
+			  Nb maxi de signaux = 6
+	GWDIVP      	: Energies  divertor  pompe titane (1 a 6)
+			  Nb maxi de signaux = 6
+	GWDIVS      	: Energies  structures  divertor (1 a 6)
+			  Nb maxi de signaux = 6
+	GWLV        	: Energies  limiteurs verticaux (1 a 6)
+			  Nb maxi de signaux = 6
+	GWNEUM1     	: Energies  neutraliseurs module 1 
+			  Nb maxi de signaux = 3
+	GWNEUM3     	: Energies  neutraliseurs module 3 
+			  Nb maxi de signaux = 3
+	GWNEUM4     	: Energies  neutraliseurs module 4 
+			  Nb maxi de signaux = 3
+	GWNEUM5     	: Energies  neutraliseurs module 5 
+			  Nb maxi de signaux = 4
+	GWNEUM6     	: Energies  neutraliseurs module 6 
+			  Nb maxi de signaux = 7
+	GWPPE       	: Energies  premiere paroi externe (1 a 6)
+			  Nb maxi de signaux = 6
+	GWPPI       	: Energies  premiere paroi interne (1 a 6)
+			  Nb maxi de signaux = 6
+	GWWCI       	: Energies  antennes FCI (1 a 3)
+			  Nb maxi de signaux = 3
+	RWCALB30    	: Energie calorimetrique sur boucle 30.
+	RWCALTOT    	: Energie calorimetrique totale.
+	RWCHAUF     	: energie recuperee sur toutes les antennes de chauffage
+	RWDIVN      	: Energie totale neutraliseurs.
+	RWDIVP      	: Energie totale divertor pompe titane.
+	RWDIVS      	: Energie totale structures divertor.
+	RWLPM       	: Energie limiteur pompe median.
+	RWLV        	: Energie totale limiteurs verticaux.
+	RWPPE       	: Energie totale premiere paroi externe.
+	RWPPI       	: Energie totale premiere paroi interne.
+	RWPRQ       	: Energie protection de queusot.
+	RWTHYB      	: Energie totale antennes hybride
+	RWWCI       	: Energie totale antennes FCI.
+
+				----------------------
+
+TCALOR2     		: Calorimetrie  des composants face au plasma à partir des mesures des réseaux de la boucle 30.
+	GCALETAGT   	: Energie thermique extraite des anneaux de garde (A+B : partie haute) 
+			  Nb maxi de signaux = 6
+	GCALETC3    	: Energie thermique extraite du coupleur hybride C3  (module 6A, partie mediane : droite, ecran, gauche)
+			  Nb maxi de signaux = 3
+	GCALETFCI1  	: Energie thermique extraite de l'antenne FCI module 1M (droite, ecran, gauche) 
+			  Nb maxi de signaux = 3
+	GCALETFCI2  	: Energie thermique extraite de l'antenne FCI module 2M (droite, ecran, gauche) 
+			  Nb maxi de signaux = 3
+	GCALETFCI5  	: Energie thermique extraite de l'antenne FCI module 5 (droite, ecran, gauche) 
+			  Nb maxi de signaux = 3
+	GCALETMPB   	: Energie thermique extraite des 6 modules (partie basse) 
+			  Nb maxi de signaux = 6
+	GCALETMPH   	: Energie thermique extraite des 6 modules (partie haute)
+			  Nb maxi de signaux = 6
+	GCALETPRIPA 	: Energie thermique extraite des protections ripple  (queusot A: partie haute) 
+			  Nb maxi de signaux = 6
+	GCALETPRIPB 	: Energie thermique extraite des protections ripple  (queusot B: partie haute) 
+			  Nb maxi de signaux = 6
+	GCALPTAGT   	: Puissance thermique extraite des 6 anneaux de garde  (A+B : partie haute)
+			  Nb maxi de signaux = 6
+	GCALPTC3    	: Puissance thermique extraite du coupleur C3  (droite, multijonction, gauche)
+			  Nb maxi de signaux = 3
+	GCALPTFCI1  	: Puissance thermique extraite de l'antenne FCI module 1M (droite, ecran, gauche) 
+			  Nb maxi de signaux = 3
+	GCALPTFCI2  	: Puissance thermique extraite de l'antenne FCI module 2M (droite, ecran, gauche)  
+			  Nb maxi de signaux = 3
+	GCALPTFCI5  	: Puissance thermique extraite de l'antenne FCI module 5 (droite, ecran, gauche)  
+			  Nb maxi de signaux = 3
+	GCALPTLPTA  	: Puissance thermique extraite des 6 modules A du LPT (30° toroidal)
+			  Nb maxi de signaux = 6
+	GCALPTLPTB  	: Puissance thermique extraite des 6 modules B du LPT (30° toroidal)
+			  Nb maxi de signaux = 6
+	GCALPTMPB   	: Puissance thermique extraite des 6 modules (partie basse)
+			  Nb maxi de signaux = 6
+	GCALPTMPH   	: Puissance thermique extraite des 6 modules (partie haute)
+			  Nb maxi de signaux = 6
+	GCALPTPRIPA 	: Puissance thermique extraite des protections ripple A
+			  Nb maxi de signaux = 6
+	GCALPTPRIPB 	: Puissance thermique extraite des protections ripple B 
+			  Nb maxi de signaux = 6
+	RETHC2      	: Somme des energies thermiques extraites des réseaux du coupleur hybride C2 (en Q6AM) 
+	RETHC3      	: Somme des energies thermiques extraites des réseaux du coupleur hybride C3 (en Q6BM)
+	RETHCALOR   	: Somme des energies thermiques extraites de tous les composants face au plasma 
+	RETHFCE     	: Energie thermique extraite de l'antenne FCE (en Q3BM) 
+	RETHFCI1    	: Somme des energies thermiques extraites des réseaux de l'antenne FCI  (en Q1BM)
+	RETHFCI2    	: Somme des energies thermiques extraites des réseaux de l'antenne FCI  (en Q2BM) 
+	RETHFCI5    	: Somme des energies thermiques extraites des réseaux de l'antenne FCI  (en Q5BM)  
+	RETHLPA     	: Energie thermique extraite du LPA 
+	RETHLPT     	: Somme des energies thermiques extraites des modules du LPT 
+	RETHPH      	: Somme des energies thermiques extraites des modules alimentés par la partie haute de Tore Supra 
+	SCALETAGT   	: Energie thermique extraite des anneaux de garde (A+B : partie haute) 
+
+ 
+
+	SCALETC2    	: Energie thermique extraite du coupleur hybride C2 implanté en module 6A partie médiane
+	SCALETC3    	: Energie thermique extraite du coupleur hybride C3  (module 6A, partie mediane : droite, ecran, gauche) 
+ 
+
+	SCALETFCE   	: Energie thermique extraite de l'antenne FCE implantée en module 3B (partie médiane)
+	SCALETFCI1  	: Energie thermique extraite de l'antenne FCI module 1M (droite, ecran, gauche) 
+
+	SCALETFCI2  	: Energie thermique extraite de l'antenne FCI module 2M (droite, ecran, gauche) 
+
+	SCALETFCI5  	: Energie thermique extraite de l'antenne FCI module 5 (droite, ecran, gauche)
+
+ 
+
+	SCALETGLOBM 	: Energie thermique globale extraite de la machine
+	SCALETLPA   	: Energie thermique extraite du LPA implanté en module 3A (partie mediane)
+	SCALETMPB   	: Energie thermique extraite du module Partie Basse machine globalement
+
+	SCALETMPH   	: Energie thermique extraite du module Partie Haute machine globalement
+	SCALETPRIPA 	: Energie thermique extraite des protections ripple  (queusot A: partie haute) 
+
+ 
+
+	SCALETPRIPB 	: Energie thermique extraite des protections ripple  (queusot B: partie haute) 
+
+ 
+
+	SCALPTC2    	: Puissance thermique extraite du  coupleur hybride C2
+	SCALPTFCE   	: Puissance thermique extraite de l'antenne FCE 
+	SCALPTGMAC  	: Puissance thermique globale extraite de la machine
+	SCALPTLPA   	: Puissance thermique extraite du  LPA
+	SCALTEB30   	: Temperature d'entree  du fluide
+	SCALTSB30   	: Temperature de sortie  du fluide
+
+				----------------------
+
+TCAMIR      		: Archivage du parametrage de DCAMIR
+	GPARCAMIR   	: Parametres  du diagnostic pour la conversion en temperature des niveaux numeriques issus des cameras infrarouge.
+			  Nb maxi de signaux = 20
+	SCCAMIR     	: Commentaire utile à la conversion en temperature des niveaux numeriques issus des cameras infrarouge
+
+				----------------------
+
+TCCCRYO     		: 
+	SDTT12B04   	: 
+	SDTTBFE03   	: 
+	STCRYO      	: 
+
+				----------------------
+
+TCCFCE      		: 
+	SCAVA1      	: Mesure temperature cavite  - gyrotron A1
+	SCAVA2      	: Mesure temperature cavite  - gyrotron A2
+
+				----------------------
+
+TCCHYB      		: 
+	STEMP01     	: 
+	STEMP02     	: 
+	STEMP03     	: 
+	STEMP04     	: 
+	STEMP05     	: 
+	STEMP06     	: 
+	STEMP07     	: 
+	STEMP08     	: 
+	STEMP09     	: 
+	STEMP10     	: 
+	STEMP11     	: 
+	STEMP12     	: 
+	STEMP13     	: 
+	STEMP14     	: 
+	STEMP15     	: 
+	STEMP16     	: 
+	STEMP17     	: 
+	STEMP18     	: 
+	STEMP19     	: 
+	STEMP20     	: 
+	STEMP21     	: 
+	STEMP22     	: 
+	STEMP23     	: 
+	STEMP24     	: 
+	STEMP25     	: 
+	STEMP26     	: 
+	STEMP27     	: 
+	STEMP28     	: 
+	STEMP29     	: 
+	STEMP30     	: 
+	STEMP31     	: 
+	STEMP32     	: 
+
+				----------------------
+
+TCCLANG     		: 
+	STSE1       	: Signal temperature echantillon n°1
+	STSE2       	: Signal temperature échantillon n°2
+	STSE3       	: Signal temperature échantillon n°3
+	STSE4       	: Signal temperature échantillon n°4
+	STSLM1      	: Signal temperature de la sonde de Langmuir mobile n. 1
+	STSLM2      	: Signal temperature de la sonde de Langmuir mobile n. 2
+	SVIB1       	: Signal vibration°1
+	SVIB2       	: Signal vibration°2
+
+				----------------------
+
+TCCREF      		: 
+	SDCETUV     	: 
+	SDPB30      	: 
+	SDPTORE     	: 
+	SDTB30      	: 
+	SDTSEC      	: 
+
+				----------------------
+
+TCCTORO     		: 
+	SDEAUALIM   	: 
+	SDITOR      	: 
+
+				----------------------
+
+TCCVIDE     		: 
+	SDBOVZ1PC   	: 
+	SDBOVZ5PC   	: 
+	SDVETPJ11   	: 
+	SDVMTPJ11   	: 
+	SDWI1       	: 
+	SDWI1ALI1   	: 
+	SDWI1ALI2   	: 
+	SDWI2       	: 
+	SDWI2ALI1   	: 
+	SDWI2ALI2   	: 
+	SDWI3ALI1   	: 
+	SDWI3ALI2   	: 
+	SDWJBARAT   	: 
+	SDWPIEZO    	: 
+	SDWPRECD4   	: 
+	SDWPREPD2   	: 
+	SDWPREPH2   	: 
+	SDWPREPHE   	: 
+	SDWU1       	: 
+	SDWU2       	: 
+
+				----------------------
+
+TCHOCRED    		: Production des données réduites
+	AMORCAGE    	: = 1 pour amorcage seul
+	ANNULE      	: = 1 pour choc annule avant lancement
+	CHOC_OK     	: = 1 pour absence de probleme
+	CHOC_RATE   	: = 1 pour choc rate
+	DECH_NETT   	: = 1 pour decharge de nettoyage
+	DISRUPTION  	: = 1 pour disruption
+	DIVERTOR    	: = 1 pour divertor present
+	ESSAI_INFO  	: = 1 pour essai informatique
+	ESSAI_TECH  	: = 1 pour essai technique
+	HYBRIDE     	: = 1 pour hybride  present
+	IDN         	: = 1 pour neutres  present
+	PELLET      	: = 1 pour glacons  present
+	RBTOR       	: Champ toroidal a 2.37 m                      T
+	RDIPMAX     	: Pente maximale courant plasma    (MA/s)  [ DMAG / SBZERO ]  (32 points autour de TDISRUPT)
+	RDIPMOY     	: Pente moyenne courant plasma   (MA/s)  [ DMAG / SBZERO ]   ( moyenne sur n points de TDISRIPT a TFINCP )
+	RDURDIS     	: Duree totale courant plasma   (ms)    [ DMAG / SBZERO ]     ( difference )
+	REIDN4      	: Energie d'acceleration de l'injecteur 4
+	RFNOYDIS    	: Integrale tension par tour en disruption.                 Wb
+	RFNOYMAX    	: Flux noyau initial                           Wb
+	RFNOYMIN    	: Flux noyau final                             Wb
+	RGAZ1       	: Nature gaz ballon 1
+	RGAZ2       	: Nature gaz ballon 2
+	RGAZ3       	: Nature gaz ballon 3
+	RGAZ4       	: Nature gaz ballon 4
+	RGAZCHOC    	: Gaz injecte en cours de choc                 Pa.m3
+	RGAZINIT    	: Gaz  de remplissage avant choc          Pa.m3
+	RGLACONS    	: Nb total glacons
+	RIPDIS      	: Courant plasma avant disruption  (MA)  [ DMAG / SBZERO ]   (1 point avant TDISRUPT)
+	RIPMAX      	: Valeur maximale courant plasma               MA
+	RITOR       	: Courant bobines toroidales                   kA
+	RNEDIS      	: Densite electronique avt disruption          E19m-3
+	RNEMAX      	: Valeur max. densite elect. moy.              E19m-3
+	RNEUTRON    	: Nb total neutrons                            E12
+	RNTN1DIS    	: Nb total photoneutrons Q1B                   E12
+	RNTN2DIS    	: Nb total photoneutrons Q4A                   E12
+	RNTN3DIS    	: Nb total photoneutrons Q5B                   E12
+	RPFCI1BMAX  	: Puissance maximale FCI antenne Q1B
+	RPFCI4AMAX  	: Puissance maximale FCI antenne Q4A
+	RPFCI5BMAX  	: Puissance maximale FCI antenne Q5B
+	RPFCIMAX    	: Puissance maximale totale FCI injectee
+	RPHYB6AMAX  	: Puissance maximale hybride coupleur Q6A
+	RPHYB6BMAX  	: Puissance maximale hybride coupleur Q6B
+	RPHYBMAX    	: Puissance maximale totale hybride injectee
+	RPOHMMAX    	: Puissance maximale ohmique
+	RPRFIN      	: Pression residuelle 1.5 s apres le plasma    mPa
+	RPRINIT     	: Pression d"amorcage                          mPa
+	RPRVIDE     	: Pression residuelle entre chocs              microPa
+	RPTOTMAX    	: Puissance maximale injectee                  MW
+	RQGCHOC     	: Quantite gaz injectee pendant choc.
+	RQGINIT     	: Quantite gaz injectee avant choc.
+	RRFCI1B     	: Rayon antenne FCI Q1B
+	RRFCI4A     	: Rayon antenne FCI Q4A
+	RRFCI5B     	: Rayon antenne FCI Q5B
+	RRHYB6A     	: Rayon coupleur hyb 1 Q6A
+	RRHYB6B     	: Rayon coupleur hyb 1 Q6B
+	RRLPM       	: Rayon limiteur exterieur
+	RTDIS       	: Temps de la disruption
+	RTPLAT      	: Temps debut plateau                           s
+	RTTGAZ1     	: Quantite gaz injecte ballon 1                Pa.m3
+	RTTGAZ2     	: Quantite gaz injecte ballon 2                Pa.m3
+	RTTGAZ3     	: Quantite gaz injecte ballon 3                Pa.m3
+	RTTGAZ4     	: Quantite gaz injecte ballon 4               Pa.m3
+	RTTORE      	: Temperature du Tore.            degres
+	RVAMORCE    	: Tension par tour d'amorcage.
+	RVPIC       	: Tension par tour maximale                    V
+	RWFCI       	: Energie totale FCI       (MJ) [ DFCI / SPUISS ]
+	RWFCI1B     	: Energie FCI antenne Q1B  (MJ) [ DFCI / GPTRA 5 et 6 ]
+	RWFCI4A     	: Energie FCI antenne Q4A  (MJ) [ DFCI / GPTRA 1 et 2 ]
+	RWFCI5B     	: Energie FCI antenne Q5B  (MJ) [ DFCI / GPTRA 3 et 4 ]
+	RWHYB       	: Energie totale hybride  injectee                     MJ
+	RWHYB6A     	: Energie hybride coupleur Q6A
+	RWHYB6B     	: Energie hybride coupleur Q6B
+	RWOHM       	: Energie Ohmique utilisee                     MJ
+	RZLHAUT     	: Hauteur limiteur vertical haut en Q6B
+	RZLPVQ1     	: Hauteur limiteur vertical bas en Q1B
+	RZLPVQ2     	: Hauteur limiteur vertical bas en Q2A
+	RZLPVQ3     	: Hauteur limiteur vertical bas en Q3B
+	RZLPVQ4     	: Hauteur limiteur vertical base en Q4A
+	RZLPVQ5     	: Hauteur limiteur vertical en Q5A
+	RZLPVQ6     	: Hauteur limiteur vertical en Q6B
+	RZMIN       	: Limiteur vertical le plus proche du plan equatorial
+	WCE         	: = 1 pour wce  present
+	WCI         	: = 1 pour wci  present
+
+				----------------------
+
+TCOUPOL     		: Calcul du profil de courant et autres grandeurs associees.
+	GCOUPFLUXP  	: Flux poloidal
+			  Nb maxi de signaux = 21
+	GCOUPFLUXT  	: Flux toroidal
+			  Nb maxi de signaux = 21
+	GCOUPJMOY   	: Profil de courant moyen sur les surfaces de flux
+			  Nb maxi de signaux = 21
+	GCOUPPDIA   	: Pression diamagnetique
+			  Nb maxi de signaux = 21
+	GCOUPQCYL   	: Q cylindrique
+			  Nb maxi de signaux = 21
+	GCOUPQPSI   	: Q psi
+			  Nb maxi de signaux = 21
+	GCOUPSHEAR  	: Cisaillement magnetique
+			  Nb maxi de signaux = 21
+	SCOUPBETAP  	: Beta poloidal deduit du Li    :     BELI  -   Li / 2
+	SCOUPLI     	: Inductance plasma deduite du profil de courant.
+
+				----------------------
+
+TCRONOS     		: Execution automatique du code CRONOS  : calcul de la diffusion du courant et du transport de la chaleur electronique.
+	GCRONA      	: Petit rayon equatorial 
+			  Nb maxi de signaux = 101
+	GCRONAE     	: Rapport  (somme des densités électonique espèces / densité électronique)
+			  Nb maxi de signaux = 101
+	GCRONALPHA  	: Angles de la polarimetrie recalcules
+			  Nb maxi de signaux = 10
+	GCRONB2     	: B2 
+			  Nb maxi de signaux = 101
+	GCRONB2I    	: 1/B2 
+			  Nb maxi de signaux = 101
+	GCRONBPOL   	: Racine de (BR2 + BZ2)
+			  Nb maxi de signaux = 101
+	GCROND      	: Decentrement de Shafranov donne par Helena 
+			  Nb maxi de signaux = 101
+	GCRONE      	: Elongation des surfaces (Zmax - Zmin)/(Rmax-Rmin) 
+			  Nb maxi de signaux = 101
+	GCRONEPAR   	: Champ electrique parallele 
+			  Nb maxi de signaux = 101
+	GCRONETA    	: Resistivite 
+			  Nb maxi de signaux = 101
+	GCRONFDIA   	: Fonction diamagnetique
+			  Nb maxi de signaux = 101
+	GCRONFTRAP  	: Fraction de particules piegees 
+			  Nb maxi de signaux = 101
+	GCRONGRHO   	: GRho 
+			  Nb maxi de signaux = 101
+	GCRONGRHO2  	: GRho2
+			  Nb maxi de signaux = 101
+	GCRONGRHO2B2	: GRho2 / B2 
+			  Nb maxi de signaux = 101
+	GCRONGRHO2R2	: GRho2 / R2
+			  Nb maxi de signaux = 101
+	GCRONJBOOT  	: Courant de bootstrap 
+			  Nb maxi de signaux = 101
+	GCRONJEFF   	: Courant effectif 
+			  Nb maxi de signaux = 101
+	GCRONJFCE   	: Source de courant due a FCE 
+			  Nb maxi de signaux = 101
+	GCRONJFCI   	: Source de courant due a FCI 
+			  Nb maxi de signaux = 101
+	GCRONJHYB   	: Source de courant due a l'hybride 
+			  Nb maxi de signaux = 101
+	GCRONJMOY   	: Courant moyen 
+			  Nb maxi de signaux = 101
+	GCRONMODE   	: Signal composite indiquant les temps de calcul effectif des sources (1=FCE, 2=FCI, 3=HYB, 4=IMPUR) 
+			  Nb maxi de signaux = 4
+	GCRONMSE    	: Angles de la MSE recalcules
+			  Nb maxi de signaux = 9
+	GCRONNE     	: Densite electronique 
+			  Nb maxi de signaux = 101
+	GCRONPE     	: Pression electronique : composante thermique
+			  Nb maxi de signaux = 101
+	GCRONPION   	: Pression ionique : composante thermique 
+			  Nb maxi de signaux = 101
+	GCRONPSI    	: Flux polaroïde 
+			  Nb maxi de signaux = 101
+	GCRONPTOT   	: Pression isotropique totale 
+			  Nb maxi de signaux = 101
+	GCRONQ      	: Facteur de securite 
+			  Nb maxi de signaux = 101
+	GCRONQE     	: Flux de chaleur electronique 
+			  Nb maxi de signaux = 101
+	GCRONQENEO  	: Flux de chaleur electronique neoclassique 
+			  Nb maxi de signaux = 101
+	GCRONQINEO  	: Flux de chaleur ionique neoclassique 
+			  Nb maxi de signaux = 101
+	GCRONR2I    	: 1/R2
+			  Nb maxi de signaux = 101
+	GCRONRECE   	: Rayon des mesures de l'ECE recalcules a partir des donnees de Helena
+			  Nb maxi de signaux = 32
+	GCRONRI     	: 1/R
+			  Nb maxi de signaux = 101
+	GCRONRMOY   	: Grand Rayon
+			  Nb maxi de signaux = 101
+	GCRONSE     	: Source totale sur les electrons 
+			  Nb maxi de signaux = 101
+	GCRONSEFCE  	: Source de courant due a FCE  
+			  Nb maxi de signaux = 101
+	GCRONSEFCI  	: Source sur les electrons  due a FCI 
+			  Nb maxi de signaux = 101
+	GCRONSEHYB  	: Source sur les electrons  due a l'hybride 
+			  Nb maxi de signaux = 101
+	GCRONSEI    	: Terme d'equipartition 
+			  Nb maxi de signaux = 101
+	GCRONSEOHM  	: Source ohmique 
+			  Nb maxi de signaux = 101
+	GCRONSERAD  	: Pertes par rayonnement  
+			  Nb maxi de signaux = 101
+	GCRONSIFCI  	: Source de chaleur ionique due a FCI 
+			  Nb maxi de signaux = 101
+	GCRONSPR    	: Element de surface
+			  Nb maxi de signaux = 101
+	GCRONVPR    	: Element de volume
+			  Nb maxi de signaux = 101
+	GCRONZEFF   	: Profil de Zeff utilisé dans Cronos 
+			  Nb maxi de signaux = 101
+	SCRONDRHOMDT	: Derivee temporelle de rhomax 
+	SCRONFAIL   	: Indicateur de non convergence de l'equilibre 
+	SCRONIP     	: Courant Plasma 
+	SCRONNBCONV 	: Nombre de boucles de convergence effectuees pour un temps 
+	SCRONPAR    	: Parametres internes de Cronos sous forme de texte source Matlab 
+	SCRONRESUME 	: Resume de Cronos (ensemble des informations sur la configuration de Cronos)
+	SCRONRHOM   	: Valeur coordonnee flux sur derniere surface magnetique fermee 
+
+				----------------------
+
+TDESIR      		: Evolution temporelle du rayonnement émis par un ion  O, C, Cu, Fe, Ni, He . 
+	RPOSGL      	: Position standard grand Lambda (1:OK, 0:non standard)
+	RPOSPL      	: Position standard petit Lambda (1;OK, 0:non standard)
+	SUVC4       	: Integrale Carbone 4
+	SUVC5A      	: Integrale Carbone 5 A
+	SUVC5B      	: Integrale Carbone 5 B
+	SUVC6A      	: Integrale Carbone 6 A (28,5 A)
+
+
+	SUVC6B      	: Integrale Carbone 6 B (33,7 A) 
+
+
+	SUVCL14     	: Integrale Chlore 14
+	SUVCU19     	: Integrale Cuivre 19
+	SUVFE15     	: Integrale Fer 15
+	SUVFE24     	: Integrale Fer 24
+
+	SUVHE2      	: Integrale Helium 2
+	SUVN7       	: Integrale Azote 7
+	SUVNE10     	: Integrale Neon 10
+	SUVNI18     	: Integrale Nickel 18
+	SUVO4B      	: Integrale Oxygene 4 B (272,5 A)
+
+	SUVO7       	: Integrale Oxygene 7
+
+	SUVO8       	: Integrale Oxygene 8
+
+				----------------------
+
+TDUO        		: Calcul du nombre de photons detectes emis par les ions issus des elements (Ne, Ni, Fe, Cu et O)
+	GDUOC296    	: Nombre de coups emis par l'ion C a lambda = 296 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant)
+			  Nb maxi de signaux = 60
+	GDUOC312    	: Nombre de coups emis par l'ion C  a lambda = 312 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant)
+			  Nb maxi de signaux = 60
+	GDUOC977    	: Nombre de coups emis par l'ion C a lambda = 977 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant)
+			  Nb maxi de signaux = 60
+	GDUOCU273   	: Nombre de coups emis par l'ion Cu a lambda = 273 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUOFE284   	: Nombre de coups emis par l'ion Fe a lambda = 284 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE103   	: Nombre de coups emis par l'ion Ne a lambda = 103 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE106   	: Nombre de coups emis par l'ion Ne a lambda = 106 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE402   	: Nombre de coups emis par l'ion Ne a lambda = 402 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE416   	: Nombre de coups emis par l'ion Ne a lambda = 416 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE421   	: Nombre de coups emis par l'ion Ne a lambda = 421 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE469   	: Nombre de coups emis par l'ion Ne a lambda = 469 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE482   	: Nombre de coups emis par l'ion Ne a lambda = 482 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONE770   	: Nombre de coups emis par l'ion Ne  a lambda = 770 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant)
+			  Nb maxi de signaux = 60
+	GDUONE98    	: Nombre de coups emis par l'ion Ne a lambda = 98 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUONI292   	: Nombre de coups emis par l'ion Ni a lambda = 292 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUOO1032   	: Nombre de coups emis par l'ion O  a lambda = 1032 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	GDUOO630    	: Nombre de coups emis par l'ion O a lambda = 630 Angstroms en fonction du temps et de l'angle de visee (miroir oscillant) 
+			  Nb maxi de signaux = 60
+	RDUOANGLE   	: Angle de visee du spectrometre  en  position fixe
+	RDUOMODE    	: Mode de fonctionnement du spectrometre  ( 1 : oscillant,  0 : fixe )
+	SCDUORAIES  	: Liste des raies traitees. (parmi: Ne106, Ne103, Ne98, Ni292, Fe284, Cu273, C296, Ne421, Ne416, Ne402, O630, C312, Ne770, O1032,C977,Ne482,Ne469)
+	SDUOC296    	: Nombre de coups emis par l'ion C a lambda = 296Angstroms
+	SDUOC312    	: Nombre de coups emis par l'ion C  a  lambda = 312 Angstroms
+	SDUOC977    	: Nombre de coups emis par l'ion C a lambda = 977Angstroms
+	SDUOCU273   	: Nombre de coups emis par l'ion Cu a lambda = 273Angstroms
+	SDUOFE284   	: Nombre de coups emis par l'ion Fe a lambda = 284Angstroms
+	SDUOFXC296  	: Nombre de coups emis par l'ion C a lambda = 296Angstroms a la visee fixe (miroir oscillant)
+	SDUOFXC312  	: Nombre de coups emis par l'ion C  a  lambda = 312 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXC977  	: Nombre de coups emis par l'ion C a lambda = 977Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXCU273 	: Nombre de coups emis par l'ion Cu a lambda = 273Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXFE284 	: Nombre de coups emis par l'ion Fe a lambda = 284 Angstroms a la visee fixe (miroir oscillant)
+	SDUOFXLDGL  	: Limite de detection Grand Lambda (a 3 sigma) du duochromateur a la visee fixe (miroir oscillant) 
+	SDUOFXLDPL  	: Limite de detection Petit Lambda (a 3 sigma) du duochromateur a la visee fixe (miroir oscillant) 
+	SDUOFXNE103 	: Nombre de coups emis par l'ion Ne a lambda = 103 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE106 	: Nombre de coups emis par l'ion Ne a lambda = 106 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE402 	: Nombre de coups emis par l'ion Ne a lambda = 402 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE416 	: Nombre de coups emis par l'ion Ne a lambda = 416 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE421 	: Nombre de coups emis par l'ion Ne a lambda = 421 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE469 	: Nombre de coups emis par l'ion Ne a lambda = 469 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE482 	: Nombre de coups emis par l'ion Ne a lambda = 482 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNE770 	: Nombre de coups emis par l'ion Ne  a  lambda = 770 Angstroms a al visee fixe (miroir oscillant) 
+	SDUOFXNE98  	: Nombre de coups emis par l'ion Ne a lambda = 98 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXNI292 	: Nombre de coups emis par l'ion Ni a lambda = 292 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXO1032 	: Nombre de coups emis par l'ion O  a  lambda = 1032 Angstroms a la visee fixe (miroir oscillant) 
+	SDUOFXO630  	: Nombre de coups emis par l'ion O a lambda = 630 Angstroms a la visee fixe (miroir oscillant)
+	SDUOLDGL    	: Limite de detection Grand Lambda (a 3 sigma) du duochromateur
+	SDUOLDPL    	: Limite de detection Petit Lambda (a 3 sigma) du duochromateur 
+	SDUONE103   	: Nombre de coups emis par l'ion Ne a lambda = 103 Angstroms
+	SDUONE106   	: Nombre de coups emis par l'ion Ne a lambda = 106 Angstroms
+	SDUONE402   	: Nombre de coups emis par l'ion Ne a lambda = 402 Angstroms
+	SDUONE416   	: Nombre de coups emis par l'ion Ne a lambda = 416 Angstroms
+	SDUONE421   	: Nombre de coups emis par l'ion Ne a lambda = 421 Angstroms
+	SDUONE469   	: Nombre de coups emis par l'ion Ne a lambda = 469 Angstroms
+	SDUONE482   	: Nombre de coups emis par l'ion Ne a lambda = 482 Angstroms
+	SDUONE770   	: Nombre de coups emis par l'ion Ne  a  lambda = 770 Angstroms
+	SDUONE98    	: Nombre de coups emis par l'ion Ne a lambda = 98 Angstroms
+	SDUONI292   	: Nombre de coups emis par l'ion Ni a lambda = 292 Angstroms
+	SDUOO1032   	: Nombre de coups emis par l'ion O  a  lambda = 1032 Angstroms
+	SDUOO630    	: Nombre de coups emis par l'ion O a lambda = 630 Angstroms
+	SDUORAIES   	: Vecteur logique des raies traitees. (dans l'ordre: Ne106, Ne103, Ne98, Ni292, Fe284, Cu273,C296,Ne421,Ne416,Ne402,O630,C312,Ne770,O1032,C977,Ne482,Ne469)
+	SDUOVISEE   	: Visees d'acquisition du duochromateur
+
+				----------------------
+
+TEFIT       		: Reconstruction d'equilibre plasma par le code EFIT
+	GEFAJAC     	: Jacobien de surface 
+			  Nb maxi de signaux = 65
+	GEFBPOLCA   	: Champ poloidal calcule
+			  Nb maxi de signaux = 127
+	GEFBPOLME   	: Champ poloidal mesure
+			  Nb maxi de signaux = 127
+	GEFCHIBPOL  	: CHI2 du champ poloidal mesure
+			  Nb maxi de signaux = 127
+	GEFCHIFLUX  	: CHI2 des boucles de flux
+			  Nb maxi de signaux = 14
+	GEFCHIPFC   	: CHI2 des courants dans les bobines poloidales
+			  Nb maxi de signaux = 10
+	GEFDFDPSI   	: F. dF / dpsi
+			  Nb maxi de signaux = 65
+	GEFDPDPSI   	: dP / dpsi
+			  Nb maxi de signaux = 65
+	GEFEFITVAR  	: Variables du courant  plasma
+			  Nb maxi de signaux = 20
+	GEFFDIA     	: F = Btor * R
+			  Nb maxi de signaux = 65
+	GEFFLUXCA   	: Boucles de flux calcule
+			  Nb maxi de signaux = 14
+	GEFFLUXME   	: Boucles de flux mesure
+			  Nb maxi de signaux = 14
+	GEFJSUR     	: Moyenne de densite de courant  
+			  Nb maxi de signaux = 65
+	GEFMFM      	: Magnétisation du fer (modèle)
+			  Nb maxi de signaux = 64
+	GEFMFR      	: Magnétisation du fer (reconstruction)
+			  Nb maxi de signaux = 64
+	GEFPFCCA    	: Courant calcule dans les bobines poloidales
+			  Nb maxi de signaux = 10
+	GEFPFCME    	: Courant mesure dans les bobines poloidales
+			  Nb maxi de signaux = 10
+	GEFPRES     	: Pression
+			  Nb maxi de signaux = 65
+	GEFPSI      	: Flux poloidal entre bobines toroidales (grille definie par rgrid, zgrid)
+			  Nb maxi de signaux = 1089
+	GEFPSIRIP   	: Flux poloidal de correction ripple (grille definie par rgrid, zgrid)
+			  Nb maxi de signaux = 1089
+	GEFQ        	: Facteur de securite
+			  Nb maxi de signaux = 65
+	GEFRPSI     	: R(psi,Z=Zaxe) des surfaces de flux 
+			  Nb maxi de signaux = 65
+	GEFVJAC     	: Jacobien de volume 
+			  Nb maxi de signaux = 65
+	SCTEFIT     	: Signal Commentaire
+	SEFBETAP    	: Beta poloidal
+	SEFBETAT    	: Beta toroidal
+	SEFBTOR     	: Champ toroidal de vide en R=2,42 m
+	SEFCHIDIAM  	: CHI2 du flux diamagnetique
+	SEFCHIMAG   	: CHI2  magnetique total
+	SEFDIAMCA   	: Flux diamagnetique calcule
+	SEFDIAMME   	: Flux diamagnetique mesure
+	SEFELONG    	: Elongation
+	SEFENERG    	: Energie du plasma
+	SEFIP       	: Courant plasma
+	SEFLI       	: Inductance interne
+	SEFPSIAXE   	: Flux  à l'axe magnetique
+	SEFPSIBND   	: Flux à la frontiere du  plasma
+	SEFPSIN     	: Flux normalise
+	SEFQAXE     	: Facteur de securite à l'axe magnetique
+	SEFRAXE     	: Position radiale de l'axe magnetique
+	SEFRGRID    	: Coordonnee radiale de la grille EFIT
+	SEFRMINOR   	: Petit rayon du plasma
+	SEFSHAF1    	: Parametre de Shafranov 1
+	SEFSHAF2    	: Parametre de Shafranov 2
+	SEFSHAF3    	: Parametre de Shafranov 3
+	SEFSURF     	: Surface du plasma
+	SEFTRIANG   	: Triangularite
+	SEFVOLUME   	: Volume du plasma
+	SEFZAXE     	: Position verticale de l'axe magnetique
+	SEFZGRID    	: Coordonnee verticale de la grille EFIT
+
+				----------------------
+
+TEFITCRONOS 		: Reconstruction d'équilibre plasma par le code Efit à partir des données de CRONOS
+	GEFCRAJAC   	: Jacobien de surface  
+			  Nb maxi de signaux = 33
+	GEFCRBPHI   	: Champ  magnetique  toroidal  entre  bobines  toroidales  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRBPHIR  	: Champ  magnetique  toroidal  de  correction ripple  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRBPOLCA 	: Champ  poloidal  calcule 
+			  Nb maxi de signaux = 127
+	GEFCRBPOLME 	: Champ  poloidal  mesure 
+			  Nb maxi de signaux = 127
+	GEFCRBR     	: Champ  magnetique  radial  entre  bobines  toroidales  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRBRRIP  	: Champ  magnetique  radial  de  correction ripple  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRBTOT   	: Champ  magnetique  total  entre  bobines  toroidales  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRBZ     	: Champ  magnetique  vertical  entre  bobines  toroidales  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRBZRIP  	: Champ  magnetique  vertical  de  correction ripple  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRCHIBP  	: CHI2 du champ poloidal mesure  
+			  Nb maxi de signaux = 127
+	GEFCRCHIFL  	: CHI2 des boucles   de flux  
+			  Nb maxi de signaux = 14
+	GEFCRCHIJSU 	: CHI2 de profil  de  densite  de  courant  
+			  Nb maxi de signaux = 64
+	GEFCRCHIPFC 	: CHI2  des  courants  dans les bobines  poloidales 
+			  Nb maxi de signaux = 10
+	GEFCRCHIPRS 	: CHI2   de  profil de pression 
+			  Nb maxi de signaux = 64
+	GEFCRDFDPSI 	: F . dF / dpsi 
+			  Nb maxi de signaux = 65
+	GEFCRDPDPSI 	: dP / dpsi  
+			  Nb maxi de signaux = 65
+	GEFCREFITVA 	: Variables du courant plasma  
+			  Nb maxi de signaux = 64
+	GEFCRFDIA   	: F = Btor * R 
+			  Nb maxi de signaux = 65
+	GEFCRFLUXCA 	: Boucles   de flux  calcule  
+			  Nb maxi de signaux = 14
+	GEFCRFLUXME 	: Boucles   de flux  mesure 
+			  Nb maxi de signaux = 14
+	GEFCRJSUR   	: Moyenne de densite de courant 
+			  Nb maxi de signaux = 33
+	GEFCRJSURCA 	: Profil  de  densite  de  courant  moyenne  calcule
+			  Nb maxi de signaux = 64
+	GEFCRJSURME 	: Profil  de  densite  de  courant  moyenne obtenu 
+			  Nb maxi de signaux = 64
+	GEFCRMFM    	: Magnetisation du fer (modele) 
+			  Nb maxi de signaux = 64
+	GEFCRMFR    	: Magnetisation du fer (reconstruction) 
+			  Nb maxi de signaux = 64
+	GEFCRPFCCA  	: Courant calcule dans les bobines  poloidales 
+			  Nb maxi de signaux = 10
+	GEFCRPFCME  	: Courant mesure dans les bobines  poloidales 
+			  Nb maxi de signaux = 10
+	GEFCRPRES   	: Pression 
+			  Nb maxi de signaux = 65
+	GEFCRPRESCA 	: Profil  de  pression calcule 
+			  Nb maxi de signaux = 64
+	GEFCRPRESME 	: Profil  de  pression mesure 
+			  Nb maxi de signaux = 64
+	GEFCRPSI    	: Flux  poloidal  entre  bobines  toroidales  ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRPSIRIP 	: Flux  poloidal  de correction ripple  ( grille  definie  par  rgrid,  zgrid ) 
+			  Nb maxi de signaux = 1089
+	GEFCRPSISYM 	: Flux  poloidal  axisymetrique ( grille  definie  par  rgrid,  zgrid )
+			  Nb maxi de signaux = 1089
+	GEFCRQ      	: Facteur de securite 
+			  Nb maxi de signaux = 65
+	GEFCRRPSI   	: R ( psi, Z=Zaxe ) des surfaces de flux 
+			  Nb maxi de signaux = 33
+	GEFCRVJAC   	: Jacobien de volume 
+			  Nb maxi de signaux = 33
+	SCTEFITCRON 	: Signal commentaire 
+	SEFCRBETAP  	: Beta poloidal   
+	SEFCRBETAT  	: Beta toroidal   
+	SEFCRBTOR   	: Champ toroidal de vide en R = 2,42 m     
+	SEFCRCHIDIA 	: CHI2 du flux diamagnetique        
+	SEFCRCHIMAG 	: CHI2 magnetique total 
+	SEFCRDIAMCA 	: Flux diamagnetique calcule       
+	SEFCRDIAMME 	: Flux diamagnetique mesure       
+	SEFCRELONG  	: Elongation 
+	SEFCRENERG  	: Energie du plasma      
+	SEFCRIP     	: Courant plasma      
+	SEFCRLI     	: Inductance interne   
+	SEFCRPSIAXE 	: Flux à l'axe magnetique 
+	SEFCRPSIBND 	: Flux à la frontière du plasma 
+	SEFCRPSIJSU 	: psi  normalise  du  profil  de  densite  de  courant  
+	SEFCRPSIN   	: Flux normalise 
+	SEFCRPSIPRS 	: psi normalise  du  profil  de  pression 
+	SEFCRQAXE   	: Facteur de securite à l'axe magnetique
+	SEFCRRAXE   	: Position radiale de l'axe magnetique 
+	SEFCRRGRID  	: Coordonnee  radiale  de  la  grille  EFIT 
+	SEFCRRMINOR 	: Petit rayon du plasma 
+	SEFCRSHAF1  	: Parametre de Shafranov 1    
+	SEFCRSHAF2  	: Parametre de Shafranov 2     
+	SEFCRSHAF3  	: Parametre de Shafranov 3      
+	SEFCRSURF   	: Surface du plasma  
+	SEFCRTRIANG 	: Triangularite  
+	SEFCRVOLUME 	: Volume du plasma  
+	SEFCRZAXE   	: Position verticale de l'axe magnetique 
+	SEFCRZGRID  	: Coordonnee  verticale  de  la  grille  EFIT  
+
+				----------------------
+
+TEMPETE     		: 
+	GFA         	: modes rayon decomposition en serie de Fourier = f(t,mode)
+			  Nb maxi de signaux = 4
+	GFTETA      	: modes angle decomposition en serie de Fourier = f(t,mode)
+			  Nb maxi de signaux = 4
+	SAMIN       	: a       : Petit rayon
+	SBELI       	: Beq+li/2: Beta equilibre + li/2
+	SBTGEXT     	: Btg ext : champ tangent a la frontiere a 0 degre
+	SBTGINT     	: Btg int : champ tangent a la frontiere a 180 degres
+	SBTGNORD    	: Champ tangentiel a la frontiere a 90 degres (T)
+	SBTGSUD     	: Champ tangentiel a la frontiere a 270 degres (T)
+	SCONTACT    	: Contact : Point de contact avec la paroi (en degres)
+	SCONTOUR    	: front   : coordonnees y=f(x) frontiere plasma au milieu du plateau
+	SDIAM       	: Beta dia: Beta diamagnetique
+	SIMAG       	: Ip      : Courant plasma
+	SPAROI      	: paroi   : coordonnees y=f(x) paroi
+	SPOHM       	: Pohm    : Puissance ohmique
+	SQPSI       	: qpsi    : q psi
+	SRMAJ       	: Ro      : Grand rayon
+	STAUDIA     	: Temps de confinement de l'energie diamagnetique.
+	SVSUR       	: Vs      : Tension par tour a la surface
+	SWDIA       	: Wdia    : Energie diamagnetique
+	SXEST       	: Xest    : frontiere du plasma a 0 degre
+	SZPOS       	: Zo      : Deplacement vertical
+
+				----------------------
+
+TENEPROB    		: Calcul de temperature et densite electroniques par diffusion Thomson des 12 spectrometres (Methode probabiliste) 
+NB : Les  incertitudes considerees sont dues aux effets statistiques (photonique, bruit des amplificateurs ...) Les erreurs systematiques ne sont pas prises en compte.
+	GNEINF      	: Densite electronique Ne (limite inferieure de l'intervalle d'incertitude a 67% de probabilite)
+			  Nb maxi de signaux = 12
+	GNEINFM     	: Densite electronique Ne (limite inferieure de l'intervalle d'incertitude a 95% de probabilite)
+			  Nb maxi de signaux = 12
+	GNEMED      	: Densite electronique Ne (mediane de la fonction densite de probabilite)
+			  Nb maxi de signaux = 12
+	GNEMOY      	: Densite electronique Ne (moyenne de la fonction densite de probabilite)
+			  Nb maxi de signaux = 12
+	GNEPROB     	: Valeur de Ne où la fonction densite de probabilite atteint son maximum
+			  Nb maxi de signaux = 12
+	GNESUP      	: Densite electronique Ne (limite superieure de l'intervalle d'incertitude à 67% de probabilite)
+			  Nb maxi de signaux = 12
+	GNESUPP     	: Densite electronique Ne (limite superieure de l'intervalle d'incertitude a 95% de probabilite)
+			  Nb maxi de signaux = 12
+	GPE         	: Pression electronique Pe (moyenne de la fonction densite de probabilite)
+			  Nb maxi de signaux = 12
+	GPEINF      	: Pression electronique Ne (limite inferieure de l'intervalle d'incertitude a 67% de probabilite)
+			  Nb maxi de signaux = 12
+	GPESUP      	: Pression electronique Pe (limite superieure de l'intervalle d'incertitude à 67% de probabilite)
+			  Nb maxi de signaux = 12
+	GPLT        	: Plausibilite temporelle
+
+			  Nb maxi de signaux = 12
+	GTEINF      	: Temperature electronique Te (limite inferieure de l'intervalle d'incertitude a 67% de probabilite)
+			  Nb maxi de signaux = 12
+	GTEINFM     	: Temperature electronique Te (limite inferieure de l'intervalle d'incertitude a 95% de probabilite)
+			  Nb maxi de signaux = 12
+	GTEMED      	: Temperature electronique Te (mediane de la fonction densite de probabilite)
+			  Nb maxi de signaux = 12
+	GTEMOY      	: Temperature electronique Te (moyenne de la fonction densite de probabilite)
+			  Nb maxi de signaux = 12
+	GTEPROB     	: Valeur de Te où la fonction densite de probabilite atteint son maximum
+			  Nb maxi de signaux = 12
+	GTESUP      	: Temperature electronique Te (limite superieure de l'intervalle d'incertitude à 67% de probabilite)
+			  Nb maxi de signaux = 12
+	GTESUPP     	: Temperature electronique Te (limite superieure de l'intervalle d'incertitude a 95% de probabilite)
+			  Nb maxi de signaux = 12
+	GXG         	: Coefficients de recalibration des 3 signaux spectraux utilises dans calcul 
+			  Nb maxi de signaux = 12
+
+				----------------------
+
+TENERE      		: Calcul de la temperature et de la densite eletronique par diffusion THOMSON
+	GERNETHOM   	: Erreur sur densite electronique
+			  Nb maxi de signaux = 12
+	GERTETHOM   	: Erreur sur temperature electronique
+			  Nb maxi de signaux = 12
+	GNETHOM     	: Densite electronique (diffusion Thomson)
+			  Nb maxi de signaux = 12
+	GTETHOM     	: Temperature electronique
+			  Nb maxi de signaux = 12
+	RTEDIS      	: Temperature electronique avant disruption            keV
+	RTHOMLAS    	: rayon de la visee laser, mesure par rapport axe machine
+	SCTENERE    	: Signal  Commentaire
+	SPARTHOM    	: Parametres de calcul 
+
+				----------------------
+
+TEQUAL      		: Recconstruction de l'equilibre du plasma par le code EQUAL
+
+	GEQFACA     	: Angles Faraday  calculés.  (rad)
+			  Nb maxi de signaux = 10
+	GEQFAME     	: Angles Faraday  mesurés.  (rad)
+			  Nb maxi de signaux = 10
+	GEQJMOY     	: Densité de courant moyenne. (Am-2)
+			  Nb maxi de signaux = 101
+	GEQNLCA     	: Nl  calculé.  (m-2)
+			  Nb maxi de signaux = 10
+	GEQNLME     	: Nl  mesuré.  (m-2)
+			  Nb maxi de signaux = 10
+	GEQPRES     	: Pression moyenne. (Pa)
+			  Nb maxi de signaux = 101
+	GEQPSI      	: Flux  (grille définie par Rgrid, Zgrid). (Wb)
+			  Nb maxi de signaux = 4225
+	GEQPSIR     	: Profil du flux sur l'axe R  (Wb)
+
+
+			  Nb maxi de signaux = 101
+	GEQQ        	: Facteur de sécurité
+			  Nb maxi de signaux = 101
+	GEQR        	: Coordonnées en R  des surfaces de flux extérieures
+			  Nb maxi de signaux = 101
+	GEQRHO      	: Coordonnées en rho normalisé des surfaces de flux
+			  Nb maxi de signaux = 101
+	GEQSHAF     	: Décalage de Shafranov
+
+			  Nb maxi de signaux = 101
+	SCEQUAL     	: Signal commentaire de TEQUAL
+
+	SEQBETAP    	: Beta poloidal.
+	SEQBETAT    	: Beta toroidal.
+	SEQELONG    	: Elongation du plasma.
+	SEQENERG    	: Energie du plasma. (J)
+	SEQLI       	: Inductance interne.
+	SEQPSIAXE   	: Flux à l'axe magnetique.
+	SEQPSIBND   	: Flux à la fontière du pasma.
+	SEQQ95      	: Facteur de sécurité à 95% du flux poloidal
+
+	SEQQAXE     	: Facteur de sécurité à l'axe magnétique.
+	SEQR0       	: Position radiale du centre du plasma. (m)
+	SEQRAXE     	: Position radiale de l'axe magnétique (m)
+	SEQRGRID    	: Coordonnées radiales de la grille  (m)
+
+	SEQRMINOR   	: Petit rayon du plasma (m)
+	SEQZ0       	: Position verticale du centre du plasma. (m)
+	SEQZAXE     	: Position verticale de l'axe magnétique (m)
+	SEQZGRID    	: Coordonnées verticales de la grille  (m)
+
+
+				----------------------
+
+TEQUILA     		: Elements des profils de courant et de decalage SHAFRANOV.
+	SD0MAG      	: Deplacement SHAFRANOV au centre calcule par les magnetiques.
+	SD0POL      	: Deplacement SHAFRANOV au centre calcule par la polarimetrie.
+	SELLIP      	: Ellipticite derniere surface magnetique.
+	SELLIPIQ    	: Derivee Ellipticite derniere surface magnetique : E(rho)= E'(10.(1-rho^2) + E(1).
+	SJCENTRE    	: Densite de courant au centre du plasma.
+	SJPIQ       	: Piquage du courant : J= SJCENTRE.(1-rho^2)^SJPIQ.
+	SQCENTRE    	: Facteur de securite au centre du plasma.
+	SSMAG       	: Piquage du deplacement SHAFRANOV calcule par les magnetiques : D= SD0MAG.(1-rho^SSMAG)
+	SSPOL       	: Piquage du deplacement SHAFRANOV calcule par la polarimetrie : D= DS0POL.(1-rho^SSPOL)
+
+				----------------------
+
+TFCE        		: Traitement associe au chauffage FCE
+	GA1FCE      	: Angles du premier miroir de chaque polariseur 
+			  Nb maxi de signaux = 6
+	GA2FCE      	: Angles du deuxieme miroir de chaque polariseur  
+			  Nb maxi de signaux = 6
+	GFACTFCE    	: Facteur multiplicatif complementaire de la puissance 
+			  Nb maxi de signaux = 6
+	GFRACOXFCE  	: Fraction de la puissance injectee en mode O
+			  Nb maxi de signaux = 6
+	GFREQFCE    	: Frequence de chaque gyrotron 
+			  Nb maxi de signaux = 6
+	GPFCE       	: Puissance fournie par chaque gyrotron
+			  Nb maxi de signaux = 6
+	GPOLOFCE    	: Angles poloidaux d'injection de l'onde  
+			  Nb maxi de signaux = 6
+	GTOROFCE    	: Angles toroidaux d'injection de l'onde 
+			  Nb maxi de signaux = 6
+	SCEQUIVFCE  	: Texte source matlab donnant l'equivalence entre le numero de voie dans un signal et le nom du tube
+	SCFCE       	: Commentaire associe au traitement  
+	SCUSERFCE   	: Nom de la session depuis laquelle a ete utilise le traitement  
+	SHARMFCE    	: Harmonique souhaitee pour le couplage de l'onde  
+	SMODOXFCE   	: Mode O/X souhaite pour le couplage de l'onde 
+	SPMAXFCE    	: Puissance maximale emise par chaque tube 
+	SRFCE       	: Grand rayon des antennes 
+	SZFCE       	: Position par rapport au plan equatorial des antennes  
+
+				----------------------
+
+TFCI        		: Traitement des donnees de FCI.
+	GPFCI       	: Puissance = f (temps, numero queusot)
+			  Nb maxi de signaux = 3
+	GPHFCI      	: Phase = f (temps, numero queusot)
+			  Nb maxi de signaux = 3
+	GRCFCI      	: Resistance de couplage = f (temps,numero du strap)
+			  Nb maxi de signaux = 6
+	GVFCI       	: Tension d'antenne = f ( temps,numero de sonde )
+			  Nb maxi de signaux = 12
+	SFREQFCI    	: Frequences des 3 antennes.
+	SPOSFCI     	: Positions des 3 antennes.
+
+				----------------------
+
+TFINIR      		: Calcul des temperatures de surface dans le proche Infrarouge
+	GTFILTPIR   	: Temperature de surface basee sur un filtre proche infrarouge
+			  Nb maxi de signaux = 6
+	GTSPECPIR   	: Temperature de surface basee sur un spectre proche infrarouge
+			  Nb maxi de signaux = 3
+	SCFINIR     	: Signal commentaire de TFINIR
+	SPARFILTPIR 	: Parametres du systeme a filtre proche infrarouge DFINIR2 
+	SPARSPECPIR 	: Parametres du spectrometre proche infrarouge DFINIR1 
+
+				----------------------
+
+THXRPROF    		: Traitement du profil d'emission X-durs
+	GHXR1       	: Emission X (cps/s/mm3/str) pour le canal d'energie 20-40 keV
+			  Nb maxi de signaux = 31
+	GHXR2       	: Emission X (cps/s/mm3/str) pour le canal d'energie 40-60 keV
+			  Nb maxi de signaux = 31
+	GHXR3       	: Emission X (cps/s/mm3/str) pour le canal d'energie 60-80 keV
+			  Nb maxi de signaux = 31
+	SLEXTHXR1   	: Largeur externe du profil (u.a) pour le canal d'energie 20-40 keV
+	SLEXTHXR2   	: Largeur externe du profil (u.a) pour le canal d'energie 40-60 keV
+	SLEXTHXR3   	: Largeur externe du profil (u.a) pour le canal d'energie 60-80 keV
+	SLINTHXR1   	: Largeur interne du profil (u.a) pour le canal d'energie 20-40 keV
+	SLINTHXR2   	: Largeur interne du profil (u.a) pour le canal d'energie 40-60 keV
+	SLINTHXR3   	: Largeur interne du profil (u.a) pour le canal d'energie 60-80 keV
+	SMAXHXR1    	: Position du maximum du profil (rayon normalise) pour le canal d'energie 20-40 keV
+	SMAXHXR2    	: Position du maximum du profil (rayon normalise) pour le canal d'energie 40-60 keV
+	SMAXHXR3    	: Position du maximum du profil (rayon normalise) pour le canal d'energie 60-80 keV
+
+				----------------------
+
+THYB        		: Chauffage Hybride
+	GNLG1       	: Densite Sondes Langmuir Coupleur 1 = f(temps,sonde)
+			  Nb maxi de signaux = 4
+	GNLG2       	: Densite Sondes Langmuir Coupleur 2 = f(temps,sonde)
+			  Nb maxi de signaux = 4
+	GPHASHYB    	: Dephasage moyen entre les modules des 2 antennes
+			  Nb maxi de signaux = 2
+	GTELG1      	: Temperature electronique par  les 3 sondes de Langmuir (antenne 1)
+			  Nb maxi de signaux = 4
+	GTELG2      	: Temperature electronique par  les 3 sondes de Langmuir (antenne 2)
+			  Nb maxi de signaux = 4
+	RDPHI1      	: Dephasage moyen Coupleur 1   (moyenne sur creneau HF)
+	RDPHI2      	: Dephasage moyen Coupleur 2   (moyenne sur creneau HF)
+	RERRPHI1    	: Ecart type Dephasage moyen Coupleur 1   (moyenne sur creneau HF)
+	RERRPHI2    	: Ecart type Dephasage moyen Coupleur 2   (moyenne sur creneau HF)
+	RPIMOY      	: Puissance totale injectee moyenne
+	RQUALIHYB   	: Facteur de qualite de la puissance HF
+
+				----------------------
+
+THYBCOR     		: Traitement de correction des puissances Hybride et des coefficients de reflexion
+	GCREFC1COR  	: Coefficient de reflexion au niveau des 16 modules du Coupleur 1 
+			  Nb maxi de signaux = 16
+	GCREFC2COR  	: Coefficient de reflexion au niveau des 16 modules du Coupleur 2 
+			  Nb maxi de signaux = 16
+	GPHYBCOR    	: Puissance Hybride Injectee Coupleur 1, Coupleur 2 et Totale (Corrigee)
+			  Nb maxi de signaux = 3
+	GPINJC1COR  	: Puissance Injectee au niveau des 16 modules du Coupleur 1 (corrigee)
+			  Nb maxi de signaux = 16
+	GPINJC2COR  	: Puissance Injectee au niveau des 16 modules du Coupleur 2 (corrigee)
+			  Nb maxi de signaux = 16
+	GREFHYBCOR  	: Coefficient de reflexion Coupleur 1 et Coupleur 2 (Corrige)
+			  Nb maxi de signaux = 2
+
+				----------------------
+
+TICXS       		: Traitement de la temperature ionique par spectroscopie d'echange de charge.
+	GERFLUXCXS  	: Erreur sur intensité de la raie CVI 
+			  Nb maxi de signaux = 15
+	GERFONDCXS  	: Erreur sur niveau du fond
+
+			  Nb maxi de signaux = 15
+	GERTICXS    	: Erreur temperature par spectroscopie d'echange de charge
+			  Nb maxi de signaux = 15
+	GERWPHICXS  	: Erreur sur vitesse angulaire toroidale par spectroscopie d'echange de charge
+			  Nb maxi de signaux = 15
+	GFLUXCXS    	: Intensité de la raie CVI 
+			  Nb maxi de signaux = 15
+	GFONDCXS    	: Niveau du fond
+
+			  Nb maxi de signaux = 15
+	GTICXS      	: Temperature ionique par spectroscopie d'echange de charge
+			  Nb maxi de signaux = 15
+	GWPHICXS    	: Vitesse angulaire toroidale par spectroscopie d'echange de charge
+			  Nb maxi de signaux = 15
+	SCTICXS     	: Signal commentaire de TICXS
+	SERRAYCXS   	: Erreur sur Grand Rayon de la mesure de Ti
+	SRAYCXS     	: Grand Rayon de la mesure de Ti
+
+				----------------------
+
+TIGNI       		: Calcul du temps IGNITRON et de la duree du plasma.
+	RDUREE      	: Duree totale du plasma (s)
+	RIGNITRON   	: Temps de l'ignitron (s)
+
+				----------------------
+
+TIGV        		: Injection de glacons.
+	SMIGV       	: Masse des glacons.
+	SVIGV       	: Vitesse initiale des glacons.
+
+				----------------------
+
+TMAG        		: Traitement des donnees magnetiques
+	GBTGMG      	: Champ tangent sur 72 angles
+			  Nb maxi de signaux = 72
+	GDIAMMG     	: Rapport de la pression diamagnétique / pression cinétique
+			  Nb maxi de signaux = 2
+	GFDIAMMG    	: Flux diamagnetique
+			  Nb maxi de signaux = 2
+	GRPLASMG    	: Abscisses de la frontiere plasma sur 72 angles
+			  Nb maxi de signaux = 72
+	GZPLASMG    	: Ordonnees de la frontière plasma sur 72 angles
+			  Nb maxi de signaux = 72
+	SAEQAMG     	: Petit  rayon  plasma  (sur l'equateur)
+	SAMOYMG     	: Petit  rayon  plasma  moyen
+	SBELIMG     	: Parametre de Shafranov
+	SCONTACTMG  	: Angle  de  contact  du  plasma  avec  le  limiteur
+	SD0MAGMG    	: Deplacement  Shafranov  (D0)
+	SDMDPMG     	: Controles des donnees traitees
+	SDPIQMG     	: Piquage  D0
+	SELONGMG    	: Ellipticite  du  plasma
+	SERRTMAG    	: Controles des mesures
+	SFLUXPMG    	: Flux  plasma  a  la  paroi
+	SILPTMG     	: Courant  poutre  LDC
+	SIMAGMG     	: Courant  plasma
+	SJCENTREMG  	: Densite de courant centrale (J0)
+	SJPIQMG     	: Piquage J0
+	SLAMG       	: Self annulaire du plasma
+	SPAROIMG    	: Coordonnees de la paroi et des limiteurs
+	SPOHMMG     	: Puissance ohmique
+	SQPSIMG     	: Facteur de securite au bord
+	SRMAJMG     	: Grand  rayon  plasma
+	SSHAF1MG    	: Coefficient de Shafranov (S1)
+	SSHAF2MG    	: Coefficient de Shafranov (S2)
+	STAUDIAMG   	: Temps de vie de l'energie diamagnetique
+	STRIANGMG   	: Triangularite  du  plasma
+	SVSURMG     	: Tension par tour au bord
+	SWDIAMG     	: Energie diamagnétique
+	SZPOSMG     	: Position  horizontale  plasma
+
+				----------------------
+
+TMAGCOR     		: Correction des donnees magnetiques temps reel
+	GRHOCOR     	: Coordonnee RHO  en fonction du temps et  de l'angle Theta
+			  Nb maxi de signaux = 72
+	SAEQACOR    	: Petit rayon plasma (sur l'equateur)
+	SAMOYCOR    	: Petit rayon plasma moyen
+	SBELICOR    	: Parametre de Shafranov 
+	SBTGEXTCOR  	: Champ tangent à 0 degre 
+	SBTGINTCOR  	: Champ tangent à 180 degre 
+	SBTGNORDCOR 	: Champ tangent à 90 degre 
+	SBTGSUDCOR  	: Champ tangent à 270 degre 
+	SCONTACTCOR 	: Angle de contact du plasma avec le limiteur 
+	SCTMAGCOR   	: Commentaire concernant les corrections
+	SD0MAGCOR   	: Deplacement Shafranov (D0)
+	SDIAMCOR    	: Rapport de la pression diamagnetique /pression cinetique
+	SDMDPMGCOR  	: Comparaison Temps Reel (DPOLO) / Temps Differe (TMAGCOR)
+	SDPIQCOR    	: Piquage (D0) 
+	SELLONGCOR  	: Ellipticite du plasma 
+	SERRMGCOR   	: Signal  Erreur 
+	SFDIAMCOR   	: Flux diamagnétique 
+	SFLUXPCOR   	: Flux plasma a la frontiere 
+	SIMAGCOR    	: Courant plasma
+	SJCENTRECOR 	: Densite de courant centrale (J0)
+	SJPIQCOR    	: Piquage (J0) 
+	SLACOR      	: Self annulaire du plasma 
+	SPAROICOR   	: Coordonnees de la paroi et des limiteurs (R,Z) 
+	SPOHMCOR    	: Puissance ohmique
+	SQPSICOR    	: Facteur de securite au bord
+	SRMAJCOR    	: Grand rayon plasma 
+	SSHAF1COR   	: Coefficient de Shafranov (S1) 
+	SSHAF2COR   	: Coefficient de Shafranov (S2)  
+	STAUDIACOR  	: Temps de vie de l'energie diamagnetique 
+	STRIANGCOR  	: Triangularite du plasma 
+	SVSURCOR    	: Tension par tour au bord 
+	SWDIACOR    	: Energie diamagnetique
+	SXESTCOR    	: Frontiere à 0 degre 
+	SZPOSCOR    	: Position horizontale plasma
+
+				----------------------
+
+TNPAR       		: Calcul du spectre N Parallele des coupleurs Hybride
+	GHYBCDIR1   	: Directivite du courant genere  du coupleur Hybride Q6A en fonction du N parallele et du temps
+			  Nb maxi de signaux = 5
+	GHYBCDIR2   	: Directivite du courant genere  du coupleur Hybride Q6B en fonction du N parallele et du temps
+			  Nb maxi de signaux = 5
+	GHYBEFFN    	: Directivite du courant genere, normalisee à N parallele=2, au niveau des coupleurs Hybride (Q6A et Q6B)
+			  Nb maxi de signaux = 2
+	GHYBNPAR    	: N parallele du maximum du spectre au niveau des coupleurs Hybride (Q6A et Q6B)
+			  Nb maxi de signaux = 2
+	GHYBPHCONS  	: Dephasage demande au niveau des coupleurs Hybride (Q6A et Q6B)
+			  Nb maxi de signaux = 2
+	GHYBPHMES   	: Dephasage mesure au niveau des coupleurs Hybride (Q6A et Q6B)
+			  Nb maxi de signaux = 2
+	GHYBSPEC1   	: Amplitude du spectre  du coupleur Hybride Q6A en fonction du N parallele et du temps
+			  Nb maxi de signaux = 5
+	GHYBSPEC2   	: Amplitude du spectre  du coupleur Hybride Q6B en fonction du N parallele et du temps
+			  Nb maxi de signaux = 5
+	SCHYBNPAR   	: Signal commentaire du traitement TNPAR
+
+				----------------------
+
+TPAROI      		: Calcul des coordonnees de la paroi et des limiteurs (R,Z)
+	SPAROITS    	: Coordonnees de la paroi et des limiteurs (R,Z)
+
+				----------------------
+
+TPRISME     		: Calcul  des radiances spectrales et des temperatures de surface des aiguilles N1 de 12 neutraliseurs à partir du diagnostic DPRISME
+	GERSPIRQ1AB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q1A Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ1AH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q1A Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ1AM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q1A Median  
+			  Nb maxi de signaux = 15
+	GERSPIRQ1BB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q1B Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ1BH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q1B Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ1BM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q1B Median 
+			  Nb maxi de signaux = 15
+	GERSPIRQ2AB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q2A Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ2AH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q2A Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ2AM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q2A Median  
+			  Nb maxi de signaux = 15
+	GERSPIRQ2BB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q2B Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ2BH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q2B Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ2BM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q2B Median 
+			  Nb maxi de signaux = 15
+	GERSPIRQ3AB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q3A Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ3AH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q3A Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ3AM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q3A Median  
+			  Nb maxi de signaux = 15
+	GERSPIRQ3BB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q3B Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ3BH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q3B Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ3BM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q3B Median 
+			  Nb maxi de signaux = 15
+	GERSPIRQ4AB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q4A Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ4AH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q4A Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ4AM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q4A Median  
+			  Nb maxi de signaux = 15
+	GERSPIRQ4BB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q4B Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ4BH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q4B Haut  
+			  Nb maxi de signaux = 45
+	GERSPIRQ4BM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q4B Median 
+			  Nb maxi de signaux = 15
+	GERSPIRQ5AB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q5A Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ5AH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q5A Haut  
+			  Nb maxi de signaux = 45
+	GERSPIRQ5AM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q5A Median  
+			  Nb maxi de signaux = 15
+	GERSPIRQ5BB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q5B Bas  
+			  Nb maxi de signaux = 45
+	GERSPIRQ5BH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q5B Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ5BM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q5B Median 
+			  Nb maxi de signaux = 15
+	GERSPIRQ6AB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q6A Bas  
+			  Nb maxi de signaux = 45
+	GERSPIRQ6AH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q6A Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ6AM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q6A Median  
+			  Nb maxi de signaux = 15
+	GERSPIRQ6BB 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q6B Bas  
+			  Nb maxi de signaux = 15
+	GERSPIRQ6BH 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q6B Haut  
+			  Nb maxi de signaux = 15
+	GERSPIRQ6BM 	: Erreur absolue sur la radiance spectrale du neutraliseur en Q6B Median 
+			  Nb maxi de signaux = 15
+	GERSPIRX1   	: Erreur absolue sur la radiance spectrale X1
+			  Nb maxi de signaux = 15
+	GERSPIRX2   	: Erreur absolue sur la radiance spectrale X2 
+			  Nb maxi de signaux = 15
+	GERSPIRX3   	: Erreur absolue sur la radiance spectrale X3 
+			  Nb maxi de signaux = 15
+	GERSPIRX4   	: Erreur absolue sur la radiance spectrale X4 
+			  Nb maxi de signaux = 15
+	GRSPIRQ1AB  	: Radiance spectrale du neutraliseur en Q1A Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ1AH  	: Radiance spectrale du neutraliseur en Q1A Haut  
+			  Nb maxi de signaux = 15
+	GRSPIRQ1AM  	: Radiance spectrale du neutraliseur en Q1A Median   
+			  Nb maxi de signaux = 15
+	GRSPIRQ1BB  	: Radiance spectrale du neutraliseur en Q1B Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ1BH  	: Radiance spectrale du neutraliseur en Q1B Haut 
+			  Nb maxi de signaux = 15
+	GRSPIRQ1BM  	: Radiance spectrale du neutraliseur en Q1B Median  
+			  Nb maxi de signaux = 15
+	GRSPIRQ2AB  	: Radiance spectrale du neutraliseur en Q2A Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ2AH  	: Radiance spectrale du neutraliseur en Q2A Haut  
+			  Nb maxi de signaux = 15
+	GRSPIRQ2AM  	: Radiance spectrale du neutraliseur en Q2A Median   
+			  Nb maxi de signaux = 15
+	GRSPIRQ2BB  	: Radiance spectrale du neutraliseur en Q2B Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ2BH  	: Radiance spectrale du neutraliseur en Q2B Haut 
+			  Nb maxi de signaux = 15
+	GRSPIRQ2BM  	: Radiance spectrale du neutraliseur en Q2B Median  
+			  Nb maxi de signaux = 15
+	GRSPIRQ3AB  	: Radiance spectrale du neutraliseur en Q3A Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ3AH  	: Radiance spectrale du neutraliseur en Q3A Haut  
+			  Nb maxi de signaux = 15
+	GRSPIRQ3AM  	: Radiance spectrale du neutraliseur en Q3A Median   
+			  Nb maxi de signaux = 15
+	GRSPIRQ3BB  	: Radiance spectrale du neutraliseur en Q3B Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ3BH  	: Radiance spectrale du neutraliseur en Q3B Haut 
+			  Nb maxi de signaux = 15
+	GRSPIRQ3BM  	: Radiance spectrale du neutraliseur en Q3B Median  
+			  Nb maxi de signaux = 15
+	GRSPIRQ4AB  	: Radiance spectrale du neutraliseur en Q4A Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ4AH  	: Radiance spectrale du neutraliseur en Q4A Haut  
+			  Nb maxi de signaux = 15
+	GRSPIRQ4AM  	: Radiance spectrale du neutraliseur en Q4A Median   
+			  Nb maxi de signaux = 15
+	GRSPIRQ4BB  	: Radiance spectrale du neutraliseur en Q4B Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ4BH  	: Radiance spectrale du neutraliseur en Q4B Haut 
+			  Nb maxi de signaux = 45
+	GRSPIRQ4BM  	: Radiance spectrale du neutraliseur en Q4B Median  
+			  Nb maxi de signaux = 15
+	GRSPIRQ5AB  	: Radiance spectrale du neutraliseur en Q5A Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ5AH  	: Radiance spectrale du neutraliseur en Q5A Haut  
+			  Nb maxi de signaux = 45
+	GRSPIRQ5AM  	: Radiance spectrale du neutraliseur en Q5A Median   
+			  Nb maxi de signaux = 15
+	GRSPIRQ5BB  	: Radiance spectrale du neutraliseur en Q5B Bas 
+			  Nb maxi de signaux = 45
+	GRSPIRQ5BH  	: Radiance spectrale du neutraliseur en Q5B Haut 
+			  Nb maxi de signaux = 15
+	GRSPIRQ5BM  	: Radiance spectrale du neutraliseur en Q5B Median  
+			  Nb maxi de signaux = 15
+	GRSPIRQ6AB  	: Radiance spectrale du neutraliseur en Q6A Bas 
+			  Nb maxi de signaux = 45
+	GRSPIRQ6AH  	: Radiance spectrale du neutraliseur en Q6A Haut  
+			  Nb maxi de signaux = 15
+	GRSPIRQ6AM  	: Radiance spectrale du neutraliseur en Q6A Median   
+			  Nb maxi de signaux = 15
+	GRSPIRQ6BB  	: Radiance spectrale du neutraliseur en Q6B Bas 
+			  Nb maxi de signaux = 15
+	GRSPIRQ6BH  	: Radiance spectrale du neutraliseur en Q6B Haut 
+			  Nb maxi de signaux = 15
+	GRSPIRQ6BM  	: Radiance spectrale du neutraliseur en Q6B Median  
+			  Nb maxi de signaux = 15
+	GRSPIRX1    	: Radiance spectrale X1
+			  Nb maxi de signaux = 15
+	GRSPIRX2    	: Radiance spectrale X2 
+			  Nb maxi de signaux = 15
+	GRSPIRX3    	: Radiance spectrale X3 
+			  Nb maxi de signaux = 15
+	GRSPIRX4    	: Radiance spectrale X4 
+			  Nb maxi de signaux = 15
+	GTS16PIR    	: Temperature de surface issue des spectres de DPRISME a 1,6 micron 
+			  Nb maxi de signaux = 40
+	GTS16PIRINF 	: Erreur inférieure sur la temperature de surface issue des spectres de DPRISME a 1,6 micron 
+			  Nb maxi de signaux = 40
+	GTS16PIRSUP 	: Erreur supérieure sur la temperature de surface issue des spectres de DPRISME a 1,6 micron 
+			  Nb maxi de signaux = 40
+	GTS20PIR    	: Temperature de surface issue des spectres de DPRISME a 2,0 micron 
+			  Nb maxi de signaux = 40
+	GTS20PIRINF 	: Erreur inférieure sur la temperature de surface issue des spectres de DPRISME a 2,0 micron 
+			  Nb maxi de signaux = 40
+	GTS20PIRSUP 	: Erreur supérieure sur la temperature de surface issue des spectres de DPRISME a 2,0 micron 
+			  Nb maxi de signaux = 40
+	GTS36PIR    	: Temperature de surface issue des spectres de DPRISME a 3,6 micron 
+			  Nb maxi de signaux = 40
+	GTS36PIRINF 	: Erreur inférieure sur la temperature de surface issue des spectres de DPRISME a 3,6 micron 
+			  Nb maxi de signaux = 40
+	GTS36PIRSUP 	: Erreur supérieure sur la temperature de surface issue des spectres de DPRISME a 3,6 micron 
+			  Nb maxi de signaux = 40
+	SCPARPRISME 	: Parametres du traitement TPRISME 
+	SCPRISME    	: Signal commentaire de TPRISME
+
+				----------------------
+
+TPROF       		: Generation de profil de temperature et de densite et Bilan energetique.
+	GPROFCUR    	: mesures du traitement courant
+
+			  Nb maxi de signaux = 127
+	GPROFDF2DR  	: dF2 / drho
+			  Nb maxi de signaux = 21
+	GPROFDIDR   	: gradient ( / rho ) du courant moyen integre
+
+			  Nb maxi de signaux = 21
+	GPROFDPDR   	: gradient  de pression totale
+			  Nb maxi de signaux = 21
+	GPROFDPHIDR 	: dPhi / drho
+			  Nb maxi de signaux = 21
+	GPROFDPSIDR 	: dPsi / drho
+			  Nb maxi de signaux = 21
+	GPROFF      	: Courant diamagnetique
+			  Nb maxi de signaux = 21
+	GPROFFE1    	: flux electronique de particules ( Ti homothetique a Te )
+			  Nb maxi de signaux = 21
+	GPROFFE2    	: flux electronique de particules ( Ti homothetique a ne )
+
+			  Nb maxi de signaux = 21
+	GPROFFEMES  	: flux electronique de particules ( Ti mesure )
+
+
+			  Nb maxi de signaux = 21
+	GPROFFI1    	: flux ionique de particules ( Ti homothetique a Te )
+			  Nb maxi de signaux = 21
+	GPROFFI2    	: flux ionique de particules ( Ti homothetique a ne )
+			  Nb maxi de signaux = 21
+	GPROFFIMES  	: flux ionique de particules ( Ti mesure )
+
+
+
+			  Nb maxi de signaux = 21
+	GPROFFTRAP  	: fraction de trappees
+
+			  Nb maxi de signaux = 21
+	GPROFHDRDR  	: composantes harmoniques de dR / drho
+
+
+
+
+			  Nb maxi de signaux = 127
+	GPROFHDZDR  	: composantes harmoniques de dZ / drho
+
+
+
+
+
+
+			  Nb maxi de signaux = 127
+	GPROFHR     	: composantes harmoniques de R
+
+
+
+			  Nb maxi de signaux = 127
+	GPROFHZ     	: composantes harmoniques de Z
+
+
+
+
+
+			  Nb maxi de signaux = 127
+	GPROFI      	: Courant moyen integre
+			  Nb maxi de signaux = 21
+	GPROFJB1    	: densite de courant de bootstrap  ( Ti homothetique a Te )
+			  Nb maxi de signaux = 21
+	GPROFJB2    	: densite de courant de bootstrap  ( Ti homothetique a ne )
+			  Nb maxi de signaux = 21
+	GPROFJBMES  	: Densite de courant de bootstrap ( Ti mesure )
+
+			  Nb maxi de signaux = 21
+	GPROFJMOY   	: Densite de courant moyen
+			  Nb maxi de signaux = 21
+	GPROFJSET   	: coefficients BSpline de jmoy
+
+
+			  Nb maxi de signaux = 30
+	GPROFNANS   	: position des NaNs rencontres dans la structure des donnees
+
+
+
+			  Nb maxi de signaux = 2
+	GPROFNE     	: Densite electronique mesuree
+			  Nb maxi de signaux = 127
+	GPROFNEFIT  	: Profil de densite electronique
+			  Nb maxi de signaux = 21
+	GPROFNESET  	: coefficients BSpline de ne
+
+			  Nb maxi de signaux = 30
+	GPROFNIFIT  	: Profil de densite ionique
+			  Nb maxi de signaux = 21
+	GPROFNIMP   	: densite d'impuretes
+
+			  Nb maxi de signaux = 21
+	GPROFP      	: pression totale
+			  Nb maxi de signaux = 21
+	GPROFPEL    	: Pression electronique
+			  Nb maxi de signaux = 21
+	GPROFPFCI   	: Puissance FCI sur chacune des 3 antennes
+			  Nb maxi de signaux = 3
+	GPROFPHI    	: Phi 
+
+			  Nb maxi de signaux = 21
+	GPROFPION   	: Pression ionique
+			  Nb maxi de signaux = 21
+	GPROFPION_  	: Pression ionique mesuree aux temps Source Modulee
+			  Nb maxi de signaux = 21
+	GPROFPSI    	: Psi
+			  Nb maxi de signaux = 21
+	GPROFQ      	: qpsi
+			  Nb maxi de signaux = 21
+	GPROFQE1    	: flux electronique de chaleur ( Ti homothetique a Te )
+
+			  Nb maxi de signaux = 21
+	GPROFQE2    	: flux electronique de chaleur ( Ti homothetique a ne )
+
+			  Nb maxi de signaux = 21
+	GPROFQEMES  	: flux electronique de chaleur ( Ti mesure )
+
+
+
+
+			  Nb maxi de signaux = 21
+	GPROFQI1    	: flux ionique de chaleur ( Ti homothetique a Te )
+
+			  Nb maxi de signaux = 21
+	GPROFQI2    	: flux ionique de chaleur ( Ti homothetique a ne )
+
+			  Nb maxi de signaux = 21
+	GPROFQIMES  	: flux ionique de chaleur ( Ti mesure )
+
+
+
+
+			  Nb maxi de signaux = 21
+	GPROFRESP1  	: densite de resistivite ( Ti homothetique a Te )
+
+			  Nb maxi de signaux = 21
+	GPROFRESP2  	: densite de resistivite ( Ti homothetique a ne )
+
+
+			  Nb maxi de signaux = 21
+	GPROFRESPMES	: densite de resistivite ( Ti mesure )
+
+
+
+
+
+			  Nb maxi de signaux = 21
+	GPROFRHOCUR 	: rho des mesures du traitement courant
+
+
+			  Nb maxi de signaux = 127
+	GPROFRHONE  	: Rho sur les voies des diagnostics utilises pour le fit de Ne
+			  Nb maxi de signaux = 127
+	GPROFRHOTE  	: Rho sur les voies des diagnostics utilises pour le fit de Te
+			  Nb maxi de signaux = 127
+	GPROFRHOTI_ 	: Rho sur les voies utilisees pour le fit de TI_
+			  Nb maxi de signaux = 127
+	GPROFRHOWPHI	: Position en rho des mesures de la vitesse de rotation
+
+
+
+			  Nb maxi de signaux = 127
+	GPROFRM     	: Rayon des surfaces magnetiques
+			  Nb maxi de signaux = 21
+	GPROFS      	: shear
+			  Nb maxi de signaux = 21
+	GPROFTE     	: Temperature electronique mesuree
+			  Nb maxi de signaux = 127
+	GPROFTEFIT  	: Temperature electronique
+			  Nb maxi de signaux = 21
+	GPROFTESET  	: coefficients BSpline de Te
+
+			  Nb maxi de signaux = 30
+	GPROFTIFIT_ 	: Temperature ionique
+			  Nb maxi de signaux = 21
+	GPROFTISET  	: coefficients BSpline de Ti
+
+
+			  Nb maxi de signaux = 30
+	GPROFTI_    	: Temperature ionique mesuree
+			  Nb maxi de signaux = 127
+	GPROFWPHI   	: Mesures de la vitesse de rotation  (rad/s)
+
+
+			  Nb maxi de signaux = 127
+	GPROFWPHIFIT	: Profil de la vitesse de rotation  (rad/s)
+
+			  Nb maxi de signaux = 127
+	GPROFWPHISET	: Coefficients BSpline de Wphi  (rad/s)
+
+
+
+
+
+			  Nb maxi de signaux = 127
+	SCPROF      	: Signal commentaire de TPROF
+	SPROFAMIN   	: Petit rayon plasma
+	SPROFBELI   	: beta + li/2
+	SPROFBETAEL 	: Beta electronique
+	SPROFBETAN  	: Beta normalise
+	SPROFBETAP  	: Beta poloidal
+	SPROFBETAT  	: Beta toroidal
+	SPROFBETION 	: Beta ionique
+	SPROFBTOR   	: Champ toroidal
+	SPROFCMAIN  	: Concentration ion(s) majoritaire(s)
+	SPROFD0     	: Decentrement Shafranov
+	SPROFELONG  	: Ellipticite derniere surface magnetique
+	SPROFIB1    	: Courant de bootstrap ( Ti homothetique a Te)
+	SPROFIB2    	: Courant de bootstrap ( Ti homothetique a ne)
+	SPROFIBMES  	: Courant  de bootstrap  ( Ti mesure )
+
+	SPROFIDIV   	: Courant divertor
+	SPROFIP     	: Courant plasma
+	SPROFITOR   	: Courant toroidal
+	SPROFLI     	: Inductance
+	SPROFMIMP   	: Nombre de masse de l'ion minoritaire
+	SPROFMMAIN  	: Nombre de masse ion(s) majoritaire(s)
+	SPROFNBAR   	: Densite lineique moyenne sur la corde centrale
+	SPROFNL     	: Densite lineique sur la corde centrale
+	SPROFNMEAN  	: Densite volumique moyenne (deduite de nefit)
+	SPROFNMOY   	: Densite volumique moyenne
+	SPROFPADD   	: Puissance additionnelle totale
+	SPROFPELONG 	: Derivee ellipticite derniere surface magnetique
+	SPROFPEMEAN 	: Pression electronique moyennee sur rho
+	SPROFPIMEAN 	: Pression ionique moyennee sur rho
+	SPROFPIQD   	: Gradient du decentrement
+	SPROFPIQNE  	: Piquage de la densite electronique
+	SPROFPIQTE  	: Piquage de la temperature electronique
+	SPROFPLH    	: Puissance hybride
+	SPROFPLOSS  	: Puissance totale perdue
+	SPROFPOH    	: Puissance ohmique
+	SPROFPRAD   	: Puissance rayonnee
+	SPROFQ0     	: Facteur de securite au centre
+	SPROFQPSIA  	: Facteur de securite au bord
+	SPROFRES1   	: Resistivite ( Ti homothetique a Te )
+	SPROFRES2   	: Resistivite ( Ti homothetique a ne )
+	SPROFRESMES 	: resistivite  ( Ti mesure )
+
+
+	SPROFRLW    	: Loi d'echelle de Rebut-Lallia-Watkins de wetot
+	SPROFRMAJ   	: Grand rayon plasma
+	SPROFSCALTS 	: Loi d'echelle TS du temps de confinement de l'energie diamagnetique
+	SPROFTEMEAN 	: Temperature electronique moyennee sur rho
+	SPROFTI_NE  	: Rapport  Ti/ne
+	SPROFTI_TE  	: Rapport  Ti/Te
+	SPROFTRIANG 	: Triangularite
+	SPROFVS     	: Tension par tour a la surface
+	SPROFWDIA   	: Energie diamagnetique
+	SPROFWETOT  	: Contenu energetique electronique
+	SPROFWITOT  	: Contenu energetique ionique
+	SPROFWITOT_ 	: Contenu energetique ionique mesure au temps de la source modulee
+	SPROFZEFF   	: Z effectif
+	SPROFZIMP   	: Charge de l'impurete
+	SPROFZMAIN  	: Charge ion(s) majoritaire(s) (1er et 2eme espece)
+	SPROFZPOS   	: Deplacement vertical
+
+				----------------------
+
+TRAX        		: Analyse du rayonnement X haute energie (50 keV - 800 keV).
+	GETPHX      	: Erreur sur temperature photonique = f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX1       	: Taux de comptage canal 1 = f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX2       	: Taux de comptage canal 2 = f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX3       	: Taux de comptage canal 3 = f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX4       	: Taux de comptage canal 4 = f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX5       	: Taux de comptage canal 5= f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX6       	: Taux de comptage canal 6= f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX7       	: Taux de comptage canal 7= f (temps,voie)
+			  Nb maxi de signaux = 59
+	GSPX8       	: Taux de comptage canal 8= f (temps,voie)
+			  Nb maxi de signaux = 59
+	GTPHX       	: Temperature photonique = f (temps,voie)
+			  Nb maxi de signaux = 59
+	SABSHX      	: Probabilite de detection   (8 canaux)
+	SEGHX       	: Etendue geometrique  (59 voies)
+	SENERHX     	: Seuils en energie  (8 canaux)
+	SMASKHX     	: Etat de fonctionnement  (59 voies)
+
+				----------------------
+
+TREFLEC     		: 
+	GREFNE      	: Densite electronique
+			  Nb maxi de signaux = 50
+	GREFNENV    	: densite electronique non validee
+			  Nb maxi de signaux = 50
+	GREFR       	: Rayon associe a la densite electronique.
+			  Nb maxi de signaux = 50
+	GREFRNV     	: Rayon associe a la densite non validee
+			  Nb maxi de signaux = 50
+	SVTREF      	: Validation temporelle de GREFNENV et GREFRNV
+
+				----------------------
+
+TREFLEX     		: Traitement de la réflectromètrie micro-ondes selon l'axe horizontal du plasma
+	GREFNEX     	: Densités électroniques
+			  Nb maxi de signaux = 100
+	GREFRX      	: Rayons des densités electroniques
+			  Nb maxi de signaux = 100
+
+				----------------------
+
+TREFLUCNE   		: Profils de densité mesurés par le diagnostic de réflectometrie de centre (DREFLUC) avec initialisation sur le profil de densité au bord de l'interférométrie ou de la réflectométrie.
+	GNEBORDINT  	: Densité électronique  au bord ( interpolation du profil GNE (r/a) ) 
+			  Nb maxi de signaux = 11
+	GNEBORDREF  	: Densité électronique  au bord ( interpolation de DREFLEC ) 
+			  Nb maxi de signaux = 11
+	GNEFLUCINT  	: Densité électronique  ( initialisation avec interférométrie GNE ) 
+			  Nb maxi de signaux = 101
+	GNEFLUCREF  	: Densité électronique  ( initialisation avec DREFLEC ) 
+			  Nb maxi de signaux = 101
+	GRBORDINT   	: Rayons des densités  au bord ( interpolation du profil GNE (r/a) ) 
+			  Nb maxi de signaux = 11
+	GRBORDREF   	: Rayons des densités  au bord ( interpolation de DREFLEC ) 
+			  Nb maxi de signaux = 11
+	GRFLUCINT   	: Rayons des densités  ( initialisation avec interférométrie GNE ) 
+			  Nb maxi de signaux = 101
+	GRFLUCREF   	: Rayons des densités électroniques  ( initialisation avec DREFLEC ) 
+			  Nb maxi de signaux = 101
+	SCFLUCNEINT 	: Signal Commentaire TREFLUCNE avec initialisation sur le profil de densité au bord de l'interférométrie.
+	SCFLUCNEREF 	: Signal Commentaire TREFLUCNE avec initialisation sur le prof de densité au bord de la réflectométrie.
+
+				----------------------
+
+TRIDENT     		: Traitement de l'equilibre plasma par le code IDENT-D
+	GIDELONG    	: elongation
+			  Nb maxi de signaux = 21
+	GIDFDIA     	: Profil de la fonction diamagnetique
+			  Nb maxi de signaux = 21
+	GIDFLUX     	: Flux Poloidal
+			  Nb maxi de signaux = 21
+	GIDJMOY     	: Profil de densite de courant
+			  Nb maxi de signaux = 21
+	GIDPRES     	: Profil de pression
+			  Nb maxi de signaux = 21
+	GIDQPSI     	: Profil de q
+			  Nb maxi de signaux = 21
+	GIDRHOG     	: Coordonnee geometrique: (Rmax-Rmin)/2
+			  Nb maxi de signaux = 21
+	GIDRHOT     	: Coordonnee de flux toroidale
+			  Nb maxi de signaux = 21
+	GIDRMOY     	: Grand rayon moyen des surfaces magnetiques
+			  Nb maxi de signaux = 21
+	SCIDERR     	: Commentaire d'erreur de  Trident
+	SCIDRUN     	: Message du run d'IDENT-D sur Titan
+	SIDBETAP    	: Beta poloidal
+	SIDBETAT    	: Beta Toroidal
+	SIDIP       	: courant plasma
+	SIDLI       	: Inductance interne
+	SIDMU       	: Parametre diamagnetique
+	SIDPERI     	: Perimetre du Plasma
+	SIDSHAF1    	: Parametre de Shafranov 1
+	SIDSHAF2    	: Parametre de Shafranov 2
+	SIDSHAF3    	: Parametre de Shafranov 3
+	SIDSURF     	: Surface du Plasma
+	SIDZPOS     	: Position verticale du Plasma
+
+				----------------------
+
+TSBOLO      		: Calcul de la puissance rayonnee et des profils d'emissivite par bolometrie
+	GPBOLO      	: Profils de l'emissivite
+			  Nb maxi de signaux = 16
+	GPBOLO1     	: Profils de l'emissivite en Q2A median
+			  Nb maxi de signaux = 16
+	GPBOLO2     	: Profils de l'emissivite en Q4A median
+			  Nb maxi de signaux = 24
+	GPBOLO3     	: Profils de l'emissivite en Q4A haut
+			  Nb maxi de signaux = 24
+	SPRAD       	: Puissance totale rayonnee = f (temps)
+	SPRAD1      	: Puissance totale rayonnee en Q2A median
+	SPRAD2      	: Puissance totale rayonnee en Q4A median
+	SPRAD3      	: Puissance totale rayonnee en Q4A haut
+
+				----------------------
+
+TSFAB       		: Evolution temporelle de Te calibree sur Michelson pour 6 rayons.
+	GTEFAB      	: Te Fabry calibree / Michelson = f(t,R) pour 6 rayons.
+			  Nb maxi de signaux = 6
+
+				----------------------
+
+TSHETERO    		: Calcul de Te par Radiometrie SuperHeterodyne.
+	GSHR        	: Grand rayon associe = f(temps,indice)
+			  Nb maxi de signaux = 32
+	GSHTE       	: Temperature electronique = f(temps,indice)
+			  Nb maxi de signaux = 32
+	GSHTENV     	: Temperature electronique = f(temps,indice)
+			  Nb maxi de signaux = 32
+
+				----------------------
+
+TSLF        		: Traitement des sondes de Langmuir fixes (SLF) à l'entrée des gorges sous le limiteur pompé toroïdal (LPT)
+	GERJSSLF    	: Incertitude de la densité de courant ionique parallèle
+			  Nb maxi de signaux = 12
+	GERNESLF    	: Incertitude de la densité électronique locale 
+			  Nb maxi de signaux = 12
+	GERTESLF    	: Incertitude de la température électronique 
+			  Nb maxi de signaux = 12
+	GERVFSLF    	: Incertitude du potentiel flottant  
+			  Nb maxi de signaux = 12
+	GJSSLF      	: Densité de courant ionique parallèle
+			  Nb maxi de signaux = 12
+	GNESLF      	: Densité électronique locale 
+			  Nb maxi de signaux = 12
+	GTESLF      	: Température électronique 
+			  Nb maxi de signaux = 12
+	GVFSLF      	: Potentiel flottant  
+			  Nb maxi de signaux = 12
+	SCSLF       	: Signal commentaire de TSLF 
+
+				----------------------
+
+TSLM1       		: Traitement de la premiere sonde de Langmuir mobile (SLM1) avec tete standard en Q3B
+	GERJSSLM1   	: Incertitude de la densite de courant ionique parallele sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GERTESLM1   	: Incertitude de la temperature electronique sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GERVFSLM1   	: Incertitude du potentiel flottant sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GJSSLM1     	: Densite de courant ionique parallele sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GTESLM1     	: Temperature electronique sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GVFSLM1     	: Potentiel flottant sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	SCSLM1      	: Signal commentaire de TSLM2 
+	SDSLM1      	: Distance de la DSMF  (m) sur la corde de la sonde 
+	SERJSSLM1A  	: Incertitude de la densite de courant ionique parallele sur cote A
+	SERJSSLM1B  	: Incertitude de la densite de courant ionique parallele sur cote B 
+	SERLN1      	: Incertitude de Ln
+	SERLQ1A     	: Incertitude de LQA 
+	SERLQ1B     	: Incertitude de LQB 
+	SERLT1A     	: Incertitude de LTA 
+	SERLT1B     	: Incertitude de LTB 
+	SERN1       	: Incertitude de SN1 
+	SERNESLM1   	: Incertitude de la densite electronique 
+	SERPARSLM1  	: Incertitude du nombre de Mach parallele 
+	SERQ1A      	: Incertitude de SQ1A 
+	SERQ1B      	: Incertitude de SQ1B 
+	SERT1A      	: Incertitude de ST1A  
+	SERT1B      	: Incertitude de ST1B 
+	SERTESLM1A  	: Incertitude de la temperature electronique sur cote A
+	SERTESLM1B  	: Incertitude de la temperature electronique sur cote B 
+	SERVFSLM1A  	: Incertitude du potentiel flottant sur cote A
+	SERVFSLM1B  	: Incertitude du potentiel flottant sur cote B 
+	SINDMV1     	: Indices des mouvements
+	SJSSLM1A    	: Moyenne des 3 mesures de densite de courant ionique parallele sur cote A
+	SJSSLM1B    	: Moyenne des 3 mesures de densite de courant ionique parallele sur cote B 
+	SLN1        	: Longueur de decroissance de ne a d=2cm
+	SLQ1A       	: Longueur de decroissance de qparA  a  d=2 cm 
+	SLQ1B       	: Longueur de decroissance de qparB  a  d=2 cm 
+	SLT1A       	: Longueur de decroissance de TeA  a  d=2 cm 
+	SLT1B       	: Longueur de decroissance de TeB  a  d=2 cm 
+	SMPARSLM1   	: Nombre de Mach parallele 
+	SN1         	: Densité électronique à d=1 cm 
+	SNESLM1     	: Densite electronique 
+	SQ1A        	: Densité de puissance sur coté A  à d=1 cm 
+	SQ1B        	: Densité de puissance sur coté B  à d=1 cm  
+	SRHOSLM1    	: Rayon normalise de la sonde 
+	SRMAJSLM1   	: Grand rayon de la sonde 
+	SRMIDSLM1   	: Distance de la DSMF  (m) reporté sur le plan médian Z=0 
+	SRMINSLM1   	: Petit rayon de la sonde 
+	ST1A        	: Température électronique sur coté A à d=1 cm 
+	ST1B        	: Température électronique sur coté B à d=1 cm  
+	STESLM1A    	: Moyenne des 3 mesures de temperature electronique sur cote A
+	STESLM1B    	: Moyenne des 3 mesures de temperature electronique sur cote B 
+	SVFSLM1A    	: Moyenne des 3 mesures du potentiel flottant sur cote A
+	SVFSLM1B    	: Moyenne des 3 mesures du potentiel flottant sur cote B 
+	SZSLM1      	: Elevation de la sonde 
+
+				----------------------
+
+TSLM2       		: Traitement de la deuxieme sonde de Langmuir mobile (SLM2) avec tete standard en Q1B
+	GERJSSLM2   	: Incertitude de la densite de courant ionique parallele sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GERTESLM2   	: Incertitude de la temperature electronique sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GERVFSLM2   	: Incertitude du potentiel flottant sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GJSSLM2     	: Densite de courant ionique parallele sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GTESLM2     	: Temperature electronique sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	GVFSLM2     	: Potentiel flottant sur les 6 pinoches
+			  Nb maxi de signaux = 6
+	SCSLM2      	: Signal commentaire de TSLM2 
+	SDSLM2      	: Distance de la DSMF  (m) sur la corde de la sonde 
+	SERJSSLM2A  	: Incertitude de la densite de courant ionique parallele sur cote A
+	SERJSSLM2B  	: Incertitude de la densite de courant ionique parallele sur cote B 
+	SERLN2      	: Incertitude de Ln
+	SERLQ2A     	: Incertitude de LQA 
+	SERLQ2B     	: Incertitude de LQB 
+	SERLT2A     	: Incertitude de LTA 
+	SERLT2B     	: Incertitude de LTB 
+	SERN2       	: Incertitude de SN2  
+	SERNESLM2   	: Incertitude de la densite electronique 
+	SERPARSLM2  	: Incertitude du nombre de Mach parallele 
+	SERQ2A      	: Incertitude de SQ2A 
+	SERQ2B      	: Incertitude de SQ2B   
+	SERT2A      	: Incertitude de ST2A  
+	SERT2B      	: Incertitude de ST2B    
+	SERTESLM2A  	: Incertitude de la temperature electronique sur cote A
+	SERTESLM2B  	: Incertitude de la temperature electronique sur cote B 
+	SERVFSLM2A  	: Incertitude du potentiel flottant sur cote A
+	SERVFSLM2B  	: Incertitude du potentiel flottant sur cote B 
+	SINDMV2     	: Indices des mouvements
+	SJSSLM2A    	: Moyenne des 3 mesures de densite de courant ionique parallele sur cote A
+	SJSSLM2B    	: Moyenne des 3 mesures de densite de courant ionique parallele sur cote B 
+	SLN2        	: Longueur de decroissance de ne a d=2cm
+	SLQ2A       	: Longueur de decroissance de qparA  a  d=2 cm 
+	SLQ2B       	: Longueur de decroissance de qparB  a  d=2 cm 
+	SLT2A       	: Longueur de decroissance de TeA  a  d=2 cm 
+	SLT2B       	: Longueur de decroissance de TeB  a  d=2 cm 
+	SMPARSLM2   	: Nombre de Mach parallele 
+	SN2         	: Densité électronique à d =1cm  
+	SNESLM2     	: Densite electronique 
+	SQ2A        	: Densité de puissance  sur coté A à d = 1 cm  
+	SQ2B        	: Densité de puissance  sur coté B à d = 1 cm  
+	SRHOSLM2    	: Rayon normalise de la sonde 
+	SRMAJSLM2   	: Grand rayon de la sonde 
+	SRMIDSLM2   	: Distance de la DSMF  (m) reporté sur le plan médian Z=0 
+	SRMINSLM2   	: Petit rayon de la sonde 
+	ST2A        	: Température électronique  sur coté A à d = 1 cm  
+	ST2B        	: Température électronique  sur coté B à d = 1 cm  
+	STESLM2A    	: Moyenne des 3 mesures de temperature electronique sur cote A
+	STESLM2B    	: Moyenne des 3 mesures de temperature electronique sur cote B 
+	SVFSLM2A    	: Moyenne des 3 mesures du potentiel flottant sur cote A
+	SVFSLM2B    	: Moyenne des 3 mesures du potentiel flottant sur cote B 
+	SZSLM2      	: Elevation de la sonde 
+
+				----------------------
+
+TSLP        		: Traitement des sondes de Langmuir pop-up (SLP) sur le limiteur pompé toroïdal (LPT)
+	GERJSSLP    	: Incertitude de la densité de courant ionique parallèle  
+			  Nb maxi de signaux = 24
+	GERNESLP    	: Incertitude de la densité électronique locale  
+			  Nb maxi de signaux = 24
+	GERTESLP    	: Incertitude de la température électronique  
+			  Nb maxi de signaux = 24
+	GERVFSLP    	: Incertitude du potentiel flottant  
+			  Nb maxi de signaux = 24
+	GJSSLP      	: Densité de courant ionique parallèle 
+			  Nb maxi de signaux = 24
+	GNESLP      	: Densité électronique locale 
+			  Nb maxi de signaux = 24
+	GTESLP      	: Température électronique 
+			  Nb maxi de signaux = 24
+	GVFSLP      	: Potentiel flottant 
+			  Nb maxi de signaux = 24
+	SCSLP       	: Signal commentaire de TSLP 
+
+				----------------------
+
+TSMASSE     		: Traitement des donnees du spectrometre de masse (Pompage principal).
+	SPAR        	: Pression partielle Argon.
+	SPCO        	: Pression partielle Oxyde de Carbone.
+	SPCO2       	: Pression partielle Dioxyde de Carbone.
+	SPD2        	: Pression partielle Deuterieum
+	SPH2        	: Pression partielle Hydrogene.
+	SPH2O       	: Pression partielle Eau.
+	SPHD        	: Pression partielle HD.
+	SPHE        	: Pression partielle Helium.
+	SPNE        	: Pression partielle Neon.
+	SRIGAZ      	: Rapport isotopique du Gaz ( NH/ (NH+ND) ).
+
+				----------------------
+
+TSMASSE2    		: Identification et quantification des gaz pompes par le LPT en Q6A et Q6B par spectrometrie de masse.
+	SARQ6A      	: Pression partielle d'argon pompe en Q6Ab
+	SARQ6B      	: Pression partielle d'argon pompe en Q6Bb
+	SCD4Q6A     	: Pression partielle de deuteromethane pompe en Q6Ab
+	SCD4Q6B     	: Pression partielle de deuteromethane pompe en Q6Bb
+	SCH4Q6A     	: Pression partielle de methane pompe en Q6Ab
+	SCH4Q6B     	: Pression partielle de methane pompe en Q6Bb
+	SCO2Q6A     	: Pression partielle de dioxyde de carbone pompe en Q6Ab
+	SCO2Q6B     	: Pression partielle de dioxyde de carbone pompe en Q6Bb
+	SCOQ6A      	: Pression partielle d'oxyde de carbone pompe en Q6Ab
+	SCOQ6B      	: Pression partielle d'oxyde de carbone pompe en Q6Bb
+	SD2Q6A      	: Pression partielle de deuterium moleculaire pompe en Q6Ab
+	SD2Q6B      	: Pression partielle de deuterium moleculaire pompe en Q6Bb
+	SH2OQ6A     	: Pression partielle d'eau pompe en Q6Ab
+	SH2OQ6B     	: Pression partielle d'eau pompe en Q6Bb
+	SH2Q6A      	: Pression partielle d'hydrogene moleculaire pompe en Q6Ab
+	SH2Q6B      	: Pression partielle d'hydrogene moleculaire pompe en Q6Bb
+	SHDQ6A      	: Pression partielle de gaz moleculaire HD pompe en Q6Ab
+	SHDQ6B      	: Pression partielle de gaz moleculaire HD pompe en Q6Bb
+	SHEQ6A      	: Pression partielle d'helium pompe en Q6Ab
+	SHEQ6B      	: Pression partielle d'helium pompe en Q6Bb
+	SN2Q6A      	: Pression partielle d'azote pompe en Q6Ab
+	SN2Q6B      	: Pression partielle d'azote pompe en Q6Bb
+	SO2Q6A      	: Pression partielle d'oxygene moleculaire pompe en Q6Ab
+	SO2Q6B      	: Pression partielle d'oxygene moleculaire pompe en Q6Bb
+	SRIQ6A      	: Rapport isotopique   nH/(nH+ND)   en Q6Ab
+	SRIQ6B      	: Rapport isotopique   nH/(nH+ND)   en Q6Bb
+
+				----------------------
+
+TSMIC       		: Calcul Te par interferometrie Michelson.
+	GTEMIC      	: Temperature electronique = f(temps,indice)
+			  Nb maxi de signaux = 80
+	SCRITH      	: Validation critere de non thermicite
+	SDDS        	: Validation dent de scie
+	SFENHF      	: Validation fenetre hybride
+	SSATUR      	: Validation saturation du signal
+
+				----------------------
+
+TSMIC2      		: 
+	GMICR       	: Rayon correspondant valide
+			  Nb maxi de signaux = 80
+	GMICRNV     	: Rayon correspondant
+			  Nb maxi de signaux = 80
+	GMICTE      	: Temperature electronique validee
+			  Nb maxi de signaux = 80
+	GMICTENV    	: Temperature electronique = f(temps, indice)
+			  Nb maxi de signaux = 80
+	SCRITH2     	: Validation critere de non thermicite (TSMIC2)
+	SDDS2       	: Validation dent de scie (TSMIC2)
+	SFENHF2     	: Validation fenetre hybride (TSMIC2)
+	SSATUR2     	: Validation saturation du signal (TSMIC2)
+	SVTMIC      	: Validation temporelle
+
+				----------------------
+
+TSPOLAR     		: Calcul des angles Faraday par polarimetrie.
+	GALPHA      	: Angles Faraday = f (temps,rayon)
+			  Nb maxi de signaux = 10
+	SCPOLAR     	: Signal Commentaire de la polarimetrie
+
+				----------------------
+
+TTOMOX      		: Reconstruction de l'émissivité locale du plasma à partir des mesures de brillances X-mous.
+	GSXRE       	: Emissivité locale du plasma.
+			  Nb maxi de signaux = 1600
+	SCTOMOX     	: Signal commentaire de TTOMOX 
+
+				----------------------
+
+ZEBRE       		: Calcul Zeff Bremstrahlung et Camera 2D.
+	SERZF2DM    	: Erreur Zeff moyen camera 2D
+	SERZFBRM    	: Erreur Zeff moyen Brems
+	SZF2DM      	: Zeff moyen Camera 2D
+	SZFBRM      	: Zeff moyen Brems
+
+				----------------------
+
+ZEBRETAN    		: Calcul de charge moyenne du plasma à partir de la ligne de visée tangentielle
+	SERZFBRMTAN 	: Erreur sur Zeff moyen Bremsstrahlung (Visée tangentielle)
+	SZFBRMTAN   	: Zeff moyen Bremsstrahlung (Visée tangentielle)
+
+				----------------------

@@ -1,0 +1,14 @@
+MEX       = mex
+MUMPS_DIR = $(HOME)/MUMPS_4.7.3
+
+LMETISDIR = $(HOME)/METIS/metis
+LMETIS = -L$(LMETISDIR) -lmetis
+LPORDDIR = $(MUMPS_DIR)/PORD/lib
+LPORD = -L$(LPORDDIR) -lpord
+LORDERINGS = $(LPORD) $(LMETIS)
+
+LIBSEQ  = -L$(MUMPS_DIR)/libseq -lmpiseq
+
+LIBFORT = /opt/intel80/lib/libifcore.a /opt/intel80/lib/libifport.a /opt/intel80/lib/libirc.a
+
+OPTC    = -O

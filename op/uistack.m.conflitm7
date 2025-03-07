@@ -1,0 +1,38 @@
+%  UISTACK  courte description  
+%------------------------------------------------------------------------------- 
+% fichier :  uistack.m  ->  uistack 
+% 
+% 
+% fonction Matlab 5 : 
+% 
+% description de la fonction sur quelques lignes  
+%  
+% syntaxe :  
+%   function   varargout=uistack(varargin) 
+%  
+% entrees :  
+%  varargin = 
+%  
+% sorties :  
+%   varargout = 
+%  
+% fonction ecrite par xxxxxxx , poste XX-XX  
+% version  1.9  du  11/03/2002  
+%  
+%*#auto#   Help genere automatiquement  
+%  
+% liste des modifications :  
+%   * XX/XX/20XX -> commentaires  
+%  
+%-------------------------------------------------------------------------------  
+%  
+function varargout=uistack(varargin)
+
+varargin{:};
+
+if ~strcmp(computer,'GLNX86')
+   return
+end
+
+
+drawnow

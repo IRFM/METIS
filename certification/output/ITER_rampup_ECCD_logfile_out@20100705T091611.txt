@@ -1,0 +1,10 @@
+ 
+==================================================
+??? Undefined function or variable 'time'.
+
+Error in ==> metis_test at 144
+fprintf('Start of %s @ %s\n',testfilename,time);
+
+dbstop if error
+dbstop if all error
+metis_test ITER_rampup_ECCD.mat

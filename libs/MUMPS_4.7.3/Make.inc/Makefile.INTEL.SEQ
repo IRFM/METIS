@@ -1,0 +1,70 @@
+# This file is part of MUMPS VERSION 4.7.3
+# This Version was built on Fri May 4 15:54:01 2007
+#
+#
+#Begin orderings
+
+# NOTE that PORD is distributed within MUMPS by default. If you would like to
+# use other orderings, you need to obtain the corresponding package and modify
+# the variables below accordingly.
+# For example, to have Metis available within MUMPS:
+#          1/ download Metis and compile it
+#          2/ uncomment (suppress # in first column) lines
+#             starting with LMETISDIR,  LMETIS
+#          3/ add -Dmetis in line ORDERINGSF
+#             ORDERINGSF  = -Dpord -Dmetis
+#          4/ Compile and install MUMPS
+#             make clean; make   (to clean up previous installation)
+#
+#          Metis is now available as an internal ordering for MUMPS.
+#
+
+#LSCOTCHDIR = $(HOME)/JY/emilio/bin/generic
+#LSCOTCH   = -L$(LSCOTCHDIR) -lesmumps  -lfax -lorder -lscotch -lsymbol -ldof -lgraph -lcommon -lm
+
+LPORDDIR = ../PORD/lib/
+IPORD    = -I../PORD/include/
+LPORD    = -L$(LPORDDIR) -lpord
+
+#LMETISDIR = /local/metis/
+#IMETIS    = # Metis doesn't need include files (Fortran interface avail.)
+#LMETIS    = -L$(LMETISDIR) -lmetis
+
+# The following variables will be used in the compilation process.
+#ORDERINGSF = -Dscotch -Dmetis -Dpord
+ORDERINGSF  = -Dpord
+ORDERINGSC  = $(ORDERINGSF)
+LORDERINGS = $(LMETIS) $(LPORD) $(LSCOTCH)
+IORDERINGS = $(IMETIS) $(IPORD) $(ISCOTCH)
+
+#End orderings
+########################################################################
+################################################################################
+
+PLAT    =
+RM = /bin/rm -f
+CC = gcc
+FC = ifort
+FL = ifort
+AR = ar vr
+#RANLIB = ranlib
+RANLIB  = echo
+INCSEQ = -I../libseq
+LIBSEQ  =  -L../libseq -lmpiseq
+#LIBBLAS = -L/usr/lib/xmm/ -lf77blas -latlas
+LIBBLAS = -L/local/BLAS -lblas
+LIBOTHERS = -lpthread
+#Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
+CDEFS   = -DAdd_
+
+#Begin Optimized options
+OPTF    = -O -Dintel_ -DALLOW_NON_INIT -nofor_main
+OPTL    = -O -nofor_main
+OPTC    = -O
+#End Optimized options
+ 
+
+
+INC = $(INCSEQ)
+LIB = $(LIBSEQ)
+LIBSEQNEEDED = libseqneeded

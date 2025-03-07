@@ -1,0 +1,107 @@
+README
+************************************************************************
+*  This MATLAB interface to MUMPS is provided to you free of charge.   *
+*  It is part of the MUMPS package (see ../Conditions_of_use) and is   *
+*  public domain. Up-to-date copies can be obtained from the Web       *
+*  pages        http://www.enseeiht.fr/apo/MUMPS/ or                   *
+*  		http://graal.ens-lyon.fr/MUMPS                         *
+*                                                                      *
+*  THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY	       *
+*  EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.                 *
+*                                                                      *
+*  More info is available in the main MUMPS users' guide and in:       *
+*                                                                      *
+*   [2006] Aurelia Fevre, Jean-Yves L'Excellent and Stephane Pralet    *
+*   MATLAB and Scilab interfaces to MUMPS. LIP Report RR2006-06.       *
+*   Also available as an INRIA and an ENSEEIHT-IRIT Technical Report.  *
+*                                                                      *
+************************************************************************
+
+ CONTENT OF DIRECTORY:
+
+ README
+ Makefile 
+ make.inc
+ INSTALL : some examples of makefile
+ initmumps.m 
+ mumps.m
+ printmumpsstat.m
+ mumpsmex.c : MATLAB CMEX-file to let you use sequential MUMPS 
+              in double precision from MATLAB.
+
+
+
+ USAGE:
+ see example below and MUMPS documentation
+ 
+
+
+ INSTALLATION:
+ You need
+ 1- 
+ to have compiled MUMPS in sequential double precision.
+
+ 2- 
+ to edit make.inc.
+ Copy the appropriate makefile from INSTALL directory
+ and modify the paths. In particular you will need
+ to give the path to the libraries of your FORTRAN 90 compiler.
+ If you are lucky the Makefile will work directly, but
+ unfortunately you may have to change the Makefile 
+ significantly even between 2 versions of the same compiler.
+
+ You can use something like
+ nm -o /opt/intel/compiler80/lib/*.a | grep <name of the routine>
+ to add the needed library. 
+
+ 3-
+ run the make command
+
+ 4- We advise you to run the 4 examples 
+    simple_example.m, multiplerhs_example.m, sparserhs_example.m and
+    schurrhs_example.m
+    and to check that no warning is returned
+
+******************************************************************************
+
+ LIMITATION:
+
+ This interface enables you to call MUMPS from MATLAB only
+ in sequential and double precision.
+
+ It does not support :
+  - other versions (complex precision, parallel ...)
+  - multiple right hand side
+  - sparse right hand side 
+  - elemental format
+
+******************************************************************************
+
+
+%Example of using MUMPS in matlab
+% initialization of a matlab MUMPS structure
+id = initmumps;
+% here JOB = -1, the call to MUMPS will initialize C and fortran MUMPS structure
+id = dmumps(id);
+% load a sparse matrix
+load lhr01;
+mat = Problem.A;
+% JOB = 6 means analysis+facto+solve
+id.JOB = 6;
+id.ICNTL(6) = 0;
+% we set the rigth hand side
+id.RHS = ones(size(mat,1),1);
+%call to mumps
+id = dmumps(id,mat);
+% we see that there is a memory problem in INFO(1) and INFO(2)
+id.INFOG(1)
+id.INFOG(2)
+% we activate the numerical maximun transversal 
+id.ICNTL(6) = 6;
+id = dmumps(id,mat);
+norm(mat*id.SOL - ones(size(mat,1),1),'inf')
+% solution OK
+% destroy mumps instance
+id.JOB = -2;
+id = dmumps(id)
+

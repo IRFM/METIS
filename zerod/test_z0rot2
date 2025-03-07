@@ -1,0 +1,3 @@
+% script de test de z0rot2
+[wrad,snbi,sicrh,sfus,sripth,sriplh,sripicrh,sturb,fact,profli] = ...
+  z0rot2(post.zerod,post.z0dinput.option,post.z0dinput.cons,post.z0dinput.geo,post.profil0d);

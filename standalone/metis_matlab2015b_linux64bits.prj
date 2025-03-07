@@ -1,0 +1,189 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="26649646" file="./metis.prj" location="." name="metis" preferred-package-location="./standalone/for_redistribution" preferred-package-type="package.type.install" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>metis</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>/metis/</param.installpath.string>
+    <param.installpath.combo>option.installpath.user</param.installpath.combo>
+    <param.logo />
+    <param.install.notes>In the following directions, replace MCR_ROOT by the directory where the MATLAB Runtime is installed on the target machine.
+
+(1) Set the environment variable XAPPLRESDIR to this value:
+
+    MCR_ROOT/v90/X11/app-defaults
+
+
+(2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the concatenation of the following strings:
+
+    MCR_ROOT/v90/runtime/glnxa64:
+    MCR_ROOT/v90/bin/glnxa64:
+    MCR_ROOT/v90/sys/os/glnxa64:
+    MCR_ROOT/v90/sys/opengl/lib/glnxa64
+
+    If it is defined, set it to the concatenation of these strings:
+
+    ${LD_LIBRARY_PATH}: 
+    MCR_ROOT/v90/runtime/glnxa64:
+    MCR_ROOT/v90/bin/glnxa64:
+    MCR_ROOT/v90/sys/os/glnxa64:
+    MCR_ROOT/v90/sys/opengl/lib/glnxa64</param.install.notes>
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}/standalone/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/standalone/for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}/standalone/for_redistribution</param.output>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.required.mcr.products>
+      <item>35000</item>
+      <item>35010</item>
+      <item>35001</item>
+    </param.required.mcr.products>
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>true</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>true</param.create.log>
+    <param.log.file>metis.log</param.log.file>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.target.install.notes />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.embed.ctf />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/metis.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}/Metis_splash_screen.png</file>
+      <file>${PROJECT_ROOT}/acces</file>
+      <file>${PROJECT_ROOT}/coef</file>
+      <file>${PROJECT_ROOT}/compatibility</file>
+      <file>${PROJECT_ROOT}/graphe</file>
+      <file>${PROJECT_ROOT}/import</file>
+      <file>${PROJECT_ROOT}/init</file>
+      <file>${PROJECT_ROOT}/op</file>
+      <file>${PROJECT_ROOT}/solver</file>
+      <file>${PROJECT_ROOT}/source</file>
+      <file>${PROJECT_ROOT}/trait</file>
+      <file>${PROJECT_ROOT}/zerod</file>
+      <file>${PROJECT_ROOT}/zineb_path.m</file>
+    </fileset.resources>
+    <fileset.package>
+      <file>${PROJECT_ROOT}/Metis_splash_screen.png</file>
+      <file>${PROJECT_ROOT}/certification</file>
+      <file>${PROJECT_ROOT}/zerod/Howto_METIS_final.pdf</file>
+      <file>${PROJECT_ROOT}/zerod/METIS_HELP.pdf</file>
+    </fileset.package>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}/interface/zinitequi.m</file>
+      <file>${PROJECT_ROOT}/interface/zinputdlg.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicloseone.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicr.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicreeform.m</file>
+      <file>${PROJECT_ROOT}/interface/zuicreefunform.m</file>
+      <file>${PROJECT_ROOT}/interface/zuidownloadform.m</file>
+      <file>${PROJECT_ROOT}/interface/zuieditcons.m</file>
+      <file>${PROJECT_ROOT}/interface/zuifaitfunaction.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiformhandle.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiformreset.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiformvisible.m</file>
+      <file>${PROJECT_ROOT}/interface/zuilistepoint.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiload.m</file>
+      <file>${PROJECT_ROOT}/interface/zuimenuliste.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiplotin.m</file>
+      <file>${PROJECT_ROOT}/interface/zuireset.m</file>
+      <file>${PROJECT_ROOT}/interface/zuisavedata.m</file>
+      <file>${PROJECT_ROOT}/interface/zuisavenonok.m</file>
+      <file>${PROJECT_ROOT}/interface/zuiuploadform.m</file>
+      <file>${PROJECT_ROOT}/interface/zverifexecution.m</file>
+      <file>${PROJECT_ROOT}/interface/zveriffilename.m</file>
+      <file>${PROJECT_ROOT}/interface/zverifversion.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}/standalone/for_testing" name="metis" optional="false">./standalone/for_testing/metis</file>
+      <file location="${PROJECT_ROOT}/standalone/for_testing" name="splash.png" optional="false">./standalone/for_testing/splash.png</file>
+      <file location="${PROJECT_ROOT}/standalone/for_testing" name="readme.txt" optional="true">./standalone/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/standalone/for_testing" name="run_metis.sh" optional="false">./standalone/for_testing/run_metis.sh</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/opt/MATLAB/R2015b</root>
+      <toolboxes>
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>4.4.0-62-generic</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
