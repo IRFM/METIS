@@ -56,11 +56,8 @@
 %
 function cr =zineb_path(local,root)
 
-
-if ~isappdata(0,'langue_cronos')
-	setappdata(0,'langue_cronos','anglais');
-end
-
+% only english is supported in METIS now
+setappdata(0,'langue_cronos','anglais');
 
 
 % par defaut
@@ -80,9 +77,9 @@ if isempty(root)
 end
 if isempty(root)
         if isdeployed
-              root = pwd;
+            root = pwd;
         else
-	      root  = fileparts(which('zineb_path'));
+            root  = fileparts(which('zineb_path'));
         end
 end
 
@@ -187,16 +184,19 @@ end
 
 
 if isdeployed
-	setappdata(0,'MPIFLAG',0);
+    setappdata(0,'MPIFLAG',0);
 else
     filename=fullfile(root,'arch.inc');
-    file=textread(filename,'%s','delimiter','\n','whitespace','');
-
-    x=strmatch('MPI=-DMPI',file,'exact');
-    if isscalar(x)
-	setappdata(0,'MPIFLAG',1);
+    if exist(filename,'file')
+        file=textread(filename,'%s','delimiter','\n','whitespace','');       
+        x=strmatch('MPI=-DMPI',file,'exact');
+        if isscalar(x)
+            setappdata(0,'MPIFLAG',1);
+        else
+            setappdata(0,'MPIFLAG',0);
+        end
     else
-	setappdata(0,'MPIFLAG',0);
+        setappdata(0,'MPIFLAG',0);
     end
 end
 
@@ -341,6 +341,21 @@ else
 	addpath(fullfile(root,'compatibility','signal'),'-BEGIN');
 end
 
+% try to compile mexfile if not aready done
+if ~isdeployed
+    if ~exist(fullfile(root,'import','sampling',sprintf('tsample.%s',mexext)),'file')
+        try
+            if ispc
+                evalin('base','make_metis_windows;');
+            else
+                evalin('base','make_metis_linux;');
+            end
+        catch
+            disp('Unable to compile mexfiles:')
+            lasterr
+        end
+    end
+end
 %
 % --------- LUKE local and remote distributions ---------
 %
@@ -391,7 +406,7 @@ if strcmp(home(ll),root(ll))
 	return
 end
 % gestion utilisateur
-if strcmp(getenv('USER'),'cgc') | strcmp(getenv('USER'),'trait') | strcmp(getenv('USER'),'devtrait')
+if strcmp(getenv('USER'),'cgc') || strcmp(getenv('USER'),'trait') || strcmp(getenv('USER'),'devtrait')
 	return
 end
 
