@@ -4,6 +4,10 @@ integrated modelling transport code for rapid simulation of tokamak
 experiments. Its main domains of application are the preparation and
 the analysis of tokamak experiments.
 
+Copyright holder : Commissariat à l’Energie Atomique et aux Energies Alternatives (CEA), France
+CEA authorize the use of the METIS software under the CeCILL-C open source license https://cecill.info/licences/Licence_CeCILL-C_V1-en.html  
+The terms and conditions of the CeCILL-C license are deemed to be accepted upon downloading the software and/or exercising any of the rights granted under the CeCILL-C license.
+
 METIS is written in Matlab.
 
 METIS features a graphical interface for configuring the code, running
@@ -14,3 +18,25 @@ The reference to be cited for this code is:
 
 J.F. Artaud et al., "Metis: a fast integrated tokamak modelling tool for
 scenario design", Nucl. Fusion 58 (2018) 105001, DOI 10.1088/1741-4326/aad5b1
+
+The documentation for METIS code is located in the directory “doc” under 
+the root installation directory of METIS.  
+The main documents are:
+
+     1/ the reference publication: Artaud_2018_Nucl._Fusion_58_105001.pdf
+     
+     2/ an introduction to METIS use: Howto_METIS_final.pdf
+     
+     3/ the installation guide: METIS_installation_guide.pdf
+
+METIS can run out of the box, but it will be slow.
+To get correct performance, we recommend compiling, 
+at least C/C++ mexfile, by launching, from Matlab, the script:
+
+      - for Linux:   “make_metis_linux”
+
+      - for Windows: “make_metis_windows”
+
+For a complete installation of METIS, please, follow instructions in 
+“METIS installation guide.pdf” located in “doc” directory.
+

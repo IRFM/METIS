@@ -559,6 +559,11 @@ if all(zs.n0a == 0)
 	zs.n0a(:) = n0a;
 end
 
+% external data for neutral source
+if isappdata(0,'NEUTRAL_EXP')
+    neutral_exp = getappdata(0,'NEUTRAL_EXP');
+    n0a = import_external_n0a(neutral_exp.temps(:),neutral_exp.n0a(:),n0a,zs.temps);
+end
 
 % calcul de la source moleculaire (probleme slab)
 % a la dsmf 50% en 2s pour les neutres issu des molecule
@@ -622,7 +627,7 @@ for lk = 1:31
     %err =sqrt(sum((nnn - nnn_mem).^2) ./ sum(nnn .^ 2))
     err =max(abs(nnn - nnn_mem) ./ max(eps,nnn));
     if err < 1e-6
-	break
+        break
     end
 end
 
@@ -998,9 +1003,18 @@ function y=interpn0_val(xx,in,x)
 y = in.offset + in.slope .* (x - xx(:,1));
 
 
-function out = interp_n0_fact(xx,yy);
+function out = interp_n0_fact(xx,yy)
 
 out.offset = yy(:,1);
 out.slope  = (yy(:,2) - yy(:,1) ) ./  ...
     (xx(:,2) - xx(:,1));
+
+
+function val_out = import_external_n0a(time_in,val_in,val_origin,time_out)
+
+val_out          = interp1_ex(time_in,val_in,time_out,'linear','extrap');
+indnok           = find(~isfinite(val_out));
+val_out(indnok)  = val_origin(indnok);
+val_out          = max(1,val_out);
+
 

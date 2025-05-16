@@ -1095,6 +1095,21 @@ Phys. Plasmas 2, 18731885 (1995), https://doi.org/10.1063/1.871274
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
+<xs:element name="pth_min" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+minimum value of power (pth, pin, ploss) used in scaling law (W):
+higher value than 1 can help to the convergence.
+To high value will provide wrong result in some transient phases or plasma initiation ant termination phase.
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.1"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
 <xs:element name="qdds" default="0" maxOccurs="1" minOccurs="1">
 <xs:annotation>
 <xs:documentation>
@@ -2480,6 +2495,19 @@ Impurity residence time in SOL and divertor (s). This parameter is used to compu
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
+<xs:element name="min_te_LCFS" default="13.6" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Minimum value of temperature at the LCFS (this limit is overwritten by the value computed in the plasma initiation model, breakdown and burnthrough, if this one is switch on)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0.001"/>
+<xs:maxInclusive value="1000"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
 <xs:element name="angle_ece" maxOccurs="1" minOccurs="1" default="90">
 <xs:annotation>
 <xs:documentation>
@@ -3738,6 +3766,32 @@ if empty, it is not used
 Variable names should be R and Z. R and Z must be vectors of same length
 </xs:documentation>
 </xs:annotation>
+</xs:element>
+<xs:element name="extrapolation_ext_data" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+If =1, external data are not extrapolated lineary outside of the time interval where the external data is defined but the nearest value is used.
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="nonan_ext_data" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+If =1, NaN and Inf are removed from external data before extrapolation. That can hide some problem, be careful!
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
 </xs:element>
 <xs:element name="dwdt_method" default="implicit" maxOccurs="1" minOccurs="1">
 <xs:annotation>

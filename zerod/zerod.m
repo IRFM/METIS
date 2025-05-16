@@ -93,6 +93,14 @@ else
     end
 end
 
+%  extrapolation for external data
+if isfield(option,'extrapolation_ext_data')
+   setappdata(0,'EXTRAPOLATION_NEAREST_EX',option.extrapolation_ext_data)
+end
+if isfield(option,'nonan_ext_data')
+    setappdata(0,'NONAN_EX',option.nonan_ext_data);
+end
+
 
 if nargin < 8
     

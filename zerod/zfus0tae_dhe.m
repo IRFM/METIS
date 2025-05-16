@@ -2,7 +2,7 @@
 function [pfus0,salpha0,pfus,salpha,ifus,xfus,jxfus,j0fus,taus,ecrit,pfus_nbi,pfus_loss,jfus,salf0,palf0,salf,palf,splusHe3D,splusD3He,splusDT,splusff,splusicrh] = ...
 	 zfus0tae_dhe(nDi,nHe3i,nTi,te,ne,zeff,tite,R,a,K,Bt,ane,ate,Vp,Sp, ...
          pnbi_th,taus_nbi,ecritnbi,e0nbi,e0nbi2,fHe3nbi,picrh_ion,taus_icrh,ecriticrh,e0icrh,temps,pnbi,d0,qa,qmin,te0, ...
-         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI)
+         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI,te_max)
 
 % pour l'interaction faisceau plasma
 tii = te .* tite;
@@ -72,7 +72,11 @@ end
 % source de particule alpha
 %sigmavdt = zperes(max(tip,30));
 %s        = nD .* nT .* sigmavdt;
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip,30));
+if real(te_max) <=100e3                           % in eV
+    [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip,30));
+else                                           % in eV
+    [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip,30));
+end
 s_DHe3   = nD.*nHe3.*dhe3.sv.*(1 + fpolarized / 2);
 s_DDp    = 0.5.*nD.^2.*dd_p.sv;
 s_DDn    = 0.5.*nD.^2.*dd_n.sv;
@@ -489,7 +493,7 @@ salpha     = salpha .* (1-frloss);
 %  %disp('in zfus0')
 %  %keyboard
 %  %plot(x,jfus,'b',x,z0j3(x,j0fus,xfus,jxfus),'r')
-%      drawnow
+%      drawnowind_duration_alt
 %  
 
 

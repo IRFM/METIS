@@ -65,6 +65,7 @@
 <collapse>0</collapse>
 <te_max>100000</te_max>
 <extended_qei>off</extended_qei>
+<pth_min>1</pth_min>
 <qdds>0</qdds>
 <ddsmode>0</ddsmode>
 <q0_dds_trig>0</q0_dds_trig>
@@ -157,6 +158,7 @@
 <fzmax_div>0</fzmax_div>
 <carbonblow>0</carbonblow>
 <residence_time>0</residence_time>
+<min_te_LCFS>13.6</min_te_LCFS>
 <angle_ece>90</angle_ece>
 <synergie>1</synergie>
 <sens>0</sens>
@@ -243,6 +245,8 @@
 <orientation>1</orientation>
 <reference_parameters></reference_parameters>
 <first_wall></first_wall>
+<extrapolation_ext_data>0</extrapolation_ext_data>
+<nonan_ext_data>0</nonan_ext_data>
 <dwdt_method>implicit</dwdt_method>
 <nbmax>31</nbmax>
 <tol0d>0</tol0d>

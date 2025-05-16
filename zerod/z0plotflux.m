@@ -7,6 +7,9 @@
 % le model a la bonne reponse en densite, tension par tour initiale et puissance de chauffage EC
 %couplage = coefficient de transfert de l'energy entre le CS et le plasma en tenant compte de la disspation dans les coques, au claquage le temps de diffusion du courant dans le plasma est petit
 available_flux = Inf;
+if isempty(post.z0dinput.machine)
+    post.z0dinput.machine = 'unknown';
+end
 switch upper(post.z0dinput.machine)
     case 'JET'
         couplage = 0.2;%(fer + coques resitives)
@@ -269,7 +272,8 @@ if ~exist('NOPLUTFLUX_HELIOS','var')
     
     hold on
     %plot(t,flux_cons,'b',t,flux_tot,'r',t,flux_plasma_li + flux_external,'m',t,flux_res,'k',t,flux_res_ri,':k',t,flux_res_axe,'k-.');
-    plot(t,flux_cs,'b',t,flux_tot,'r',t,flux_plasma_li + flux_external,'m',t,flux_res,'k',t,flux_res_axe,'k-.');
+    plot(t,flux_cs,'b',t,flux_tot,'r',t,flux_plasma_li + flux_external,'m',t,flux_plasma_li,'c', t,flux_external,'c-.',...
+         t,flux_res,'k',t,flux_res_axe,'k-.');
     leg_exp = 1;
     if post.z0dinput.mode_exp == 0
         fluxexp = -post.profil0d.psi(:,end) .* 2 .* pi;
@@ -294,7 +298,7 @@ if ~exist('NOPLUTFLUX_HELIOS','var')
         if dt_break >= 0
             bdcsf = flux_cs(1);
         else
-            bdcsf = interp1(post.z0dinput.cons.temps,flux_cs,temps_ed,'linear','extrap')
+            bdcsf = interp1(post.z0dinput.cons.temps,flux_cs,temps_ed,'linear','extrap');
         end
     else
         bdcsf = NaN;
@@ -314,10 +318,12 @@ if ~exist('NOPLUTFLUX_HELIOS','var')
     end
     if leg_exp
         legend('Total CS Flux','Total flux (CS + vertical field)','Total plasma flux (L_p * I_p)', ...
+            'Internal flux (L_i * I_p)', 'External flux (L_{ext} * I_p)', ...
             'Resitive consumed flux (int(t,Pohm / Ip))','Resistive flux @ magnetic axis',...
             'Computed flux loop (plasma surface)','Computed flux loop (fixed loop)','Measured flux loop','location','best')
     else
         legend('Total CS Flux','Total flux (CS + vertical field)','Total plasma flux (L_p * I_p)', ...
+            'Internal flux (L_i * I_p)', 'External flux (L_{ext} * I_p)', ...
             'Resitive consumed flux (int(t,Pohm / Ip))','Resistive flux @ magnetic axis', ...
             'Computed flux loop (plasma surface)','Computed flux loop (fixed loop)','location','best')
     end
@@ -365,15 +371,15 @@ if ~exist('NOPLUTFLUX_HELIOS','var')
         ylim = get(gca,'ylim');
         xlim = get(gca,'xlim');
         xtxt = min(xlim) + 0.03 .* (max(xlim) - min(xlim));
-        ytxt = max(ylim) - 0.35 .* (max(ylim) - min(ylim));
+        ytxt = max(ylim) - 0.05 .* (max(ylim) - min(ylim));
         text(xtxt,ytxt,sprintf('shot duration between %g and %g (s)\n',min(duration,duration_alt),max(duration,duration_alt)),'fontsize',12,'fontweight','bold','fontname','times');
-        ytxt = max(ylim) - 0.4 .* (max(ylim) - min(ylim));
+        ytxt = max(ylim) - 0.1 .* (max(ylim) - min(ylim));
         text(xtxt,ytxt,sprintf('maximum flat-top duration between %g and %g (s)\n', ...
             min(duration_flattop,duration_flattop_alt),max(duration_flattop,duration_flattop_alt)),'fontsize',12,'fontweight','bold','fontname','times');
-        ytxt = max(ylim) - 0.45 .* (max(ylim) - min(ylim));
+        ytxt = max(ylim) - 0.15 .* (max(ylim) - min(ylim));
         text(xtxt,ytxt,sprintf('maximum flat-top duration between %g and %g (h)\n', ...
             min(duration_flattop,duration_flattop_alt)/3600,max(duration_flattop,duration_flattop_alt)/3600),'fontsize',12,'fontweight','bold','fontname','times');
-        ytxt = max(ylim) - 0.5 .* (max(ylim) - min(ylim));
+        ytxt = max(ylim) - 0.2 .* (max(ylim) - min(ylim));
         text(xtxt,ytxt,sprintf('flux consumption between %g and %g (Wb/s)\n', ...
             min(flux_flow./duration_flattop,flux_flow_alt ./ duration_flattop_alt), ...
             max(flux_flow./duration_flattop,flux_flow_alt ./ duration_flattop_alt)),'fontsize',12,'fontweight','bold','fontname','times');

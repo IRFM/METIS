@@ -525,7 +525,7 @@ function zs = zerod_param(void)
                               'The default value is 1e5 eV corresponding to the maximum tabulated temperature for thermal cross section and radiative cooling rate.', ...
                               'The upper limit allowed by this parameter is set just below the energy threshold for pair prodcution.', ...
                               'This limit should be increase for some aneutronic fusion reaction and accordingly models for cross section, radiative cooling rate,', ...
-                              'relativist bremsstrahlung and enhanced collisional heat exchange between eletrons and ions should be selected');                      
+                              'relativist bremsstrahlung and enhanced collisional heat exchange between eletrons and ions should be selected');     
     section.te_max  = 'Confinement & Transport';
     mode.te_max     = 'advanced';
     
@@ -540,6 +540,15 @@ function zs = zerod_param(void)
                                       'Phys. Plasmas 2, 18731885 (1995), https://doi.org/10.1063/1.871274');                      
     section.extended_qei  = 'Confinement & Transport';
     mode.extended_qei    = 'advanced';
+    
+    valeur.pth_min    = 1;
+    type.pth_min      = 'real';
+    borne.pth_min     = [1e-1,1e3];
+    defaut.pth_min    = 1;
+    info.pth_min      = sprintf('minimum value of power (pth, pin, ploss) used in scaling law (W):\nhigher value than 1 can help to the convergence.\nTo high value will provide wrong result in some transient phases or plasma initiation ant termination phase.');     
+    section.pth_min   = 'Confinement & Transport';
+    mode.pth_min      = 'advanced';
+
 
     valeur.qdds    = 0;
     type.qdds      = 'real';
@@ -1265,6 +1274,14 @@ function zs = zerod_param(void)
     section.residence_time   = 'SOL';
     mode.residence_time      = 'advanced';
 
+    valeur.min_te_LCFS    = 13.6;
+    type.min_te_LCFS      = 'real';                    
+    borne.min_te_LCFS     = [1e-3,1e3];
+    defaut.min_te_LCFS    = 13.6;
+    info.min_te_LCFS      = 'Minimum value of temperature at the LCFS (this limit is overwritten by the value computed in the plasma initiation model, breakdown and burnthrough, if this one is switch on)';
+    section.min_te_LCFS   = 'SOL';
+    mode.min_te_LCFS      = 'advanced';
+
     valeur.angle_ece    = 90;
     type.angle_ece      = 'real';                    
     borne.angle_ece     = {0,90,180};  
@@ -1928,6 +1945,25 @@ function zs = zerod_param(void)
     defaut.first_wall         = '';                
     info.first_wall           = 'matfile name that contains (R,Z) points describing poloidal section of the first_wall.\nif empty, it is not used\nVariable names should be R and Z. R and Z must be vectors of same length';	
     section.first_wall        = 'Miscellaneous';
+    
+    
+    valeur.extrapolation_ext_data       = 0;
+    type.extrapolation_ext_data         = 'integer';                    
+    borne.extrapolation_ext_data        = {0,1};  
+    defaut.extrapolation_ext_data       = 0;                
+    info.extrapolation_ext_data         = 'If =1, external data are not extrapolated lineary outside of the time interval where the external data is defined but the nearest value is used.';	
+    section.extrapolation_ext_data      = 'Miscellaneous';
+    mode.extrapolation_ext_data         = 'advanced';
+    
+    valeur.nonan_ext_data       = 0;
+    type.nonan_ext_data         = 'integer';                    
+    borne.nonan_ext_data        = {0,1};  
+    defaut.nonan_ext_data       = 0;                
+    info.nonan_ext_data         = 'If =1, NaN and Inf are removed from external data before extrapolation. That can hide some problem, be careful!';	
+    section.nonan_ext_data      = 'Miscellaneous';
+    mode.nonan_ext_data         = 'advanced';
+    
+  
 
     valeur.dwdt_method    = 'implicit';
     type.dwdt_method      = 'string';

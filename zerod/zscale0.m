@@ -436,7 +436,10 @@ tauhe_h = tauhe ./ max(1e-3,tauthl) .* tauh;
 % NF 47 (2007) p147
 tau_ped_sc = 2.4e-2  .* ip .^ 1.64 .* ploss .^ (-0.44) .* ne .^ (-0.18) .* R .^ 1.03 .* ep .^ (-0.39);
 
-% use excternal data if available
+% securite
+% utilisation de la regle ref : V. A. Belyakov et al , Plasma Devices and operations vol 11, 2003, p 193-201
+taum    = R + a .* K;
+% use external data if available
 if isappdata(0,'TAUE_EXP')
     tau_ext  = getappdata(0,'TAUE_EXP');
     if isfield(tau_ext,'temps') && ~isempty(tau_ext.temps)
@@ -444,27 +447,32 @@ if isappdata(0,'TAUE_EXP')
             tau_bohm = import_external_tau(tau_ext.temps,tau_ext.tau_bohm,tau_bohm,time);
         end
         if isfield(tau_ext,'tauthl') && ~isempty(tau_ext.tauthl)
-            tauthl = import_external_tau(tau_ext.temps,tau_ext.tauthl,tauthl,time);            
+            tauthl = import_external_tau(tau_ext.temps,tau_ext.tauthl,tauthl,time);
+        else
+            tauthl  = min(max(tau_bohm,tauthl),taum);            
         end
         if isfield(tau_ext,'tauh') && ~isempty(tau_ext.tauh)
-            tauh = import_external_tau(tau_ext.temps,tau_ext.tauh,tauh,time);            
+            tauh = import_external_tau(tau_ext.temps,tau_ext.tauh,tauh,time);
+        else
+            tauh    = min(max(tau_bohm,tauh),taum);
         end
         if isfield(tau_ext,'tauhe_l') && ~isempty(tau_ext.tauhe_l)
-            tauhe_l = import_external_tau(tau_ext.temps,tau_ext.tauhe_l,tauhe_l,time);                        
+            tauhe_l = import_external_tau(tau_ext.temps,tau_ext.tauhe_l,tauhe_l,time);
+        else
+            tauhe_l = min(max(tau_bohm,tauhe_l), 10 .* taum);            
         end
         if isfield(tau_ext,'tauhe_h') && ~isempty(tau_ext.tauhe_h)
-            tauhe_h = import_external_tau(tau_ext.temps,tau_ext.tauhe_h,tauhe_h,time);                        
+            tauhe_h = import_external_tau(tau_ext.temps,tau_ext.tauhe_h,tauhe_h,time);
+        else
+            tauhe_h = min(max(tau_bohm,tauhe_h), 10 .* taum);            
         end
     end
+else
+    tauthl  = min(max(tau_bohm,tauthl),taum);
+    tauh    = min(max(tau_bohm,tauh),taum);
+    tauhe_l = min(max(tau_bohm,tauhe_l), 10 .* taum);
+    tauhe_h = min(max(tau_bohm,tauhe_h), 10 .* taum);
 end
-
-% securite
-% utilisation de la regle ref : V. A. Belyakov et al , Plasma Devices and operations vol 11, 2003, p 193-201
-taum    = R + a .* K;
-tauthl  = min(max(tau_bohm,tauthl),taum);
-tauh    = min(max(tau_bohm,tauh),taum);
-tauhe_l = min(max(tau_bohm,tauhe_l), 10 .* taum);
-tauhe_h = min(max(tau_bohm,tauhe_h), 10 .* taum);
 
 
 %disp(' in scale0')
@@ -506,12 +514,6 @@ function taug = mono_scaling(R,ep,Ka,Bt,nem,ip,meff,ploss,c0)
         ((1+Ka.^2)./(2+Ka.^2)).^ (1/5) .* Ka .^ (3/5)  .* ploss .^ (-3/5);
 
 
-function val_out = import_external_tau(time_in,val_in,val_origin,time_out)
-
-val_out          = interp1_ex(time_in,val_in,time_out,'linear','extrap');
-indnok           = find(~isfinite(val_out));
-val_out(indnok)  = val_origin(indnok);
-val_out          = max(0,val_out);
 
 
         

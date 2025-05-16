@@ -1,8 +1,8 @@
 % retourne la version de cronos et la date de creation de la version
 function [zver,zdate,git_hash] = zinebversion
 
-zver       = 9.1;
-zdate      = 20241129;
-git_hash   = 'ac285179964217ace6d8a26069dd31e080377940';  % result of git rev-parse HEAD
+zver       = 10.0;
+zdate      = 20250515;
+git_hash   = 'ed74c75945e584ccd125403d4394ae86eea415c8';  % result of git rev-parse HEAD
 
 

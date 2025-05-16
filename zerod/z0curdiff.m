@@ -173,7 +173,7 @@ if isempty(psi_old)
 	% calcul de psi initial (cf. maple)
 	lipj = liin(1);
 	lipj(~isfinite(lipj)) = 1;
-	ip(ip == 0) =1;
+	ip(ip <= 0) =1;
 	piqj = max(0.1,min(10,(exp(lipj)-1.65)./0.89));
 	jini = (1 - x.^2) .^ piqj;
 	iini = rm(1) .* trapz(x,spr(1,:) .* jini,2);
@@ -203,9 +203,9 @@ if isempty(psi_old)
 	jmoy2     =  - grho2r2(1,:)  .* psid2   ./   (mu0  .*ri(1,:) .* (rm(1) .* ve).^ 2) ;
 	jmoy      =  jmoy1 + jmoy2;
 	% calcul de j0 est maintenant ok, il faut regularsier j(2)
-	if cronos_regul ~= 5
-            jmoy(1:2)  = pchip(x(3:11),jmoy(3:11),x(1:2));
-        end
+    if cronos_regul ~= 5
+        jmoy(1:2)  = pchip(x(3:11),jmoy(3:11),x(1:2));
+    end
 	ipinit   = (rm(1) .* trapz(x,spr(1,:) .* jmoy,2) - ...
 		C2(1,end) ./ (2 .* pi .* mu0 .* rm(1)) .* psid1(end)) ./ 2;
 	psi_init = psi_init .* ip(1) ./ ipinit;

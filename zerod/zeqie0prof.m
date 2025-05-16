@@ -2,7 +2,7 @@ function [tite,tauee,tauii,pei,tauei,profli]= ....
          zeqie0prof(vp,a,k,te0,nem,pel,pion,wth,ae,ane,ate,A,temps,tite_in,pei_in,...
 	 nDm,nTm,n1m,nhem,nimpm,zimp,rimp,zmax,pped,tebord,nebord,xiioxie,grad_ped, ...
      hitb,qdds,indice_inv,profli,fact_confinement,coef_shape,creux,exp_shape,kishape, ...
-     Sn_fraction,telim,extended_qei,frhe0,nboronm)
+     Sn_fraction,telim,extended_qei,frhe0,nboronm,min_te_LCFS)
 	
 % frhe0 is 0 if option.gaz ~= 5
 % nboronm is 0 if option.gaz ~= 11
@@ -48,7 +48,7 @@ end
 
 % minimal temperature
 if nargin >= 33
-    t_sub = min(13.6,(1 - fact_confinement) .* tebord + fact_confinement .* 13.6);
+    t_sub = min(min_te_LCFS,(1 - fact_confinement) .* tebord + fact_confinement .* min_te_LCFS);
 end
 
 % control du transport dans le piedestal
@@ -1093,12 +1093,12 @@ elseif isfield(profli,'source_el')
 		end
 %		if (length(indok) > 3)
 %  			tepnew   = pchip(temps(indok)',tep(indok,:)',temps')';
-%  			indnn    = find(all(tepnew > 13.6,2));
+%  			indnn    = find(all(tepnew > min_te_LCFS,2));
 %  			tep      = profli.tep;
 %  			tep(indnn,:) = tepnew(indnn,:);
 %  			
 %  			tipnew   = pchip(temps(indok)',tip(indok,:)',temps')';
-%  			indnn    = find(all(tipnew > 13.6,2));
+%  			indnn    = find(all(tipnew > min_te_LCFS,2));
 %  			tip      = profli.tip;
 %  			tip(indnn,:) = tipnew(indnn,:);	
 			

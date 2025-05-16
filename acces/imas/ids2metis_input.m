@@ -32,6 +32,12 @@ z0dinput.zsinfo        = zero1t;
 z0dinput.profinfo      = z0dprofinfo;
 z0dinput.mode_exp      = 118;
 
+
+% generate pulse schedule with homogeneous time
+if isempty(pulse_schedule.time)
+    pulse_schedule = make_time_pulse_schedule(pulse_schedule);    
+end
+
 % recherche des infos
 z0dinput.cons.temps    = pulse_schedule.time;
 % choix de la composition
@@ -81,7 +87,7 @@ switch z0dinput.option.gaz
         z0dinput.cons.iso     = zeros(size(z0dinput.cons.temps));
 end
 % cette donnees doit etre non vide
-z0dinput.cons.ip       = abs(pulse_schedule.flux_control.i_plasma.reference.data); % any COCOS
+z0dinput.cons.ip       = max(eps,abs(pulse_schedule.flux_control.i_plasma.reference.data)); % any COCOS
 if ~isempty(pulse_schedule.flux_control.loop_voltage.reference.data)
     dt = diff(pulse_schedule.time);
 	flux_rebuilt = -cumsum(sign(mean(pulse_schedule.flux_control.loop_voltage.reference.data)) .* pulse_schedule.flux_control.loop_voltage.reference.data(2:end) .* dt) ./ 2 ./ pi; % any COCOS ?
@@ -126,7 +132,7 @@ if length(pulse_schedule.density_control.valve) >=1
       end
   end
 end
-z0dinput.cons.nbar     = z0dinput.cons.nbar + sqrt(-1) .* gaspuff;
+z0dinput.cons.nbar     = max(1,z0dinput.cons.nbar) + sqrt(-1) .* gaspuff;
 
 %% IC
 if isfield(pulse_schedule.ic,'antenna')
@@ -261,12 +267,12 @@ if isfield(pulse_schedule.density_control.zeff,'zeff_method') && ...
    (pulse_schedule.density_control.zeff.zeff_method.index ~= 3)
       error('Only supported method for pulse.density_control.zeff is 3: average of a 1D core profile over rho_tor_norm up to the LCFS');
 end
-z0dinput.cons.zeff     = pulse_schedule.density_control.zeff.reference.data;
+z0dinput.cons.zeff     = max(1,pulse_schedule.density_control.zeff.reference.data);
 z0dinput.cons.zeff(~isfinite(z0dinput.cons.zeff)) = 3;
 % Geometry
 % selon les donnees disponibles
 
-if ~isempty(pulse_schedule.position_control.boundary_outline{1}.r.reference.data) &&  ~isempty(pulse_schedule.position_control.boundary_outline{1}.r.reference.data)
+if ~isempty(pulse_schedule.position_control.boundary_outline{1}.r.reference.data) &&  ~isempty(pulse_schedule.position_control.boundary_outline{1}.z.reference.data)
 	% cas separatrice donnees par points
 	% rebuilt of LCFS from references
 	nbpts  = length(pulse_schedule.position_control.boundary_outline);
@@ -278,7 +284,7 @@ if ~isempty(pulse_schedule.position_control.boundary_outline{1}.r.reference.data
 	end
 	% calcul des moments
 	% la courbe doit etre fermee
-	if (sepa.R(1,1) ~= sepa.R(1,end)) | (sepa.Z(1,1) ~= sepa.Z(1,end))
+	if (sepa.R(1,1) ~= sepa.R(1,end)) || (sepa.Z(1,1) ~= sepa.Z(1,end))
 		sepa.R(:,end+1) = sepa.R(:,1);
 		sepa.Z(:,end+1) = sepa.Z(:,1);
 	end
@@ -324,12 +330,12 @@ if ~isempty(pulse_schedule.position_control.boundary_outline{1}.r.reference.data
 	geo.d = sin(tm);
 
 
-	z0dinput.geo.R       = geo.R;      % grand rayon du plasma (m)
+	z0dinput.geo.R       = max(0.1,geo.R);      % grand rayon du plasma (m)
 	z0dinput.geo.z0      = geo.z0;     % centre geometricque du plasma en Z (m)
-	z0dinput.geo.a       = geo.a;      % petit rayon du plasma (m)
-	z0dinput.geo.K       = geo.K;     % elongation (b/a)
+	z0dinput.geo.a       = max(eps,geo.a);      % petit rayon du plasma (m)
+	z0dinput.geo.K       = max(0.1,geo.K);     % elongation (b/a)
 	z0dinput.geo.d       = geo.d;    % triangularite haute (definition entree de helena)
-	z0dinput.exp0d.Rsepa = sepa.R;       % vecteur R des points de la separatrice (m)
+	z0dinput.exp0d.Rsepa = max(0.1 - eps,sepa.R);       % vecteur R des points de la separatrice (m)
 	z0dinput.exp0d.Zsepa = sepa.Z - geo.z0 * ones(1,size(sepa.Z,2));       % vecteur Z des points de la separtrice (m)
 else
 	% cas separatrice donnees par moments	
@@ -339,18 +345,18 @@ else
 	end
    	z0dinput.geo.a     	= pulse_schedule.position_control.minor_radius.reference.data;
    	if isfield(pulse_schedule.position_control,'geometric_axis')
-	      z0dinput.geo.R     	= pulse_schedule.position_control.geometric_axis.r.reference.data;
+	      z0dinput.geo.R     	= max(0.1,pulse_schedule.position_control.geometric_axis.r.reference.data);
 	      z0dinput.geo.z0    	= pulse_schedule.position_control.geometric_axis.z.reference.data;
    	else
 	      disp('test mode for pulse_schedule: you are connected to a obsolete version of IMAS');
-	      z0dinput.geo.R     	= pulse_schedule.position_control.magnetic_axis.r.reference.data;
+	      z0dinput.geo.R     	= max(0.1,pulse_schedule.position_control.magnetic_axis.r.reference.data);
 	      z0dinput.geo.z0    	= pulse_schedule.position_control.magnetic_axis.z.reference.data;
 	end  
 	if isempty(pulse_schedule.position_control.elongation)
-	      z0dinput.geo.K     	= (pulse_schedule.position_control.elongation_upper.reference.data + ...
-					  pulse_schedule.position_control.elongation_lower.reference.data) ./ 2;
+	      z0dinput.geo.K     	= max(0.1,(pulse_schedule.position_control.elongation_upper.reference.data + ...
+					  pulse_schedule.position_control.elongation_lower.reference.data) ./ 2);
 	else
-	      z0dinput.geo.K     	= pulse_schedule.position_control.elongation.reference.data;
+	      z0dinput.geo.K     	= max(0.1,pulse_schedule.position_control.elongation.reference.data);
 	end
 	if isempty(pulse_schedule.position_control.triangularity)
 	      z0dinput.geo.d     	= (pulse_schedule.position_control.triangularity_upper.reference.data + ...
@@ -365,7 +371,7 @@ else
 end
 
 % vaccum magnetic field (temporary waiting for final version of pulse schedule)
-z0dinput.geo.b0 = pulse_schedule.tf.b_field_tor_vacuum_r.reference.data ./ z0dinput.geo.R;
+z0dinput.geo.b0 = max(50e-6,abs(pulse_schedule.tf.b_field_tor_vacuum_r.reference.data) ./ z0dinput.geo.R);
 
 % informations generales   
 z0dinput.machine   = z0dinput.option.machine;

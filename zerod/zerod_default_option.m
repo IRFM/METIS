@@ -630,7 +630,16 @@ end
 if ~isfield(option,'collapse')
     option.collapse    = 0;
 end
-
-
-
+if ~isfield(option,'extrapolation_ext_data')
+    option.extrapolation_ext_data    = 0;
+end
+if ~isfield(option,'nonan_ext_data')
+    option.nonan_ext_data    = 0;
+end
+if ~isfield(option,'pth_min')
+    option.pth_min    = 1;
+end
+if ~isfield(option,'min_te_LCFS')
+    option.min_te_LCFS    = 13.6;
+end
 

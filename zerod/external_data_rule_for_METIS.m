@@ -133,13 +133,23 @@
 %     METIS as an external data. Fields that are not provided or are empty
 %     is just skipped.
 %
-%       TAUE_EXP.temps      = time vector [N,1]
-%       TAUE_EXP.tau_bohm   = Bohm confinement time (s), vector [N,1]
-%       TAUE_EXP.tauthl     = L-mode confinement time (s), vector [N,1]
-%       TAUE_EXP.tauh       = H-mode confinement time (s), vector [N,1] 
-%       TAUE_EXP.tauhe_l    = Helium ashes L-mode confinement time (s), vector [N,1]
-%       TAUE_EXP.tauhe_h    = Helium ashes H-mode confinement time (s), vector [N,1]
+%       TAUE_EXP.temps                 = time vector [N,1]
+%       TAUE_EXP.tau_bohm              = Bohm confinement time (s), vector [N,1]
+%       TAUE_EXP.tauthl                = L-mode confinement time (s), vector [N,1]
+%       TAUE_EXP.tauh                  = H-mode confinement time (s), vector [N,1] 
+%       TAUE_EXP.tauhe_l               = Helium ashes L-mode confinement time (s), vector [N,1]
+%       TAUE_EXP.tauhe_h               = Helium ashes H-mode confinement time (s), vector [N,1]
+%       TAUE_EXP.fraction_closed_lines = fraction of closed line in plasma poloidal cross section (0 to 1) [N,1]
 %	    setappdata(0,'TAUE_EXP',TAUE_EXP);
+%
+% 15- source of cold neutral at the LCFS (for the coupling with DYON)
+%
+%       NEUTRAL_EXP.temps      = time vector [N,1]
+%       NEUTRAL_EXP.n0a        = number of neutral inputed at the LCFS by the recycling and the gas puff [N,1]
+%	    setappdata(0,'NEUTRAL_EXP',NEUTRAL_EXP);
+%
+%
+
 
 
 

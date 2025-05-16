@@ -274,7 +274,7 @@ if mode == 0
    zs.ate     = ones(size(cons.temps));
    zs.tem     = 1e3 * ones(size(cons.temps));
    zs.te0     = 2e3 * ones(size(cons.temps));
-   zs.tebord  = 13.6 * ones(size(cons.temps));
+   zs.tebord  = option.min_te_LCFS * ones(size(cons.temps));
    zs.tite    = 0.5 .*ones(size(cons.temps));
    zs.betap   = 0.3 .* ones(size(cons.temps));
    zs.betaptot= 0.3 .* ones(size(cons.temps));
@@ -380,7 +380,7 @@ if (mode == 1)
 		  d95  = geo.d;
 		end
      
-                tau_bohm = max(1e-6,(zs.sp ./ pi) .* geo.b0 ./ max(13.6,zs.tem) .* 2 ./ (1 + zs.zeff .* zs.tite));
+                tau_bohm = max(1e-6,(zs.sp ./ pi) .* geo.b0 ./ max(option.min_te_LCFS,zs.tem) .* 2 ./ (1 + zs.zeff .* zs.tite));
                 [void1,void2,tauthl_ref] = ...
                 zscale0(zs.nbar./ 1e20,zs.ip ./ 1e6 ,geo.b0,zs.ploss./ 1e6, ...
                         max(zs.ploss,zs.pin - zs.dwdt) ./ 1e6,geo.R,geo.K,geo.a, zs.meff, zs.zeff,zs.vp,zs.sp, ...
@@ -462,6 +462,16 @@ else
     f_wth   = ones(size(cons.nbar));
 end     
 
+% external data fraction of line of field confined:
+if isappdata(0,'TAUE_EXP')
+    tau_ext  = getappdata(0,'TAUE_EXP');
+    if isfield(tau_ext,'temps') && ~isempty(tau_ext.temps)
+        if isfield(tau_ext,'fraction_closed_lines') && ~isempty(tau_ext.fraction_closed_lines)
+            fact_confinement = max(0,min(1,import_external_tau(tau_ext.temps,tau_ext.fraction_closed_lines,fact_confinement,cons.temps)));
+        end
+    end
+end
+
 % effet du ripple
 % attention au bug -> ne pas lire le nom de la machine dans le workspace
 
@@ -519,13 +529,13 @@ switch option.ploss_exp
         zs.ploss =  zs.pin;
     case 'max_power'
         if isfield(profli,'qe') &&isfield(profli,'qi')
-            zs.ploss  =  max(eps,max(profli.qe + profli.qi,[],2));
+            zs.ploss  =  max(option.pth_min,max(profli.qe + profli.qi,[],2));
         else
             zs.ploss =  zs.pin;
         end
     case 'max(pel)+max(pion)'
         if isfield(profli,'qe') &&isfield(profli,'qi')
-            zs.ploss  =  max(eps,max(profli.qe,[],2) + max(profli.qi,[],2));
+            zs.ploss  =  max(option.pth_min,max(profli.qe,[],2) + max(profli.qi,[],2));
         else
             zs.ploss =  zs.pin;
         end
@@ -748,7 +758,7 @@ switch option.ploss_exp
         zs.pth   = (zs.pfus_th + zs.pohm + zs.picrh_th + zs.plh_th + real(zs.pnbi_th) + imag(zs.pnbi_th) + zs.pecrh);
     case 'max_power'
         if isfield(profli,'qe') &&isfield(profli,'qi')
-            zs.pth  =  max(eps,max(profli.qe + profli.qi,[],2));
+            zs.pth  =  max(option.pth_min,max(profli.qe + profli.qi,[],2));
         else
             zs.pth   = (zs.pfus_th + zs.pohm + zs.picrh_th + zs.plh_th + real(zs.pnbi_th) + imag(zs.pnbi_th) + zs.pecrh);
         end
@@ -762,10 +772,12 @@ switch option.ploss_exp
         zs.pth   = (zs.pfus_th + zs.pohm + zs.picrh_th + zs.plh_th + real(zs.pnbi_th) + imag(zs.pnbi_th) + zs.pecrh) - ...
             (zs.pbrem + zs.pcyclo + option.fprad .* zs.prad + zs.pioniz);
 end
+zs.pth  =  max(option.pth_min,zs.pth);
+
 pion_icrh = zeros(size(zs.picrh_th));
 
 % limite pour dwthdt
-plim          = max(1,min(zs.vp .* 1e6,max(0.8 .* zs.pth,0.2 .* abs(zs.pin))));
+plim          = max(option.pth_min,min(zs.vp .* 1e6,max(0.8 .* zs.pth,0.2 .* abs(zs.pin))));
 
 % puissance ion/electron
 if isfield(profli,'nbishape_ion')
@@ -932,32 +944,32 @@ if isfield(profli,'vpr') && isfield(profli,'rmx') && isfield(profli,'Raxe')  && 
 end
 
 % correction de dwdt
-if (option.transitoire == 1) & (mode ~=0)
+if (option.transitoire == 1) && (mode ~=0)
 	switch option.dwdt_method
 	case 'none'
-	    zs.ploss = max(1,real(zs.ploss));
-	    zs.pth   = max(1,real(zs.pth));
+	    zs.ploss = max(option.pth_min,real(zs.ploss));
+	    zs.pth   = max(option.pth_min,real(zs.pth));
 	otherwise 
-	    zs.pth   = max(1,zs.pth - zs.dwthdt);
-	    zs.ploss = max(1,zs.ploss - zs.dwdt);
+	    zs.pth   = max(option.pth_min,zs.pth - zs.dwthdt);
+	    zs.ploss = max(option.pth_min,zs.ploss - zs.dwdt);
 	end
 else
-	zs.ploss = max(1,real(zs.ploss));
-	zs.pth   = max(1,real(zs.pth));
+	zs.ploss = max(option.pth_min,real(zs.ploss));
+	zs.pth   = max(option.pth_min,real(zs.pth));
 end
 
 % securite
-zs.pion  = max(1,zs.pion);
-zs.pel   = max(1,zs.pel);
-zs.pin   = max(1,real(zs.pin));
+zs.pion  = max(option.pth_min,zs.pion);
+zs.pel   = max(option.pth_min,zs.pel);
+zs.pin   = max(option.pth_min,real(zs.pin));
 
 % appel du module de loi d'echelle
 if fwr == 1; disp('zscale0');end
 %
-tau_bohm = max(1e-6,(zs.sp ./ pi) .* geo.b0 ./ max(13.6,zs.tem) .* 2 ./ (1 + zs.zeff .* zs.tite));
+tau_bohm = max(1e-6,(zs.sp ./ pi) .* geo.b0 ./ max(option.min_te_LCFS,zs.tem) .* 2 ./ (1 + zs.zeff .* zs.tite));
 % nombre de rayon de larmor dans le plasma (ou en nombre de longueur de Debye, on prend le plus grand, c'est une securite a faible densite)	
-%rho_i  = max(4.57e-3 .* sqrt(zs.meff) .* sqrt(max(13.6,zs.tem .* zs.tite) ./ 1e3) ./ geo.b0, ...
-%		     2.35e5  .* sqrt(max(13.6,zs.tem) ./ max(1e13,zs.nem)));
+%rho_i  = max(4.57e-3 .* sqrt(zs.meff) .* sqrt(max(option.min_te_LCFS,zs.tem .* zs.tite) ./ 1e3) ./ geo.b0, ...
+%		     2.35e5  .* sqrt(max(option.min_te_LCFS,zs.tem) ./ max(1e13,zs.nem)));
 % effet des pieges
 %  if isfield(profli,'ftrap') 
 %  	%% INVERSE ASPECT RATIO = r/R (PROFILE)
@@ -971,8 +983,8 @@ tau_bohm = max(1e-6,(zs.sp ./ pi) .* geo.b0 ./ max(13.6,zs.tem) .* 2 ./ (1 + zs.
 %  	%% ORBIT WIDTH (M)
 %  	%btot       = sqrt(profli.fdia .^2 .* profli.r2i + profli.bpol .^ 2);
 %  	%rho_im = rho_i
-%  	%rho_ip       = max(4.57e-3 .* sqrt(mass) .* sqrt(max(13.6,profli.tip) ./ 1e3) ./ btot, ...
-%  	%	     2.35e5  .* sqrt(max(13.6,profli.tep) ./ max(1e13,profli.nep)));
+%  	%rho_ip       = max(4.57e-3 .* sqrt(mass) .* sqrt(max(option.min_te_LCFS,profli.tip) ./ 1e3) ./ btot, ...
+%  	%	     2.35e5  .* sqrt(max(option.min_te_LCFS,profli.tep) ./ max(1e13,profli.nep)));
 %  	dr_banana  = (epsi).^(-0.5) .* profli.qjli;
 %  	dr_banana(:,1) = 0;
 %  	% calcul de l'effet moyen des pieges
@@ -1020,7 +1032,7 @@ switch  option.scaling
         iob = (2/5) .* geo.R .* zs.ip ./ 1e6  .* geo.K .^ 2 ./  geo.a .^ 2 ./ (1 + geo.K .^ 2);
         pped   = max(0,4.53138e3 .* (min(0.5,abs(geo.d)) + 0.0034) .^ 0.435509 .* (p_scaling_pped  ./ 1e6).^ 0.121836 .* iob .^ 1.51649);
         wped      = abs(option.fpped)  .*  3/2 .*  pped .* zs.vp;
-        zs.tauh   = zs.tauthl + wped ./ max(1,zs.pth);
+        zs.tauh   = zs.tauthl + wped ./ max(option.pth_min,zs.pth);
 end
 
 % difference de seuil selon la configuration
@@ -1068,8 +1080,8 @@ if (mode ~= 0) &&  isfield(profli,'nip') && (option.scaling == 9)
     %pcor = cat(1,pcor(2:end),pcor(end));
     %pcor(pcor < 0) = 0;
     pcor(1) = 0;
-    tauh   = max(tau_bohm,whmode ./ max(1,zs.pth + pcor));
-    tauthl = max(tau_bohm,wlmode ./ max(1,zs.pth + pcor));
+    tauh   = max(tau_bohm,whmode ./ max(option.pth_min,zs.pth + pcor));
+    tauthl = max(tau_bohm,wlmode ./ max(option.pth_min,zs.pth + pcor));
     %zs.tauh(indok)  = tauh(indok);
     %zs.tauthl(indok)  = tauthl(indok);
     zs.tauh  = tauh;
@@ -1126,14 +1138,14 @@ elseif (option.fpped < 0) && (mode ~= 0) && isfield(profli,'nip')
             % La reponse est meilleur en utilisant rhomax, ce qui est logique puisque l'invariant est relie au flux toroidal
             % pour eviter le problemes de decouplage ? basse densite :
             %teff    = (profli.tip  + profli.zeff .* profli.tep) ./ (1 + profli.zeff); % selon la vitesse du son
-            %rho_e   = 1.07e-4 .*  sqrt(max(13.6,teff) ./ 1e3) ./ sqrt((profli.fdia .* profli.ri) .^ 2 + profli.bpol .^2);
-            rho_e   = 1.07e-4 .*  sqrt(max(13.6,profli.tep) ./ 1e3) ./ sqrt((profli.fdia .* profli.ri) .^ 2 + profli.bpol .^2);
+            %rho_e   = 1.07e-4 .*  sqrt(max(option.min_te_LCFS,teff) ./ 1e3) ./ sqrt((profli.fdia .* profli.ri) .^ 2 + profli.bpol .^2);
+            rho_e   = 1.07e-4 .*  sqrt(max(option.min_te_LCFS,profli.tep) ./ 1e3) ./ sqrt((profli.fdia .* profli.ri) .^ 2 + profli.bpol .^2);
             rho_b   = rho_e .* profli.qjli ./ sqrt(profli.epsi);
             rho_pot = (rho_e .^ 2 .* profli.qjli .^ 2 .* profli.Raxe) .^ (1/3);
             rho_b   = rho_b .* (rho_b < profli.rmx) + rho_pot .* (rho_b >= profli.rmx);
             rho_b(:,1) = rho_pot(:,1);
             % debyes
-            rho_d  = 2.35e5  .* sqrt(max(13.6,profli.tep) ./ max(1e13,profli.nep)./ 1e3);
+            rho_d  = 2.35e5  .* sqrt(max(option.min_te_LCFS,profli.tep) ./ max(1e13,profli.nep)./ 1e3);
             %figure(51);clf;plot(cons.temps,rho_b,'r',cons.temps,rho_d,'b');drawnow
             rho_bd = max(rho_b,rho_d);
             % cas du modele stiff2 avec particule passantes et piegees
@@ -1233,11 +1245,11 @@ elseif (option.fpped < 0) && (mode ~= 0) && isfield(profli,'nip')
     
     switch option.coef_shape
         case {'alpha','alpha+neo'}
-            zs.tauh   = max(tau_bohm,whmode ./ max(1,zs.pin));
-            zs.tauthl = max(tau_bohm,wlmode ./ max(1,zs.pin));
+            zs.tauh   = max(tau_bohm,whmode ./ max(option.pth_min,zs.pin));
+            zs.tauthl = max(tau_bohm,wlmode ./ max(option.pth_min,zs.pin));
         otherwise
-            zs.tauh   = max(tau_bohm,whmode ./ max(1,zs.pth));
-            zs.tauthl = max(tau_bohm,wlmode ./ max(1,zs.pth));
+            zs.tauh   = max(tau_bohm,whmode ./ max(option.pth_min,zs.pth));
+            zs.tauthl = max(tau_bohm,wlmode ./ max(option.pth_min,zs.pth));
     end
 
 %figure(21);plot(cons.temps,wped,cons.temps,wcore,cons.temps,wlmode,cons.temps,w0);drawnow
@@ -1256,17 +1268,17 @@ end
 
 % cas breakdown
 if (option.berror > 0) && (mode ~= 0)
-        fconf_taup = zs.tauthl;
-        if option.evolution == 1
-	    [zs.tauthl,void_f,eddy_current,void_nec,void_tref,void_prf,flux_edge_cor] = z0taue_burnthrough(option,geo,cons,zs,zs.tauthl, ...
-	                    zs.eddy_current(2),zs.flux_edge_cor(2));
-	    
-	    zs.eddy_current(3:end)   = eddy_current(3:end); 
-	    zs.flux_edge_cor(3:end)  = flux_edge_cor(3:end);              
-        else
-	    [zs.tauthl,void_f,zs.eddy_current,void_nec,void_tref,void_prf,zs.flux_edge_cor] = z0taue_burnthrough(option,geo,cons,zs,zs.tauthl);
-	end
-	fconf_taup = min(1,zs.tauthl ./ fconf_taup); 
+    fconf_taup = zs.tauthl;
+    if option.evolution == 1
+        [zs.tauthl,void_f,eddy_current,void_nec,void_tref,void_prf,flux_edge_cor] = z0taue_burnthrough(option,geo,cons,zs,zs.tauthl, ...
+            zs.eddy_current(2),zs.flux_edge_cor(2));
+        
+        zs.eddy_current(3:end)   = eddy_current(3:end);
+        zs.flux_edge_cor(3:end)  = flux_edge_cor(3:end);
+    else
+        [zs.tauthl,void_f,zs.eddy_current,void_nec,void_tref,void_prf,zs.flux_edge_cor] = z0taue_burnthrough(option,geo,cons,zs,zs.tauthl);
+    end
+    fconf_taup = min(1,zs.tauthl ./ fconf_taup);
 end
 
 % limitation avec la loi neo alcator
@@ -1293,13 +1305,13 @@ end
 zs.plossl2h = max(1e4,real(zs.plossl2h));
 switch option.plhthr
 case '2*pion'
-	zs.plhthr = max(1,max(min(2 .* zs.pion,zs.pin - zs.dwdt),zs.ploss./3));
+	zs.plhthr = max(option.pth_min,max(min(2 .* zs.pion,zs.pin - zs.dwdt),zs.ploss./3));
 case 'P_LCFS'
-	zs.plhthr = max(1,min(zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz,zs.pin - zs.dwdt));
+	zs.plhthr = max(option.pth_min,min(zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz,zs.pin - zs.dwdt));
 case 'P_LCFS_dwdt'
-	zs.plhthr = max(1,zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz - zs.dwdt);
+	zs.plhthr = max(option.pth_min,zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz - zs.dwdt);
 otherwise
-	zs.plhthr = max(1,max(min(zs.ploss,zs.pin - zs.dwdt),zs.ploss./3));
+	zs.plhthr = max(option.pth_min,max(min(zs.ploss,zs.pin - zs.dwdt),zs.ploss./3));
 end
 if mode == 0
    zs.modeh  = (zs.plhthr >= (zs.plossl2h + 1e6 .*  option.l2hmul));
@@ -1362,7 +1374,7 @@ zs.modeh = double(zs.modeh);
 
 % transition entre taul et tauh
 if option.l2hslope > 0
-	f = (zs.plhthr - (zs.plossl2h + 1e6 .*  option.l2hmul)) ./ max(1,zs.plossl2h + 1e6 .*  option.l2hmul);
+	f = (zs.plhthr - (zs.plossl2h + 1e6 .*  option.l2hmul)) ./ max(option.pth_min,zs.plossl2h + 1e6 .*  option.l2hmul);
 	f = min(1,max(0,f ./ option.l2hslope));
 	%figure(151);clf;plot(f);drawnow
 	zs.tauh = zs.tauthl + f .* option.l2hslope .* (zs.tauh - zs.tauthl) +  (1 - option.l2hslope) .* (zs.tauh - zs.tauthl);
@@ -1423,20 +1435,20 @@ end
 
 % effet de l'injection de gaz
 if option.HH_gas_puff > 0
-	HH_gas_puff = max(eps,1 - tanh(option.HH_gas_puff .* zs.pioniz ./ max(1,zs.pin)));
-	%figure(21);clf;plot(cons.temps,HH_gas_puff);drawnow
+    HH_gas_puff = max(eps,1 - tanh(option.HH_gas_puff .* zs.pioniz ./ max(option.pth_min,zs.pin)));
+    %figure(21);clf;plot(cons.temps,HH_gas_puff);drawnow
 else
-	HH_gas_puff = ones(size(cons.hmore));
-	%disp('here')
+    HH_gas_puff = ones(size(cons.hmore));
+    %disp('here')
 end
 % confinement
 taue_itb    = (zs.hitb-1) .* zs.tauthl;
 tauhe_itb   = (zs.hitb-1) .* zs.tauhe_l;
 zs.taue     = zs.hmhd .* HH_delta .* HH_li .* HH_gas_puff .* cons.hmore .* (zs.modeh .* zs.tauh  + (~zs.modeh) .* zs.tauthl)  + taue_itb;
 if (option.berror > 0) && (mode ~= 0)
-	zs.taue     = 	max(max(2e-6 .* fact_confinement,eps),zs.taue);
+    zs.taue     = 	max(max(2e-6 .* fact_confinement,eps),zs.taue);
 else
-        zs.taue     = 	max(2e-6,zs.taue);
+    zs.taue     = 	max(2e-6,zs.taue);
 end
 
 
@@ -1460,7 +1472,7 @@ zs.wrlw   = (zs.taue ./ zs.tauthl) .* zs.wrlw;
 
 
 % betan pour la mhd (anti oscillation estime avec le jeux de donneees pre
-if (option.transitoire == 1) & (mode ~=0)
+if (option.transitoire == 1) && (mode ~=0)
 	betan0 = zs.w .* (1.6.*pi./3) .* geo.a ./ zs.vp ./ geo.b0 ./ zs.ip;
 else
 	tau0     = max(1e-3,zs.hitb .* cons.hmore .* (zs.modeh .* zs.tauh    + (~zs.modeh) .* zs.tauthl));
@@ -1473,7 +1485,7 @@ if isappdata(0,'TE_EXP') && isappdata(0,'TI_EXP') && isfield(profli,'nip') && is
         isfield(option,'exp_shape') && (option.exp_shape == 0)
     zs.wth  = max(eps,1.602176462e-19 .* (3/2) .* trapz(profli.xli,(profli.tep .* profli.nep + profli.tip .* profli.nip) .* profli.vpr,2));
     taue_before = zs.taue;
-    zs.taue = max(1e-6,zs.wth ./ max(1,zs.pth));
+    zs.taue = max(1e-6,zs.wth ./ max(option.pth_min,zs.pth));
     if any((taue_before / 10) > zs.taue) || any((taue_before * 10) < zs.taue)
         fprintf('t');
         indbad = find(((taue_before / 10) > zs.taue) | ((taue_before * 10) < zs.taue));
@@ -1497,7 +1509,7 @@ elseif option.evolution == 1
                 fconf_disrup(1:2) = 1;
                 zs.wth       = fconf_disrup .* zs.wth;
                 zs.taue      = fconf_disrup .* zs.taue;
-                figure(21);clf;plot(fconf_disrup);drawnow
+                %figure(21);clf;plot(fconf_disrup);drawnow
              end
         end
         zs.wth(end-1:end)       = wth_loc(end-1:end);
@@ -1658,9 +1670,9 @@ if (option.ode_pped == 1) && (mode ~= 0)
   wped      = 3/2 .* zs.pped .* zs.vp;
   if isfield(profli,'qe') &&isfield(profli,'qi')
 	pow_ped  = profli.qe(:,end-1) + profli.qi(:,end-1);
-        pow_ped  = pow_ped .* (pow_ped > 0) + max(eps,min(zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz,zs.pin - zs.dwdt)) .* (pow_ped <= 0);
+        pow_ped  = pow_ped .* (pow_ped > 0) + max(option.pth_min,min(zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz,zs.pin - zs.dwdt)) .* (pow_ped <= 0);
   else
-	pow_ped  = max(eps,min(zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz,zs.pin - zs.dwdt));
+	pow_ped  = max(option.pth_min,min(zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pioniz,zs.pin - zs.dwdt));
   end
   if option.evolution == 1
       tau_W_ped = min(zs.taue,wped ./ pow_ped) .* (0.5 + 0.5 .* zs.modeh(end));
@@ -1801,117 +1813,117 @@ wthf = zs.wth;
 wthf(~isfinite(wthf))= 0;
 % cas de donnees experimentales
 if isappdata(0,'TE_EXP') & isappdata(0,'TI_EXP') & isfield(zs,'temps');
-	if option.transitoire == 1
-			pth = max(1,zs.pth + zs.dwthdt);
-	else
-			pth = zs.pth;
-	end
-        if fwr == 1; disp('zdwdt0');end
-	[void,dwthdt]  = zdwdt0(wthf,pth,zs.taue,cons.temps,zs.vp);
-	dwthdt        = max(-plim,min(plim,dwthdt));
-	if option.transitoire == 0
-		zs.dwthdt(:)  = 0;
-  	elseif option.evolution == 1
-
-                zs.wth(1:2) =  wthf(1:2);
-
-		switch option.dwdt_method
-		case {'implicit','mixed','freebie'}
-		    zs.dwthdt(end-1:end)     = dwthdt(end-1:end);	
-		case 'none'
-		    zs.dwthdt(:)  = 0;
-		otherwise
-		    % rien
-		end
- 	else
-		switch option.dwdt_method
-		case 'none'
-		    zs.dwthdt(:)  = 0;
-		otherwise
-		    zs.dwthdt     = dwthdt;	
-		end
-	end	
-	% fast electron due to runaway electrons addedt to LH terms
-        if option.runaway ~= 0
-            % assuming v// ~ c
-            esup_run = zs.irun .* phys.me .* phys.c ./ phys.e;
-        else
-            esup_run = zeros(size(cons.temps));
+    if option.transitoire == 1
+        pth = max(option.pth_min,zs.pth + zs.dwthdt);
+    else
+        pth = zs.pth;
+    end
+    if fwr == 1; disp('zdwdt0');end
+    [void,dwthdt]  = zdwdt0(wthf,pth,zs.taue,cons.temps,zs.vp);
+    dwthdt        = max(-plim,min(plim,dwthdt));
+    if option.transitoire == 0
+        zs.dwthdt(:)  = 0;
+    elseif option.evolution == 1
+        
+        zs.wth(1:2) =  wthf(1:2);
+        
+        switch option.dwdt_method
+            case {'implicit','mixed','freebie'}
+                zs.dwthdt(end-1:end)     = dwthdt(end-1:end);
+            case 'none'
+                zs.dwthdt(:)  = 0;
+            otherwise
+                % rien
         end
-        zs.w          = zs.wth + (zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh + esup_run);
-        zs.dwdt       = zs.dwthdt + z0dxdt(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh + esup_run,cons.temps);
-	if option.evolution == 1
-		switch option.dwdt_method
-		case 'freebie'
-        		zs.dwdt       = zs.dwthdt + z0dxdt_freebie(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh,cons.temps);
-		end
-	end
-
+    else
+        switch option.dwdt_method
+            case 'none'
+                zs.dwthdt(:)  = 0;
+            otherwise
+                zs.dwthdt     = dwthdt;
+        end
+    end
+    % fast electron due to runaway electrons addedt to LH terms
+    if option.runaway ~= 0
+        % assuming v// ~ c
+        esup_run = zs.irun .* phys.me .* phys.c ./ phys.e;
+    else
+        esup_run = zeros(size(cons.temps));
+    end
+    zs.w          = zs.wth + (zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh + esup_run);
+    zs.dwdt       = zs.dwthdt + z0dxdt(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh + esup_run,cons.temps);
+    if option.evolution == 1
+        switch option.dwdt_method
+            case 'freebie'
+                zs.dwdt       = zs.dwthdt + z0dxdt_freebie(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh,cons.temps);
+        end
+    end
+    
 elseif mode ~= 0
-	if option.transitoire == 1
-			pth = max(1,zs.pth + zs.dwthdt);
-	else
-			pth = zs.pth;
-	end
-        if fwr == 1; disp('zdwdt0');end
-	[zs.wth,dwthdt]  = zdwdt0(wthf,pth,zs.taue,cons.temps,zs.vp);
-	
-%  	figure(21);
-%  	clf
-%  	subplot(3,1,1);
-%  	plot(cons.temps,zs.wth,'-+',cons.temps,wthf,'-o');
-%  	ylabel('wth')
-%  	subplot(3,1,2)
-%  	plot(cons.temps,dwthdt,'-+',cons.temps,zs.dwthdt,'-o');
-%  	ylabel('dwthdt')
-%  	subplot(3,1,3)
-%  	plot(cons.temps,zs.taue,'-o');
-%  	ylabel('taue')
-%  	drawnow
-
-	dwthdt        = max(-plim,min(plim,dwthdt));
-	if option.transitoire == 0
-		zs.dwthdt(:)  = 0;
-  	elseif option.evolution == 1
-
-                zs.wth(1:2) =  wthf(1:2);
-
-		switch option.dwdt_method
-		case {'implicit','mixed'}
-		    zs.dwthdt(end-1:end)     = dwthdt(end-1:end);	
-		case 'none'
-		    zs.dwthdt(:)  = 0;
-		otherwise
-		    % rien
-		end
-	else
-		switch option.dwdt_method
-		case 'none'
-		    zs.dwthdt(:)  = 0;
-		otherwise
-		    zs.dwthdt     = dwthdt;
-		end
-	end
-	% fast electron due to runaway electrons addedt to LH terms
-        if option.runaway ~= 0
-            % assuming v// ~ c
-            esup_run = zs.irun .* phys.me .* phys.c ./ phys.e;
-        else
-            esup_run = zeros(size(cons.temps));
+    if option.transitoire == 1
+        pth = max(option.pth_min,zs.pth + zs.dwthdt);
+    else
+        pth = zs.pth;
+    end
+    if fwr == 1; disp('zdwdt0');end
+    [zs.wth,dwthdt]  = zdwdt0(wthf,pth,zs.taue,cons.temps,zs.vp);
+    
+    %  	figure(21);
+    %  	clf
+    %  	subplot(3,1,1);
+    %  	plot(cons.temps,zs.wth,'-+',cons.temps,wthf,'-o');
+    %  	ylabel('wth')
+    %  	subplot(3,1,2)
+    %  	plot(cons.temps,dwthdt,'-+',cons.temps,zs.dwthdt,'-o');
+    %  	ylabel('dwthdt')
+    %  	subplot(3,1,3)
+    %  	plot(cons.temps,zs.taue,'-o');
+    %  	ylabel('taue')
+    %  	drawnow
+    
+    dwthdt        = max(-plim,min(plim,dwthdt));
+    if option.transitoire == 0
+        zs.dwthdt(:)  = 0;
+    elseif option.evolution == 1
+        
+        zs.wth(1:2) =  wthf(1:2);
+        
+        switch option.dwdt_method
+            case {'implicit','mixed'}
+                zs.dwthdt(end-1:end)     = dwthdt(end-1:end);
+            case 'none'
+                zs.dwthdt(:)  = 0;
+            otherwise
+                % rien
         end
-        zs.w          = zs.wth + (zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi)  + zs.esup_lh + esup_run);
-        zs.dwdt       = zs.dwthdt + z0dxdt(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh + esup_run,cons.temps);
-	if option.evolution == 1
-		switch option.dwdt_method
-		case 'freebie'
-			%zs.dwdt = zs.dwthdt + polyder(polyfit(cons.temps,zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh,1));
-        		zs.dwdt       = zs.dwthdt + z0dxdt_freebie(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh,cons.temps);
-		end
-	end
-
+    else
+        switch option.dwdt_method
+            case 'none'
+                zs.dwthdt(:)  = 0;
+            otherwise
+                zs.dwthdt     = dwthdt;
+        end
+    end
+    % fast electron due to runaway electrons addedt to LH terms
+    if option.runaway ~= 0
+        % assuming v// ~ c
+        esup_run = zs.irun .* phys.me .* phys.c ./ phys.e;
+    else
+        esup_run = zeros(size(cons.temps));
+    end
+    zs.w          = zs.wth + (zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi)  + zs.esup_lh + esup_run);
+    zs.dwdt       = zs.dwthdt + z0dxdt(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh + esup_run,cons.temps);
+    if option.evolution == 1
+        switch option.dwdt_method
+            case 'freebie'
+                %zs.dwdt = zs.dwthdt + polyder(polyfit(cons.temps,zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh,1));
+                zs.dwdt       = zs.dwthdt + z0dxdt_freebie(zs.esup_fus + zs.esup_icrh + real(zs.esup_nbi) + imag(zs.esup_nbi) + zs.esup_lh,cons.temps);
+        end
+    end
+    
 else
-	zs.dwdt    = zeros(size(cons.temps));
-	zs.dwthdt  = zeros(size(cons.temps));
+    zs.dwdt    = zeros(size(cons.temps));
+    zs.dwthdt  = zeros(size(cons.temps));
 end
 
 % puissance equivalente
@@ -1980,7 +1992,7 @@ switch option.ane
         fnbis  = real(zs.pnbi) ./ (1.602176462e-19 .* option.einj) + imag(zs.pnbi) ./ (1.602176462e-19 .* option.einj2);
         % le facteur 2 est remplace par une meilleur approximation car disponible : (1 + zs.tite .* zs.nim ./ zs.nem)
         % utilisation de Te0 au lieu de Te2
-        fnbis  = (1 + zs.tite .* zs.nim ./ zs.nem) .* fnbis .* (1.602176462e-19 .* zs.te0) ./ max(1,zs.pin) .* (zs.ate + 1 - 0.37);
+        fnbis  = (1 + zs.tite .* zs.nim ./ zs.nem) .* fnbis .* (1.602176462e-19 .* zs.te0) ./ max(option.pth_min,zs.pin) .* (zs.ate + 1 - 0.37);
         ngr     = 1e20 .* (zs.ip /1e6) ./ (pi.* geo.a .^ 2);
         ane_h  = 0.253 - 0.499 .* (zs.nbar ./ ngr)  + 2.094 .* fnbis + 0.117 .* geo.R;
         ane_h   = max(0.01,min(10,ane_h));
@@ -2002,7 +2014,7 @@ switch option.ane
         % en mode H scaling formule 5 de C. Angioni ref : NF 47 (2007) p 1326-1335
         % le facteur 2 est remplace par une meilleur approximation car disponible : (1 + zs.tite .* zs.nim ./ zs.nem)
         % utilisation de Te0 au lieu de Te2
-        fnbis  = (1 + zs.tite .* zs.nim ./ zs.nem) .* fnbis .* (1.602176462e-19 .* zs.te0) ./ max(1,zs.pin) .* (zs.ate + 1 - 0.37);
+        fnbis  = (1 + zs.tite .* zs.nim ./ zs.nem) .* fnbis .* (1.602176462e-19 .* zs.te0) ./ max(option.pth_min,zs.pin) .* (zs.ate + 1 - 0.37);
         ngr     = 1e20 .* (zs.ip /1e6) ./ (pi.* geo.a .^ 2);
         ane_h  = 0.253 - 0.499 .* (zs.nbar ./ ngr)  + 2.094 .* fnbis + 0.117 .* geo.R;
         ane_h   = max(0.01,min(10,ane_h));                 
@@ -2024,7 +2036,7 @@ switch option.ane
         % similar toC. Angioni ref : NF 47 (2007) p 1326-1335
         % le facteur 2 est remplace par une meilleur approximation car disponible : (1 + zs.tite .* zs.nim ./ zs.nem)
         % utilisation de Te0 au lieu de Te2
-        fnbis  = (1 + zs.tite .* zs.nim ./ zs.nem) .* fnbis .* (1.602176462e-19 .* zs.te0) ./ max(1,zs.pin) .* (zs.ate + 1 - 0.37);
+        fnbis  = (1 + zs.tite .* zs.nim ./ zs.nem) .* fnbis .* (1.602176462e-19 .* zs.te0) ./ max(option.pth_min,zs.pin) .* (zs.ate + 1 - 0.37);
         ngr     = 1e20 .* (zs.ip /1e6) ./ (pi.* geo.a .^ 2);
         %    ane_h  = 0.253 - 0.499 .* (zs.nbar ./ ngr)  + 2.094 .* fnbis + 0.117 .* geo.R;
         
@@ -2478,7 +2490,9 @@ if isfield(profli,'nip') && (option.gaz ~= 4)
             zs.nDm   = option.natural_nD_o_nH .* nHm; %assume non deuterium depleted hydrogen
             zs.nTm   = cons.iso .* nHm;  % this is boron density in this case
         case 5
-            % at this stage nhem is known as nimpm
+
+            % at this stage nhem is known as nimpm, nhem is the density of helium-3
+            % nTm and nHm is computed elsewhere 
             zs.n1m = trapz(profli.xli,profli.n1p .* profli.vpr,2) ./ vpp;
             switch option.mino
                 case 'H'
@@ -2674,7 +2688,7 @@ end
                          zs.pped,zs.tebord,zs.nebord,option.xiioxie + sqrt(-1) .* option.xiioxie_ped, ...
                          option.grad_ped,zs.hitb,option.qdds,zs.indice_inv,profli,fact_confinement, ...
                          option.coef_shape,option.hollow,option.exp_shape,option.kishape, ...
-                         option.Sn_fraction,option.te_max,option.extended_qei,frhe0_loc,nboronm_loc);
+                         option.Sn_fraction,option.te_max,option.extended_qei,frhe0_loc,nboronm_loc,option.min_te_LCFS);
 
 if isfield(profli,'tep')
 	zs.te0 = profli.tep(:,1);
@@ -2694,15 +2708,15 @@ else
 end
 
 % puissance conduite a la separatrice
-pl        = max(1,zs.pin - zs.prad - zs.pbrem - zs.pcyclo - zs.pioniz);
+pl        = max(option.pth_min,zs.pin - zs.prad - zs.pbrem - zs.pcyclo - zs.pioniz);
 %figure(21) ;plot(cons.temps,pl);drawnow;
 % ref : S.K. Erents, NF vol 28 , 1988,  p 1209
 % fraction perdue en volume dans la sol par rayonnement:
 switch option.sol_rad
 case 'coupled'
-	fesol   = max(0,min(1, (zs.pradsol + max(0,1 - option.fprad) .* zs.prad) ./ max(1,pl)));
+	fesol   = max(0,min(1, (zs.pradsol + max(0,1 - option.fprad) .* zs.prad) ./ max(option.pth_min,pl)));
 otherwise
-	fesol   = max(0,min(1, zs.pradsol ./ max(1,pl)));
+	fesol   = max(0,min(1, zs.pradsol ./ max(option.pth_min,pl)));
 end
 %
 % these E. Tsitrone
@@ -2836,7 +2850,7 @@ ld_  = 2.35e5 .* sqrt(zs.tebord ./ 1e3 ./ zs.nebord);
 % securite pour limiter la valeur basse 
 lambda_min  = max(ral_ ,max(dp_ ,ld_));
 %figure(21);clf;plot(cons.temps,lambda_min,'r',cons.temps,zs.dsol,'b');drawnow
-zs.dsol = max(zs.dsol,lambda_min);
+zs.dsol = min(geo.a/2,max(zs.dsol,lambda_min));
 
 
 
@@ -2846,7 +2860,7 @@ zs.dsol = max(zs.dsol,lambda_min);
 telim_x = (1 + 0.18 .* edge_eta_c) .* 15 .* ones(size(zs.tebord));
 % ref S.K. Erents et al Nuc. Fus. 40 vol 30 p .06
 tebord_x = max(telim_x,1.18e-7 .* telim_x .^ 0.2 .* (zs.nebord .* lc .* (1 - 0.5 .* fesol)).^ 0.4);
-tebord_x = min(zs.te0 ./ 2,max(13.6,real(tebord_x)));
+tebord_x = min(zs.te0 ./ 2,max(option.min_te_LCFS,real(tebord_x)));
 % temperature sur le mur ou le divertor
 %nusol     = max(10,min(100,1e-16 .* zs.nebord .* lc ./ zs.tebord  .^ 2));
 %zs.telim  = zs.tebord ./ 2.3e-3 .* (1 - 0.5 .* fesol) .^ 2 ./ nusol .^ 2;
@@ -2909,7 +2923,7 @@ otherwise
 end
 zs.tebord  = (pl ./ zs.nebord ./ wlim ./2 ./ gtr ./ zs.dsol ./ 1.602176462e-19 ./cs0) .^ (2/3);	
 zs.telim   = zs.tebord; % la temperature est constante le long de la ligne de champ
-zs.tebord  = max(13.6,zs.tebord);
+zs.tebord  = max(option.min_te_LCFS,zs.tebord);
 zs.nelim   = 0.5 .* zs.nebord;
 
 
@@ -2933,13 +2947,17 @@ if isappdata(0,'TE_EXP') && isfield(profli,'tep')
 end   
 
 % changing  minimal tebord value during breakdown 
-if (option.berror > 0) && (mode ~= 0) 
+if ((option.berror > 0) || any(fact_confinement < 1)) && (mode ~= 0) 
    % tebord must be low during breakdown   
-   zs.tebord = 300.* 1.3806503e-23./ 1.602176462e-19 .* (1 - fact_confinement) + fact_confinement .* zs.tebord;
+   zs.tebord = option.temp_vac .* 1.3806503e-23./ 1.602176462e-19 .* (1 - fact_confinement) + fact_confinement .* zs.tebord;
+   if option.berror == 0
+       % now lower limit if the internal breakdown model is switch on
+       zs.tebord =  max(option.min_te_LCFS,zs.tebord);
+   end
 end
 
 % securite
-tebordmax  = max(30,zs.wth ./ 1.602176462e-19 ./ zs.nem ./ zs.vp ./ 3);
+tebordmax  = max(option.min_te_LCFS,zs.wth ./ 1.602176462e-19 ./ zs.nem ./ zs.vp ./ 3);
 %figure(21);plot(cons.temps,zs.tebord,'b',cons.temps, tebordmax,'r');drawnow
 zs.tebord  = min(tebordmax,option.fte_edge .* real(zs.tebord));
 if option.te_edge_fixed > 0
@@ -2952,7 +2970,7 @@ zs.telim  = min(zs.tebord,real(zs.telim));
 
 % fit :Pacher et al 1992 
 % caclul de la densite de puissance sur le divertor
-zs.plim    = max(1,zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pradsol - zs.pioniz); 
+zs.plim    = max(option.pth_min,zs.pin - zs.prad - zs.pbrem -zs.pcyclo - zs.pradsol - zs.pioniz); 
 % nouvelle etalonage pour tenir compte des dernier resultat (Kukushkin NF 43 2003 p 716-723)
 zs.peakdiv = 5e29 ./ zs.nebord .^ 1.82 .* (zs.plim ./ zs.sext) .^ 2.37 .* zs.q95 .^ 0.52 .* geo.R .^ 0.33; 
 %zs.peakdiv = 1.02e30 ./ zs.nebord .^ 1.82 .* (zs.plim ./ zs.sext) .^ 2.37 .* zs.q95 .^ 0.52 .* geo.R .^ 0.33; 
@@ -3114,7 +3132,7 @@ case 5
 	% zeff pour TS 
 	% calcul du teref
 	if isfield(profli,'tep')
-		teref  = trapz(profli.xli,profli.tep .^ 2,2) ./ max(13.6,trapz(profli.xli,profli.tep,2)) ./ 1e3;
+		teref  = trapz(profli.xli,profli.tep .^ 2,2) ./ max(option.min_te_LCFS,trapz(profli.xli,profli.tep,2)) ./ 1e3;
 	else
 		teref  = zs.tem .* (zs.ate + 0.5) ./ 1e3;
 	end
@@ -3188,11 +3206,11 @@ switch option.icrh_model
 end
 % effet du  condinement au breakdown
 if (option.berror > 0) && (mode ~= 0)
- 	zs.ilh    = fact_confinement .* zs.ilh;
-        zs.ifwcd  = fact_confinement .* zs.ifwcd;
-        zs.ieccd  = fact_confinement .* zs.ieccd;
-        zs.inbicd = fact_confinement .* zs.inbicd;
-        zs.ifus   = fact_confinement .* zs.ifus;
+    zs.ilh    = fact_confinement .* zs.ilh;
+    zs.ifwcd  = fact_confinement .* zs.ifwcd;
+    zs.ieccd  = fact_confinement .* zs.ieccd;
+    zs.inbicd = fact_confinement .* zs.inbicd;
+    zs.ifus   = fact_confinement .* zs.ifus;
 end
 
 zs.icd   =  zs.ilh + zs.ifwcd + zs.ieccd + real(zs.inbicd) + imag(zs.inbicd) + zs.ifus;
@@ -3230,7 +3248,7 @@ if isfield(profli,'nip') && isfield(profli,'tip') && (option.cx_ion ~= 0)
       ticx   = profli.tip(:,end);
 else
       fcxion  = zeros(size(zs.taup));
-      ticx    = 13.6 .* ones(size(zs.taup));
+      ticx    = option.min_te_LCFS .* ones(size(zs.taup));
 end
 % cette expression prend aussi en compte la puissance necessaire pour ioniser les glacons
 if isfield(profli,'spellet') && isfield(profli,'vpr')
@@ -3314,7 +3332,7 @@ if option.berror ~= 0
 end
 ipin(1) = cons.ip(1);
 
-swlh = abs(zs.plh ./ max(1,zs.pohm)) > 0.2;
+swlh = abs(zs.plh ./ max(option.pth_min,zs.pohm)) > 0.2;
 
 
 switch option.icrh_model
@@ -3640,14 +3658,14 @@ switch option.gaz
             [pfus0,salpha0,zs.pfus,zs.salpha,ifus,zs.xfus,jxfus,j0fus,zs.taus_he,ecrit_he_void,zs.pfus_nbi,zs.pfus_loss,profli.jfusshape,~,palf0,profli.salf,profli.palf] = ...
                 zfus0tae_dhe(zs.nDm,zs.nhem,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
                 zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2 ,ftnbi, ...
-                zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
-                zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI);
+                zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin,zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim, ...
+                zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.te_max);
         else
             [pfus0,salpha0,zs.pfus,zs.salpha,ifus,zs.xfus,jxfus,j0fus,zs.taus_he,ecrit_he_void,zs.pfus_nbi,zs.pfus_loss,profli.jfusshape,~,palf0,profli.salf,profli.palf] = ...
                 zfus0tae_dhe(zs.nDm,zs.nhem,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
                 zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2,ftnbi, ...
-                zeros(size(zs.pion_icrh)),zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin,...
-                zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI);
+                zeros(size(zs.pion_icrh)),zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin,zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,...
+                zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.te_max);
         end
         
         % neutron dd
