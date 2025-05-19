@@ -2,7 +2,7 @@
 function [zver,zdate,git_hash] = zinebversion
 
 zver       = 10.0;
-zdate      = 20250515;
-git_hash   = 'ed74c75945e584ccd125403d4394ae86eea415c8';  % result of git rev-parse HEAD
+zdate      = 20250519;
+git_hash   = '8a9c7b75173945e7162f36088192da7bd4cd829a';  % result of git rev-parse HEAD
 
 

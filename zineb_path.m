@@ -160,14 +160,14 @@ end
 editeur = '/usr/bin/kate';
 envediteur = getenv('EDITOR');
 
-if ~isempty(envediteur) & ~strcmp(computer,'GLNX86')& ~strcmp(computer,'GLNXA64')
+if ~isempty(envediteur) && ~strcmp(computer,'GLNX86') && ~strcmp(computer,'GLNXA64')
    editeur = envediteur;
 else
    liste_editeur = {'kate','emacs','nedit','dtpad','kedit','gedit','kwrite','xemacs','textedit','notepad','write'};
    for k=1:length(liste_editeur)
          nomc = liste_editeur{k};
          [s,t]=unix(sprintf('which %s',nomc));
-         if (s == 0) & ~isempty(t)
+         if (s == 0) && ~isempty(t)
                editeur = t;
                editeur(editeur <= ' ') = [];
                break
@@ -203,7 +203,8 @@ end
 if isdeployed
     setappdata(0,'TEMPDIR',tempdir);
     setappdata(0,'TEMPDIR_EXCHANGE',tempdir);
-else
+elseif exist(filename,'file')
+
     x=strmatch('CRONOSTEMPDIR',file);
     if ~isempty(x)
       [token,remain]=strtok(file{x(1)},'=');
@@ -241,6 +242,9 @@ else
     else
       setappdata(0,'TEMPDIR_EXCHANGE','DirNoSpecified');
     end
+else
+    setappdata(0,'TEMPDIR',tempdir);
+    setappdata(0,'TEMPDIR_EXCHANGE',tempdir);
 end
 
 % matlabpool
@@ -344,15 +348,34 @@ end
 % try to compile mexfile if not aready done
 if ~isdeployed
     if ~exist(fullfile(root,'import','sampling',sprintf('tsample.%s',mexext)),'file')
+        metis_is_installed = false;
         try
             if ispc
                 evalin('base','make_metis_windows;');
             else
                 evalin('base','make_metis_linux;');
             end
+            %
+            % make just one test
+            disp('======================')
+            disp('Now running one test:')
+            disp('======================')
+            try
+                evalin('base','metis_test ITER_rampup_ECCD.mat')
+                metis_is_installed = true;
+                evalin('base','clear z0dinput post');
+            catch
+                disp('Error during test execution:')
+                lasterr
+            end
         catch
             disp('Unable to compile mexfiles:')
             lasterr
+        end
+        if metis_is_installed
+            msgbox('METIS fast installation has been completed','METIS installation');
+        else
+            msgbox('Some errors has been reported during METIS fast installation','METIS installation');            
         end
     end
 end
