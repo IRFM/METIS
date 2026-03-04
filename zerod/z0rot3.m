@@ -757,7 +757,7 @@ else
 end
 
 % extranal shape for rotation
-if isappdata(0,'VTOR_SHAPE_EXP') & isfield(profli,'qjli');
+if isappdata(0,'VTOR_SHAPE_EXP') && isfield(profli,'qjli')
       % il faut aussi modifier dans zicd0
       vtor_shape = getappdata(0,'VTOR_SHAPE_EXP');
       omega_  = max(eps,interp1_ex(vtor_shape.temps,vtor_shape.omega,cons.temps,'nearest','extrap'));

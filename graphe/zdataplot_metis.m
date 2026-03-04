@@ -2277,7 +2277,7 @@ if strcmp(cmd,'dataimas')
                 else
                     fprintf('accessing to IMAS IDS %s for shot %d.%d: ',parents{1},shot,run);
                 end
-                idx  = imas_open('ids',shot,run);
+                idx  = imas_open_old('ids',shot,run);
                 if ~isempty(occurrence)
                     data = ids_get(idx,sprintf('%s/%s',parents{1},occurrence));
                 else

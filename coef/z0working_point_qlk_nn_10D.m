@@ -45,7 +45,17 @@ for klz_ = 1:klz_max
       cs4m('Ti','nointer');
   end
   if qlkparams.calc_part_transport == 1
-      cs4m('Ne','nointer');
+      if isfield(qlkparams,'update_nbar') && (qlkparams.update_nbar == 1)
+         cs4m_nbar('Ne','nointer');
+      else          
+         cs4m('Ne','nointer');
+      end
+      % nbar should also be updated in this case to get full QLK prediction
+%      ne_exp = getappdata(0,'NE_EXP');
+%      nbar = trapz(ne_exp.x,ne_exp.ne,2);
+%      fprintf('QLK-NN nbar = %g\n',mean(nbar));
+%       ne_exp.nbar = nbar;
+%       setappdata(0,'NE_EXP',ne_exp);
   end
   % prediction for working point
   z0working_point;

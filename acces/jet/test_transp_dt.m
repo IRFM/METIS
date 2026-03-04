@@ -32,7 +32,7 @@ rep             = sal_get(sprintf('data/pulse/%d/ppf/signal/tranppf/trt0/thdt',s
 ntr_th_dt       = rep.object.data.value.data;
 
 % compute sn_dt
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(ti,30));
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(ti,30));
 sn_dt = nd .* nt .* dt.sv;
 vt  = ones(length(time),1);
 ve  = ones(1,length(x));

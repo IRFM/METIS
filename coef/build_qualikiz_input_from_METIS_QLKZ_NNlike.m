@@ -205,7 +205,7 @@ end
 tic
 disp('============== Starts QuaLiKiz run ===============')
     disp(['QuaLiKiz runs on ' num2str(round(qlkparams.numproc)) ' processors'])
-    [sout,tout] = unix(sprintf(['module purge \n module load intel/2018 mpi/2018 \n mpiexec -np ' num2str(round(qlkparams.numproc)) ' ./QuaLiKiz']));
+    [sout,tout] = unix(sprintf(['module purge \n module load inteloneapi/2025.1.0 mpi/2025.1.0 \n nice -n 9 mpiexec -np ' num2str(round(qlkparams.numproc)) ' ./QuaLiKiz']));
 toc
 disp('============== End of QuaLiKiz run ===============')
 

@@ -101,7 +101,7 @@ nwp  = max(1,profil0d.nwp);
 %           ceil(7/3 .* z0dstruct.z0dinput.option.zimp) .* nz1p + ceil(7/3 .* z0dstruct.z0dinput.option.zmax) .* nz2p + 183.84 .* nwp);
 if z0dstruct.z0dinput.option.Sn_fraction > 0
     Mtor    = phys.mp .*  max(1e13,nHp +  2 .* nDp + 3 .* nTp + 4 .* nhep + aimp .* nz1p + amax .* nz2p +  ...
-              (1 - option.Sn_fraction) .*183.84 .* nwp) + option.Sn_fraction .*118.71 .* nwp + 3.02 .* nhep3 + 11 .* nbp;
+              (1 - z0dstruct.z0dinput.option.Sn_fraction) .*183.84 .* nwp) + z0dstruct.z0dinput.option.Sn_fraction .*118.71 .* nwp + 3.02 .* nhep3 + 11 .* nbp;
 else
     Mtor    = phys.mp .*  max(1e13,nHp +  2 .* nDp + 3 .* nTp + 4 .* nhep + aimp .* nz1p + amax .* nz2p + 183.84 .* nwp + 3.02 .* nhep3 + 11 .* nbp);
 end
@@ -148,6 +148,15 @@ for k=1:length(profil0d.temps)
     profiles_1d.momentum_tor.flux              = profil0d.frot(k,:) ./ Mtor(k,:) .* profil0d.r2i(k,:) .* profil0d.Raxe(k,:);
     profiles_1d.time                           = profil0d.temps(k);
     model.profiles_1d{k} = profiles_1d;
+    if isfield(model,'ggd')
+        model.ggd{k} = model.ggd{1};
+    end
+    if isfield(model,'ggd_fast')
+        model.ggd_fast{k} = model.ggd_fast{1};
+    end
+    if isfield(coretransp,'grid_ggd')
+        coretransp.grid_ggd{k} = coretransp.grid_ggd{1};
+    end
 end
 % final assignement
 coretransp.model{1} = model;

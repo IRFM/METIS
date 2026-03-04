@@ -133,7 +133,7 @@ t=[0,10,20,30,40,50,60,70,80,100].*1e3;
 f=[0.01,0.146,0.269,0.377,0.473,0.55,0.615,0.665,0.698,0.72];
 fion = interp1(t,f,profil0d.tep,'pchip');
 pfus_shape_ion_ctrl = min(1 - eps,(option.alpha_channeling + fion)) .* fpfus;
-pfus_ion_ctrl = trapz(profil0d.xli,profil0d.vpr .* pfus_shape_ion,2);
+pfus_ion_ctrl = trapz(profil0d.xli,profil0d.vpr .* pfus_shape_ion_ctrl,2);
 
 if ~isfield(profil0d,'temps')
   if isfield(zerod,'temps')
@@ -148,9 +148,10 @@ figure(21)
 plot(profil0d.temps,pfus_el ./ 1e6,'r',profil0d.temps,pfus_ion ./ 1e6,'b', ...
      zerod.temps,zerod.pel_fus ./ 1e6,'m',zerod.temps,zerod.pion_fus ./ 1e6,'c', ...
      zerod.temps,zerod.pfus_th ./ 1e6,'g',profil0d.temps,(pfus_el + pfus_ion)  ./ 1e6,'--k', ...
-     profil0d.temps,pfus_ion_ctrl./1e6,'.k');
+     profil0d.temps,pfus_ion_ctrl./1e6,'ok');
 xlabel('time (s)');
 ylabel('MW')
-legend('P_{el} (profile)','P_{ion} (profile)','P_{el} (0d)','P_{ion} (0d)')
+legend('P_{el} (profile)','P_{ion} (profile)','P_{el} (0d)','P_{ion} (0d)', ...
+       'P_{th} (0D)','P_{th} (profile)','D. Sigmar');
 edition2
 drawnow

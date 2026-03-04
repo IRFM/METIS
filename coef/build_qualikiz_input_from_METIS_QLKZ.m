@@ -220,7 +220,7 @@ end
 % Launch on interactive node (can be made neater with batch jobs)
 tic
 disp('============== Starts QuaLiKiz run ===============')
-[sout,tout] = unix(sprintf('module purge \n module load intel/2018 mpi/2018 \n mpiexec -np 8 ./QuaLiKiz'));
+[sout,tout] = unix(sprintf(['module purge \n module load inteloneapi/2025.1.0 mpi/2025.1.0 \n nice -n 9 mpiexec -np ' num2str(round(qlkparams.numproc)) ' ./QuaLiKiz']));
 toc
 disp('============== End of QuaLiKiz run ===============')
 

@@ -200,7 +200,7 @@ elseif nargin >= 8
 			indok = find(isfinite(tloc) & all(isfinite(val),2));
 			val = val(indok,:);
 			tloc = tloc(indok);
-   			if length(tloc) >= 2;
+   			if length(tloc) >= 2
       				if (size(val,1) == length(times(indok)))
 					warning off
 	         			valn  = interp1(tloc,val,cons.temps,'linear');		

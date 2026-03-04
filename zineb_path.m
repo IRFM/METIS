@@ -283,6 +283,7 @@ warning off
 warning on
 % path en dur pour question de rapidite
 addpath(fullfile(root,'acces/cronos'));
+addpath(fullfile(root,'acces/dina'));
 addpath(fullfile(root,'acces/imas'));
 addpath(fullfile(root,'acces/imas/noimas_installed'),'-end');
 addpath(fullfile(root,'acces/iter'));

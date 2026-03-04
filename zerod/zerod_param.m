@@ -169,7 +169,7 @@ function zs = zerod_param(void)
 
     valeur.scaling    = 0;
     type.scaling      = 'integer';
-    borne.scaling     = {0,1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21};
+    borne.scaling     = {0,1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21,30};
     defaut.scaling    = 0;
     info.scaling      = sprintf('%s','choice of scaling law for energy confinement time:\n0 = ITERL-96P(th) + ITERH-98P(y,2);\n1 = Ohmic (to be used for startup phase);\n', ...
                                      '2 = ITPA 2 terms;\n3 = DS03 (no beta dependence);\n 4 = adjusted to match experimental value of Wdia;\n5 = scaling ITER EIV,Std;\n6 = Ohmic scaling in Tokamak Wesson;\n', ...
@@ -181,7 +181,8 @@ function zs = zerod_param(void)
                                      '16 = ITER89-P + ITERH-98P(y,2);\n17 = ITER89-P in Lmode and ITER89-P + Cordey tau_{pedestal} in H mode;\n', ...
                                      '18 = ITER89-P in L-mode and Petty 2008 gyroBohm scaling in H-mode\n', ...
                                      '19 = ITER89-P in L-mode and  ITER89-P  + W_ped scaling incorporating experimental data and prediction from MHD code for ITER and DEMO\n', ...
-                                     '20 = must not be used (preprint version of ITPA20);\n21= ITPA20 scaling for ITER 2020 with triangularity dependance');
+                                     '20 = must not be used (preprint version of ITPA20);\n21= ITPA20 scaling for ITER 2020 with triangularity dependance\n', ... 
+                                     '30 = K.S Riedel scaling for L and H mode (N.F 31 p 927 [1991] formula 13 and N.F. 32 p 1270 [1992] formula 3)\n');
     section.scaling   = 'Confinement & Transport';
 
     valeur.dilution      = 1;
@@ -240,7 +241,7 @@ function zs = zerod_param(void)
 
     valeur.l2hscaling    = 0;
     type.l2hscaling      = 'real';
-    borne.l2hscaling     = {-10,-5,-3,-2,-1.5,-1,0,1,2,3,4,5,6,10,28,30,31};
+    borne.l2hscaling     = {-10,-5,-3,-2,-1.5,-1,0,1,2,3,4,5,6,10,28,30,31,32,33};
     defaut.l2hscaling    = 0;
     info.l2hscaling      = sprintf('%s\n','L to H power threshold scaling law:', ...'
                                               'if = 0  -> LH99(1);', ...
@@ -252,8 +253,10 @@ function zs = zerod_param(void)
                                               'if = 6  -> Jpol change of sign in edge region (E. R. Solano rule);', ...
                                               'if = 10 -> Multimachine scaling law from Murari 2013 (BUEMS);', ...
                                               'if = 28 -> Low density case - Ryter et al, NF 54 (2014) 083003, equation 4', ...
-                                              'if = 30 -> Fit of metalic tokamaks database for horizontal targets (E . Delabie et al, 2025 ?);',...
-                                              'if = 31 -> Fit of metalic tokamaks database for vertical targets and corner configuration (E . Delabie et al, 2025 ?);',...
+                                              'if = 30 -> Fit of metalic tokamaks database for horizontal targets (TC_26(Bt), E . Delabie et al, N.F. 2026);',...
+                                              'if = 31 -> Fit of metalic tokamaks database for vertical targets and corner configuration (TC_26(Bt),E . Delabie et al, N.F 2026);',...
+                                              'if = 32 -> Fit of metalic tokamaks database for horizontal targets with B_pol instead of B_tor (TC_26(Bpol), E . Delabie et al, N.F. 2026);',...
+                                              'if = 33 -> Fit of metalic tokamaks database for vertical targets and corner configuration with B_pol instead of B_tor (TC_26(Bpol),E . Delabie et al, N.F 2026);',...
                                               'if < 0, criterion based on plasma rotation (abs(l2hscaling) = value of Gamma_ExB / Gamma_ITG for transition)');
     section.l2hscaling   = 'H mode transition';
 
@@ -312,6 +315,15 @@ function zs = zerod_param(void)
     info.hysteresis      = 'Control of histeresis for the back transition H-> L mode:\nP_{H->L} = hysteresis * P_{in} + (1 - hysteresis) * P_{lh,thr}\n';	
     section.hysteresis   = 'H mode transition';
     mode.hysteresis      = 'advanced';
+    
+    valeur.second_stability   = 0;
+    type.second_stability     = 'integer';                    
+    borne.second_stability    = {0,1} ;  
+    defaut.second_stability   = 0;
+    info.second_stability     = sprintf('if = 1, test if second stability domain is accessible (useful for negative triangularity;\nbased on analytical formulation from: Y. Zhang et al, Nucl. Fusion 64 2024) \nand prevent the transition to H-mode if it is not the case.');	
+    section.second_stability  = 'H mode transition';
+    mode.second_stability     = 'advanced';
+
 
     valeur.ton_modeh    = Inf;
     type.ton_modeh      = 'real';                    
@@ -372,9 +384,16 @@ function zs = zerod_param(void)
 
     valeur.usepped_scl    = 0;
     type.usepped_scl      = 'integer';
-    borne.usepped_scl     = {0,1,2,3,4,5};
+    borne.usepped_scl     = {0,1,2,3,4,5,6};
     defaut.usepped_scl    = 0;
-    info.usepped_scl      = 'if = 0, pedestal energy content is the difference between H-mode and L-mode energy content or half of this difference (see scaling options);\n if = 1, tau_ped scaling law (ITPA McDonald) is used to compute Pped (does not work with stiff model);\nif = 2, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling law prediction is used;\nif = 3, P_ped scaling incorporating experimental data and prediction from MHD code for ITER and DEMO is used\nif = 4, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling incorporating prediction from MHD code for ITER and DEMO is used\nif = 5, use model from reference F.D. Halpern et al, PoP 15 (2008) p 062505';
+    info.usepped_scl      = sprintf('%s','if = 0, pedestal energy content is the difference between H-mode and L-mode energy content or half of this difference (see scaling options);\n', ...
+                                         'if = 1, tau_ped scaling law (ITPA McDonald) is used to compute Pped (does not work with stiff model);\n,', ...
+                                         'if = 2, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling law prediction is used;\n', ...
+                                         'if = 3, P_ped scaling incorporating experimental data and prediction from MHD code for ITER and DEMO is used\n', ...
+                                         'if = 4, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling incorporating prediction from MHD code for ITER and DEMO is used\n', ...
+                                         'if = 5, use model from reference F.D. Halpern et al, PoP 15 (2008) p 062505\n', ...
+                                         'if = 6, use Dunne-Puchmayr model (ref ?); this model compute also density at the pedestal and LCFS temperature and density\n', ...
+                                         '        (https://pure.mpg.de/rest/items/item_3262339/component/file_3262340/content)'); 
     section.usepped_scl   = 'Confinement & Transport';
 
     valeur.taurotmul   = 0;
@@ -1579,7 +1598,7 @@ function zs = zerod_param(void)
     type.cmin      = 'real';                    
     borne.cmin     = [0,1];  
     defaut.cmin    = 0;                
-    info.cmin      = 'ICRH heating scheme: fraction of the first minority species (nX/nD or nX/n_main if no deuterium in plasma discharge);\nif = 0, no suprathermal ions in plasma, direct heating of electrons and ions';	
+    info.cmin      = 'ICRH heating scheme: fraction of the first minority species (nX/nD or nX/n_main if no deuterium in plasma discharge);\nif the minority is T, then the fraction is cmin time the reference nT/nD;\nif = 0, no suprathermal ions in plasma, direct heating of electrons and ions';	
     section.cmin   = 'ICRH/FW/FWCD';
 
     valeur.nphi    = 25;
@@ -1650,6 +1669,22 @@ function zs = zerod_param(void)
     info.fMC_loss    = 'Mode conversion: with model Dumont-Vu, fraction of power coming from mode conversion (IBW) that is lost (otherwise, this power is assume to heat the electron);\nUse the model from: L.G. Eriksson and T. Hellsten, Physica Scripta vol. 52, 70-79, 1995.';	
     section.fMC_loss = 'ICRH/FW/FWCD';   
     mode.fMC_loss    = 'advanced';
+
+    valeur.icrh_mode_fast  = 1;
+    type.icrh_mode_fast    = 'real';                    
+    borne.icrh_mode_fast   = {0,1};  
+    defaut.icrh_mode_fast  = 1;                
+    info.icrh_mode_fast    = 'For model Dumont-Vu, if = 1, use fast convergence mode';	
+    section.icrh_mode_fast = 'ICRH/FW/FWCD';   
+    mode.icrh_mode_fast    = 'advanced';
+
+    valeur.f_icrh_salpha = 0; 
+    type.f_icrh_salpha    = 'real';                    
+    borne.f_icrh_salpha   = [0,10];  
+    defaut.f_icrh_salpha  = 0;                
+    info.f_icrh_salpha    = 'Factor applied to the fusion source between D and T induced by the fast ions of ICRH (type beam-plamsa) to compensate the low precision of model used in the code';	
+    section.f_icrh_salpha = 'ICRH/FW/FWCD';   
+    mode.f_icrh_salpha    = 'advanced';
 
     valeur.sitb    = 0;
     type.sitb      = 'integer';
@@ -1931,6 +1966,14 @@ function zs = zerod_param(void)
     info.orientation         = 'orientation of toroidal magnetic field: follows ITER convention (for ITER the value is -1, i.e. clockwise for tokamak see from above)';	
     section.orientation      = 'Miscellaneous';
     mode.orientation         = 'advanced';
+    
+    valeur.mavrin_sigmav       = 1;
+    type.mavrin_sigmav         = 'integer';                    
+    borne.mavrin_sigmav        = {0,1};  
+    defaut.mavrin_sigmav       = 1;                
+    info.mavrin_sigmav         = 'if = 1, used Mavrin 2018 <sigma_v> reaction rate instead of the METIS original one (see zsigmavfusion and zsigmavfusion2 function for details)';	
+    section.mavrin_sigmav      = 'Miscellaneous';
+    mode.mavrin_sigmav         = 'advanced';   
 
     valeur.reference_parameters 	= '';
     type.reference_parameters           = 'string';                    

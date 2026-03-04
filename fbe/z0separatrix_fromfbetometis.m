@@ -168,10 +168,10 @@ end
 
 % rescale ip if input waveform has greater IP than ip_ref
 switch mode_resampling
-case 'input'
-  % nothing: controlled by input
-otherwise
-  ip_ref = ip_ref ./   max(ip_ref) .* max(z0dinput.cons.ip);
+    case {'input','none'}
+        % nothing: controlled by input
+    otherwise
+        ip_ref = ip_ref ./   max(ip_ref) .* max(z0dinput.cons.ip);
 end
 
 % add backup value if start and end of METIS simulation is not included in given LCFS
@@ -258,7 +258,7 @@ case 'time'
   ip_out   = interp1(time_ref',ip_ref',z0dinput.cons.temps,'linear','extrap');
   time_out = z0dinput.cons.temps;
  
-case 'ip'
+case {'ip','ip fbe','ip metis'}
 
   rmin = min(min(z0dinput.geo.R - z0dinput.geo.a),min(r0 + min(rho .* cos(uni * ones(1,size(rho,2))),[],1)));
   rmax = max(max(z0dinput.geo.R + z0dinput.geo.a),max(r0 + max(rho .* cos(uni * ones(1,size(rho,2))),[],1)));
@@ -304,9 +304,11 @@ case 'ip'
   % make monotone variable for resampling
   dipin  = abs(diff(z0dinput.cons.ip));
   dipout = abs(diff(ip_ref));
-  dipmin = min(min(dipin(dipin > eps)),min(dipin(dipout > eps)));
+  dipmin = min(min(dipin(dipin > eps)),min(dipout(dipout > eps)));
   ipinm  = z0dinput.cons.ip(1) + cat(1,0,cumsum(max(dipmin,abs(diff(z0dinput.cons.ip)))));
   ipoutm = ip_ref(1) + cat(1,0,cumsum(max(dipmin,abs(diff(ip_ref(:))))));
+  indipok = ((ipinm >= min(ipoutm))& (ipinm <= max(ipoutm)));
+  ipinm(ipinm > max(ipoutm)) = max(ipoutm);
   %  
   rho_out   = interp1(ipoutm,rho',ipinm,'linear','extrap')';
   r0_out    = interp1(ipoutm,r0',ipinm,'linear','extrap')';
@@ -314,7 +316,20 @@ case 'ip'
   a_out     = interp1(ipoutm,aminor',ipinm,'linear','extrap')';
   K_out     = interp1(ipoutm,elong',ipinm,'linear','extrap')';
   d_out     = interp1(ipoutm,delta',ipinm,'linear','extrap')';
-  time_out  = interp1(ipoutm,time_ref',ipinm,'linear','extrap');
+  switch mode_resampling
+      case 'ip metis'
+          time_out  = z0dinput.cons.temps;
+          if ~all(indipok)
+              rho_out(:,~indipok) = interp1(ipoutm,rho',ipinm(~indipok),'nearest','extrap')';
+              r0_out(~indipok)    = interp1(ipoutm,r0',ipinm(~indipok),'nearest','extrap')';
+              z0_out(~indipok)    = interp1(ipoutm,z0',ipinm(~indipok),'nearest','extrap')';
+              a_out(~indipok)     = interp1(ipoutm,aminor',ipinm(~indipok),'nearest','extrap')';
+              K_out(~indipok)     = interp1(ipoutm,elong',ipinm(~indipok),'nearest','extrap')';
+              d_out(~indipok)     = interp1(ipoutm,delta',ipinm(~indipok),'nearest','extrap')';
+          end
+      otherwise
+          time_out  = interp1(ipoutm,time_ref',ipinm,'linear','extrap');
+  end
   ip_out    = z0dinput.cons.ip;
   % prevent small time step
   dt_min = min(min(abs(diff(z0dinput.cons.temps))),abs(min(diff(time_ref))));
@@ -335,7 +350,7 @@ case 'ip'
   
 otherwise
   % no resampling
-  if ~same(time_ref,z0dinput.cons.temps) || ~same(ip_ref,z0dinput.cons.ip)
+  if ~same(time_ref(:),z0dinput.cons.temps(:)) || ~same(ip_ref(:),z0dinput.cons.ip(:))
 	error('data is not compatible to be used without resampling')
   else
       rho_out   = rho;
@@ -344,8 +359,8 @@ otherwise
       a_out     = aminor;
       K_out     = elong;
       d_out     = delta;
-      time_out  = time_ref';
-      ip_out    = z0dinput.cons.ip';  
+      time_out  = time_ref(:)';
+      ip_out    = z0dinput.cons.ip(:)';  
   end 
 end
 
@@ -367,18 +382,15 @@ geo.R    = r0_out(:);
 geo.z0   = z0_out(:);
 geo.K    = K_out(:);
 geo.d    = d_out(:);
+
 % conservation de la raideur magnetique
-sepa.b0 = z0dinput.geo.b0 .* z0dinput.geo.R ./ geo.R; 
-
-
-
+sepa.b0 = z0dinput.geo.b0 .* z0dinput.geo.R ./ geo.R;
 z0dinput.geo.R       = geo.R;      % grand rayon du plasma (m)
 z0dinput.geo.z0      = geo.z0;     % centre geometrique du plasma en Z (m)
 z0dinput.geo.a       = geo.a;      % petit rayon du plasma (m)
 z0dinput.geo.K       = geo.K;     % elongation (b/a)
 z0dinput.geo.d       = geo.d;    % triangularite haute (definition entree de helena)
 z0dinput.geo.b0      = sepa.b0;  % champ toroidal a R0
-
 z0dinput.cons.temps = time_out(:);
 z0dinput.cons.ip = ip_out(:);
 
@@ -386,7 +398,6 @@ z0dinput.exp0d.temps = time_out(:);
 z0dinput.exp0d.ip    = ip_out(:);
 z0dinput.exp0d.Rsepa = sepa.R;       % vecteur R des points de la separatrice (m)
 z0dinput.exp0d.Zsepa = sepa.Z;       % vecteur Z des points de la separtrice (m)
-
 
 if plotonoff == 0
   return
@@ -432,5 +443,4 @@ axis('equal')
 % 
 % 
 % keyboard
-
 

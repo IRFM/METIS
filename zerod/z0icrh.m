@@ -1,6 +1,55 @@
 % cette fonction calcul les effets du chauffage minoriatire a l'harmonique 1 de ICRH
 % pour les test : [pth,pel,pion,esupra,einj,ecrit,teff0,taus,frloss] = z0icrh(zs,z0dinput.geo,z0dinput.cons,z0dinput.option);
-function [pth,pel,pion,esupra,einj,ecrit,teff0,taus,frloss,rres,xres,frac,harm,nmino] = z0icrh(zs,geo,cons,option,profli)
+function [pth,pel,pion,esupra,einj,ecrit,teff0,taus,frloss,rres,xres,frac,harm,nmino,salpha_icrh] = z0icrh(zs,geo,cons,option,profli)
+
+% load  precomputed table for mono-kinetic -> thermal plasma fusion rate
+persistent svs_td
+persistent Ftd
+persistent svs_dt 
+persistent Fdt
+persistent svs_dhe3
+persistent Fdhe3
+persistent svs_he3d
+persistent Fhe3d
+persistent svs_pb
+persistent Fpb
+persistent svs_bp
+persistent Fbp
+if isempty(svs_td)
+   svs_td = load('sigmav_nbi_t_plasma_d');
+   % make interpolant function
+   Ftd = griddedInterpolant(svs_td.enbi * ones(size(svs_td.eti)),ones(size(svs_td.enbi)) * svs_td.eti,svs_td.svnbitd,'linear','none');
+end
+if isempty(svs_dt)
+   svs_dt = load('sigmav_nbi_d_plasma_t');
+   % make interpolant function
+   Fdt = griddedInterpolant(svs_dt.enbi * ones(size(svs_dt.eti)),ones(size(svs_dt.enbi)) * svs_dt.eti,svs_dt.svnbidt,'linear','none');
+end
+if isempty(svs_dhe3)
+   svs_dhe3 = load('sigmav_nbi_d_plasma_he3');
+   % make interpolant function
+   Fdhe3 = griddedInterpolant(svs_dhe3.enbi * ones(size(svs_dhe3.eti)),ones(size(svs_dhe3.enbi)) * svs_dhe3.eti,svs_dhe3.svnbidhe3,'linear','none');
+end
+if isempty(svs_he3d)
+   svs_he3d = load('sigmav_nbi_he3_plasma_d');
+   % make interpolant function
+   Fhe3d = griddedInterpolant(svs_he3d.enbi * ones(size(svs_he3d.eti)),ones(size(svs_he3d.enbi)) * svs_he3d.eti,svs_he3d.svnbihe3d,'linear','none');
+end
+if isempty(svs_pb)
+   svs_pb = load('sigmav_nbi_p_plasma_b');
+   % make interpolant function
+   Fpb = griddedInterpolant(svs_pb.enbi * ones(size(svs_pb.eti)),ones(size(svs_pb.enbi)) * svs_pb.eti,svs_pb.svnbipb,'linear','none');
+end
+if isempty(svs_bp)
+   svs_bp = load('sigmav_nbi_b_plasma_p');
+   % make interpolant function
+   Fbp = griddedInterpolant(svs_bp.enbi * ones(size(svs_bp.eti)),ones(size(svs_bp.enbi)) * svs_bp.eti,svs_bp.svnbibp,'linear','none');
+end
+
+
+salpha_icrh = zeros(size(cons.temps));
+
+
 
 % constante physique (phys)
 phys.c           =   2.99792458e8;             % vitesse de la lumiere dans le vide (m/s)  (definition)
@@ -87,10 +136,14 @@ xa  = cat(2,-geo.a *x(end:-1:2),geo.a *x);
 qpp = max(0.5,cat(2,qp(:,end:-1:2),qp));
 btot = (geo.b0 * ones(1,size(xa,2))) .* sqrt((xa ./ qpp ./ (geo.R *ones(1,size(xa,2)))) .^ 2 + ((geo.R *ones(1,size(xa,2))) ./ rr) .^ 2);
 
+% search for regime T rich
+isomean = trapz(cons.temps,abs(cons.picrh) .* real(cons.iso)) ./ ...
+          max(1,trapz(cons.temps,abs(cons.picrh)));
+
 % choix de l'harmonique
 switch option.mino
     case 'D'
-        if (option.gaz == 2)  || (option.gaz == 3)
+        if (option.gaz == 2) || ((option.gaz == 3) && (isomean <= 2))
             % D dans D, recherche de l'harmonique superieure
             dd2 = abs(btot(:,21) - bres ./ 2);
             dd3 = abs(btot(:,21) - bres ./ 3);
@@ -212,7 +265,7 @@ switch option.gaz
                 nmino  = nheres  .* option.cmin ./ harm .^ 2;
             case 'B'
                 nmino  = neres .* nref ./ zs.nem .* cons.iso  ./ harm .^ 2;
-             otherwise
+            otherwise
                 nmino  = neres .* nref ./ zs.nem .* option.cmin ./ harm .^ 2;
         end
     otherwise
@@ -348,10 +401,107 @@ teff0  =  pi .* ag .* phys.ua .* trapz(v,(vt * v) .^ 3 .* fth,2) ./ nmino  ./ ph
 % calcul de l'energie suprathermique contenu dans le plasma :    (fvn -fth) * (1/2*m*v^2) * (2*pi*v)dv
 % avec ou sans effet du ripple
 esupra_st = max(0,pi .* ag .* phys.ua .* trapz(v,(vt * v) .^ 3 .* (fvn - fth),2) .* vmino);
-etot_st = max(0,pi .* ag .* phys.ua .* trapz(v,(vt * v) .^ 3 .* fvn,2) .* vmino);
+etot_st   = max(0,pi .* ag .* phys.ua .* trapz(v,(vt * v) .^ 3 .* fvn,2) .* vmino);
 
 % calcul de l'energie moyenne des ions
-einj  = max(tjres,pi .* ag .* phys.ua .* trapz(v,(vt * v) .^ 3 .* fvn,2) ./ nmino  ./ phys.e);
+einj  = max(tjres,pi .* ag .* phys.ua .* trapz(v,(vt * v) .^ 3 .* fvn,2) ./ nmino  ./ phys.e) + tpara;
+
+
+% compute fusion power induced by ICRH
+switch option.gaz
+    case {1,2,3,4}
+        switch option.mino
+            case 'T'
+                % formula 41 Stix paper 1973 with present normalisation
+                % negelct plasma temperature
+                %salpha_icrh = 4 .* pi .* njres .* trapz(v,1e-31 .* z0csdt(ev ./ phys.e / 1e3) .* (vt * v) .^ 2 .* fvn,2).* vmino;
+                %figure(21);plot(salpha_icrh);drawnow
+                % full formula 
+                % integration sur la fonction des ions rapides
+%                 svnbitd     = tsplinet((svs_td.enbi * ones(1,size(svs_td.svnbitd,2)))',svs_td.svnbitd', ((ev' ./ phys.e) * ones(1,size(svs_td.svnbitd,2)))')';
+%                 svnbitd((ev ./ phys.e)> max(svs_td.enbi),:) = 0;
+%                 svm_alt         = tsplinet(ones(size(svnbitd,1),1)*svs_td.eti,svnbitd,ones(size(svnbitd,1),1)*min(tjres',max(svs_td.eti)))';
+%
+
+                mev = (ones(size(tjres)) * ev) ./ phys.e +  tpara * ones(size(ev));
+                mtj = min(tjres,max(svs_td.eti)) * ones(size(ev));
+                svm = Ftd(mev(:),mtj(:));
+                svm(~isfinite(svm)) = 0;                
+                svm(svm < 0) = 0;
+                svm = reshape(svm,size(mev));
+                salpha_icrh      = option.f_icrh_salpha .* 2 .* pi .* njres .* trapz(v,svm .* (vt * v) .* fvn,2).* vmino;
+                % securite
+                salpha_icrh(pm < 1e3) = 0;
+                
+            case 'D'
+                 % full formula 
+                % integration sur la fonction des ions rapides
+%                 svnbidt     = tsplinet((svs_ft.enbi * ones(1,size(svs_dt.svnbidt,2)))',svs_dt.svnbidt', ((ev' ./ phys.e) * ones(1,size(svs_dt.svnbidt,2)))')';
+%                 svnbidt((ev ./ phys.e)> max(svs_dt.enbi),:) = 0;
+%                 svm_alt         = tsplinet(ones(size(svnbidt,1),1)*svs_dt.eti,svnbidt,ones(size(svnbidt,1),1)*min(tjres',max(svs_dt.eti)))';
+                mev = (ones(size(tjres)) * ev) ./ phys.e +  tpara * ones(size(ev));
+                mtj = min(tjres,max(svs_dt.eti)) * ones(size(ev));
+                svm = Fdt(mev(:),mtj(:));
+                svm(~isfinite(svm)) = 0;                
+                svm(svm < 0) = 0;
+                svm = reshape(svm,size(mev));
+                salpha_icrh      = option.f_icrh_salpha .* 2 .* pi .* njres .* trapz(v,svm .* (vt * v) .* fvn,2).* vmino;
+                % securite
+                salpha_icrh(pm < 1e3) = 0;
+               
+         end
+    case 5
+        switch option.mino
+            case 'He3'
+                mev = (ones(size(tjres)) * ev) ./ phys.e +  tpara * ones(size(ev));
+                mtj = min(tjres,max(svs_he3d.eti)) * ones(size(ev));
+                svm = Fhe3d(mev(:),mtj(:));
+                svm(~isfinite(svm)) = 0;
+                svm(svm < 0) = 0;
+                svm = reshape(svm,size(mev));
+                salpha_icrh      = option.f_icrh_salpha .* 2 .* pi .* njres .* trapz(v,svm .* (vt * v) .* fvn,2).* vmino;
+                % securite
+                salpha_icrh(pm < 1e3) = 0;
+                warning('The fusion source induced by ICRH for D-He3 reaction has not yet been validated');                
+            case 'D'
+                mev = (ones(size(tjres)) * ev) ./ phys.e +  tpara * ones(size(ev));
+                mtj = min(tjres,max(svs_dhe3.eti)) * ones(size(ev));
+                svm = Fdhe3(mev(:),mtj(:));
+                svm(~isfinite(svm)) = 0;
+                svm(svm < 0) = 0;
+                svm = reshape(svm,size(mev));
+                salpha_icrh      = option.f_icrh_salpha .* 2 .* pi .* njres .* trapz(v,svm .* (vt * v) .* fvn,2).* vmino;
+                % securite
+                salpha_icrh(pm < 1e3) = 0;
+                warning('The fusion source induced by ICRH for D-He3 reaction has not yet been validated');
+        end
+    case 11
+       switch option.mino
+           case 'H'
+                mev = (ones(size(tjres)) * ev) ./ phys.e +  tpara * ones(size(ev));
+                mtj = min(tjres,max(svs_pb.eti)) * ones(size(ev));
+                svm = Fpb(mev(:),mtj(:));
+                svm(~isfinite(svm)) = 0;
+                svm(svm < 0) = 0;
+                svm = reshape(svm,size(mev));
+                salpha_icrh      = 3 .*  option.f_icrh_salpha .* 2 .* pi .* njres .* trapz(v,svm .* (vt * v) .* fvn,2).* vmino;
+                % securite
+                salpha_icrh(pm < 1e3) = 0;
+                warning('The fusion source induced by ICRH for p-B11 reaction has not yet been validated');
+           case 'B11'
+                mev = (ones(size(tjres)) * ev) ./ phys.e +  tpara * ones(size(ev));
+                mtj = min(tjres,max(svs_bp.eti)) * ones(size(ev));
+                svm = Fbp(mev(:),mtj(:));
+                svm(~isfinite(svm)) = 0;
+                svm(svm < 0) = 0;
+                svm = reshape(svm,size(mev));
+                salpha_icrh      = 3 .* option.f_icrh_salpha .* 2 .* pi .* njres .* trapz(v,svm .* (vt * v) .* fvn,2).* vmino;
+                % securite
+                salpha_icrh(pm < 1e3) = 0;
+                warning('The fusion source induced by ICRH for p-B11 reaction has not yet been validated');
+        end
+end
+
 
 % puissance sur les electrons (staydy state, L-G Eriksson)
 %pel_st   = 2 .* esupra_st ./ max(eps,taus) .* (pm >= 1e3); 

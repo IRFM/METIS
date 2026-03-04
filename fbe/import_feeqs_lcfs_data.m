@@ -7,8 +7,10 @@ nbp_max = 0;
 for k=1:length(fbe_lcfs)
     nbp_max = max(nbp_max,length(fbe_lcfs{k}.R));
 end
-km = menu('Choose a time rsampling method:','kept time slices from FEEQS.M','kept time slices from METIS','resampling on plasma current','no resmapling');
-list = {'input','time','ip','none'};
+km = menu('Choose a time rsampling method:','kept time slices from CREATE', ...
+         'kept time slices from METIS','resampling on plasma current (time of FBE)', ...
+         'resampling on plasma current (time of METIS)','no resmapling');
+list = {'input','time','ip','ip metis','none'};
 z0dinput = z0separatrix_fromfbetometis(z0dinput,fbe_lcfs,list{km},[],1);
 
 % make matrix for figure
@@ -25,7 +27,7 @@ end
 % figure for control
 hold on
 zplotprof(gca,time_fig,R_fig,Z_fig,'color','k','marker','.','linestyle','none');
-legend('METIS moments','METIS (R,Z)','CREATE (R,Z)');
+legend('METIS moments','METIS (R,Z)','FBE (R,Z)');
 if ~isempty(strfind(upper(z0dinput.machine),'JT-60SA'))
     load('jt60sawall.mat');
     plot(wall.data(:,1),wall.data(:,2),'k');

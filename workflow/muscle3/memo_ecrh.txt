@@ -1,0 +1,34 @@
+From metis/workflow/muscle3:
+
+# --------------------------------------
+# How to prepare METIS-TORBEAM coupling:
+# --------------------------------------
+
+*** External actors to be compiled and copied to the current folder:
+   - torbeam/torbeam_m3.exe
+   - hcd2core_sources/hcd2core_sources_m3.exe
+   - chease/bin/chease.exe
+   
+*** Other actors "cs_cooker" and "waveform_editor" are python scripts
+    already in current folder
+
+*** Copy the TORBEAM configuration folder e.g. here as "torbeam_config/iter"
+    in current folder, which contains the following essential files:
+      - ec_waveforms.yaml: pre-configured EC waveform (extracted from METIS input scenario)
+      - input_torbeam.xml: code parameters for TORBEAM
+      - codeparam_hcd2core_source.xml: code parameters for HCD2CORE-SOURCES
+      - input_chease.xml: code parameters for CHEASE (to be linked to chease/input/chease_input_choices.xml
+        since iWrap-compiled M3 actors offer no flexibility for the location of the input code parameters files)
+      - scenario.yaml: used by waveform-editor (but not so essential: can ultimately be removed)
+
+*** As necessary, modify the coupling scheme in:
+    YMMSL/metis4muscle3_ecrh.ymmsl
+    + YMMSL/metis4muscle3_ecrh_iter.ymmsl or YMMSL/metis4muscle3_ecrh_west.ymmsl
+
+# ----------------------------------
+# How to run METIS-TORBEAM coupling:
+# ----------------------------------
+
+source config_sdcc.sh # (for ITER cluster)
+./run_script/launch_metis4muscle3_ecrh.bash
+

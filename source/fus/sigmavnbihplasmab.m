@@ -24,7 +24,7 @@ phys = cphys;
 enbi = cat(2,linspace(1e3,399e3,301),linspace(400e3,799e3,101),logspace(log10(800e3),6.5,101))';
 % le deuxieme est la temperature du plasma cible (eV)
 %eti  = logspace(3,6,101);
-eti  = cat(2,linspace(1e3,399e3,301),linspace(400e3,799e3,101),logspace(log10(670e3),6,71))';
+eti  = cat(2,linspace(1e3,399e3,301),linspace(400e3,668e3,101),logspace(log10(670e3),6,71));
 % resevation de la sortie
 svnbipb = NaN .* ones(length(enbi),length(eti));
 %

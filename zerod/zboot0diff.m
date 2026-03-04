@@ -446,7 +446,7 @@ flag_ftrap = false;
 if isappdata(0,'EQUILIBRIUM_EXP')
     % tester si le champ ftrap exist, pas disponible dans tous les cas
     ftrap = equi_ext.ftrap;
-elseif isfield(profil,'bpol') & isfield(profil,'fdia')
+elseif isfield(profil,'bpol') && isfield(profil,'fdia')
 	b2m       = profil.bpol .^ 2  + profil.fdia .^ 2 .* profil.r2i;
 	bm        = profil.fdia .* profil.ri .* (1 + 0.5 .* profil.bpol ./ sqrt(profil.grho2r2) ./ ...
 	            profil.fdia .* sqrt(profil.grho2));
@@ -1633,7 +1633,7 @@ fpfus    = fpfus .* ((pfus./  max(1,trapz(x,vpr .* fpfus,2))) * ve);
 
 
 % icrh
-if isappdata(0,'ICRH_SHAPE_EXP') & isfield(profil,'qjli');
+if isappdata(0,'ICRH_SHAPE_EXP') && isfield(profil,'qjli')
 	% il faut aussi modifier dans zero1t
 	icrhexp = getappdata(0,'ICRH_SHAPE_EXP');
 

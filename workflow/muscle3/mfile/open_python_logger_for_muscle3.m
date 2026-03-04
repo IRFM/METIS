@@ -1,0 +1,16 @@
+function logger = open_python_logger_for_muscle3(initial_message)
+
+logger = py.logging.getLogger();
+setdefault(py.os.environ,'MUSCLE_INSTANCE','macro');
+
+py.logging.basicConfig( ...
+    pyargs( ...
+    "format", "%(asctime)s - %(name)s - %(levelname)s - %(message)s", ...
+    "level", py.logging.INFO ...
+    ) ...
+    )
+
+setdefault(py.os.environ,'MUSCLE_INSTANCE','macro');
+%% Create libmuscle instance, specify all Ports
+% Ports need to match the MUSCLE3 yaml description on the other side
+logger.info(initial_message)

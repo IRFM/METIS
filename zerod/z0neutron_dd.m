@@ -223,7 +223,7 @@ end
 %  drawnow
 
 % fusion DD du plasma thermique (correction ,doit etre petit, l'enrichissement du milieu en T, H et He3 n'est pas prise en compte)
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip(:),13.6));
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip(:),13.6));
 sp       = 0.5 .* nD .^ 2 .* reshape(dd_p.sv,size(tip)) .* (tip >= dd_p.timin) .*  (tip <= dd_p.timax);
 sn       = 0.5 .* nD .^ 2 .* reshape(dd_n.sv,size(tip)) .* (tip >= dd_n.timin) .*  (tip <= dd_n.timax);
 proton_dd_th     = trapz(x,vpr .* sp,2);

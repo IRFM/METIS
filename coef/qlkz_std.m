@@ -8,8 +8,8 @@
 % This function is the main interface between METIS and QLK-NN 10D which transporm input in units of METIS in input in units of QUALIKIZ
 % and output with QUALIKIZ normalisation to data in physical units for METIS 
 
-function [Chie,Chii,De,Ve] = qlkz_std(xli,te,ti,ne,w_ExB,zeff,q,factor_em,meff,R0,a0,B0,Amain,qlkparams,prof,option,zerod)
-
+% function [Chie,Chii,De,Ve] = qlkz_std(xli,te,ti,ne,w_ExB,zeff,q,factor_em,meff,R0,a0,B0,Amain,qlkparams,prof,option,zerod)
+function varargout  = qlkz_std(xli,te,ti,ne,w_ExB,zeff,q,factor_em,meff,R0,a0,B0,Amain,qlkparams,prof,option,zerod)
 
 %INPUTS
 %xli - Lao coordinate from METIS
@@ -176,20 +176,25 @@ NNin_str.amin = repmat(prof.epsi(:,end).*prof.Raxe(:,end),1,size(te,2));
 
 NNin_str.B0 = B0;
 
-z1 = option.zimp;
-z2 = option.zmax;
-z3 = round((1 - Sn_fraction) .* z0wavez(NNin_str.te*1000) + Sn_fraction .* z0snavez(NNin_str.te*1000));
+%IMPURITIES PART
+% Three species probably stored in .mat
+z1 = option.zimp;  %for this one we specify a Z and a profile
+z2 = option.zmax;  %for this one we specify a Z and take the profile of z1
+z3 = round((1 - Sn_fraction) .* z0wavez(NNin_str.te*1000) + Sn_fraction .* z0snavez(NNin_str.te*1000));  %Tungsten
 
-NNin_str.z1 = z1.*ones(size(te,1),size(te,2));
+%The specified Z
+NNin_str.z1 = z1.*ones(size(te,1),size(te,2));  
 NNin_str.z2 = z2.*ones(size(te,1),size(te,2));
 NNin_str.z3 = z3;
 
+%The specified profiles
 NNin_str.nz1p = prof.nzp./1e19;
-NNin_str.nz2p = prof.nzp.*option.rimp./1e19;
+NNin_str.nz2p = prof.nzp.*option.rimp./1e19;  %rimp = ratio of impurities
 NNin_str.nwp = prof.nwp./1e19;
-NNin_str.nip = (NNin_str.ne - z1.*NNin_str.nz1p-z2.*NNin_str.nz2p-z3.*NNin_str.nwp)./(1+option.cmin);
-NNin_str.nminp = NNin_str.nip.*option.cmin;
-
+NNin_str.nip = (NNin_str.ne - z1.*NNin_str.nz1p-z2.*NNin_str.nz2p-z3.*NNin_str.nwp)./(1+option.cmin);  %Ambipolarity of profils
+NNin_str.nminp = NNin_str.nip.*option.cmin;  %Hydrogen profil
+N = [NNin_str.nip,NNin_str.nz1p,NNin_str.nz2p,NNin_str.nwp,NNin_str.nminp,NNin_str.ne];
+%Gradients
 nz1d1  = pdederive(prof.xli,prof.nzp,0,2,2,1) ./ a0;
 rlnz1  = -nz1d1  .* R0./ prof.nzp;
 rlnz2  = rlnz1;
@@ -197,10 +202,11 @@ rlnz2  = rlnz1;
 nz3d1  = pdederive(prof.xli,prof.nwp,0,2,2,1) ./ a0;
 rlnz3  = -nz3d1  .* R0./ prof.nwp;
 
+%4 impurities z1,z2,z3 (W) and cmin (H)
 NNin_str.rlnz1 = rlnz1;
 NNin_str.rlnz2 = rlnz2;
 NNin_str.rlnz3 = rlnz3;
-NNin_str.cmin = option.cmin.*ones(size(te,1),size(te,2));
+NNin_str.cmin = option.cmin.*ones(size(te,1),size(te,2));   %cmin = 1/(n_H/(n_H  + n_D)-1)
 NNin_str.rova = NNin_str.rmin./NNin_str.amin;
 
 % Put a warning when difference on one of QuaLiKiz input is too large between all 4 times considered
@@ -269,28 +275,118 @@ kDeff   = (R0./a0) .* chiGB .* irlne;
 kD      = chiGB;
 kV      = chiGB ./ a0;
 
+%Computation of heat transport coefficients, used in z0qlkz_std
 if ~time_flag
   NNout(:,1) = reshape(repmat(yout_qlkz.efe_GB,1,size(te,1)),1,size(te,1).*size(te,2));
   NNout(:,2) = reshape(repmat(sum(yout_qlkz.efi_GB,2),1,size(te,1)),1,size(te,1).*size(te,2));
-  NNout(:,3) = reshape(repmat(yout_qlkz.dfe_GB,1,size(te,1)),1,size(te,1).*size(te,2));
-  NNout(:,4) = reshape(repmat(yout_qlkz.vce_GB+yout_qlkz.vte_GB,1,size(te,1)),1,size(te,1).*size(te,2));
 
-  Chie = reshape(NNout(:,1),flip(insize))' .* kchie;
-  Chii = reshape(NNout(:,2),flip(insize))' .* kchii;
-  De   = reshape(NNout(:,3),flip(insize))' .* kD;
-  Ve   = reshape(NNout(:,4),flip(insize))' .* kV;
+  Chie = reshape(NNout(:,1),flip(insize))'.* kchie;
+  Chii = reshape(NNout(:,2),flip(insize))'.* kchii;
 
 else
 
   NNout(:,1) = yout_qlkz.efe_GB;
   NNout(:,2) = sum(yout_qlkz.efi_GB,2);
-  NNout(:,3) = yout_qlkz.dfe_GB;
-  NNout(:,4) = yout_qlkz.vce_GB+yout_qlkz.vte_GB;
 
-  Chie = reshape(NNout(:,1),insize) .* kchie;
-  Chii = reshape(NNout(:,2),insize) .* kchii;
-  De   = reshape(NNout(:,3),insize) .* kD;
-  Ve   = reshape(NNout(:,4),insize) .* kV;
-
+  Chie = reshape(NNout(:,1),insize).* kchie;
+  Chii = reshape(NNout(:,2),insize).* kchii;
 end
 
+% Species transport coefficients extraction
+if qlkparams.imp_trans ~= 0
+
+  if ~time_flag
+
+    for i = 1:size(yout_qlkz.dfi_GB,2)
+      %For all ions species
+      NNoutI(:,1,i) = reshape(repmat(yout_qlkz.dfi_SI(:,i),1,size(te,1)),1,size(te,1).*size(te,2));
+      NNoutI(:,2,i) = reshape(repmat(yout_qlkz.vti_SI(:,i)+yout_qlkz.vri_SI(:,i)+yout_qlkz.vci_SI(:,i),1,size(te,1)),1,size(te,1).*size(te,2));
+      NNoutI(:,3,i) = reshape(repmat(yout_qlkz.pfi_SI(:,i),1,size(te,1)),1,size(te,1).*size(te,2));
+      
+      D(:,:,i) = reshape(NNoutI(:,1,i),flip(insize))';
+      V(:,:,i) = reshape(NNoutI(:,2,i),flip(insize))';
+      G(:,:,i) = reshape(NNoutI(:,3,i),flip(insize))';
+
+      %For electrons
+      % NNout(:,3) = reshape(repmat(yout_qlkz.dfe_GB,1,size(te,1)),1,size(te,1).*size(te,2));
+      % NNout(:,4) = reshape(repmat(yout_qlkz.vce_GB+yout_qlkz.vte_GB,1,size(te,1)),1,size(te,1).*size(te,2));
+      % NNout(:,5) = reshape(repmat(yout_qlkz.pfe_GB,1,size(te,1)),1,size(te,1).*size(te,2));
+
+      % D(:,:,size(yout_qlkz.dfi_GB,2)+1) = reshape(NNout(:,3),flip(insize))' .* kD;
+      % V(:,:,size(yout_qlkz.dfi_GB,2)+1) = reshape(NNout(:,4),flip(insize))' .* kV;
+      % G(:,:,size(yout_qlkz.dfi_GB,2)+1) = reshape(NNout(:,5),flip(insize))' .* kV .* N(:,size(yout_qlkz.dfi_GB,2)+1);
+
+      %For electrons
+      NNout(:,3) = reshape(repmat(yout_qlkz.dfe_SI,1,size(te,1)),1,size(te,1).*size(te,2));
+      NNout(:,4) = reshape(repmat(yout_qlkz.vce_SI+yout_qlkz.vte_SI,1,size(te,1)),1,size(te,1).*size(te,2));
+      NNout(:,5) = reshape(repmat(yout_qlkz.pfe_SI,1,size(te,1)),1,size(te,1).*size(te,2));
+
+      D(:,:,size(yout_qlkz.dfi_SI,2)+1) = reshape(NNout(:,3),flip(insize))';
+      V(:,:,size(yout_qlkz.dfi_SI,2)+1) = reshape(NNout(:,4),flip(insize))';
+      G(:,:,size(yout_qlkz.dfi_SI,2)+1) = reshape(NNout(:,5),flip(insize))';
+      
+    end
+ 
+  else
+
+    for i = 1:size(yout_qlkz.dfi_GB,2)
+      %For all ions species
+      NNoutI(:,1,i) = yout_qlkz.dfi_SI(:,i);
+      NNoutI(:,2,i) = yout_qlkz.vti_SI(:,i)+yout_qlkz.vri_SI(:,i)+yout_qlkz.vci_SI(:,i);
+      NNoutI(:,3,i) = yout_qlkz.pfi_SI(:,i);
+
+      D(:,:,i) = reshape(NNoutI(:,1,i),insize) ;
+      V(:,:,i) = reshape(NNoutI(:,2,i),insize) ;
+      G(:,:,i) = reshape(NNoutI(:,3,i),insize) ;
+
+      %For electrons
+      NNout(:,3) = yout_qlkz.dfe_GB;
+      NNout(:,4) = yout_qlkz.vce_GB+yout_qlkz.vte_GB;
+      NNout(:,5) = yout_qlkz.pfe_GB;
+
+      D(:,:,size(yout_qlkz.dfi_GB,2)+1)   = reshape(NNout(:,3),insize) .* kD;
+      V(:,:,size(yout_qlkz.dfi_GB,2)+1)   = reshape(NNout(:,4),insize) .* kV;
+      G(:,:,size(yout_qlkz.dfi_GB,2)+1)   = reshape(NNout(:,5),insize) .* kV .* N(:,size(yout_qlkz.dfi_GB,2)+1);
+
+      %For electrons
+      NNout(:,3) = yout_qlkz.dfe_SI;
+      NNout(:,4) = yout_qlkz.vce_SI+yout_qlkz.vte_SI;
+      NNout(:,5) = yout_qlkz.pfe_SI;
+
+      D(:,:,size(yout_qlkz.dfi_SI,2)+1)   = reshape(NNout(:,3),insize);
+      V(:,:,size(yout_qlkz.dfi_SI,2)+1)   = reshape(NNout(:,4),insize);
+      G(:,:,size(yout_qlkz.dfi_SI,2)+1)   = reshape(NNout(:,5),insize);
+    end
+
+  end 
+
+  varargout{1} = Chie;
+  varargout{2} = Chii;
+  varargout{3} = D;
+  varargout{4} = V;
+  varargout{5} = G;
+
+else %without transport coefficient extraction
+  if ~time_flag
+
+    NNout(:,3) = reshape(repmat(yout_qlkz.dfe_GB,1,size(te,1)),1,size(te,1).*size(te,2));
+    NNout(:,4) = reshape(repmat(yout_qlkz.vce_GB+yout_qlkz.vte_GB,1,size(te,1)),1,size(te,1).*size(te,2));
+
+    De   = reshape(NNout(:,3),flip(insize))' .* kD;
+    Ve   = reshape(NNout(:,4),flip(insize))' .* kV;
+
+  else
+
+    NNout(:,3) = yout_qlkz.dfe_GB;
+    NNout(:,4) = yout_qlkz.vce_GB+yout_qlkz.vte_GB;
+
+    De   = reshape(NNout(:,3),insize) .* kD;
+    Ve   = reshape(NNout(:,4),insize) .* kV;
+
+    
+  end
+  varargout{1} = Chie;
+  varargout{2} = Chii;
+  varargout{3} = De;
+  varargout{4} = Ve;
+end

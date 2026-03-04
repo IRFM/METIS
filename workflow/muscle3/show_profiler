@@ -1,0 +1,4 @@
+export MPLBACKEND=TKagg
+muscle3 profile --instances performance.sqlite &
+muscle3 profile --resources performance.sqlite &
+muscle3 profile --timeline performance.sqlite &

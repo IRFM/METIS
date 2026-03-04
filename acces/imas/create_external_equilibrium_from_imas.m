@@ -1,4 +1,4 @@
-function [data,equi] = create_extrernal_equilibrium_from_imas(time_out,time_offset,shot, imas_run, imas_occurrence, imas_user, imas_machine,imas_backend,flag_extrap_data_flag)
+function [data,equi] = create_external_equilibrium_from_imas(time_out,time_offset,shot, imas_run, imas_occurrence, imas_user, imas_machine,imas_backend,flag_extrap_data_flag)
 
 % initialisation
 data = [];
@@ -10,7 +10,7 @@ if nargin < 9
 end
 %
 if nargin < 3
-    error('syntax: equi_ext = create_extrernal_equilibrium_from_imas(time_out,time_offset,shot, imas_run, imas_occurrence, imas_user, imas_machine)');
+    error('syntax: equi_ext = create_external_equilibrium_from_imas(time_out,time_offset,shot, imas_run, imas_occurrence, imas_user, imas_machine)');
 elseif isstruct(shot)
     equi = shot;
     if nargin > 3
@@ -34,7 +34,7 @@ else
     end
     imas_version = '3'; 
     [imas_machine,imas_user,imas_version,imas_backend] = imasdb(imas_machine,imas_user,imas_version,imas_backend);
-    id_backend = get_imas_backend_id(imas_backend)
+    id_backend = get_imas_backend_id(imas_backend);
     if ~isempty(id_backend)
         try
             idx = imas_open_env_backend(shot, imas_run, imas_user, imas_machine, imas_version,imas_backend);
@@ -165,6 +165,47 @@ data.indice_inv    = v0d;
 data.poynting      = v0d;
 data.ftrap         = v1d;
 
+
+% get factors and signs from input coherences
+mu0 = 4 .* pi .* 1e-7;
+if length(indok) == 1
+    indcheck = indok;
+else
+    indcheck = indok(round(length(indok)/2));
+end
+% signs
+sign_ip = sign(equi.time_slice{indcheck}.global_quantities.ip);
+sign_q  = sign(mean(equi.time_slice{indcheck}.profiles_1d.q));
+sign_b0 = sign(equi.vacuum_toroidal_field.b0(indcheck));
+decrease_psi = sign(equi.time_slice{indcheck}.profiles_1d.psi(1) - ...
+                    equi.time_slice{indcheck}.profiles_1d.psi(end));
+increase_phi = sign(equi.time_slice{indcheck}.profiles_1d.phi(end) - ...
+                    equi.time_slice{indcheck}.profiles_1d.phi(1));
+qtest = (equi.time_slice{indcheck}.profiles_1d.phi(1) - ...
+                    equi.time_slice{indcheck}.profiles_1d.phi(end)) ./ ...
+         (equi.time_slice{indcheck}.profiles_1d.psi(1) - ...
+                    equi.time_slice{indcheck}.profiles_1d.psi(end));   
+if abs(qtest./ mean(equi.time_slice{indcheck}.profiles_1d.q)) > 3
+        % psi is already in WB/rad
+        factor_2pi = 1;
+else
+        % psi is in Wb
+        factor_2pi = 2.*pi;
+end
+sign_dpdpsi = sign(mean(equi.time_slice{indok(indcheck)}.profiles_1d.dpressure_dpsi));
+% sign_deltap_delta_psi = (equi.time_slice{indcheck}.profiles_1d.pressure(1) - ...
+%                          equi.time_slice{indcheck}.profiles_1d.pressure(end)) ./ ...
+%                         (equi.time_slice{indcheck}.profiles_1d.psi(1) - ...
+%                          equi.time_slice{indcheck}.profiles_1d.psi(end)); 
+jphi_test  = mean(equi.time_slice{indok(indcheck)}.profiles_1d.dpressure_dpsi) .* ...
+             equi.vacuum_toroidal_field.r0  +  ...
+             mean(equi.time_slice{indok(indcheck)}.profiles_1d.f_df_dpsi) ./  ...
+             equi.vacuum_toroidal_field.r0 ./ mu0; 
+sign_j_tor = sign(jphi_test);
+% just to see
+%factor_jphi = mean(equi.time_slice{indok(indcheck)}.profiles_1d.j_phi) ./ jphi_test;
+
+
 % use all valid data to compute time derivative
 psi_time  = NaN * ones(length(indok),nbx);
 phi_time  = NaN * ones(length(indok),nbx);
@@ -174,8 +215,8 @@ zaxe_time = NaN * ones(length(indok),nbx);
 bpol_time = NaN * ones(length(indok),nbx);
 wbp_time  = NaN * ones(length(indok),1);
 for k = 1:length(indok)
-    psi_time(k,:)  = - equi.time_slice{indok(k)}.profiles_1d.psi ./ (2*pi);
-    phi_time(k,:)  =   equi.time_slice{indok(k)}.profiles_1d.phi;
+    psi_time(k,:)  =   decrease_psi .* equi.time_slice{indok(k)}.profiles_1d.psi ./ factor_2pi;
+    phi_time(k,:)  =   increase_phi .* equi.time_slice{indok(k)}.profiles_1d.phi;
     rho_time(k,:)  =   equi.time_slice{indok(k)}.profiles_1d.rho_tor;
     raxe_time(k,:) =   (equi.time_slice{indok(k)}.profiles_1d.r_outboard' + equi.time_slice{indok(k)}.profiles_1d.r_inboard') ./ 2;
     wbp_time(k)    =   mu0 .* equi.time_slice{indok(k)}.global_quantities.ip .^ 2 .* raxe_time(k,end) ./ 4 .* equi.time_slice{indok(k)}.global_quantities.li_3;
@@ -220,7 +261,7 @@ for k=1:length(ind_out)
     m   = ind_time(k);
     tsl = equi.time_slice{l}.profiles_1d;
     %
-    jphi_1d = tsl.j_tor(:)';
+    jphi_1d = sign_j_tor .* tsl.j_tor(:)';
     Rim     = tsl.gm9(:)';
     Rm      = tsl.gm8(:)';
     volume  = tsl.volume(:)';
@@ -250,7 +291,7 @@ for k=1:length(ind_out)
     psid2    = pdederive(x,psi_time(m,:),1,0,2,2);
     psid2(1) = - Bt ./ abs(tsl.q(1)) .* rmx(end) .^ 2;
     %
-    bpol  = sqrt(tsl.gm2 .* tsl.dpsi_drho_tor .^ 2) ./ 2 ./ pi;
+    bpol  = sqrt(tsl.gm2 .* tsl.dpsi_drho_tor .^ 2) ./ factor_2pi;
     
     % create external data structure 
     data.x(k,:)         = x;
@@ -275,7 +316,7 @@ for k=1:length(ind_out)
     data.spr_tor(k,:)   = tsl.darea_drho_tor;
     if any(tsl.darea_drho_tor == 0)
         mask0 = (tsl.darea_drho_tor == 0);
-        data.spr_tor(k,mask0) =  tsl.gm9(mask0) .* tsl.dvolume_drho_tor(mask0) ./ (2*pi);
+        data.spr_tor(k,mask0) =  tsl.gm9(mask0) .* tsl.dvolume_drho_tor(mask0) ./ factor_2pi;
     end
     data.vpr_tor(k,:)       = tsl.dvolume_drho_tor;
     data.volume(k,:)        = tsl.volume;
@@ -287,15 +328,15 @@ for k=1:length(ind_out)
     data.C2(k,:)            = tsl.dvolume_drho_tor(:)' .* data.grho2r2(k,:);
     data.C3(k,:)            = tsl.dvolume_drho_tor(:)' .* data.r2i(k,:);
     data.ej(k,:)            = ej;
-    data.jeff(k,:)          = tsl.j_parallel;
+    data.jeff(k,:)          = sign_j_tor .* tsl.j_parallel;
     data.jres(k,:)          = NaN * data.jeff(k,:); % must be computed with METIS data
     data.Raxe(k,:)          = raxe;
     data.Zaxe(k,:)          = zaxe;
     data.epsi(k,:)          = epsi;
     data.a(k,:)             = aminor;
     data.difcurconv(k)      = equi.time_slice{l}.convergence.iterations_n;
-    data.df2dpsi(k,:)       = - (4*pi) .* tsl.f_df_dpsi;
-    data.dptotdpsi(k,:)     = - (2*pi) .* tsl.dpressure_dpsi;
+    data.df2dpsi(k,:)       =  2 .* sign_dpdpsi.* factor_2pi .* tsl.f_df_dpsi;
+    data.dptotdpsi(k,:)     = sign_dpdpsi.* factor_2pi .* tsl.dpressure_dpsi;
     data.ptot(k,:)          = abs(tsl.pressure);
     data.fdia(k,:)          = abs(tsl.f);
     data.wbp (k)            = wbp_time(m);
@@ -315,7 +356,7 @@ for k=1:length(ind_out)
     data.d95(k)             = sum(data.dx(k,:) .* mask95,2) ./ max(1, sum(mask95,2));
     data.K95(k)             = sum(data.kx(k,:) .* mask95,2) ./ max(1, sum(mask95,2));
     data.piqj(k)            = max(0.1,min(10,data.jli(k,1) ./ (sum(diff(data.surface_pol(k,:),1,2) .*  ...
-        (data.jli(k,1:end-1) + data.jli(k,2:end)) ./ 2,2) ./ data.surface_pol(k,end))));
+                              (data.jli(k,1:end-1) + data.jli(k,2:end)) ./ 2,2) ./ data.surface_pol(k,end))));
     
     % LCFS
     bnd = equi.time_slice{l}.boundary; 
@@ -329,12 +370,29 @@ for k=1:length(ind_out)
     data.geo.sp(k)        = data.surface_pol(k,end);
     data.geo.sext(k)      = data.surface_flux(k,end);
     xpoint = false;
-    for kl = 1:length(bnd.x_point)
-        if ~isempty(bnd.x_point{kl})
-            if ~isempty(bnd.x_point{kl}.r) && isfinite(bnd.x_point{kl}.r) && ...
-               ~isempty(bnd.x_point{kl}.z) && isfinite(bnd.x_point{kl}.z) && ...
-                (bnd.x_point{kl}.r > 0) 
-                xpoint = true;
+    if isfield(equi.time_slice{l},'contour_tree')
+        %this is DDv >= 4
+        if isfield(equi.time_slice{l}.contour_tree,'node') && ...
+           ~isempty(equi.time_slice{l}.contour_tree.node)
+            for kl = 1:length(equi.time_slice{l}.contour_tree.node)
+                if (equi.time_slice{l}.contour_tree.node{kl}.critical_type  == 1) && ...
+                   (equi.time_slice{l}.contour_tree.node{kl}.psi ==  bnd.psi)
+                     xpoint = true;                    
+                end
+            end
+        end
+    else
+        for kl = 1:length(bnd.x_point)
+            if ~isempty(bnd.x_point{kl})
+                if isfield(bnd.x_point{kl},'r') && isfield(bnd.x_point{kl},'z')
+                    if ~isempty(bnd.x_point{kl}.r) && isfinite(bnd.x_point{kl}.r) && ...
+                            ~isempty(bnd.x_point{kl}.z) && isfinite(bnd.x_point{kl}.z) && ...
+                            (bnd.x_point{kl}.r > 0)
+                        xpoint = true;
+                    end
+                else
+                    warning('missformatted x_point data: at least one field is missing');
+                end
             end
         end
     end

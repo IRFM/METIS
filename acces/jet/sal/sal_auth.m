@@ -25,7 +25,7 @@ authorisation = [];
 
 
 % do not reask for authorisation if there is still one valide
-if nargin < 3
+if (nargin < 3) || isempty(machine)
      machine = 'JET';
 end   
 switch machine
@@ -108,19 +108,31 @@ end
 %opt = weboptions('RequestMethod','get','Username',user,'Password',passwd,'CertificateFilename','','ContentType','text','debug',true);
 opt = weboptions('RequestMethod','get','Username',user,'Password',passwd,'CertificateFilename','','ContentType','text','Timeout',60);
 url = sprintf('https://%s/auth',server);
-
-%try
+alternative = false;
+try
     t = webread(url,opt);
-    if isempty(t)
-        error('t is empty');
+catch
+    if ~isempty(strfind(lasterr,'Could not establish a secure connection'))
+        alternative = true;
+        t = '';
+    else
+        error(lasterr)
+    end    
+end
+if isempty(t) && ~alternative
+    error('t is empty');
+end
+if alternative
+    disp('using backup solution with wget to connect to the server')
+    [s,t] = unix(sprintf('wget -O -  --no-check-certificate --continue  --http-user=%s --http-password=%s https://%s/auth ',user,passwd,server));
+    if (s~= 0) && isempty(strfind(t,'"authorisation":'))
+        error(t);
+    else
+        ind1 = min(strfind(t,'"authorisation":')) - 1;
+        ind2 = max(strfind(t,'}'));
+        t = t(ind1:ind2);
     end
-% catch
-%     disp(lasterr)
-%     disp('using backup solution with wget to connect to the server')
-%     [s,t] = unix(sprintf('wget -q -O - --http-user=%s --http-password=%s https://%s/auth ',user,passwd,server));
-%     if (s~= 0) && isempty(strfind(t,'{"authorisation": {'))
-%         error(t);
-%     end
+end
 % end
 r=jsondecode(t);
 if isfield(r,'authorisation') && isfield(r.authorisation,'token') && ~isempty(r.authorisation.token)

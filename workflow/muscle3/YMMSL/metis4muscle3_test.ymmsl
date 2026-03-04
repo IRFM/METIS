@@ -1,0 +1,48 @@
+ymmsl_version: v0.1
+
+model:
+  name: METIS4MUSCLE3_TEST
+
+  components:
+    scheduler: scheduler
+    metis: metis
+
+  conduits:
+    scheduler.next_time: metis.clock
+    metis.status: scheduler.status
+
+resources:
+  scheduler:
+    threads: 1
+  metis:
+    threads: 30
+    
+implementations:
+   metis: 
+        executable: matlab
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t));addpath('/ZONE_TRAVAIL/JA132999/METIS4ITM/eufus.Git/metis/workflow/muscle3/mfile/');metis4muscle3(4,false,true);"
+#       args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t));addpath('/ZONE_TRAVAIL/JA132999/METIS4ITM/eufus.Git/metis/workflow/muscle3/mfile/'); metis4muscle3(2,false,true);"
+
+   scheduler:
+        executable: python
+        args: /ZONE_TRAVAIL/JA132999/METIS4ITM/eufus.Git/metis/workflow/muscle3/python/Scheduler/Scheduler.py
+
+
+
+settings:
+  muscle_local_log_level: INFO
+  muscle_remote_log_level: WARNING
+
+
+# for Scheduler actor
+  time_start: 0.0
+  time_stop: 3.0
+  time_step: 0.1
+
+# for METIS actor
+# internal clock
+  metis_clock_time_start: 0.0
+  metis_clock_time_stop: 3.0
+  metis_clock_time_step: 0.1
+
+

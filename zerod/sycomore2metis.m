@@ -388,13 +388,13 @@ if isempty(sepa_option)
 end
 
 % open wrinting on standard output
-if ~isempty(sycomore_data.path4metis_files);
+if ~isempty(sycomore_data.path4metis_files)
       if ~isempty(sycomore_data.device)
 	  tokamak = sycomore_data.device;
       else
 	  tokamak = sprintf('DEMO-R%d-a%d-RBt%d-Ip%d',ceil(sepa_option.ra*100),ceil(sepa_option.a*100),ceil(sycomore_data.rb0),ceil(sycomore_data.ip/1e6));
       end
-      root_name = fullfile(sycomore_data.path4metis_files,sprintf('sycomore2metis_%s@%d_run_%d',tokamak,sycomore_data.shot,sycomore_data.run))
+      root_name = fullfile(sycomore_data.path4metis_files,sprintf('sycomore2metis_%s@%d_run_%d',tokamak,sycomore_data.shot,sycomore_data.run));
       diary off
       diary(sprintf('%s_verbatim.txt',root_name));
       diary on

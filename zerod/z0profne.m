@@ -1,5 +1,5 @@
 % calcul du porfil de densite et des donnees derivees 
-function [nep,n0,S0,n0m,S0m,D,V,Vware,n0a,spellet,ge,frac_pellet,sn0fr,taup] = z0profne(cons,zs,profli,option,geo)
+function [nep,n0,S0,n0m,S0m,D,V,Vware,n0a,spellet,ge,frac_pellet,sn0fr,taup] = z0profne(cons,zs,profli,option,geo,neped)
 
 % constante physique (phys)
 phys.c           =   2.99792458e8;             % vitesse de la lumiere dans le vide (m/s)  (definition)
@@ -15,6 +15,13 @@ phys.mp          =   1.6726485e-27;            % masse au repos du proton (kg)
 phys.ua          =   1.66053873e-27;           % 1 unite atomique (kg) (+/- 1.00000013e-27)
 phys.avo         =   6.02214199e23;            % nombre d'avogadro (mol^-1) (+/- 0.00000047e23)
 phys.sigma       =   5.670400e-8;              % constante de stephan ( W*m^-2*K^-4) (+/- 0.000040e-8)
+
+% test if pedestal pressure is prescribed by another model
+if nargin > 5
+    external_pedestal_density = true;
+else
+    external_pedestal_density = false;    
+end
 
 % isotopic composition for option.gaz == 5
 if option.gaz == 5
@@ -79,16 +86,24 @@ switch option.ne_free
         nem_tep = max(1,trapz(x,vpr.* (nout - zs.nebord * ve),2) ./ trapz(x,vpr,2));
         fact_tep = max(0,zs.nem - zs.nebord) ./nem_tep;
         nout     = (nout - zs.nebord * ve).* (fact_tep * ve) + zs.nebord * ve;
-       
+        
     case 4
         if isfield(profli,'ptot')
-            [nout,fbest] = formene_4d(profli.xli,profli.vpr,zs.nem,zs.ane,zs.nebord,zs.negr,option.neped_expo);
+            if external_pedestal_density
+                [nout,fbest] = formene_neped(profli.xli,profli.vpr,zs.nem,zs.ane,zs.nebord,zs.negr,neped);
+            else
+                [nout,fbest] = formene_4d(profli.xli,profli.vpr,zs.nem,zs.ane,zs.nebord,zs.negr,option.neped_expo);
+            end
         else
             [nout,fbest] = formene_4d(x,vpr,zs.nem,zs.ane,zs.nebord,zs.negr,option.neped_expo);
         end
     otherwise
         if isfield(profli,'ptot')
-            [nout,fbest] = formene(profli.xli,profli.vpr,zs.nem,zs.ane,zs.nebord,profli.tep .* profli.nep);
+            if external_pedestal_density
+                [nout,fbest] = formene_neped(profli.xli,profli.vpr,zs.nem,zs.ane,zs.nebord,zs.negr,neped);
+            else
+                [nout,fbest] = formene(profli.xli,profli.vpr,zs.nem,zs.ane,zs.nebord,profli.tep .* profli.nep);
+            end
         else
             [nout,fbest] = formene(x,vpr,zs.nem,zs.ane,zs.nebord);
         end
@@ -107,7 +122,7 @@ otherwise
   ne0(indh)    = nout(indh,1);
 end
 
-if isfield(profli,'tip') & (option.ane == 5)
+if isfield(profli,'tip') && (option.ane == 5)
 	nep  = max(1,profli.tip - profli.tip(:,end) * ve);
 	nemx = trapz(x,vpr .* nep,2)./ zs.vp;
 	rap  = max(0,zs.nem -zs.nebord) ./max(eps,nemx);
@@ -116,7 +131,7 @@ if isfield(profli,'tip') & (option.ane == 5)
 end
 
 % cas de donnees experimentales
-if isappdata(0,'NE_EXP') & isfield(zs,'temps');
+if isappdata(0,'NE_EXP') && isfield(zs,'temps')
 	nes = getappdata(0,'NE_EXP');
 	nex = max(1e13,interp1_ex(nes.temps,nes.ne,zs.temps,'nearest','extrap'));
 	nep = pchip(nes.x,nex,x);
@@ -179,7 +194,7 @@ einj_w = ((option.einj .* max(1,real(zs.pnbi)) + option.einj2 .* imag(zs.pnbi)) 
 
 %  % calcul de l'effet des itb sur le profil de ne
 %  % hypothese pour le transport
-if isappdata(0,'NE_EXP') & isfield(zs,'temps');
+if isappdata(0,'NE_EXP') && isfield(zs,'temps')
     %rien
 elseif isfield(profli,'ge')
     
@@ -654,7 +669,7 @@ ge =   1 ./ max(eps,profli.vpr_tor .* profli.grho2) .*  ...
 ge(:,1) = 0;
 
 % calcul de Dn et Vn
-if (option.kishape == 0) && strcmp(option.density_model,'default');
+if (option.kishape == 0) && strcmp(option.density_model,'default')
         % la variation radial ne fonctionne que sur certains chocs JET
 	D = (vt * linspace(1,0.3,length(profli.xli))) .* (profli.xie .* profli.xii) ./ max(1e-3,profli.xie + profli.xii);
  	D(D > 30) = 30;

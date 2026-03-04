@@ -70,8 +70,9 @@ catch
     end
 end
 
-
-
+% IMAS data version
+IMAS_VERSION =getappdata(0,'IMAS_VERSION');
+%
 output = [];
 mixed = [];
 if (nargin == 0) || isempty(idss_list)
@@ -136,11 +137,12 @@ if nargin > 3
         fprintf('selected backend (%d)is nos available switching back to default backend: %d\n',id_backend,imas_get_backendID(expIdx));
     end  
 else
-    expIdx = imas_open('ids',shot,run);
+    expIdx = imas_open_old('ids',shot,run);
 end
 
 for k=1:length(idss_list)
     nomc = idss_list{k};
+    
     fprintf('reading %s :',nomc)
     if nargin > 6
         if iscell(occurrence)
@@ -148,10 +150,13 @@ for k=1:length(idss_list)
         else
             loco = occurrence;
         end
-        if ischar(loco)
+        if ischar(loco) && ~isempty(loco)
             nomr = sprintf('%s/%s',nomc,loco);
-        else
+        elseif ~isempty(loco)
             nomr = sprintf('%s/%d',nomc,loco);
+        else
+            nomr = nomc;
+            occurrence = 0;
         end
         % bug with occurrence 0
         nomr = strrep(nomr,'/0','');
@@ -176,15 +181,59 @@ for k=1:length(idss_list)
                 imas_occurrence = 1;
                 disp('enforce use of NICE equilibrium data')
         end
-        
-        ids_in = imas_west_get(shot, nomc, run, imas_occurrence, user, tokamak);
+        if IMAS_VERSION > 3
+            switch nomc
+                case 'core_profiles'
+                    try
+                        ids_in = imas_west_get(shot, 'plasma_profiles', run, imas_occurrence, user, tokamak);
+                        
+                    catch
+                        ids_in = imas_west_get(shot, nomc, run, imas_occurrence, user, tokamak);
+                    end
+                case 'core_sources'
+                    try
+                        ids_in = imas_west_get(shot, 'plasma_sources', run, imas_occurrence, user, tokamak);
+                        
+                    catch
+                        ids_in = imas_west_get(shot, nomc, run, imas_occurrence, user, tokamak);
+                    end
+                case 'core_transport'
+                    try
+                        ids_in = imas_west_get(shot, 'plasma_transport', run, imas_occurrence, user, tokamak);
+                        
+                    catch
+                        ids_in = imas_west_get(shot, nomc, run, imas_occurrence, user, tokamak);
+                    end
+                otherwise
+                    ids_in = imas_west_get(shot, nomc, run, imas_occurrence, user, tokamak);
+                    
+            end
+        else
+            ids_in = imas_west_get(shot, nomc, run, imas_occurrence, user, tokamak);
+        end
     else
-        try
-            ids_in =ids_get(expIdx,nomr);
-            fprintf('done\n')
-        catch
-            ids_in = [];
-            fprintf('empty\n')
+        if IMAS_VERSION > 3
+            nom4 = strrep(nomr,'core_','plasma_');
+            try
+                ids_in =ids_get(expIdx,nom4);
+                fprintf('done\n')
+            catch
+                try
+                    ids_in =ids_get(expIdx,nomr);
+                    fprintf('done\n')
+                catch
+                    ids_in = [];
+                    fprintf('empty\n')
+                end
+            end
+       else
+            try
+                ids_in =ids_get(expIdx,nomr);
+                fprintf('done\n')
+            catch
+                ids_in = [];
+                fprintf('empty\n')
+            end
         end
     end
     output.(nomc) = ids_in;
@@ -205,7 +254,7 @@ end
 function description = readidsdescription(idss_list)
 
 description = [];
-p = fileparts(fileparts(which('imas_open_env')));
+p = fileparts(fileparts(which('imas_open_env_backend')));
 Pref.Debug   = true;
 Pref.Str2Num = 'never';
 Pref.NoCells = false;

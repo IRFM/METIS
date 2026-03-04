@@ -231,7 +231,7 @@ joint_axes(h,k);
 % not interresting for other mixture
 if post.z0dinput.option.gaz == 3
     [burn_fraction,averaged_burn_fraction,source_T_plasma,source_T_pellet,source_T_gaz,source_T_nbi, ...
-                                    source_leakage,source_recycling]=z0burn_fraction(post,mat.eta_g_high,eta_p,0);
+                                    source_leakage,source_recycling]=z0burn_fraction(post,1./(1./mat.eta_g_high+1./mat.eta_g_low) / 2,eta_p,0);
     fprintf('Averaged burn fraction = %g %%\n',averaged_burn_fraction .* 100);
 
     kiloT  = cumtrapz(post.z0dinput.cons.temps,(source_T_pellet + source_T_gaz + source_T_nbi) .* 4.41e-4 .* phys.avo .* 3.016 .* phys.ua) +  ...

@@ -12,13 +12,17 @@ catch
 end
 
 data.ids_properties.comment          = dataset_description.ids_properties.comment;
-data.ids_properties.homogeneous_time = 1;
+if getappdata(0,'IMAS_VERSION') > 3
+    data.ids_properties.homogeneous_time = 2;
+else
+    data.ids_properties.homogeneous_time = 1;
+end
 data.ids_properties.source           = dataset_description.ids_properties.source;
 data.ids_properties.provider         = dataset_description.ids_properties.provider;
 data.ids_properties.creation_date    = dataset_description.ids_properties.creation_date;
 data.time                            = dataset_description.time;
 data.identifier                      = '';
-if ~isempty(data_fair_in) && isfield(data_fair_in,'identifier');
+if ~isempty(data_fair_in) && isfield(data_fair_in,'identifier')
     data.replaces                        = data_fair_in.identifier;
 else
     data.replaces                        = '';
@@ -31,6 +35,10 @@ data.is_referenced_by                = '';
 data.ids_properties.version_put.data_dictionary       = dataset_description.dd_version;
 data.ids_properties.version_put.access_layer          = dataset_description.dd_version;
 data.ids_properties.version_put.access_layer_language = 'Matlab';
+%
+if isfield(dataset_description.ids_properties,'provenance')
+    data.ids_properties.provenance = dataset_description.ids_properties.provenance;
+end
                 
 % try to get better definition of IMAS UAL version 
 try
@@ -50,6 +58,8 @@ catch
          disp('unable to update IMAS UAL information');
     end
 end
+% create also provenance for version 4 of the dictionary
+data.ids_properties.provenance = make_provenance;
 
 % some information identifier ?
 try

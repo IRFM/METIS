@@ -357,9 +357,9 @@ case 'radio_load'
     % backward compatibilty (bug shortcut)
     if isfield(exp0d,'flux')
         if ~isfield(exp0d,'edgeflux')
-            exp0d.edgeflux = exp0d.flux;
+            exp0d.edgeflux = exp0d.flux .* 2 .* pi;
         elseif all(~isfinite(exp0d.edgeflux))
-            exp0d.edgeflux = exp0d.flux;
+            exp0d.edgeflux = exp0d.flux ./ 2 ./ pi;
         end
         exp0d = rmfield(exp0d,'flux');
     end
@@ -1956,7 +1956,19 @@ case lower('radio_qlkANN_k_wp')
 case lower('radio_qlkz_std_wp')
       evalin('base','z0working_point_qlkz_std;');
       set(ho,'value',0);
-      
+
+case lower('radio_TGLF_interp')
+     evalin('base','metis2tglf;');
+     set(ho,'value',0);
+
+case lower('radio_TGLF_op')
+     evalin('base','z0working_point_tglf;');
+     set(ho,'value',0);
+
+case lower('radio_ImpTrans')
+     evalin('base','ImpTrans;');
+     set(ho,'value',0);    
+     
 case  'radio_coils_currents'     
         try
             evalin('base','set_reactor_feeqs_path;zwaitfor(zuicreefunform(''compute_reactor_fbe_inverse_fast'',''option_feeqs_reactor'',1,0,''option_feeqs_reactor = compute_reactor_fbe_inverse_fast(option_feeqs_reactor);''),''visible'');')

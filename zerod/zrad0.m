@@ -235,7 +235,7 @@ if isfield(profli,'nzp')
 else
     % G-F Matthews et al , Journal of Nuclear Materials, 1997 revue 1999
     % G. F. Matthews Nuclear Fusion vol 39  1999, p
-    prad    = frad .* pradmat
+    prad    = frad .* pradmat;
     switch sol_rad
         case 'coupled'
             pradsol = max( 2./ 3 .* pradmat, (1-frad) .* pradmat);
@@ -583,13 +583,17 @@ end
 
 
 % source externe pour PRAD
-if isappdata(0,'PLINE_EXP') & isfield(profli,'qjli');
+if isappdata(0,'PLINE_EXP') && isfield(profli,'qjli')
 	pline_exp  = getappdata(0,'PLINE_EXP');
 	pline      = max(1,interp1_ex(pline_exp.temps,pline_exp.prad,temps,'nearest','extrap'));
 	pline      = pchip(pline_exp.x,pline,profli.xli);
-
 	% recopie
 	profli.fprad  = real(pline);
+    % case for absolute value not only profile shape.
+    if isfield(pline_exp,'prad_tot')
+        % abs is here for IMAS data
+        prad = max(0,abs(real(interp1_ex(pline_exp.temps,pline_exp.prad_tot,temps,'nearest','extrap'))));
+    end
 end
 
 % renormalisation finale pour amelioree la precision

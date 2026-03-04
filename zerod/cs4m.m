@@ -15,6 +15,13 @@ try
 	contexte_QLK = 1;
 end
 
+contexte_TGLF=0;
+try
+	time = evalin('base','TGLF_data.time');
+	liste{end+1}  = 'TGLF';       
+	contexte_TGLF = 1;
+end
+
 contexte_cronos = 0;
 try
 	time = evalin('base','data.gene.temps');
@@ -56,7 +63,9 @@ switch item
 case 'CRONOS'
 		cs4m_cronos(choice);
 case 'Qualikiz NN'
-		cs4m_QLK(choice);
+                cs4m_QLK(choice);
+case 'TGLF'
+		cs4m_TGLF(choice);
 case 'Profile Maker'
 		cs4m_PROFILE_MAKER(choice);
 case 'IMAS'
@@ -66,7 +75,9 @@ otherwise
 	if contexte_cronos
 		cs4m_cronos(choice);
 	elseif contexte_QLK
-		cs4m_QLK(choice);
+	        cs4m_QLK(choice);
+	elseif contexte_TGLF
+		cs4m_TGLF(choice);	  
 	elseif contexte_PROFILE_MAKER
 		cs4m_PROFILE_MAKER(choice);
 	end
@@ -74,7 +85,7 @@ end
 % donnees en provenance des predictions de QLK_nn
 function  cs4m_QLK(choice)
 
-itemliste = {'Ne','Te','Ti','Cancel'};
+itemliste = {'Ne','N1','NW','Te','Ti','Cancel'};
 header    = sprintf('Copy of QLK_nn data in METIS external data structure\nWhich data or source must be copied ?');
 
 while(isempty(strmatch(choice,itemliste)) | isempty(choice))
@@ -87,6 +98,65 @@ while(isempty(strmatch(choice,itemliste)) | isempty(choice))
 end
 % lecture des donnees
 data = evalin('base','QLK_nn_data');
+time = data.time;
+x    = data.x;
+
+switch choice 
+case 'Ne'
+	% 1- Electron density 
+	NE_EXP.x     =  x;
+	NE_EXP.ne    =  data.NE;
+	NE_EXP.temps =  time;
+	setappdata(0,'NE_EXP',NE_EXP)
+case 'N1'
+	% 1- 1 density 
+	N1_EXP.x     =  x;
+	N1_EXP.n1    =  data.N(:,:,2);
+	N1_EXP.temps =  time;
+	setappdata(0,'N1_EXP',N1_EXP)
+case 'NW'
+	% 1- W density 
+	NW_EXP.x     =  x;
+	NW_EXP.nw    =  data.N(:,:,4);
+	NW_EXP.temps =  time;
+	setappdata(0,'NW_EXP',NW_EXP)
+	
+case 'Te'
+	% 1- Electron temperature 
+	TE_EXP.x     =  x;
+	TE_EXP.te    =  data.TE;
+	TE_EXP.temps =  time;
+	setappdata(0,'TE_EXP',TE_EXP)
+
+case 'Ti'
+	% 1- Ion temperature
+	TI_EXP.x     =  x;
+	TI_EXP.ti    =  data.TI;
+	TI_EXP.temps =  time;
+	setappdata(0,'TI_EXP',TI_EXP)
+	
+otherwise
+	% cas cancel
+	return
+end
+
+
+% donnees en provenance des predictions de TGLF
+function  cs4m_TGLF(choice)
+
+itemliste = {'Ne','Te','Ti','Cancel'};
+header    = sprintf('Copy of TGLF data in METIS external data structure\nWhich data or source must be copied ?');
+
+while(isempty(strmatch(choice,itemliste)) | isempty(choice))
+	Button = menu(header,itemliste);
+	
+	if Button == 0
+		return
+	end
+	choice = itemliste{Button};
+end
+% lecture des donnees
+data = evalin('base','TGLF_data');
 time = data.time;
 x    = data.x;
 
@@ -116,8 +186,6 @@ otherwise
 	% cas cancel
 	return
 end
-
-
 
 % donnees en provenance des predictions de Porifle Maker
 function  cs4m_PROFILE_MAKER(choice)

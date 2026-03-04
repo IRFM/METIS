@@ -181,7 +181,8 @@ end
 delta_int = reactor_option.delta_int;
 R         = reactor_option.R;
 a         = reactor_option.a;
-d         = reactor_option.d;
+d         = abs(reactor_option.d);
+d_sepa    = reactor_option.d;
 K         = reactor_option.K;
 b0        = reactor_option.b0;
 delta_int = reactor_option.delta_int;
@@ -239,28 +240,28 @@ switch reactor_option.sepa_type
 case 'SN'
     Kref = (1.687 + 2.001) / 2;
     dref = (0.466 + 0.568) / 2;
-    sepa_option.rxup      = 0.466 .* d ./ dref;     % upper triangularity (minor radius unit)
+    sepa_option.rxup      = 0.466 .* d_sepa ./ dref;     % upper triangularity (minor radius unit)
     sepa_option.zxup      = 1.687 .* K / Kref;    % upper altitude X point (minor radius unit)
     sepa_option.apup      = 0;       % upper separatrix angle (R,X)  (LFS, degrees)
     sepa_option.amup      = 0;       % upper separatrix angle (-R,X) (HFS, degrees)
     sepa_option.ra        = R;       % major radius R0 (m) [6.2]
     sepa_option.za        = 0;       % altitude of the magnetic axis (m) [0.9]
     sepa_option.a         = a;         % minor radius (m) [2]
-    sepa_option.rxdo      = 0.568 .* d ./ dref;     % lower triangularity (minor radius unit)
+    sepa_option.rxdo      = 0.568 .* d_sepa ./ dref;     % lower triangularity (minor radius unit)
     sepa_option.zxdo      = 2.001 .* K / Kref;       % lower altitude X point (minor radius unit)
     sepa_option.apdo      = 22.46;   % lower separatrix angle (R,X)  (LFS, degrees)
     sepa_option.amdo      = 67.92;   % lower separatrix angle (-R,X)  (HFS, degrees)
     sepa_option.b0        = 14.2;      % magnetic field at R0
     sepa_option.delta     = delta_int;      % magnetic field at R0
 otherwise
-    sepa_option.rxup      = d;     % upper triangularity (minor radius unit)
+    sepa_option.rxup      = d_sepa;     % upper triangularity (minor radius unit)
     sepa_option.zxup      = K;    % upper altitude X point (minor radius unit)
     sepa_option.apup      = 22.46;       % upper separatrix angle (R,X)  (LFS, degrees)
     sepa_option.amup      = 67.92;       % upper separatrix angle (-R,X) (HFS, degrees)
     sepa_option.ra        = R;       % major radius R0 (m) [6.2]
     sepa_option.za        = 0;       % altitude of the magnetic axis (m) [0.9]
     sepa_option.a         = a;         % minor radius (m) [2]
-    sepa_option.rxdo      = d;     % lower triangularity (minor radius unit)
+    sepa_option.rxdo      = d_sepa;     % lower triangularity (minor radius unit)
     sepa_option.zxdo      = K;       % lower altitude X point (minor radius unit)
     sepa_option.apdo      = 22.46;   % lower separatrix angle (R,X)  (LFS, degrees)
     sepa_option.amdo      = 67.92;   % lower separatrix angle (-R,X)  (HFS, degrees)

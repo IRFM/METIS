@@ -2,16 +2,16 @@
 function option = z0doverwriteparam(filename,option)
 
 if nargin == 1
-	option = filename;
-        if isfield(option,'reference_parameters')
-	        if ~isempty(option.reference_parameters)
-			filename = option.reference_parameters;
-                else
-			return
-                end
-        else 
-		return
+    option = filename;
+    if isfield(option,'reference_parameters')
+        if ~isempty(option.reference_parameters)
+            filename = option.reference_parameters;
+        else
+            return
         end
+    else
+        return
+    end
 end
 
 % valeur par defaut et bornes

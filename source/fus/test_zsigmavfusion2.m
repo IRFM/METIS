@@ -10,7 +10,7 @@ tikeV1 = linspace(1, 100e3);
 tikeV2 = linspace(1, 1000e3);
 [dd_p2,dd_n2,dt2,dhe32, ~, ~, ~]=zsigmavfusion2(tikeV2);
 
-figure (1)
+figure
 clf;
 plot(tikeV1, dd_p1.sv, '-b', 'LineWidth', 2); hold on;
 plot(tikeV1, dd_n1.sv, '-g', 'LineWidth', 2);
@@ -38,7 +38,7 @@ tikeV1 = logspace(1, 5);
 tikeV2 = logspace(1, 6);
 [dd_p2,dd_n2,dt2,dhe32, ~, ~, ~]=zsigmavfusion2(tikeV2);
 
-figure (2)
+figure
 clf;
 loglog(tikeV1, dd_p1.sv, '-b', 'LineWidth', 2); hold on;
 loglog(tikeV1, dd_n1.sv, '-g', 'LineWidth', 2);

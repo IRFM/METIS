@@ -98,5 +98,7 @@ end
 
 post.z0dinput = z0dinput;
 post.zerod    = zs;
-post.profil0d =profli;
+post.profil0d = profli;
+post.zs       = zs;
+post.profil   = profli;
 

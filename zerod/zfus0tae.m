@@ -2,7 +2,7 @@
 function [pfus,salpha,ifus,xfus,jxfus,j0fus,taus,ecrit,pfus_nbi,pfus_loss,jfus,salf,palf,splustd,splusdt,splusff,splusicrh] = ...
 	 zfus0tae(nDi,nTi,te,ne,zeff,tite,R,a,K,Bt,ane,ate,Vp,Sp, ...
          pnbi_th,taus_nbi,ecritnbi,e0nbi,e0nbi2,ftnbi,picrh_ion,taus_icrh,ecriticrh,e0icrh,temps,pnbi,d0,qa,qmin,te0, ...
-         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI)
+         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI,mino_icrh,splusicrh)
 
 % pour l'interaction faisceau plasma
 tii = te .* tite;
@@ -70,7 +70,7 @@ end
 % source de particule alpha
 %sigmavdt = zperes(max(tip,30));
 %s        = nD .* nT .* sigmavdt;
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip,30));
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip,30));
 s        = nD .* nT .* dt.sv .* (1 + fpolarized / 2);
 
 
@@ -272,7 +272,7 @@ profli.jfusshape = jfus;
 
 
 % calcul de l'interraction faisceau-plasma (DT)
-if (all(real(ftnbi == 0)) && all(imag(ftnbi == 0)))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
+if (all(real(ftnbi) == 0) && all(imag(ftnbi) == 0))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
     esupranbi = zeros(size(temps));
     pTth      = zeros(size(temps));
     tauseff   = 1;
@@ -293,7 +293,7 @@ else
 end
 % attention la matrice est T-> D, IL FAUDRA RAJOUTER 	D -> T
 % maintenant c'est la bonne matrice
-if	(all(real(ftnbi == 1)) && all(imag(ftnbi == 1)))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
+if	(all(real(ftnbi) == 1) && all(imag(ftnbi) == 1))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
     splusdt   = zeros(size(temps));
 else
     splusdt   = zbpi0_dt(nTi,tii,real(pnbi_th),real(taus_nbi),e0nbi,real(ecritnbi),1-real(ftnbi));
@@ -329,20 +329,45 @@ else
         splusff = splusff + splusff22 + splusff12 + splusff21;
    end
 end
-%  % acceleration de T par icrh (approximation type idn)
-e0icrhm =zpmean(1:length(e0icrh),picrh_ion,e0icrh);
-if all(picrh_ion < 1e3)
-  	splusicrh = zeros(size(nDi));
-elseif ~isempty(e0icrhm)
-	if e0icrhm == 0
-  		  	splusicrh = zeros(size(nDi));
- 	else
-  		rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nTi ./ max(1,nDi));
-  		splusicrh = zbpi0(nDi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
-	end
-else
-  	splusicrh = zeros(size(nDi));
-end
+
+% now computed inside ICRH module directly with distribution function
+% %  % acceleration de T par icrh (approximation type idn)
+% switch mino_icrh
+%     case 'T'
+%         e0icrhm =zpmean(1:length(e0icrh),picrh_ion,e0icrh);
+%         if all(picrh_ion < 1e3)
+%             splusicrh = zeros(size(nDi));
+%         elseif ~isempty(e0icrhm)
+%             if e0icrhm == 0
+%                 splusicrh = zeros(size(nDi));
+%             else
+%                 rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nTi ./ max(1,nDi));
+%                 splusicrh = zbpi0(nDi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
+%             end
+%         else
+%             splusicrh = zeros(size(nDi));
+%         end
+%         
+%         
+%         % acceleration de D par ICRH (approximation type idn)
+%     case 'D'
+%         e0icrhm =zpmean(1:length(e0icrh),picrh_ion,e0icrh);
+%         if all(picrh_ion < 1e3)
+%             splusicrh = zeros(size(nDi));
+%         elseif ~isempty(e0icrhm)
+%             if e0icrhm == 0
+%                 splusicrh = zeros(size(nDi));
+%             else
+%                 rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nDi ./ max(1,nTi));
+%                 splusicrh = zbpi0_dt(nTi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
+%             end
+%         else
+%             splusicrh = zeros(size(nDi));
+%         end
+%                 
+%     otherwise
+%         splusicrh = zeros(size(nDi));
+% end
 
 splus     = max(0,splustd) +  max(0,splusdt) +  max(0,splusff) + max(0,splusicrh) ;
 %disp([salpha(end-2),splus(end-2) , nDi(end-2) .* Vp(end-2),nTi(end-2) .* Vp(end-2)])

@@ -36,7 +36,7 @@ end
 
 
 % fusion DD du plasma thermique (correction ,doit etre petit, l'enrichissement du milieu en T, H et He3 n'est pas prise en compte)
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip(:),13.6));
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip(:),13.6));
 profli.sn0_th       = 0.5 .* nD .^ 2 .* reshape(dd_n.sv,size(tip)) .* (tip >= dd_n.timin) .*  (tip <= dd_n.timax);
 profli.sn0_th       = profli.sn0_th .* ((ndd_th ./ max(1,trapz(x,profli.sn0_th .* vpr,2))) * ve);
 

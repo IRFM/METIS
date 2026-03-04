@@ -47,10 +47,13 @@
 %
 % input :
 %
-%     shot                    = shot number (integer >0)
-%				if is complex, imag(shot) is used as reference shot
+%     shot                    = shot number (integer >0) or URI for IMAS dataset.
+%				                if is complex, imag(shot) is used as reference shot.
+%                               Even when URI is provided, run number and
+%                               occurrence should be provided (dummy value).
+%
 %     run                     = run number for this shot (integer >0)
-%				if is complex, imag(shot) is used as reference run
+%				                if is complex, imag(shot) is used as reference run
 %
 %     occurrence              = input ids scenario occurrence in Kepler (default = [])
 %                               or occurrence can be a structure to use an alternative database :
@@ -259,6 +262,13 @@ if nargin <= 1
   error_flag.defaut.numerics  = 1;
   error_flag.info.numerics    = 'IDS selection:\nif = 0, do not write numerics IDSs;\nif=1, write numerics IDSs (transport_solver_numerics)';
   error_flag.section.numerics = 'UAL';
+  
+  error_flag.valeur.plasma_ids  = 'both';
+  error_flag.type.plasma_ids    = 'string';
+  error_flag.borne.plasma_ids   = {'both','core&edge','plasma'}; 
+  error_flag.defaut.plasma_ids  = 'both';
+  error_flag.info.plasma_ids    = 'IDS selection:\nif = both, write both core_* or edge_* and plasma_* IDSs;\nif = core&edge, write only core_* or edge_* IDSs;\nif = plasma, write only plasma_* IDSs;\nRemark: data production and occurrences are still the one defined for core_* and edge_* and they are also applied to plasma_*';
+  error_flag.section.plasma_ids = 'UAL';  
 
   error_flag.valeur.equilibrium = 1;
   error_flag.type.equilibrium	= 'integer';
@@ -375,17 +385,17 @@ if nargin <= 1
   error_flag.info.equilibrium_occurrence    = 'UAL control: output ids occurrence for equilibrium IDS;\nif empty, use default occurence (0)';
   error_flag.section.equilibrium_occurrence = 'Occurrence UAL';
 
-  error_flag.valeur.COCOS  = 11;
+  error_flag.valeur.COCOS  = 17;
   error_flag.type.COCOS    = 'integer';
   error_flag.borne.COCOS   = [1,18]; 
-  error_flag.defaut.COCOS  = 11;
+  error_flag.defaut.COCOS  = 17;
   error_flag.info.COCOS    = 'UAL control: choice for the output COCOS';
   error_flag.section.COCOS = 'UAL';
   
-  error_flag.valeur.COCOS_method   = 'Sauter';
+  error_flag.valeur.COCOS_method   = 'Native';
   error_flag.type.COCOS_method     = 'string';
   error_flag.borne.COCOS_method    = {'Sauter','Native'}; 
-  error_flag.defaut.COCOS_method   = 'Sauter';
+  error_flag.defaut.COCOS_method   = 'Native';
   error_flag.info.COCOS_method     = 'Method use to make the COCOS mapping:\nNative = native METIS method.\nSauter = use O.Sauter tools (see https://gitlab.epfl.ch/spc/cocos)';
   error_flag.section.COCOS_method  = 'UAL';
   
@@ -396,7 +406,7 @@ if nargin <= 1
   error_flag.info.COCOS_verbose     = 'if COCOS_method = Sauter, level of verbosity of COCOS transformation (0 = no text output).';
   error_flag.section.COCOS_verbose  = 'UAL';
   
-  error_flag.valeur.COCOS_check   = 'on';
+  error_flag.valeur.COCOS_check   = 'off';
   error_flag.type.COCOS_check     = 'string';
   error_flag.borne.COCOS_check    = {'off','on'}; 
   error_flag.defaut.COCOS_check   = 'on';
@@ -416,6 +426,73 @@ end
 if nargin < 2
   error_flag = - 9999;
   return
+end
+
+% manage URI
+if ischar(shot)
+    uri = shot;
+    shot = NaN;
+    run = NaN;
+    % try to decode uri
+    elem = split(uri,'/');
+    try
+        run  = str2double(elem{end});
+    catch
+        run = 0;
+    end
+    if isempty(run) || ~isfinite(run)
+        run = 0;
+    end
+    try
+        shot = str2double(elem{end-1});
+    catch
+        shot = 999999;
+    end
+    if isempty(shot) || ~isfinite(shot)
+        shot = 999999;
+    end
+    try
+        version = elem{end-2};
+    catch
+        version = '4';
+    end
+    if isempty(version)
+        version = '4';
+    end
+    try
+        machine = elem{end-3};
+    catch
+        machine =  'test';
+    end
+    if isempty(machine)
+        machine = 'test';
+    end
+    if contains(elem{1},'mdsplus')
+        backend = 12;
+    else
+        backend = 13;
+    end
+    if isempty(backend) || ~isfinite(backend)
+        backend = 13;
+    end
+    user = getenv('USER');
+    try
+        for k=3:length(elem)
+            if contains(elem{k},'public')
+                user = elem{k-1};
+            end
+        end
+    end
+    if isempty(user)
+        user = getenv('USER');
+    end   
+    setappdata(0,'UAL_TOKAMAK',machine);
+    setappdata(0,'UAL_USER',strtrim(user));
+    setappdata(0,'UAL_DATAVERSION',version);
+    setappdata(0,'UAL_BACKEND',backend);
+
+else
+    uri = '';
 end
 
 %% garbage collection to prevent java heap overflow
@@ -438,6 +515,9 @@ if exist('imas_set_mex_params')
     %imas_set_mex_params('convert_whole_ids',false);
     imas_set_mex_params('verbosity',0);        
 end
+
+% get IMAS dictionnary major version
+IMAS_VERSION = get_imas_version;
 
 % no more handle with environment variables
 %% CHANGE DATABASE
@@ -632,22 +712,33 @@ id_backend = get_imas_backend_id;
 
 %% OPEN DATABASE IF NEEDED
 if read_input == 1
-    try
-        disp('Opening tree');
-        if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK'))
-            if ~isempty(id_backend)
-                expIdx = imas_open_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend);
-            else
-                expIdx = imas_open_env('ids',real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'));
-            end
-        else
-            expIdx = imas_open('ids',real(shot),real(run));
+    if ~isempty(uri)
+        try
+            expIdx = imas_open(uri,40);
+            expIdx = mem_cache_imas(expIdx);
+        catch
+            %% NO INPUT DATA
+            warning('no initial IDS available');
+            expIdx = NaN;
         end
-        expIdx = mem_cache_imas(expIdx);
-    catch
-        %% NO INPUT DATA
-        warning('no initial IDS available');
-        expIdx = NaN;
+    else
+        try
+            disp('Opening tree');
+            if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK'))
+                if ~isempty(id_backend)
+                    expIdx = imas_open_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend);
+                else
+                    expIdx = imas_open_env('ids',real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'));
+                end
+            else
+                expIdx = imas_open_old('ids',real(shot),real(run));
+            end
+            expIdx = mem_cache_imas(expIdx);
+        catch
+            %% NO INPUT DATA
+            warning('no initial IDS available');
+            expIdx = NaN;
+        end
     end
     mode_full = 0;
     switch methode
@@ -677,25 +768,29 @@ if read_input == 1
             end
         end
         %% GET DATASET_DESCRIPTION
-        %% OCCURENCE MANAGEMENT
-        if isempty(occurrence)
-            nids = 'dataset_description';
-        else
-            nids = sprintf('dataset_description/%s',occurrence);
-        end
-        disp('Reading dataset_descriptionp IDS');
-        if isempty(time)  | (mode_full == 1)
-            try
-                dataset_description_in =ids_get(expIdx,nids);
-            catch
-                dataset_description_in = [];
+        if IMAS_VERSION < 4
+            %% OCCURENCE MANAGEMENT
+            if isempty(occurrence)
+                nids = 'dataset_description';
+            else
+                nids = sprintf('dataset_description/%s',occurrence);
+            end
+            disp('Reading dataset_descriptionp IDS');
+            if isempty(time)  | (mode_full == 1)
+                try
+                    dataset_description_in =ids_get(expIdx,nids);
+                catch
+                    dataset_description_in = [];
+                end
+            else
+                try
+                    dataset_description_in = ids_get_slice(expIdx,nids,time,interpolation_methode);
+                catch
+                    dataset_description_in = [];
+                end
             end
         else
-            try
-                dataset_description_in = ids_get_slice(expIdx,nids,time,interpolation_methode);
-            catch
-                dataset_description_in = [];
-            end
+            dataset_description_in = [];
         end
         %% GET DATASET_FAIR
         %% OCCURENCE MANAGEMENT
@@ -872,6 +967,29 @@ elseif ~isempty(codeparam_filename)
   end
   
 end
+
+% if not defined !
+if ~isfield(z0dstruct.z0dinput,'shot') && isfield(z0dstruct.z0dinput.option,'shot')
+    z0dstruct.z0dinput.shot = z0dstruct.z0dinput.option.shot;
+end
+if ~isfield(z0dstruct.z0dinput,'machine') && isfield(z0dstruct.z0dinput.option,'machine')
+    z0dstruct.z0dinput.machine = z0dstruct.z0dinput.option.machine;
+end
+if isfield(z0dstruct.z0dinput,'shot') && isfield(z0dstruct.z0dinput.option,'shot')
+    if isempty(z0dstruct.z0dinput.shot) && ~isempty(z0dstruct.z0dinput.option.shot)
+        z0dstruct.z0dinput.shot = z0dstruct.z0dinput.option.shot;
+    elseif ~isempty(z0dstruct.z0dinput.shot) && isempty(z0dstruct.z0dinput.option.shot)
+        z0dstruct.z0dinput.option.shot = z0dstruct.z0dinput.shot ;
+    end
+end
+if isfield(z0dstruct.z0dinput,'machine') && isfield(z0dstruct.z0dinput.option,'machine')
+    if isempty(z0dstruct.z0dinput.machine) && ~isempty(z0dstruct.z0dinput.option.machine)
+        z0dstruct.z0dinput.machine = z0dstruct.z0dinput.option.machine;
+    elseif ~isempty(z0dstruct.z0dinput.machine) && isempty(z0dstruct.z0dinput.option.machine)
+        z0dstruct.z0dinput.option.machine = z0dstruct.z0dinput.machine ;
+    end
+end
+
 if exit_after_read_input == 1
   % retourne les donnees pour metis init (zerod_init)
   error_flag = 0;
@@ -925,7 +1043,16 @@ try
             profil0d   = z0dstruct.profil0d;
             z0dinput   = z0dstruct.z0dinput;
             % compatibilite ascendante
-            z0dstruct.zs = z0dstruct.zerod;
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif ~isfield(z0dstruct,'zerod') && isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif ~isfield(z0dstruct,'profil0d') && isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
             
         case 'full'
             % cette methode calcul la simulation complete en mode fast : le IDS d'entree doit contenir au moins 3 temps
@@ -936,8 +1063,17 @@ try
             profil0d   = z0dstruct.profil0d;
             z0dinput   = z0dstruct.z0dinput;
             % compatibilite ascendante
-            z0dstruct.zs = z0dstruct.zerod;
-            
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif ~isfield(z0dstruct,'zerod') && isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif ~isfield(z0dstruct,'profil0d') && isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
+           
         case 'fast'
             % cette methode calcul la simulation complete en mode fast : le IDS d'entree doit contenir au moins 5 temps
             disp('Fast computation')
@@ -946,9 +1082,18 @@ try
             data_zerod = z0dstruct.zerod;
             profil0d   = z0dstruct.profil0d;
             z0dinput   = z0dstruct.z0dinput;
-            % compatibilite ascendante
-            z0dstruct.zs = z0dstruct.zerod;
-            
+             % compatibilite ascendante
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif ~isfield(z0dstruct,'zerod') && isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif ~isfield(z0dstruct,'profil0d') && isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
+           
         case 'init'
             % cette methode precede one-time, elle doit etre appelee juste avant le calcul pour le premier intervalle de temps
             disp('Init METIS for evolution computation')
@@ -970,8 +1115,17 @@ try
                 end
             end
             % compatibilite ascendante
-            z0dstruct.zerod = z0dstruct.zs;
-            
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
+           
             % add possible missign field in option
             model = metis4imas(1);
             noms = fieldnames(model.valeur);
@@ -1016,9 +1170,18 @@ try
             else
                 [data_zerod,profil0d,z0dstruct] = zerodevolution(z0dstruct,option,time,cons1t,geo1t,[]);
             end
-            % compatibilite ascendante
-            z0dstruct.zerod = z0dstruct.zs;
-            % UAL option is not always preserve (security rule on parameters)
+             % compatibilite ascendante
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
+           % UAL option is not always preserve (security rule on parameters)
             noms = fieldnames(option);
             for kl=1:length(noms)
                 if ~isfield(z0dstruct.z0dinput.option,noms{kl})
@@ -1031,8 +1194,16 @@ try
             fprintf('Post processing of METIS simulation data\n');
             z0dstruct = post;
             % compatibilite ascendante
-            z0dstruct.zs = z0dstruct.zerod;
-            z0dstruct.profil = z0dstruct.profil0d;
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif ~isfield(z0dstruct,'zerod') && isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif ~isfield(z0dstruct,'profil0d') && isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
             %
             data_zerod = z0dstruct.zerod;
             profil0d   = z0dstruct.profil0d;
@@ -1042,15 +1213,15 @@ try
             fprintf('Post processing of METIS evolution simulation data\n');
             z0dstruct = post.z0dstruct;
             % compatibilite ascendante
-            if ~isfield(z0dstruct,'zs')
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
                 z0dstruct.zs = z0dstruct.zerod;
-            elseif ~isfield(z0dstruct,'zerod')
-                 z0dstruct.zerod = z0dstruct.zs;
+            elseif  isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
             end
-            if ~isfield(z0dstruct,'profil')
-                 z0dstruct.profil = z0dstruct.profil0d;
-            elseif ~isfield(z0dstruct,'profil0d')
-                  z0dstruct.profil0d = z0dstruct.profil;
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif  isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
             end
             %
             if isfield(post,'data_zerod')
@@ -1083,8 +1254,16 @@ try
             end
             z0dstruct.z0dinput.option = secure_option_imas(z0dstruct.z0dinput.option);
             % compatibilite ascendante
-            z0dstruct.zs = z0dstruct.zerod;
-            z0dstruct.profil = z0dstruct.profil0d;
+            if ~isfield(z0dstruct,'zs') && isfield(z0dstruct,'zerod')
+                z0dstruct.zs = z0dstruct.zerod;
+            elseif ~isfield(z0dstruct,'zerod') && isfield(z0dstruct,'zs')
+                z0dstruct.zerod = z0dstruct.zs;
+            end
+            if ~isfield(z0dstruct,'profil') && isfield(z0dstruct,'profil0d')
+                z0dstruct.profil = z0dstruct.profil0d;
+            elseif ~isfield(z0dstruct,'profil0d') && isfield(z0dstruct,'profil')
+                z0dstruct.profil0d = z0dstruct.profil;
+            end
             %
             data_zerod = z0dstruct.zerod;
             profil0d   = z0dstruct.profil0d;
@@ -1110,9 +1289,27 @@ catch
   return
 end
 
+
+
 % debut traitement COCOS
+% default METIS in COCOS 7 with Ip and Bt positive
+sigma_B0_in = 1;
+sigma_Ip_in = 1;
+factor_two_pi = 1;
+sigma_bvac_r  = 1;
+sigma_RphiZ_eff = 1;
+% applied sign that is not completely defined in METIS
+if isfield(z0dstruct.z0dinput.option,'orientation')
+    sigma_B0_out = z0dstruct.z0dinput.option.orientation;
+else
+    sigma_B0_out = 1;
+end
+% disp('Signs are:')
+% sigma_B0_out
+sigma_Ip_out = sign(z0dstruct.z0dinput.option.signe .* sigma_B0_out);
 % before COCOS transformation if any
-sigma_B0_eff = 1;
+sigma_B0_eff = sigma_B0_out;
+
 COCOS_Sauter = false;
 z0dstruct_loc = z0dstruct;
 if ~isempty(which('ids_check_cocos'))
@@ -1123,73 +1320,81 @@ if ~isempty(which('ids_check_cocos'))
 end
 if COCOS_Sauter
     % use Olivier Sauter tools for COCOS in this case
-    sigma_B0_in = 1;
-    sigma_Ip_in = 1;
-    factor_two_pi = 1;
-    sigma_bvac_r  = 1;
     %COCOS_Sauter = true;
-    
+        
     % change orientation and signe in z0dstruct if COCOS_Sauter to 1:
-    z0dstruct_loc.z0dinput.option.signe = 1;
-    z0dstruct_loc.z0dinput.option.orientation = 1;
-   
-     
+    % no modication of data before call of tool for COCOS transformation.
+    z0dstruct_loc.z0dinput.option.signe = sigma_B0_in .* sigma_Ip_in;
+    z0dstruct_loc.z0dinput.option.orientation = sigma_B0_in;
+    
+    % METIS data are in COCOS 7 with Ip and Bt positive !
+    % neutral transformations if some field is not in COCOS 7 in METIS
+    [data_zerod,profil0d,sigma_bvac_r,factor_two_pi,sigma_RphiZ_eff] = ...
+      makecocos_imas_from_seven(data_zerod,profil0d,z0dstruct,7,sigma_Ip_in,sigma_B0_in);
+  
+    sigma_B0_eff = sigma_bvac_r;
+ 
+
+    
+             
 elseif exist('profil0d','var') && exist('data_zerod','var')
 
-  % applied sign that is not completely defined in METIS
-  if isfield(z0dstruct.z0dinput.option,'orientation')
-      sigma_B0_in = z0dstruct.z0dinput.option.orientation;
-  else
-      sigma_B0_in = 1;
-  end
-  disp('Signs are:')
-  sigma_B0_in
-  sigma_Ip_in = sign(z0dstruct.z0dinput.option.signe .* sigma_B0_in)
-  % test neutral if sign of METIS
-%    data_zerod_test = data_zerod;
-%    profil0d_test   = profil0d;
-%    [data_zerod,profil0d] = makesign_imas(data_zerod,profil0d,z0dstruct,1,1);
-%    zcompstruct(data_zerod,data_zerod_test);
-%    zcompstruct(profil0d,profil0d_test);
-%    keyboard
-  %
-  [data_zerod,profil0d] = makesign_imas(data_zerod,profil0d,z0dstruct,sigma_Ip_in,sigma_B0_in);
   
-  % changement normalisation psi
-  factor_two_pi   = 2 .* pi;
-  profil0d.psi    = + profil0d.psi    .* 2 .* pi;
-  profil0d.dpsidt = + profil0d.dpsidt .* 2 .* pi;
-  profil0d.qjli   = - profil0d.qjli;  
-  profil0d.utheta = + profil0d.utheta ./ 2 ./ pi;
-  data_zerod.q0   = - data_zerod.q0; 
-  data_zerod.q95  = - data_zerod.q95;
-  data_zerod.qa   = - data_zerod.qa;
-  data_zerod.qmin = - data_zerod.qmin;
-  data_zerod.qeff = - data_zerod.qeff;
-  
-  % pour test
-  %  z0dstruct.z0dinput.option.signe = -1
-  %  z0dstruct.z0dinput.option.COCOS = 11;
-  
-%    % mise en place signe Bphi
-%    if z0dstruct.z0dinput.option.signe < 0
-%      % on change le signe de b0
-%      data_zerod.qa           = - data_zerod.qa;
-%      data_zerod.q95          = - data_zerod.q95;
-%      data_zerod.qmin         = - data_zerod.qmin;
-%      data_zerod.qeff         = - data_zerod.qeff;
-%      data_zerod.q0           = - data_zerod.q0;
-%      data_zerod.phiplasma    = - data_zerod.phiplasma;
-%      profil0d.qjli           = - profil0d.qjli;
-%      profil0d.fdia           = - profil0d.fdia;
-%      profil0d.phi            = - profil0d.phi;
-%      profil0d.dphidx         = - profil0d.dphidx;
-%    end
-    
-  % appel de la fonction qui regle le bon cocos
-  [data_zerod,profil0d,sigma_B0_eff,sigma_bvac_r,factor_two_pi] = ...
-      makecocos_imas(data_zerod,profil0d,z0dstruct,z0dstruct.z0dinput.option.COCOS,factor_two_pi);
-      
+% this code is too complex !
+% 
+%   % test neutral if sign of METIS
+% %    data_zerod_test = data_zerod;
+% %    profil0d_test   = profil0d;
+% %    [data_zerod,profil0d] = makesign_imas(data_zerod,profil0d,z0dstruct,1,1);
+% %    zcompstruct(data_zerod,data_zerod_test);
+% %    zcompstruct(profil0d,profil0d_test);
+% %    keyboard
+%   %
+%   [data_zerod,profil0d] = makesign_imas(data_zerod,profil0d,z0dstruct,sigma_Ip_in,sigma_B0_in);
+%   
+%   % changement normalisation psi
+%   factor_two_pi   = 2 .* pi;
+%   profil0d.psi    = + profil0d.psi    .* 2 .* pi;
+%   profil0d.dpsidt = + profil0d.dpsidt .* 2 .* pi;
+%   profil0d.qjli   = - profil0d.qjli;  
+%   profil0d.utheta = + profil0d.utheta ./ 2 ./ pi;
+%   data_zerod.q0   = - data_zerod.q0; 
+%   data_zerod.q95  = - data_zerod.q95;
+%   data_zerod.qa   = - data_zerod.qa;
+%   data_zerod.qmin = - data_zerod.qmin;
+%   data_zerod.qeff = - data_zerod.qeff;
+%   
+%   % pour test
+%   %  z0dstruct.z0dinput.option.signe = -1
+%   %  z0dstruct.z0dinput.option.COCOS = 11;
+%   
+% %    % mise en place signe Bphi
+% %    if z0dstruct.z0dinput.option.signe < 0
+% %      % on change le signe de b0
+% %      data_zerod.qa           = - data_zerod.qa;
+% %      data_zerod.q95          = - data_zerod.q95;
+% %      data_zerod.qmin         = - data_zerod.qmin;
+% %      data_zerod.qeff         = - data_zerod.qeff;
+% %      data_zerod.q0           = - data_zerod.q0;
+% %      data_zerod.phiplasma    = - data_zerod.phiplasma;
+% %      profil0d.qjli           = - profil0d.qjli;
+% %      profil0d.fdia           = - profil0d.fdia;
+% %      profil0d.phi            = - profil0d.phi;
+% %      profil0d.dphidx         = - profil0d.dphidx;
+% %    end
+%     
+%   % appel de la fonction qui regle le bon cocos
+%   [data_zerod,profil0d,sigma_B0_eff,sigma_bvac_r,factor_two_pi] = ...
+%       makecocos_imas(data_zerod,profil0d,z0dstruct,z0dstruct.z0dinput.option.COCOS,factor_two_pi);
+%   
+
+
+  % METIS data are in COCOS 7 with Ip and Bt positive !
+  [data_zerod,profil0d,sigma_bvac_r,factor_two_pi,sigma_RphiZ_eff] = ...
+      makecocos_imas_from_seven(data_zerod,profil0d,z0dstruct,z0dstruct.z0dinput.option.COCOS,sigma_Ip_out,sigma_B0_out);
+ 
+   sigma_B0_eff = sigma_bvac_r;
+   
 end 
 
 % Structure for O. Sauter tools
@@ -1207,8 +1412,8 @@ cocos_struct.cocos_in     = 7; % METIS native
 cocos_struct.cocos_out    = z0dstruct.z0dinput.option.COCOS;
 cocos_struct.ipsign_out   = sign(z0dstruct.z0dinput.option.signe .* z0dstruct.z0dinput.option.orientation);
 cocos_struct.b0sign_out   = z0dstruct.z0dinput.option.orientation;
-cocos_struct.ipsign_in    = 1; % METIS default
-cocos_struct.b0sign_in    = 1; % METIS default
+cocos_struct.ipsign_in    = sigma_Ip_in; % METIS default
+cocos_struct.b0sign_in    = sigma_B0_in; % METIS default
 cocos_struct.error_bar    = 'none'; % no error bar in METIS output
 cocos_struct.verbose      = z0dstruct.z0dinput.option.COCOS_verbose; % can be switch for debug
 cocos_struct.check        = z0dstruct.z0dinput.option.COCOS_check; % can be switch for debug
@@ -1239,74 +1444,97 @@ end
 % access to UAL
 if write_mode == 1
     disp('METIS4IMAS: Opening database');
-    
-    %  creation of imasdb
-    if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK')) && ~strcmp(treename,getappdata(0,'UAL_TOKAMAK'))
+    % using URI
+    if ~isempty(uri)
+        fprintf('IMAS URI = %s\n',uri);
+        try 
+            expIdx = mem_cache_imas(imas_open(uri,40));
+            if expIdx < 0
+                error('unexisting database');
+            end
+            fprintf('reusing previously created database entry\n');
+        catch
+            expIdx = imas_open(uri,42);
+            disp('METIS4IMAS: creating a new entry in database');
+        end
+    else
+        %  creation of imasdb
+        if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK')) && ~strcmp(treename,getappdata(0,'UAL_TOKAMAK'))
 
-        al_version = getenv('AL_VERSION'); 
-        if ~isempty(al_version)
-            al_version = str2num(al_version(1));
-        else
-            al_version = 4;
+            al_version = getenv('AL_VERSION');
+            if ~isempty(al_version)
+                al_version = str2num(al_version(1));
+            else
+                al_version = 4;
+            end
+            if isempty(al_version)
+                al_version = 4;
+            end
+            imas_version = getenv('IMAS_VERSION');
+            if ~isempty(imas_version)
+                imas_version = str2num(imas_version(1));
+            else
+                imas_version = 3;
+            end
+
+            if (al_version < 5) && (imas_version < 4)
+                [s,t] = unix(sprintf('%s %s',fullfile(fileparts(fileparts( ...
+                    which('imas_open_env_backend'))),'bin','imasdb'),getappdata(0,'UAL_TOKAMAK')));
+            else
+                s = 0;
+            end
+            if s == 0
+                fprintf('METIS4IMAS: creating a new trename entry: %s\n',getappdata(0,'UAL_TOKAMAK'));
+            else
+                fprintf('METIS4IMAS: error creating a new treename %s:\n%s\n',getappdata(0,'UAL_TOKAMAK'),t);
+                return
+            end
+            if isappdata(0,'UAL_USER') && isempty(getappdata(0,'UAL_USER'))
+                setappdata(0,'UAL_USER',deblank(user));
+            end
+            if isappdata(0,'UAL_DATAVERSION') && isempty(getappdata(0,'UAL_DATAVERSION'))
+                setappdata(0,'UAL_DATAVERSION',deblank(ver));
+            end
         end
-        if al_version < 5
-            [s,t] = unix(sprintf('%s %s',fullfile(fileparts(fileparts( ...
-                which('imas_open_env'))),'bin','imasdb'),getappdata(0,'UAL_TOKAMAK')));
-        else
-            s = 0;
-        end
-        if s == 0
-            fprintf('METIS4IMAS: creating a new trename entry: %s\n',getappdata(0,'UAL_TOKAMAK'));
-        else
-            fprintf('METIS4IMAS: error creating a new treename %s:\n%s\n',getappdata(0,'UAL_TOKAMAK'),t);
-            return
-        end
-        if isappdata(0,'UAL_USER') && isempty(getappdata(0,'UAL_USER'))
-            setappdata(0,'UAL_USER',deblank(user));
-        end
-        if isappdata(0,'UAL_DATAVERSION') && isempty(getappdata(0,'UAL_DATAVERSION'))
-            setappdata(0,'UAL_DATAVERSION',deblank(ver));
+        try
+            fprintf('METIS4IMAS: testing if entry exist in database -> ');
+            if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK')) &&  ...
+                    isappdata(0,'UAL_USER') && ~isempty(getappdata(0,'UAL_USER')) &&  ...
+                    isappdata(0,'UAL_DATAVERSION') && ~isempty(getappdata(0,'UAL_DATAVERSION'));
+                if ~isempty(id_backend)
+                    expIdx = mem_cache_imas( imas_open_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend));
+                else
+                    expIdx = mem_cache_imas( imas_open_env('ids',real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION')));
+                end
+            else
+                expIdx = mem_cache_imas(imas_open_old('ids',real(shot),real(run)));
+            end
+            if expIdx < 0
+                error('unexisting database');
+            end
+            fprintf('reusing previously created database entry\n');
+        catch
+            if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK')) &&  ...
+                    isappdata(0,'UAL_USER') && ~isempty(getappdata(0,'UAL_USER')) &&  ...
+                    isappdata(0,'UAL_DATAVERSION') && ~isempty(getappdata(0,'UAL_DATAVERSION'));
+                if ~isempty(id_backend)
+                    expIdx = imas_create_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend);
+                elseif imag(shot) ~= 0
+                    expIdx = imas_create_env('ids',real(shot),real(run),imag(shot),imag(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'));
+                else
+                    expIdx =imas_create_env('ids',real(shot),real(run),0,0,getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'));
+                end
+                disp('METIS4IMAS: creating a new entry in database');
+            else
+                if imag(shot) ~= 0
+                    expIdx = imas_create('ids',real(shot),real(run),imag(shot),imag(run));
+                else
+                    expIdx = imas_create('ids',real(shot),real(run),0,0);
+                end
+                disp('METIS4IMAS: creating a new entry in database');
+            end
         end
     end
-    try
-        fprintf('METIS4IMAS: testing if entry exist in database -> ');
-        if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK')) &&  ...
-                isappdata(0,'UAL_USER') && ~isempty(getappdata(0,'UAL_USER')) &&  ...
-                isappdata(0,'UAL_DATAVERSION') && ~isempty(getappdata(0,'UAL_DATAVERSION'));
-            if ~isempty(id_backend)
-                expIdx = mem_cache_imas( imas_open_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend));
-            else
-                expIdx = mem_cache_imas( imas_open_env('ids',real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION')));
-            end
-        else
-            expIdx = mem_cache_imas(imas_open('ids',real(shot),real(run)));
-        end
-        if expIdx < 0
-            error('unexisting database');
-        end
-        fprintf('reusing previously created database entry\n');
-    catch
-        if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK')) &&  ...
-                isappdata(0,'UAL_USER') && ~isempty(getappdata(0,'UAL_USER')) &&  ...
-                isappdata(0,'UAL_DATAVERSION') && ~isempty(getappdata(0,'UAL_DATAVERSION'));
-            if ~isempty(id_backend)
-                expIdx = imas_create_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend);
-            elseif imag(shot) ~= 0
-                expIdx = imas_create_env('ids',real(shot),real(run),imag(shot),imag(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'));
-            else
-                expIdx =imas_create_env('ids',real(shot),real(run),0,0,getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'));
-            end
-            disp('METIS4IMAS: creating a new entry in database');
-        else
-            if imag(shot) ~= 0
-                expIdx = imas_create('ids',real(shot),real(run),imag(shot),imag(run));
-            else
-                expIdx = imas_create('ids',real(shot),real(run),0,0);
-            end
-            disp('METIS4IMAS: creating a new entry in database');
-        end
-    end
-    
     if ~(isfinite(expIdx) && (expIdx >=0))
         disp('Unable to open data base or to connect to UAL')
         error_flag = -9001;
@@ -1314,7 +1542,12 @@ if write_mode == 1
     else
         expIdx = mem_cache_imas(expIdx);
     end
-    
+
+    % test for plasm_* IDSs
+    if IMAS_VERSION < 4
+        z0dstruct.z0dinput.option.plasma_ids = 'core&edge';
+    end
+
     % mapping IMAS structures
     ntime_summary = length(data_zerod.temps);
     ntime_core_profiles = length(profil0d.temps);
@@ -1326,13 +1559,25 @@ if write_mode == 1
     % recopie des informations
     summary             = ids_gen('summary');
     summary.code        = pulse_schedule.code;
-    core_profiles       = ids_gen('core_profiles');
+    if IMAS_VERSION > 3
+        core_profiles       = merge_core_and_plasma('profiles');
+    else
+        core_profiles       = ids_gen('core_profiles');
+    end
     core_profiles.code  = pulse_schedule.code;
     core_profiles.ids_properties  = pulse_schedule.ids_properties;
-    core_transport      = ids_gen('core_transport');
+    if IMAS_VERSION > 3
+        core_transport      = merge_core_and_plasma('transport');
+    else
+        core_transport      = ids_gen('core_transport');
+    end
     core_transport.code = pulse_schedule.code;
     core_transport.ids_properties  = pulse_schedule.ids_properties;
-    core_sources       = ids_gen('core_sources');
+    if IMAS_VERSION > 3
+        core_sources       = merge_core_and_plasma('sources');
+    else
+        core_sources       = ids_gen('core_sources');
+    end
     core_sources.code  = pulse_schedule.code;
     core_sources.ids_properties  = pulse_schedule.ids_properties;
     radiation       = ids_gen('radiation');
@@ -1359,24 +1604,25 @@ if write_mode == 1
         ids_put_slice(expIdx,nids,pulse_schedule);
     end
     % information are also in  dataset_description
-    disp('Mapping IDS data structure dataset_description')
     dataset_description = mapdataset_description_imas(z0dstruct_loc,data_zerod,texte_diary,error_flag,run,shot,pulse_schedule.code);
     dataset_description = change_cocos_OS(dataset_description,'dataset_description',cocos_struct);
-    %
-    disp('Writing IDS data structure dataset_description')
-    if isempty(strtrim(z0dstruct.z0dinput.option.pulse_schedule_occurrence))
-        nids = 'dataset_description';
-    else
-        nids = sprintf('dataset_description/%s',strtrim(z0dstruct.z0dinput.option.pulse_schedule_occurrence));
+    if IMAS_VERSION < 4
+        disp('Mapping IDS data structure dataset_description')
+        %
+        disp('Writing IDS data structure dataset_description')
+        if isempty(strtrim(z0dstruct.z0dinput.option.pulse_schedule_occurrence))
+            nids = 'dataset_description';
+        else
+            nids = sprintf('dataset_description/%s',strtrim(z0dstruct.z0dinput.option.pulse_schedule_occurrence));
+        end
+        if init_output_ids
+            ids_put_non_timed(expIdx,nids,dataset_description);
+        elseif  ntime_summary > 1
+            ids_put(expIdx,nids,dataset_description);
+        else
+            ids_put_slice(expIdx,nids,dataset_description);
+        end
     end
-    if init_output_ids
-        ids_put_non_timed(expIdx,nids,dataset_description);
-    elseif  ntime_summary > 1
-        ids_put(expIdx,nids,dataset_description);
-    else
-        ids_put_slice(expIdx,nids,dataset_description);
-    end
-    
     % dataset_fair IDS
     disp('Mapping IDS data structure dataset_fair')
     dataset_fair = map_dataset_fair(dataset_description,dataset_fair_in,real(shot),real(run));
@@ -1418,7 +1664,10 @@ if write_mode == 1
         end
     end
     %
-    if z0dstruct.z0dinput.option.core_profiles == 1
+    % new occurrence for edge in plasma_* to prevent collision
+    new_occurrence = 1;
+    %
+    if z0dstruct.z0dinput.option.core_profiles == 1  
         disp('Mapping IDS data structure core_profiles')
         core_profiles = mapcore_profiles_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,core_profiles,sigma_B0_eff);
         core_profiles = change_cocos_OS(core_profiles,'core_profiles',cocos_struct);
@@ -1427,13 +1676,27 @@ if write_mode == 1
             nids = 'core_profiles';
         else
             nids = sprintf('core_profiles/%s',strtrim(z0dstruct.z0dinput.option.core_profiles_occurrence));
+            new_occurrence = new_occurrence + str2double(strtrim(z0dstruct.z0dinput.option.core_profiles_occurrence));
         end
-        if init_output_ids
-            ids_put_non_timed(expIdx,nids,core_profiles);
-        elseif ntime_core_profiles  > 1
-            ids_put(expIdx,nids,core_profiles);
-        else
-            ids_put_slice(expIdx,nids,core_profiles);
+        switch z0dstruct.z0dinput.option.plasma_ids
+            case {'both','core&edge'}
+                if init_output_ids
+                    ids_put_non_timed(expIdx,nids,core_profiles);
+                elseif ntime_core_profiles  > 1
+                    ids_put(expIdx,nids,core_profiles);
+                else
+                    ids_put_slice(expIdx,nids,core_profiles);
+                end
+        end
+        switch z0dstruct.z0dinput.option.plasma_ids
+            case {'both','plasma'}
+                if init_output_ids
+                    ids_put_non_timed(expIdx,strrep(nids,'core_','plasma_'),core_profiles);
+                elseif ntime_core_profiles  > 1
+                    ids_put(expIdx,strrep(nids,'core_','plasma_'),core_profiles);
+                else
+                    ids_put_slice(expIdx,strrep(nids,'core_','plasma_'),core_profiles);
+                end
         end
     end
     if z0dstruct.z0dinput.option.core_transport == 1
@@ -1445,14 +1708,29 @@ if write_mode == 1
             nids = 'core_transport';
         else
             nids = sprintf('core_transport/%s',strtrim(z0dstruct.z0dinput.option.core_transport_occurrence));
+            new_occurrence = new_occurrence + str2double(strtrim(z0dstruct.z0dinput.option.core_transport_occurrence));
         end
-        if init_output_ids
-            ids_put_non_timed(expIdx,nids,core_transport);
-        elseif ntime_core_profiles  > 1
-            ids_put(expIdx,nids,core_transport);
-        else
-            ids_put_slice(expIdx,nids,core_transport);
+        switch z0dstruct.z0dinput.option.plasma_ids
+            case {'both','core&edge'}
+                if init_output_ids
+                    ids_put_non_timed(expIdx,nids,core_transport);
+                elseif ntime_core_profiles  > 1
+                    ids_put(expIdx,nids,core_transport);
+                else
+                    ids_put_slice(expIdx,nids,core_transport);
+                end
         end
+         switch z0dstruct.z0dinput.option.plasma_ids
+            case {'both','plasma'}
+                if init_output_ids
+                    ids_put_non_timed(expIdx,strrep(nids,'core_','plasma_'),core_transport);
+                elseif ntime_core_profiles  > 1
+                    ids_put(expIdx,strrep(nids,'core_','plasma_'),core_transport);
+                else
+                    ids_put_slice(expIdx,strrep(nids,'core_','plasma_'),core_transport);
+                end
+        end
+       
     end
     count_sources = 0; % Need to be initialized when we map no source at all
     if z0dstruct.z0dinput.option.core_sources == 1
@@ -1504,6 +1782,16 @@ if write_mode == 1
         core_sources = change_cocos_OS(core_sources,'core_sources',cocos_struct);
     end
     
+    % for dd 4.x
+    if (count_sources > 1) && isfield(core_sources,'grid_ggd')
+       for k = 2:length(core_sources.time)
+           core_sources.grid_ggd{k} = core_sources.grid_ggd{1};
+           for l=1:length(core_sources.source)
+               core_sources.source{l}.ggd{k}  = core_sources.source{1}.ggd{1};
+               core_sources.source{l}.ggd_fast{k}  = core_sources.source{1}.ggd_fast{1};
+           end
+       end
+    end
     % there i no IDS neoclassic ? core transport ?
     %neoclassic = mapneoclassic_imas(z0dstruct,data_zerod,profil0d,texte_diary,error_flag,neoclassic,vtor,vpol,sigma_B0_eff);
     
@@ -1522,13 +1810,27 @@ if write_mode == 1
             nids = 'core_sources';
         else
             nids = sprintf('core_sources/%s',strtrim(z0dstruct.z0dinput.option.core_sources_occurrence));
+            new_occurrence = new_occurrence + str2double(strtrim(z0dstruct.z0dinput.option.core_sources_occurrence));
+       end
+        switch z0dstruct.z0dinput.option.plasma_ids
+            case {'both','core&edge'}
+                if init_output_ids
+                    ids_put_non_timed(expIdx,nids,core_sources);
+                elseif ntime_core_profiles  > 1
+                    ids_put(expIdx,nids,core_sources);
+                else
+                    ids_put_slice(expIdx,nids,core_sources);
+                end
         end
-        if init_output_ids
-            ids_put_non_timed(expIdx,nids,core_sources);
-        elseif ntime_core_profiles  > 1
-            ids_put(expIdx,nids,core_sources);
-        else
-            ids_put_slice(expIdx,nids,core_sources);
+        switch z0dstruct.z0dinput.option.plasma_ids
+            case {'both','plasma'}
+                if init_output_ids
+                    ids_put_non_timed(expIdx,strrep(nids,'core_','plasma_'),core_sources);
+                elseif ntime_core_profiles  > 1
+                    ids_put(expIdx,strrep(nids,'core_','plasma_'),core_sources);
+                else
+                    ids_put_slice(expIdx,strrep(nids,'core_','plasma_'),core_sources);
+                end
         end
     end
     
@@ -1563,28 +1865,54 @@ if write_mode == 1
                     nids = 'edge_profiles';
                 else
                     nids = sprintf('edge_profiles/%s',strtrim(z0dstruct.z0dinput.option.edge_occurrence));
+                    new_occurrence = new_occurrence + str2double(strtrim(z0dstruct.z0dinput.option.edge_occurrence));
+               end
+                switch z0dstruct.z0dinput.option.plasma_ids
+                    case {'both','core&edge'}
+                        if init_output_ids
+                            ids_put_non_timed(expIdx,nids,edge_profiles);
+                        elseif ntime_core_profiles  > 1
+                            ids_put(expIdx,nids,edge_profiles);
+                        else
+                            ids_put_slice(expIdx,nids,edge_profiles);
+                        end
+                        disp('Writing IDS data structure edge_transport')
+                        if isempty(strtrim(z0dstruct.z0dinput.option.edge_occurrence))
+                            nids = 'edge_transport';
+                        else
+                            nids = sprintf('edge_transport/%s',strtrim(z0dstruct.z0dinput.option.edge_occurrence));
+                        end
+                        if init_output_ids
+                            ids_put_non_timed(expIdx,nids,edge_transport);
+                        elseif ntime_core_profiles  > 1
+                            ids_put(expIdx,nids,edge_transport);
+                        else
+                            ids_put_slice(expIdx,nids,edge_transport);
+                        end
                 end
-                if init_output_ids
-                    ids_put_non_timed(expIdx,nids,edge_profiles);
-                elseif ntime_core_profiles  > 1
-                    ids_put(expIdx,nids,edge_profiles);
-                else
-                    ids_put_slice(expIdx,nids,edge_profiles);
+                switch z0dstruct.z0dinput.option.plasma_ids
+                    case {'both','plasma'}
+                        % shitf occurrence
+                        nids = sprintf('plsama_profiles/%d',new_occurrence);
+                        %
+                        if init_output_ids
+                            ids_put_non_timed(expIdx,nids,edge_profiles);
+                        elseif ntime_core_profiles  > 1
+                            ids_put(expIdx,nids,edge_profiles);
+                        else
+                            ids_put_slice(expIdx,nids,edge_profiles);
+                        end
+                        disp('Writing IDS data structure edge_transport')
+                        nids = sprintf('plsama_transport/%d',new_occurrence);
+                        if init_output_ids
+                            ids_put_non_timed(expIdx,nids,edge_transport);
+                        elseif ntime_core_profiles  > 1
+                            ids_put(expIdx,nids,edge_transport);
+                        else
+                            ids_put_slice(expIdx,nids,edge_transport);
+                        end
                 end
-                disp('Writing IDS data structure edge_transport')
-                if isempty(strtrim(z0dstruct.z0dinput.option.edge_occurrence))
-                    nids = 'edge_transport';
-                else
-                    nids = sprintf('edge_transport/%s',strtrim(z0dstruct.z0dinput.option.edge_occurrence));
-                end
-                if init_output_ids
-                    ids_put_non_timed(expIdx,nids,edge_transport);
-                elseif ntime_core_profiles  > 1
-                    ids_put(expIdx,nids,edge_transport);
-                else
-                    ids_put_slice(expIdx,nids,edge_transport);
-                end
-            end
+           end
     end
     if z0dstruct.z0dinput.option.numerics == 1
         disp('Mapping IDS data structure transport_solver_numerics')
@@ -1608,7 +1936,7 @@ if write_mode == 1
     if z0dstruct.z0dinput.option.equilibrium == 1
         disp('Mapping IDS data structure equilibrium')
         equilibrium = mapequilibrium_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,equilibrium,summary, ...
-            1,sigma_B0_eff,z0dstruct.z0dinput.option.equi_extrap,factor_two_pi);
+            1,z0dstruct.z0dinput.option.COCOS,z0dstruct.z0dinput.option.equi_extrap,factor_two_pi,sigma_RphiZ_eff);
         equilibrium = change_cocos_OS(equilibrium,'equilibrium',cocos_struct);
         disp('Writing IDS data structure equilibrium')
         if isempty(strtrim(z0dstruct.z0dinput.option.equilibrium_occurrence))
@@ -1642,13 +1970,25 @@ else
     xsd.dataset_fair        = map_dataset_fair(xsd.dataset_description,dataset_fair_in);
     xsd.summary             = ids_gen('summary');
     xsd.summary.code        = xsd.pulse_schedule.code;
-    xsd.core_profiles       = ids_gen('core_profiles');
+    if IMAS_VERSION > 3
+        xsd.core_profiles       = merge_core_and_plasma('profiles');
+    else
+        xsd.core_profiles       = ids_gen('core_profiles');
+    end
     xsd.core_profiles.code  = xsd.pulse_schedule.code;
     xsd.core_profiles.ids_properties  =  xsd.pulse_schedule.ids_properties;
-    xsd.core_transport      = ids_gen('core_transport');
+    if IMAS_VERSION > 3
+        xsd.core_transport       = merge_core_and_plasma('transport');
+    else
+        xsd.core_transport       = ids_gen('core_transport');
+    end
     xsd.core_transport.code = xsd.pulse_schedule.code;
     xsd.core_transport.ids_properties  = xsd.pulse_schedule.ids_properties;
-    xsd.core_sources       = ids_gen('core_sources');
+    if IMAS_VERSION > 3
+        xsd.core_sources       = merge_core_and_plasma('sources');
+    else
+        xsd.core_sources       = ids_gen('core_sources');
+    end
     xsd.core_sources.code  = xsd.pulse_schedule.code;
     xsd.core_sources.ids_properties  = xsd.pulse_schedule.ids_properties;
     xsd.radiation          = ids_gen('radiation');
@@ -1669,10 +2009,12 @@ else
     if z0dstruct.z0dinput.option.core_profiles == 1
       disp('Mapping IDS data structure core_profiles')
       xsd.core_profiles = mapcore_profiles_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.core_profiles,sigma_B0_eff);
+      xsd.plasma_profiles = xsd.core_profiles;
     end
     if z0dstruct.z0dinput.option.core_transport == 1
       disp('Mapping IDS data structure core_transport')
       xsd.core_transport = mapcore_transport_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.core_transport,sigma_B0_eff);
+      xsd.plasma_transport = xsd.core_transport;
     end
     if z0dstruct.z0dinput.option.core_sources == 1
       model_source = xsd.core_sources.source{1};
@@ -1717,33 +2059,46 @@ else
       % extra source for runaways
       if z0dstruct.z0dinput.option.runaway > 0
 		disp('Mapping IDS data structure core_sources for runaway electron current')
-		core_sources.source{count_sources} = mapcore_sources_runaways_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,sigma_B0_eff,model_source);
+		xsd.core_sources.source{count_sources} = mapcore_sources_runaways_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,sigma_B0_eff,model_source);
 		count_sources = count_sources + 1;
       end
+      % for dd 4.x
+      if (count_sources > 1) && isfield(xsd.core_sources,'grid_ggd')
+          for k = 2:length(xsd.core_sources.time)
+              xsd.core_sources.grid_ggd{k} = xsd.core_sources.grid_ggd{1};
+              for l=1:length(xsd.core_sources.source)
+                  xsd.core_sources.source{l}.ggd{k}  = xsd.core_sources.source{1}.ggd{1};
+                  xsd.core_sources.source{l}.ggd_fast{k}  = xsd.core_sources.source{1}.ggd_fast{1};
+              end
+          end
+      end
+      xsd.plasma_sources = xsd.core_sources;
     end
     if z0dstruct.z0dinput.option.radiation == 1
-      disp('Mapping IDS data structure radiation')
-      xsd.radiation = mapradiation_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.radiation,sigma_B0_eff);
+        disp('Mapping IDS data structure radiation')
+        xsd.radiation = mapradiation_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.radiation,sigma_B0_eff);
     end
     switch z0dstruct.z0dinput.option.sol_model
-    case '2_points'
-      if z0dstruct.z0dinput.option.edge == 1
-	disp('Mapping IDS data structure edge_profiles and edge_transport')
-	[xsd.edge_profiles,xsd.edge_transport] = mapedge_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.pulse_schedule,sigma_B0_eff);
-      end
+        case '2_points'
+            if z0dstruct.z0dinput.option.edge == 1
+                disp('Mapping IDS data structure edge_profiles and edge_transport')
+                [xsd.edge_profiles,xsd.edge_transport] = mapedge_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.pulse_schedule,sigma_B0_eff);
+            end
+            xsd.plasma_profiles_1  = xsd.edge_profiles;
+            xsd.plasma_transport_1 = xsd.edge_transport;
     end
-    if z0dstruct.z0dinput.option.numerics == 1 
-	disp('Mapping IDS data structure transport_solver_numerics')
+    if z0dstruct.z0dinput.option.numerics == 1
+        disp('Mapping IDS data structure transport_solver_numerics')
         xsd.transport_solver_numerics = maptransport_solver_numerics(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.transport_solver_numerics,run,occurrence,sigma_B0_eff,sigma_bvac_r);
     end
     if z0dstruct.z0dinput.option.equilibrium == 1
       disp('Mapping IDS data structure equilibrium')
       if isfield(xsd,'summary')
         xsd.equilibrium = mapequilibrium_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.equilibrium,xsd.summary, ...
-					      1,sigma_B0_eff,z0dstruct.z0dinput.option.equi_extrap,factor_two_pi);
+					      1,z0dstruct.z0dinput.option.COCOS,z0dstruct.z0dinput.option.equi_extrap,factor_two_pi,sigma_RphiZ_eff);
       else
         xsd.equilibrium = mapequilibrium_imas(z0dstruct_loc,data_zerod,profil0d,texte_diary,error_flag,xsd.equilibrium,[], ...
-					       1,sigma_B0_eff,z0dstruct.z0dinput.option.equi_extrap,factor_two_pi);     
+					       1,z0dstruct.z0dinput.option.COCOS,z0dstruct.z0dinput.option.equi_extrap,factor_two_pi,sigma_RphiZ_eff);     
       end
     end 
     
@@ -1756,20 +2111,25 @@ else
 end
 
 if read_output == 1
+  % to prevent some UAL bug
+  !sync
   %% OUTPUT VARIABLE
   xsd = [];
-  try
-      if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK'))
-          if ~isempty(id_backend)
-              expIdx = mem_cache_imas( imas_open_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend));
+  if ~isempty(uri)
+      expIdx = mem_cache_imas(imas_open(uri,40));
+  else
+      try
+          if isappdata(0,'UAL_TOKAMAK') && ~isempty(getappdata(0,'UAL_TOKAMAK'))
+              if ~isempty(id_backend)
+                  expIdx = mem_cache_imas( imas_open_env_backend(real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION'),id_backend));
+              else
+                  expIdx = mem_cache_imas( imas_open_env('ids',real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION')));
+              end
           else
-              expIdx = mem_cache_imas( imas_open_env('ids',real(shot),real(run),getappdata(0,'UAL_USER'),getappdata(0,'UAL_TOKAMAK'),getappdata(0,'UAL_DATAVERSION')));
+              expIdx = mem_cache_imas(imas_open_old('ids',real(shot),real(run)));
           end
-      else
-          expIdx = mem_cache_imas(imas_open('ids',real(shot),real(run)));
       end
   end
-  
   if ~(isfinite(expIdx) & (expIdx >=0))
     disp('Unable to open data base or to connect to UAL')
     error_flag = -9001;

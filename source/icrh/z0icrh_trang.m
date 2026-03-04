@@ -1,6 +1,6 @@
 % cette fonction calcul les effets du chauffage minoriatire a l'harmonique 1 de ICRH
 % pour les test : [pth,pel,pion,esupra,einj,ecrit,teff0,taus,frloss,rres,xres,frac,harm,nmino,Pe,PM,esupra_par,jmino,imino,pfw] = z0icrh_trang(post.zerod,post.z0dinput.geo,post.z0dinput.cons,post.z0dinput.option,post.profil0d);
-function [pth,pel,pion,esupra,einj,ecrit,teff0,taus,frloss,rres,xres,frac,harm,nmino,Pe,PM,esupra_par,jmino,imino,pfw,pabs] = z0icrh_trang(zs,geo,cons,option,profli)
+function [pth,pel,pion,esupra,einj,ecrit,teff0,taus,frloss,rres,xres,frac,harm,nmino,Pe,PM,esupra_par,jmino,imino,pfw,pabs,salpha_icrh] = z0icrh_trang(zs,geo,cons,option,profli)
 
 % constante physique (phys)
 phys.c           =   2.99792458e8;             % vitesse de la lumiere dans le vide (m/s)  (definition)
@@ -91,11 +91,16 @@ res   = sum(rr .* mask,2);
 rres = res; % pour la sortie
 xres  = min(0.95,abs(sum(xa .* mask,2)) ./ geo.a);
 
+% search for regime T rich
+isomean = trapz(cons.temps,abs(cons.picrh) .* real(cons.iso)) ./ ...
+          max(1,trapz(cons.temps,abs(cons.picrh)));
+
+
 % choix de l'harmonique
 switch option.mino
     case 'D'
         
-        if (option.gaz == 2)  || (option.gaz == 3)
+        if (option.gaz == 2)  ||  ((option.gaz == 3) && (isomean <= 2))
             % D dans D, recherche de l'harmonique superieure
             dd2 = abs(btot(:,21) - bres ./ 2);
             dd3 = abs(btot(:,21) - bres ./ 3);
@@ -211,6 +216,8 @@ if all(pm <= 1e3) || ~isfield(profli,'qjli') || (harm == 0)
     PM    = shape ./ 2;
     jmino = 0 .* Pe;
     imino = zeros(size(pm));
+    salpha_icrh = zeros(size(pm));
+    pabs = pm;
     return
 end
 
@@ -223,9 +230,10 @@ end
 % ipa.uindices = tune.ichcd.uindices;
 % ipa.check = false;
 
-%% METIS Test Find all in  post.z0dinput.option
+% METIS Test Find all in  post.z0dinput.option
 ipa.eps_Xi = 1e-3;
 ipa.upshift = 0;
+ipa.mode_fast = option.icrh_mode_fast;
 ipa.p  = harm;
 ipa.f  = option.freq*1e6; % Hz 5.5e10; 5.5e7;
 ipa.fz = option.icrh_width;
@@ -240,6 +248,9 @@ ipa.Zm = zg;% H in METIS;
 ipa.ZM = zj;% Deuteron 1 % charge of Majority with electron
 ipa.Am = ag;% number of mass of minority
 ipa.AM = aj;% number of mass of Majority
+% gas mode to simplified the switching
+ipa.gas = option.gaz;
+
 
 ichcd_params = ipa;
 g = 0; % geometric params like C2, C3,...
@@ -255,6 +266,8 @@ pabs = Pe;
 rres = geo.R;
 P_loss_conv = zeros(size(cons.temps));
 flag_non_conv = zeros(size(cons.temps));
+salpha_icrh = zeros(size(cons.temps));
+salpha_icrh_prof = Pe;
 
 % boucle sur les temps
 for it = 1:length(cons.temps)
@@ -273,6 +286,8 @@ for it = 1:length(cons.temps)
         model.equi.B0 = rigidity ./ model.equi.R0;
         model.equi.kappa  = geo.K(it);
         model.equi.Raxe   = profli.Raxe(it,:)';
+        model.equi.dvrho    = profli.vpr(it,:)';
+        model.equi.vrho = cumtrapz(profli.xli,profli.vpr(it,:),2)';      
         model.equi.xRaxe  = profli.xli';
         ichcd_params.picrh = U;
         ichcd_params.Ploss = 0; % already acounted u=in pm computation
@@ -282,7 +297,7 @@ for it = 1:length(cons.temps)
         if length(aj) > 1
             ichcd_params.AM =  aj(it);
         end
-        [Pe(:,it),PM(:,it),pabs(:,it),rres(it),Wperp(:,it),Wpar(:,it),Tpar(:,it),P_loss_conv(it),flag_non_conv(it),ichcd_params.Xi] = ...
+        [Pe(:,it),PM(:,it),pabs(:,it),rres(it),Wperp(:,it),Wpar(:,it),Tpar(:,it),P_loss_conv(it),flag_non_conv(it),ichcd_params.Xi,next,salpha_icrh_prof(:,it)] = ...
             ichcd_colli_test(q,te,ne,ti,ni,U,model,ichcd_params,g);
         if flag_non_conv(it) == 1
             ichcd_params.Xi = 0.02 .* ones(size(ichcd_params.Xi));
@@ -326,6 +341,10 @@ end
 if length(cmino) > 1
     cmino = cmino * ve;
 end
+
+% computation of totale alpha source
+salpha_icrh = option.f_icrh_salpha .* trapz(profli.xli,profli.vpr .* salpha_icrh_prof',2);
+
 % energy suprathermique
 esupra_perp = trapz(profli.xli,profli.vpr .* Wperp',2);
 esupra_par  = trapz(profli.xli,profli.vpr .* Wpar',2);
@@ -335,7 +354,7 @@ etot_st     = esupra_st + (3/2) .* trapz(profli.xli,profli.vpr .* pabs' .* profl
 
 % calcul de l'energie moyenne des ions
 einj   = trapz(profli.xli,profli.vpr .* (Wperp' + Wpar' + (3/2) .* phys.e .* profli.tip .* profli.nip  .* cmino) .* pabs',2) ./ ...
-    max(1,trapz(profli.xli,profli.vpr .* pabs' .* profli.nip .* cmino,2)) ./ phys.e;
+          max(1,trapz(profli.xli,profli.vpr .* pabs' .* profli.nip .* cmino,2)) ./ phys.e;
 %  ecrit  = trapz(profli.xli,profli.vpr .* (Wpar' + (3/2) .* phys.e .* profli.tip .* profli.nip .* cmino) .* pabs',2) ./ ...
 %           max(1,trapz(profli.xli,profli.vpr .* pabs' .* profli.nip .* cmino,2)) ./ phys.e;
 if length(aj) > 1
@@ -343,8 +362,13 @@ if length(aj) > 1
 else
     ecrit_mat = 14.8 .* profli.tep  .* (ag .^ (3/2) ./ aj .* zj .^ 2 .* profli.nip .* cmino ./ profli.nep) .^ (2/3);
 end
-ecrit =trapz(profli.xli,profli.vpr .* ecrit_mat  .* pabs',2) ./ max(1,trapz(profli.xli,profli.vpr .* pabs',2));
+
+% weight for integrals
+wpi = PM;
+wpi(wpi<= 0) = pabs(wpi<= 0);
+ecrit =trapz(profli.xli,profli.vpr .* ecrit_mat  .* wpi',2) ./ max(1,trapz(profli.xli,profli.vpr .* wpi',2));
 %figure(21);plot(cons.temps,ecrit_alt,'b',cons.temps,ecrit,'r');drawnow
+
 
 %% effective temperature (averaged on profile deposition
 teff0  = trapz(profli.xli,profli.vpr .* Tpar' .* pabs' .* profli.nip .* cmino,2) ./ ...
@@ -366,7 +390,7 @@ pion   = trapz(profli.xli,profli.vpr .* PM',2);
 pabs_int  = trapz(profli.xli,profli.vpr .* pabs',2);
 % nous supposons que la puissance non absorbee va directement aux electrons
 %figure(21);clf;plot(cons.temps,pel_st,'r',cons.temps,pion,'b',cons.temps,pabs_int,'c',cons.temps,pfw,'g',cons.temps,pm,'m');drawnow
-pfw    = pfw + max(0,pm - pabs_int);
+pfw    = max(1,pfw + max(0,pm - pabs_int));
 %  zzz = flag_non_conv;
 %  zzz(flag_non_conv ==  1) = NaN;
 %  figure(21);
@@ -386,7 +410,7 @@ taus = min(10 .* zs.taue,taus);
 if isfield(option,'transitoire') && (option.transitoire == 1)
     % temps de variation sur les electron
     % calcul de taueff pour
-    tauseff = taus ./ 2;
+    tauseff = medfilt1(taus ./ 2,3);
     tauseff(tauseff <= 0) = zs.taue(tauseff <=0)./1e3;
     tauseff(pm<1e3) = mean(tauseff(pm >=1e3));
     tauseff(1)      = mean(tauseff(pm >=1e3));
@@ -396,7 +420,7 @@ if isfield(option,'transitoire') && (option.transitoire == 1)
     else
         esupra_ini = 0.01 .* pel_st(1) .* mean(tauseff);
     end
-    [te,esupra] = z0ode(cons.temps,pel_st,tauseff,esupra_ini);
+    [te_,esupra] = z0ode(cons.temps,pel_st,tauseff,esupra_ini);
     esupra = max(0,esupra);
     pel   = max(0,esupra ./ tauseff);
     pth   = max(0,pion + pel);

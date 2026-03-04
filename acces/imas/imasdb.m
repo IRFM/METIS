@@ -30,12 +30,12 @@ elseif isappdata(0,'UAL_TOKAMAK')
     ual_tokamak = getappdata(0,'UAL_TOKAMAK');
 end
 if ~isempty(ual_dataversion)
-    setappdata(0,'UAL_DATAVERSION',ual_dataversion);
+    setappdata(0,'UAL_DATAVERSION',get_main_version(ual_dataversion));
 elseif isappdata(0,'UAL_DATAVERSION')
     ual_dataversion = getappdata(0,'UAL_DATAVERSION');
 else
     ual_dataversion = getenv('IMAS_VERSION');
-    setappdata(0,'UAL_DATAVERSION',ual_dataversion);
+    setappdata(0,'UAL_DATAVERSION',get_main_version(ual_dataversion));
 end
 if ~isempty(ual_backend)
     setappdata(0,'UAL_BACKEND',ual_backend);
@@ -168,7 +168,7 @@ if useGUI
     end
     setappdata(0,'UAL_TOKAMAK',ual_tokamak);
     setappdata(0,'UAL_USER',ual_user);
-    setappdata(0,'UAL_DATAVERSION',ual_dataversion);
+    setappdata(0,'UAL_DATAVERSION',get_main_version(ual_dataversion));
     setappdata(0,'UAL_BACKEND',ual_backend);
 else
     ual_tokamak = input(sprintf('IMAS environment Tokamak (%s) ? ',ual_tokamak),'s');
@@ -187,10 +187,10 @@ else
     end
     ual_dataversion = input(sprintf('IMAS environment Version (%s) ? ',ual_dataversion),'s');
     if ~isempty(ual_dataversion)
-        setappdata(0,'UAL_DATAVERSION',strtrim(ual_dataversion));
+        setappdata(0,'UAL_DATAVERSION',get_main_version(strtrim(ual_dataversion)));
     else
         ual_dataversion = list{end};
-        setappdata(0,'UAL_DATAVERSION',ual_dataversion);
+        setappdata(0,'UAL_DATAVERSION',get_main_version(ual_dataversion));
         fprintf('Using default ual version %s',ual_dataversion);        
     end
     ual_backend = input(sprintf('IMAS backend (%s) ? ',ual_backend),'s');
@@ -202,3 +202,20 @@ else
     end
 
 end
+
+function rep = get_main_version(version)
+
+if isempty(version)
+    rep = 4;
+else
+   if isnumeric(version)
+       rep = sprintf('%d',fix(version));
+   elseif any(version == '.')
+       rep = strtok(strtrim(version),'.');
+   else
+       rep = sprintf('%d',fix(str2num(strtrim(version))));
+   end
+end
+
+
+

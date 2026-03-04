@@ -297,7 +297,7 @@ if other_graph
         zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,post.profil0d.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
         zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth, ...
         post.z0dinput.option.tae,post.z0dinput.option.nb_nbi,post.z0dinput.option.fspot,post.z0dinput.option.e_shielding,post.profil0d, ...
-        post.z0dinput.option.fpolarized,post.z0dinput.option.forced_H_NBI);
+        post.z0dinput.option.fpolarized,post.z0dinput.option.forced_H_NBI,post.z0dinput.option.mino,zs.salpha_icrh);
     
     [neutron_total_tt,neutron_th_tt,neutron_nbi_th_tt,neutron_nbi_nbi_tt,pttfus,proton_tt,picrh_nbi_tt,einj_tt] = ...
         z0neutron_tt(post.z0dinput.option,cons,zs,post.profil0d);
@@ -365,7 +365,7 @@ if other_graph
             ylabel('neutron/s');
             title(sprintf('METIS : %s@%d/Neutrons total ', ...
                 post.z0dinput.machine,post.z0dinput.shot));
-            legend('Total','Experimental total');
+            legend('Total','Experimental total (DD only)');
             z0loglin(gca);
             
             

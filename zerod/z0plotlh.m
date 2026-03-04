@@ -3,7 +3,7 @@ zs   = post.zerod;
 cons = post.z0dinput.cons;
 exp0d  = post.z0dinput.exp0d;
 if isfield(exp0d,'edgeflux')
-  exp0d.flux = exp0d.edgeflux;
+  exp0d.flux = exp0d.edgeflux ./ 2 ./ pi;
 end
 geo = post.z0dinput.geo;
 t    = zs.temps;

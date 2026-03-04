@@ -14,8 +14,9 @@ root = fileparts(which('metis'));
 % add path to the cocos test function
 root_cocos = fullfile(root,'acces','imas','cocos_test');
 if ~isdir(root_cocos)
-    s = mkdir(root_cocos);
+    [s,message] = mkdir(root_cocos);
     if ~s
+        disp(message);
         error(sprintf('unable to make directory %s\n',root_cocos));
     end
     no_update= false;

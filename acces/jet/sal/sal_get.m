@@ -79,7 +79,7 @@ catch
         % built wegt querry
         %
         disp('using backup solution with wget to retreive the data')
-        [s,t] = system(sprintf('wget -q -O - --header="Host: %s" --header="Authorization: Bearer %s" "https://%s%s?revision=%d&object=%s&auth=%s"', ...
+        [s,t] = system(sprintf('wget -q -O - --no-check-certificate --header="Host: %s" --header="Authorization: Bearer %s" "https://%s%s?revision=%d&object=%s&auth=%s"', ...
                 authorisation_machine.server,authorisation_machine.token,authorisation_machine.server,data_path,revision,type,authorisation_machine.token));
         
         % error handling

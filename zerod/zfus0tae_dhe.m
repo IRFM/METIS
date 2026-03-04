@@ -2,7 +2,7 @@
 function [pfus0,salpha0,pfus,salpha,ifus,xfus,jxfus,j0fus,taus,ecrit,pfus_nbi,pfus_loss,jfus,salf0,palf0,salf,palf,splusHe3D,splusD3He,splusDT,splusff,splusicrh] = ...
 	 zfus0tae_dhe(nDi,nHe3i,nTi,te,ne,zeff,tite,R,a,K,Bt,ane,ate,Vp,Sp, ...
          pnbi_th,taus_nbi,ecritnbi,e0nbi,e0nbi2,fHe3nbi,picrh_ion,taus_icrh,ecriticrh,e0icrh,temps,pnbi,d0,qa,qmin,te0, ...
-         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI,te_max)
+         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI,te_max,splusicrh)
 
 % pour l'interaction faisceau plasma
 tii = te .* tite;
@@ -72,11 +72,11 @@ end
 % source de particule alpha
 %sigmavdt = zperes(max(tip,30));
 %s        = nD .* nT .* sigmavdt;
-if real(te_max) <=100e3                           % in eV
-    [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip,30));
-else                                           % in eV
-    [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip,30));
-end
+% if real(te_max) <=100e3                           % in eV
+%     [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip,30));
+% else                                           % in eV
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip,30));
+%end
 s_DHe3   = nD.*nHe3.*dhe3.sv.*(1 + fpolarized / 2);
 s_DDp    = 0.5.*nD.^2.*dd_p.sv;
 s_DDn    = 0.5.*nD.^2.*dd_n.sv;
@@ -390,7 +390,7 @@ profli.jfusshape = jfus;
 
 
 % calcul de l'interraction faisceau-plasma (D3He)
-if (all(real(fHe3nbi == 0)) && all(imag(fHe3nbi == 0)))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
+if (all(real(fHe3nbi) == 0) && all(imag(fHe3nbi) == 0))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
     esupranbi = zeros(size(temps));
     pHe3th      = zeros(size(temps));
     tauseff   = 1;
@@ -413,7 +413,7 @@ end
 % add D beam injection to T ions in plasma,
 % and do not consider the case of T beam injection for option.gaz=5.
 % maintenant c'est la bonne matrice
-if	(all(real(fHe3nbi == 1)) && all(imag(fHe3nbi == 1)))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
+if	(all(real(fHe3nbi) == 1) && all(imag(fHe3nbi) == 1))  || all( pnbi  < 1e3) || (forced_H_NBI ~= 0)
     splusD3He   = zeros(size(temps));
     splusDT   = zeros(size(temps));
 else
@@ -454,19 +454,19 @@ else
    end
 end
 %  % acceleration de 3He par icrh (approximation type idn)
-e0icrhm =zpmean(1:length(e0icrh),picrh_ion,e0icrh);
-if all(picrh_ion < 1e3)
-  	splusicrh = zeros(size(nDi));
-elseif ~isempty(e0icrhm)
-	if e0icrhm == 0
-  		  	splusicrh = zeros(size(nDi));
- 	else
-  		rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nHe3i ./ max(1,nDi));
-  		splusicrh = zbpi0_He3D(nDi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
-	end
-else
-  	splusicrh = zeros(size(nDi));
-end
+% e0icrhm =zpmean(1:length(e0icrh),picrh_ion,e0icrh);
+% if all(picrh_ion < 1e3)
+%   	splusicrh = zeros(size(nDi));
+% elseif ~isempty(e0icrhm)
+% 	if e0icrhm == 0
+%   		  	splusicrh = zeros(size(nDi));
+%  	else
+%   		rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nHe3i ./ max(1,nDi));
+%   		splusicrh = zbpi0_He3D(nDi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
+% 	end
+% else
+%   	splusicrh = zeros(size(nDi));
+% end
 
 splus.he4_DHe3  = max(0,splusHe3D) + max(0,splusD3He) +  max(0,splusff) + max(0,splusicrh) ;
 splus.p_DHe3    = splus.he4_DHe3;

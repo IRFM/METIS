@@ -357,6 +357,8 @@ choice of scaling law for energy confinement time:
 19 = ITER89-P in L-mode and  ITER89-P  + W_ped scaling incorporating experimental data and prediction from MHD code for ITER and DEMO
 20 = must not be used (preprint version of ITPA20);
 21= ITPA20 scaling for ITER 2020 with triangularity dependance
+30 = K.S Riedel scaling for L and H mode (N.F 31 p 927 [1991] formula 13 and N.F. 32 p 1270 [1992] formula 3)
+
 </xs:documentation>
 </xs:annotation>
 <xs:simpleType>
@@ -382,6 +384,7 @@ choice of scaling law for energy confinement time:
 <xs:enumeration value="19"/>
 <xs:enumeration value="20"/>
 <xs:enumeration value="21"/>
+<xs:enumeration value="30"/>
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
@@ -504,8 +507,10 @@ if = 5  -&gt; NLM-11 Murari 2012;
 if = 6  -&gt; Jpol change of sign in edge region (E. R. Solano rule);
 if = 10 -&gt; Multimachine scaling law from Murari 2013 (BUEMS);
 if = 28 -&gt; Low density case - Ryter et al, NF 54 (2014) 083003, equation 4
-if = 30 -&gt; Fit of metalic tokamaks database for horizontal targets (E . Delabie et al, 2025 ?);
-if = 31 -&gt; Fit of metalic tokamaks database for vertical targets and corner configuration (E . Delabie et al, 2025 ?);
+if = 30 -&gt; Fit of metalic tokamaks database for horizontal targets (TC_26(Bt), E . Delabie et al, N.F. 2026);
+if = 31 -&gt; Fit of metalic tokamaks database for vertical targets and corner configuration (TC_26(Bt),E . Delabie et al, N.F 2026);
+if = 32 -&gt; Fit of metalic tokamaks database for horizontal targets with B_pol instead of B_tor (TC_26(Bpol), E . Delabie et al, N.F. 2026);
+if = 33 -&gt; Fit of metalic tokamaks database for vertical targets and corner configuration with B_pol instead of B_tor (TC_26(Bpol),E . Delabie et al, N.F 2026);
 if &lt; 0, criterion based on plasma rotation (abs(l2hscaling) = value of Gamma_ExB / Gamma_ITG for transition)
 
 </xs:documentation>
@@ -529,6 +534,8 @@ if &lt; 0, criterion based on plasma rotation (abs(l2hscaling) = value of Gamma_
 <xs:enumeration value="28"/>
 <xs:enumeration value="30"/>
 <xs:enumeration value="31"/>
+<xs:enumeration value="32"/>
+<xs:enumeration value="33"/>
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
@@ -636,6 +643,21 @@ P_{H-&gt;L} = hysteresis * P_{in} + (1 - hysteresis) * P_{lh,thr}
 <xs:restriction base="xs:double">
 <xs:minInclusive value="0"/>
 <xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="second_stability" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 1, test if second stability domain is accessible (useful for negative triangularity;
+based on analytical formulation from: Y. Zhang et al, Nucl. Fusion 64 2024) 
+and prevent the transition to H-mode if it is not the case.
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
@@ -754,11 +776,13 @@ if stiff transport is activated and fstiff &lt; 0, isotope_stiff is the exponent
 <xs:annotation>
 <xs:documentation>
 if = 0, pedestal energy content is the difference between H-mode and L-mode energy content or half of this difference (see scaling options);
- if = 1, tau_ped scaling law (ITPA McDonald) is used to compute Pped (does not work with stiff model);
-if = 2, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling law prediction is used;
+if = 1, tau_ped scaling law (ITPA McDonald) is used to compute Pped (does not work with stiff model);
+,if = 2, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling law prediction is used;
 if = 3, P_ped scaling incorporating experimental data and prediction from MHD code for ITER and DEMO is used
 if = 4, minimum between standard rule (Pped = K (W_Hmode - W_Lmode) and scaling incorporating prediction from MHD code for ITER and DEMO is used
 if = 5, use model from reference F.D. Halpern et al, PoP 15 (2008) p 062505
+if = 6, use Dunne-Puchmayr model (ref ?); this model compute also density at the pedestal and LCFS temperature and density
+        (https://pure.mpg.de/rest/items/item_3262339/component/file_3262340/content)
 </xs:documentation>
 </xs:annotation>
 <xs:simpleType>
@@ -769,6 +793,7 @@ if = 5, use model from reference F.D. Halpern et al, PoP 15 (2008) p 062505
 <xs:enumeration value="3"/>
 <xs:enumeration value="4"/>
 <xs:enumeration value="5"/>
+<xs:enumeration value="6"/>
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
@@ -3107,6 +3132,7 @@ ICRH heating scheme: minority species for ICRH scheme
 <xs:annotation>
 <xs:documentation>
 ICRH heating scheme: fraction of the first minority species (nX/nD or nX/n_main if no deuterium in plasma discharge);
+if the minority is T, then the fraction is cmin time the reference nT/nD;
 if = 0, no suprathermal ions in plasma, direct heating of electrons and ions
 </xs:documentation>
 </xs:annotation>
@@ -3238,6 +3264,32 @@ Use the model from: L.G. Eriksson and T. Hellsten, Physica Scripta vol. 52, 70-7
 <xs:restriction base="xs:double">
 <xs:minInclusive value="0"/>
 <xs:maxInclusive value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="icrh_mode_fast" maxOccurs="1" minOccurs="1" default="1">
+<xs:annotation>
+<xs:documentation>
+For model Dumont-Vu, if = 1, use fast convergence mode
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
+<xs:element name="f_icrh_salpha" default="0" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+Factor applied to the fusion source between D and T induced by the fast ions of ICRH (type beam-plamsa) to compensate the low precision of model used in the code
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:double">
+<xs:minInclusive value="0"/>
+<xs:maxInclusive value="10"/>
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
@@ -3751,6 +3803,19 @@ orientation of toroidal magnetic field: follows ITER convention (for ITER the va
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
+<xs:element name="mavrin_sigmav" default="1" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+if = 1, used Mavrin 2018 &lt;sigma_v&gt; reaction rate instead of the METIS original one (see zsigmavfusion and zsigmavfusion2 function for details)
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:integer">
+<xs:enumeration value="0"/>
+<xs:enumeration value="1"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
 <xs:element name="reference_parameters" type="string" default="" maxOccurs="1" minOccurs="1">
 <xs:annotation>
 <xs:documentation>
@@ -3952,6 +4017,20 @@ IDS selection:\nif = 0, do not write numerics IDSs;\nif=1, write numerics IDSs (
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
+<xs:element name="plasma_ids" default="both" maxOccurs="1" minOccurs="1">
+<xs:annotation>
+<xs:documentation>
+IDS selection:\nif = both, write both core_* or edge_* and plasma_* IDSs;\nif = core&amp;edge, write only core_* or edge_* IDSs;\nif = plasma, write only plasma_* IDSs;\nRemark: data production and occurrences are still the one defined for core_* and edge_* and they are also applied to plasma_*
+</xs:documentation>
+</xs:annotation>
+<xs:simpleType>
+<xs:restriction base="xs:string">
+<xs:enumeration value="both"/>
+<xs:enumeration value="core&edge"/>
+<xs:enumeration value="plasma"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:element>
 <xs:element name="equilibrium" default="1" maxOccurs="1" minOccurs="1">
 <xs:annotation>
 <xs:documentation>
@@ -4095,7 +4174,7 @@ UAL control: output ids occurrence for equilibrium IDS;\nif empty, use default o
 </xs:documentation>
 </xs:annotation>
 </xs:element>
-<xs:element name="COCOS" default="11" maxOccurs="1" minOccurs="1">
+<xs:element name="COCOS" default="17" maxOccurs="1" minOccurs="1">
 <xs:annotation>
 <xs:documentation>
 UAL control: choice for the output COCOS
@@ -4108,7 +4187,7 @@ UAL control: choice for the output COCOS
 </xs:restriction>
 </xs:simpleType>
 </xs:element>
-<xs:element name="COCOS_method" default="Sauter" maxOccurs="1" minOccurs="1">
+<xs:element name="COCOS_method" default="Native" maxOccurs="1" minOccurs="1">
 <xs:annotation>
 <xs:documentation>
 Method use to make the COCOS mapping:\nNative = native METIS method.\nSauter = use O.Sauter tools (see https://gitlab.epfl.ch/spc/cocos)

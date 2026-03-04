@@ -93,7 +93,7 @@ end
 matiere =zeros(size(matiere));
 
 % informations sur les reactions                                  
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(prof.ti);
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(prof.ti);
                                   
 % recherche de la presence des gaz
 ind_p    = find(compo.z == 1 & compo.a == 1);

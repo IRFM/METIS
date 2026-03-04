@@ -15,6 +15,13 @@ eccdmul      = option.eccdmul;
 e_shielding  = option.e_shielding;
 cur_nbi_time = option.cur_nbi_time;
 
+% preserve pnbi for next modules
+if isfield(profli,'pnbi')
+    pnbi_mem_in = profli.pnbi;
+else
+    pnbi_mem_in = [];
+end
+
 
 % handling of new plasma composition
 switch option.gaz
@@ -250,7 +257,7 @@ else
 end
 
 
-if isappdata(0,'ICRH_SHAPE_EXP') & isfield(profli,'qjli');
+if isappdata(0,'ICRH_SHAPE_EXP') && isfield(profli,'qjli')
 	icexp = getappdata(0,'ICRH_SHAPE_EXP');
 	jfwcd  = max(1,abs(interp1_ex(icexp.temps,icexp.jfwcd,temps,'nearest','extrap')));
 	jfwcd  = pchip(icexp.x,jfwcd,profli.xli);
@@ -1236,14 +1243,14 @@ if nb_injecteur_neutre == 2
 	pitch_out  = pchip(cat(2,-1,xnew0),cat(2,0.*vt,pitch_out),xp);
     if ~all(Zaxe(:) ==0)
         for kz = 1:size(Zaxe,1)
-            xnew0  = option.zext + Zaxe(kz,:) + xp .* (1 - option.zext - Zaxe(kz,:));
-            xnew1  = (option.zext + dzs + Zaxe(kz,:)) + xp .* (1 - option.zext - dzs - Zaxe(kz,:));
-            xnew2  = abs(option.zext - dzs) + Zaxe(kz,:) + xp .* (1 - abs(option.zext - dzs)- Zaxe(kz,:));
+            xnew0  = option.zext2 + Zaxe(kz,:) + xp .* (1 - option.zext2 - Zaxe(kz,:));
+            xnew1  = (option.zext2 + dzs + Zaxe(kz,:)) + xp .* (1 - option.zext2 - dzs - Zaxe(kz,:));
+            xnew2  = abs(option.zext2 - dzs) + Zaxe(kz,:) + xp .* (1 - abs(option.zext2 - dzs)- Zaxe(kz,:));
             pout(kz,:)  = max(0,interp1(xnew0,pout(kz,:) .* dvol(kz,:), xp,'pchip',0) ./ dvol(kz,:) +  ...
                 interp1(xnew1,pout(kz,:) .* dvol(kz,:), xp,'pchip',0) ./ dvol(kz,:) +  ...
                 interp1(xnew2,pout(kz,:) .* dvol(kz,:), xp,'pchip',0) ./ dvol(kz,:)) ./ 3;
             % cette transformation conserve l'angle avec la direction toroidale mais l'efficacite est diminuee
-            %pitch_out  = (1 - option.zext) .* pchip(cat(2,-1,xnew0),cat(2,0.*vt,pitch_out),xp);
+            %pitch_out  = (1 - option.zext2) .* pchip(cat(2,-1,xnew0),cat(2,0.*vt,pitch_out),xp);
             pitch_out(kz,:)  = interp1(xnew0,pitch_out(kz,:),xp,'pchip',0);
         end
     end
@@ -1266,7 +1273,7 @@ if nb_injecteur_neutre == 2
   pdep = max(eps,pdep .* ((pnbi2 ./ max(eps,trapz(xp,pdep .* vpr,2))) * ve));
 
   % source d'electron associe
-  profli.nbinesource(indout,:) = profli.nbinesource(indout,:) +  sqrt(-1) .* pdep ./ (1.602176462e-19 .* option.einj);
+  profli.nbinesource(indout,:) = profli.nbinesource(indout,:) +  sqrt(-1) .* pdep ./ (1.602176462e-19 .* option.einj2);
 
   % position du maximum de P
   xdep2       = sum((vt * xp) .* pdep .^ 2 ,2) ./ sum(pdep .^ 2,2);
@@ -1295,7 +1302,7 @@ if nb_injecteur_neutre == 2
       otherwise
           fral  = (sqrt(2)/1 .* (1-ftnbi2) + sqrt(3)/1 .* ftnbi2) * ve;
   end
-  ral    = 4.576e-3 .* fral.* sqrt(option.einj ./ 1e3) ./ (((bt .* R)*ve) ./ rloc); % en m 
+  ral    = 4.576e-3 .* fral.* sqrt(option.einj2 ./ 1e3) ./ (((bt .* R)*ve) ./ rloc); % en m 
   %ral    = 7.2e-3.* sqrt(option.einj2 ./ 1e3) ./ (((bt .* R)*ve) ./ rloc); % en m
   if isfield(profli,'qjli')
 	  qp     = min(qa*ve,profli.qjli(indout,:));
@@ -1318,9 +1325,9 @@ if nb_injecteur_neutre == 2
   end
   % puissance couplee au final
   frnbi  = max(0,frnbi - frnbi .* frloss);
-  frnbi(pnbi == 0) = 1;
+  frnbi(pnbi2 == 0) = 1;
   frloss = frnbi .* frloss;
-  frloss(pnbi == 0) = 0;
+  frloss(pnbi2 == 0) = 0;
   
   % piquage du depot tenant compte des perte de 1ere orbite
   piqdep     = max(0.1,sqrt(abs(trapz(xp,(vt * xp - xdep2 * ve) .^ 2 .* pdep .* (~mask) ,2) ./max(1,trapz(xp,pdep .* (~mask),2)))));
@@ -1605,4 +1612,12 @@ if nb_injecteur_neutre == 2
 
 
 end
+
+% this is not correct, should be updated or keep from previous value
+% updated in zboot0diff.m
+if ~isempty(pnbi_mem_in)
+    profli.pnbi = pnbi_mem_in;
+end
+
+
 

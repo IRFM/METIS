@@ -1,5 +1,6 @@
 % mapping du CPO coreprof (seule les variables d'interret sont remplie, un model vide doit etre fourni)
-function equilibrium = mapequilibrium_imas(z0dstruct,data_zerod,profil0d,texte_diary,error_flag,equilibrium,summary,opt_grille,sigma_B0_eff,equi_extrap,factor_two_pi)
+function equilibrium = mapequilibrium_imas(z0dstruct,data_zerod,profil0d,texte_diary,error_flag,equilibrium,summary,opt_grille,COCOS_out,equi_extrap,factor_two_pi,sigma_RphiZ_eff)
+
 
 % pour profile2d : opt_grille = 0 => grille en (psi,theta)
 %                  opt_grille = 1 => Delaunay
@@ -8,10 +9,8 @@ if nargin < 8
 elseif isempty(opt_grille)
   opt_grille = 0;
 end 
-if nargin < 9
-  sigma_B0_eff = 1;
-elseif isempty(sigma_B0_eff)
-  sigma_B0_eff = 1;
+if nargin < 9 || isempty(COCOS_out)
+  COCOS_out = 17;
 end 
 if nargin < 10
   equi_extrap = 0;
@@ -56,6 +55,8 @@ if isfield(z0dstruct.z0dinput.option,'nb_points_radial')
 else
     nbeqdsk = 51;
 end
+
+
 %% SUMMARY HERITAGE
 %  if isfield(summary,'ids_properties')
 %    if isfield(summary.ids_properties,'comment')
@@ -83,24 +84,50 @@ for itime=1:ntime
 end
 equilibrium.time = profil0d.temps;
 
+% new boundary definition
+if isfield(equilibrium.time_slice{1},'contour_tree')
+    node_model = equilibrium.time_slice{1}.contour_tree.node{1};
+else
+    node_model = [];
+end
 
 %% BOUNDARY STRUCTURE
 xpoint = interp1_imas(data_zerod.temps,data_zerod.xpoint,profil0d.temps,'nearest','extrap');
 for itime=1:ntime
+  % removes node first is any defined in this time slice
+  equilibrium.time_slice{itime}.contour_tree.node =[];
 
   equilibrium.time_slice{itime}.boundary.type = xpoint(itime);   
   z0 = interp1_imas(z0dstruct.z0dinput.cons.temps,z0dstruct.z0dinput.geo.z0,profil0d.temps(itime),'nearest','extrap');
   if isfield(profil0d,'Rsepa') && isfield(profil0d,'Zsepa') && all(isfinite(profil0d.Rsepa(itime,:))) && all(isfinite(profil0d.Zsepa(itime,:)))
       % LFCS must be open in IMAS
-      if (profil0d.Rsepa(itime,end) == profil0d.Rsepa(itime,1)) &&  (profil0d.Zsepa(itime,end) == profil0d.Zsepa(itime,1))
-          equilibrium.time_slice{itime}.boundary.outline.r	= profil0d.Rsepa(itime,1:end-1);
-          equilibrium.time_slice{itime}.boundary.outline.z	= profil0d.Zsepa(itime,1:end-1) + z0;
+      if (profil0d.Rsepa(itime,end) == profil0d.Rsepa(itime,1)) &&  (profil0d.Zsepa(itime,end) == profil0d.Zsepa(itime,1)) 
+          if (getappdata(0,'IMAS_VERSION') < 4)
+              equilibrium.time_slice{itime}.boundary.outline.r	= profil0d.Rsepa(itime,1:end-1);
+              equilibrium.time_slice{itime}.boundary.outline.z	= profil0d.Zsepa(itime,1:end-1) + z0;
+          else
+              equilibrium.time_slice{itime}.boundary.outline.r	= profil0d.Rsepa(itime,:);
+              equilibrium.time_slice{itime}.boundary.outline.z	= profil0d.Zsepa(itime,:) + z0;              
+          end
       else
-          equilibrium.time_slice{itime}.boundary.outline.r	= profil0d.Rsepa(itime,:);
-          equilibrium.time_slice{itime}.boundary.outline.z	= profil0d.Zsepa(itime,:) + z0;
+          if (getappdata(0,'IMAS_VERSION') < 4)
+              equilibrium.time_slice{itime}.boundary.outline.r	= profil0d.Rsepa(itime,:);
+              equilibrium.time_slice{itime}.boundary.outline.z	= profil0d.Zsepa(itime,:) + z0;
+          else
+              equilibrium.time_slice{itime}.boundary.outline.r	= cat(2,profil0d.Rsepa(itime,:),profil0d.Rsepa(itime,1));
+              equilibrium.time_slice{itime}.boundary.outline.z	= cat(2,profil0d.Zsepa(itime,:),profil0d.Rsepa(itime,1)) + z0;
+         end
       end
       % deduire de la sepa
-      control =sepa_moments(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0,equilibrium.time_slice{1}.boundary.x_point{1});
+      if isfield(equilibrium.time_slice{1},'boundary') && isfield(equilibrium.time_slice{1}.boundary,'x_point')
+          control = sepa_moments(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0,equilibrium.time_slice{1}.boundary.x_point{1});
+      elseif isfield(equilibrium.time_slice{1},'contour_tree')
+          x_point_struct.r = NaN;
+          x_point_struct.z = NaN;
+          control = sepa_moments(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0,x_point_struct);        
+      else
+          control = sepa_moments(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0,[]);
+      end
       equilibrium.time_slice{itime}.boundary.minor_radius           = control.a;
       equilibrium.time_slice{itime}.boundary.elongation             = control.K;
       equilibrium.time_slice{itime}.boundary.triangularity_upper    = control.du;
@@ -118,6 +145,22 @@ for itime=1:ntime
       equilibrium.time_slice{itime}.boundary.geometric_axis.z    = control.z0_geo;
       z0_mag = control.z0_geo;
       outlineisfilled = 1;
+      
+      % new definition in V4
+      if getappdata(0,'IMAS_VERSION') > 3
+          if isfield(control,'x_point')
+              for lz = 1:length(control.x_point)
+                  equilibrium.time_slice{itime}.contour_tree.node{end+1} = node_model;
+                  equilibrium.time_slice{itime}.contour_tree.node{end}.critical_type  = 1 ; %  saddle point
+                  equilibrium.time_slice{itime}.contour_tree.node{end}.r   = control.x_point{lz}.r;
+                  equilibrium.time_slice{itime}.contour_tree.node{end}.z   = control.x_point{lz}.z;
+                  equilibrium.time_slice{itime}.contour_tree.node{end}.psi = profil0d.psi(itime,end);
+                  equilibrium.time_slice{itime}.contour_tree.node{end}.levelset.r = equilibrium.time_slice{itime}.boundary.outline.r;
+                  equilibrium.time_slice{itime}.contour_tree.node{end}.levelset.z = equilibrium.time_slice{itime}.boundary.outline.z;
+              end
+          end          
+      end
+      
   else
       control = [];
       equilibrium.time_slice{itime}.boundary.outline.r	= [];
@@ -130,6 +173,8 @@ for itime=1:ntime
       equilibrium.time_slice{itime}.boundary.geometric_axis.z    = z0;
       z0_mag = z0;
       outlineisfilled = 0;
+      
+      
   end
   equilibrium.time_slice{itime}.boundary.psi = profil0d.psi(itime,end);
   noms_loc = fieldnames( equilibrium.time_slice{itime}.boundary);
@@ -141,12 +186,27 @@ for itime=1:ntime
   equilibrium.time_slice{itime}.global_quantities.magnetic_axis.r = profil0d.Raxe(itime,1);
   equilibrium.time_slice{itime}.global_quantities.magnetic_axis.z               = z0_mag;
   equilibrium.time_slice{itime}.global_quantities.magnetic_axis.b_field_tor     = profil0d.fdia(itime,1) ./ profil0d.Raxe(itime,1);
+  equilibrium.time_slice{itime}.global_quantities.magnetic_axis.b_tor           = profil0d.fdia(itime,1) ./ profil0d.Raxe(itime,1); % backward compatibility with COCOS tools
+  equilibrium.time_slice{itime}.global_quantities.magnetic_axis.b_phi           = profil0d.fdia(itime,1) ./ profil0d.Raxe(itime,1); % forward anticipated compatibility with COCOS tools
+  equilibrium.time_slice{itime}.global_quantities.magnetic_axis.b_field_phi     = profil0d.fdia(itime,1) ./ profil0d.Raxe(itime,1);  
   equilibrium.time_slice{itime}.global_quantities.ip           = interp1_imas(data_zerod.temps,data_zerod.ip,profil0d.temps(itime),'pchip','extrap');
+  %
+  % new definition in V4
+  if getappdata(0,'IMAS_VERSION') > 3
+      % magnetic axis 
+      equilibrium.time_slice{itime}.contour_tree.node{end+1} = node_model;
+      equilibrium.time_slice{itime}.contour_tree.node{end}.critical_type  = 2 ; % this is extremum in flux
+      equilibrium.time_slice{itime}.contour_tree.node{end}.r   = profil0d.Raxe(itime,1);
+      equilibrium.time_slice{itime}.contour_tree.node{end}.z   = z0_mag;
+      equilibrium.time_slice{itime}.contour_tree.node{end}.psi = profil0d.psi(itime,1);
+  end
+
   %
   equilibrium.time_slice{itime}.global_quantities.beta_tor     = interp1_imas(data_zerod.temps,data_zerod.betan,profil0d.temps(itime),'pchip','extrap') .*  ...
       equilibrium.time_slice{itime}.global_quantities.ip ./ (profil0d.fdia(itime,end) ./ profil0d.Raxe(itime,end)) ./  ...
       equilibrium.time_slice{itime}.boundary.minor_radius ./ 1e6;
-  equilibrium.time_slice{itime}.global_quantities.beta_normal  =  interp1_imas(data_zerod.temps,100 .* data_zerod.betan,profil0d.temps(itime),'pchip','extrap');
+  equilibrium.time_slice{itime}.global_quantities.beta_normal  = interp1_imas(data_zerod.temps,100 .* data_zerod.betan,profil0d.temps(itime),'pchip','extrap');
+  equilibrium.time_slice{itime}.global_quantities.beta_tor_norm  = equilibrium.time_slice{itime}.global_quantities.beta_normal;
   equilibrium.time_slice{itime}.global_quantities.li_3         = interp1_imas(data_zerod.temps,data_zerod.li,profil0d.temps(itime),'pchip','extrap');
   equilibrium.time_slice{itime}.global_quantities.volume       = interp1_imas(data_zerod.temps,data_zerod.vp,profil0d.temps(itime),'pchip','extrap');
   equilibrium.time_slice{itime}.global_quantities.area         = interp1_imas(data_zerod.temps,data_zerod.sp,profil0d.temps(itime),'pchip','extrap');
@@ -176,10 +236,14 @@ for itime=1:ntime
   r0  =   interp1_imas(data_zerod.temps,z0dstruct.z0dinput.geo.R ,profil0d.temps,'pchip','extrap');
   
   equilibrium.vacuum_toroidal_field.r0 = mean(z0dstruct.z0dinput.geo.R);
-  equilibrium.vacuum_toroidal_field.b0(itime) = sigma_B0_eff .* z0dstruct.z0dinput.option.signe .* rb0(itime) ./ equilibrium.vacuum_toroidal_field.r0;
+  equilibrium.vacuum_toroidal_field.b0(itime) = sign(mean(profil0d.fdia(:))) .* abs(rb0(itime)) ./ equilibrium.vacuum_toroidal_field.r0;
+  sbt0 = sign(equilibrium.vacuum_toroidal_field.b0(itime));
   %
   equilibrium.time_slice{itime}.global_quantities.w_mhd = interp1_imas(data_zerod.temps,data_zerod.w,profil0d.temps(itime),'nearest','extrap');
-    
+  equilibrium.time_slice{itime}.global_quantities.energy_mhd = interp1_imas(data_zerod.temps,data_zerod.w,profil0d.temps(itime),'nearest','extrap');
+  %
+  equilibrium.time_slice{itime}.global_quantities.plasma_resistance = interp1_imas(data_zerod.temps,data_zerod.RR,profil0d.temps(itime),'nearest','extrap');
+  
   %% FOR THE MACH NUMBER! (GONDOR TONE)
   ve   = ones(1,size(profil0d.tip,2));
   meff = interp1_imas(data_zerod.temps,data_zerod.meff,profil0d.temps(itime),'nearest','extrap');
@@ -193,6 +257,7 @@ for itime=1:ntime
   equilibrium.time_slice{itime}.profiles_1d.dpressure_dpsi = v1;
   equilibrium.time_slice{itime}.profiles_1d.f_df_dpsi = v1;
   equilibrium.time_slice{itime}.profiles_1d.j_tor = v1;
+  equilibrium.time_slice{itime}.profiles_1d.j_phi = v1;
   equilibrium.time_slice{itime}.profiles_1d.j_parallel = v1;
   equilibrium.time_slice{itime}.profiles_1d.q = v1;
   equilibrium.time_slice{itime}.profiles_1d.magnetic_shear = v1;
@@ -222,8 +287,11 @@ for itime=1:ntime
   equilibrium.time_slice{itime}.profiles_1d.gm8 = v1;
   equilibrium.time_slice{itime}.profiles_1d.gm9 = v1;
   equilibrium.time_slice{itime}.profiles_1d.b_field_average = v1;
+  equilibrium.time_slice{itime}.profiles_1d.b_average = v1;  % COCOS tool backward compatibility
   equilibrium.time_slice{itime}.profiles_1d.b_field_min = v1;
   equilibrium.time_slice{itime}.profiles_1d.b_field_max = v1;
+  equilibrium.time_slice{itime}.profiles_1d.b_min = v1; % COCOS tool backward compatibility
+  equilibrium.time_slice{itime}.profiles_1d.b_max = v1; % COCOS tool backward compatibility
   %
   iprof = 1;
   % initialisation sub structure
@@ -235,12 +303,16 @@ for itime=1:ntime
     %equilibrium.time_slice{itime}.profiles_2d{iprof}.grid_type.description = char({'1','inverse','3','polar'});
     equilibrium.time_slice{itime}.profiles_2d{iprof}.psi = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.j_tor = [];
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.j_phi = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.j_parallel = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_r = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_z = [];
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.b_tor = []; % backward compatibility with COCOS tools
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.b_phi = []; % backward compatibility with COCOS tools
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_r = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_z = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_tor = [];
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_phi = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.r = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.z = [];
     equilibrium.time_slice{itime}.profiles_2d{iprof}.phi = [];
@@ -254,12 +326,16 @@ for itime=1:ntime
     %equilibrium.time_slice{itime}.profiles_2d{iprof}.grid_type.description = char({'3','irregular','4','unstruct'});
     equilibrium.time_slice{itime}.profiles_2d{iprof}.psi = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.j_tor = v3;
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.j_phi = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.j_parallel = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_r = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_z = v3;
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.b_tor = v3; % backward compatibility with COCOS tools
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.b_phi = v3; % backward compatibility with COCOS tools
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_r = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_z = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_tor = v3;
+    equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_phi = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.r = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.z = v3;
     equilibrium.time_slice{itime}.profiles_2d{iprof}.phi = v3;
@@ -285,14 +361,18 @@ for itime=1:ntime
   profiles_2d_2{1}.grid.dim2    = [];
   profiles_2d_2{1}.grid.connect = [];
   %profiles_2d_2{1}.grid_type.description = char({'1','rectangular',' ',' '});;
-  profiles_2d_2{1}.psi	      = [];
+  profiles_2d_2{1}.psi	        = [];
   profiles_2d_2{1}.j_tor        = [];
+  profiles_2d_2{1}.j_phi        = [];
   profiles_2d_2{1}.j_parallel   = [];
-  profiles_2d_2{1}.b_r 	      = [];
-  profiles_2d_2{1}.b_z 	      = [];
+  profiles_2d_2{1}.b_r 	        = [];
+  profiles_2d_2{1}.b_z 	        = [];
+  profiles_2d_2{1}.b_tor        = []; % backward compatibility with COCOS tools
+  profiles_2d_2{1}.b_phi        = []; % backward compatibility with COCOS tools
   profiles_2d_2{1}.b_field_r    = [];
   profiles_2d_2{1}.b_field_z    = [];
   profiles_2d_2{1}.b_field_tor  = [];
+  profiles_2d_2{1}.b_field_phi  = [];
   profiles_2d_2{1}.r            = [];
   profiles_2d_2{1}.z            = [];      
   profiles_2d_2{1}.phi          = [];
@@ -435,6 +515,8 @@ for itime=1:ntime
 %    hold on
 %    if isfield(profil0d,'Rsepa') &&isfield(profil0d,'Zsepa')
 %      plot(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0_offset ,'k');
+%      indexp = find(z0dstruct.z0dinput.cons.temps >= profil0d.temps(itime),1);
+%      plot(z0dstruct.z0dinput.exp0d.Rsepa(indexp,:),z0dstruct.z0dinput.exp0d.Zsepa(indexp,:) + z0_offset,'k.');
 %    end
 %    xlabel('R (m)');
 %    ylabel('Z (m)');
@@ -455,10 +537,11 @@ for itime=1:ntime
 %    plot(profil0d.xli,profil0d.bpol(itime,:),'r',profil.x,profil.bpolm,'b')
 %    title('bpolm')
 %    drawnow
-  
-  % there is a problem with z0
+
+  %   % there is a problem with z0
   deuxd.Z     = deuxd.Z + z0_offset;
   moment.zaxe = moment.zaxe   + z0_offset;
+
 
   % remplissage de la structure pour le precalcul de la grille rectangulaire
   % remplissage de la structure equivide
@@ -467,7 +550,11 @@ for itime=1:ntime
   % calcul de rhomax
   equicronos.rhomax          = profil.rho(end);
   % utilisation des donnnees du mapping pour les indice de temps problematique
-  equicronos.phi(1,:)             = profil.phi; 
+  if profil.phi(1) > profil.phi(end)
+      equicronos.phi(1,:)             =  - profil.phi;
+  else
+      equicronos.phi(1,:)             = profil.phi;
+  end
   equicronos.psi(1,:)             = profil.psi ./ factor_two_pi; 
   % le R et le Z
   equicronos.R(1,:,:)          =  shiftdim(deuxd.R,-1);
@@ -483,43 +570,51 @@ for itime=1:ntime
   
   % remplissage des profils;
   equilibrium.time_slice{itime}.profiles_1d.psi = profil0d.psi(itime,:);
-  switch z0dstruct.z0dinput.option.COCOS
-      case {1,2,3,4,11,12,13,14}
-           equilibrium.time_slice{itime}.profiles_1d.phi = profil.phi .* sign(mean(profil.phi)) .* sign(profil0d.psi(itime,end) - profil0d.psi(itime,1)) .* sign(mean(profil0d.qjli(itime,:)));
-    otherwise
-          equilibrium.time_slice{itime}.profiles_1d.phi = profil.phi .* sign(mean(profil.phi)) .* sign(profil0d.psi(itime,1) - profil0d.psi(itime,end)) .* sign(mean(profil0d.qjli(itime,:)));
-  end
+  equilibrium.time_slice{itime}.profiles_1d.phi = profil.phi;
   equilibrium.time_slice{itime}.profiles_1d.pressure = profil0d.ptot(itime,:);
   equilibrium.time_slice{itime}.profiles_1d.f = mean(sign(profil0d.fdia(itime,:))) .* profil0d.fdia(itime,:) .* sign(equilibrium.vacuum_toroidal_field.b0(itime));
-  
   % new computation with improved precision on magnetic axis
   %equilibrium.time_slice{itime}.profiles_1d.dpressure_dpsi = pdederive(profil0d.psi(itime,:),profil0d.ptot(itime,:),0,2,2,1);
   %equilibrium.time_slice{itime}.profiles_1d.f_df_dpsi = pdederive(profil0d.psi(itime,:),profil0d.fdia(itime,:) .^ 2,0,2,2,1) ./ 2 ;
   mu0 = 4e-7 .* pi;
   psid1_             = pdederive(profil0d.xli,profil0d.psi(itime,:),0,2,2,1);
-  psid1_(psid1_ == 0) = sign(mean(psid1_)) .* eps;
-  psid1_(end)      = -(2*pi) .* mu0 .* profil0d.rmx(itime,end) .* equilibrium.time_slice{itime}.global_quantities.ip  ./ profil0d.C2(itime,end) .* factor_two_pi;
+  spsi               = sign(mean(psid1_));
+  if spsi == 0
+      spsi = 1;
+  end
+  psid1_(psid1_ == 0) = spsi .* eps;
+  psid1_(end)      = spsi .*abs(-(2*pi) .* mu0 .* profil0d.rmx(itime,end) .* equilibrium.time_slice{itime}.global_quantities.ip  ./ profil0d.C2(itime,end) .* factor_two_pi);
   psid2_    = pdederive(profil0d.xli,profil0d.psi(itime,:),1,0,2,2);
   dpdpsi_   = pdederive(profil0d.xli,profil0d.ptot(itime,:),0,1,2,1) ./ psid1_;
   dpdpsi_(abs(psid1_)  == eps) = 0;
-  sm = sign(mean(dpdpsi_));
+  %sm_old = sign(mean(dpdpsi_));
+  sm = -sign(mean(psid1_));
   dpdpsi_(1) = double(sm >= 0) .* max(0,dpdpsi_(1)) + double(sm < 0).* min(0,dpdpsi_(1)); 
   dpdx_1 = (profil0d.ptot(itime,2) - profil0d.ptot(itime,1)) ./ profil0d.xli(2) .^ 2;
   dpdpsi_1 = sm .* abs(2 .* dpdx_1 ./ (profil0d.fdia(itime,1) ./ profil0d.Raxe(itime,1)) .* profil0d.qjli(itime,1) ./ profil0d.rmx(itime,end) .^ 2 ./ factor_two_pi);
   dpdpsi_(1) = double(sm >= 0) .* max(dpdpsi_(1),dpdpsi_1) + double(sm < 0) .* min(dpdpsi_(1),dpdpsi_1);
+  %df2dpsi_  = 2 .* mu0 .* (max(0,sign(equilibrium.time_slice{itime}.global_quantities.ip) .* profil0d.jli(itime,:)) .* profil0d.ri(itime,:) - ...
+  %            sign(equilibrium.time_slice{itime}.global_quantities.ip) .* dpdpsi_ * factor_two_pi)./ profil0d.r2i(itime,:) / factor_two_pi;
   df2dpsi_  = 2 .* mu0 .* (max(0,sign(equilibrium.time_slice{itime}.global_quantities.ip) .* profil0d.jli(itime,:)) .* profil0d.ri(itime,:) - ...
-              sign(equilibrium.time_slice{itime}.global_quantities.ip) .* dpdpsi_ * factor_two_pi)./ profil0d.r2i(itime,:) / factor_two_pi;
+                           dpdpsi_ * factor_two_pi)./ profil0d.r2i(itime,:) / factor_two_pi;
   equilibrium.time_slice{itime}.profiles_1d.dpressure_dpsi = dpdpsi_;
   equilibrium.time_slice{itime}.profiles_1d.f_df_dpsi = df2dpsi_ ./ 2;
   
-%  figure(21);clf;plot( equilibrium.time_slice{itime}.profiles_1d.psi,equilibrium.time_slice{itime}.profiles_1d.dpressure_dpsi,'r', ...
-%  profil0d.psi(itime,:),pdederive(profil0d.psi(itime,:),profil0d.ptot(itime,:),0,2,2,1),'sm', ...
-%  equilibrium.time_slice{itime}.profiles_1d.psi,equilibrium.time_slice{itime}.profiles_1d.f_df_dpsi * 1000,'b', ...
-%  profil0d.psi(itime,:),pdederive(profil0d.psi(itime,:),profil0d.fdia(itime,:) .^ 2,0,2,2,1) ./ 2 *1000,'oc');drawnow;pause(3);
-%  keyboard
+% figure(21);
+% clf;
+% subplot(2,2,1);
+% plot( equilibrium.time_slice{itime}.profiles_1d.psi,equilibrium.time_slice{itime}.profiles_1d.dpressure_dpsi,'r', ...
+% profil0d.psi(itime,:),pdederive(profil0d.psi(itime,:),profil0d.ptot(itime,:),0,2,2,1),'sm');
+% subplot(2,2,2)
+% plot(equilibrium.time_slice{itime}.profiles_1d.psi,equilibrium.time_slice{itime}.profiles_1d.f_df_dpsi,'b', ...
+% profil0d.psi(itime,:),pdederive(profil0d.psi(itime,:),profil0d.fdia(itime,:) .^ 2,0,2,2,1) ./ 2,'oc');
+% drawnow;
+% %pause(3);
+% keyboard
   
   
   equilibrium.time_slice{itime}.profiles_1d.j_tor = profil0d.jli(itime,:);
+  equilibrium.time_slice{itime}.profiles_1d.j_phi = profil0d.jli(itime,:);
   equilibrium.time_slice{itime}.profiles_1d.j_parallel = profil0d.jeff(itime,:);
   equilibrium.time_slice{itime}.profiles_1d.q = profil0d.qjli(itime,:);
   equilibrium.time_slice{itime}.profiles_1d.magnetic_shear = pdederive(profil0d.rmx(itime,:),profil0d.qjli(itime,:),0,2,2,1) ./ profil0d.qjli(itime,:) .* profil0d.rmx(itime,:);
@@ -537,10 +632,12 @@ for itime=1:ntime
   equilibrium.time_slice{itime}.profiles_1d.volume = profil.volume;
   equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi = pdederive(profil.psi,profil.volume,1,2,2,1);
   % center value with q_0
-  volmem_area = equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1);
-  equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1)  = - equilibrium.time_slice{itime}.profiles_1d.q(1) .* ...
-	deuxd.R(1,1) .^ 2 ./ (equilibrium.time_slice{itime}.profiles_1d.f(1))  .*  factor_two_pi;
-  fact_area_dpsi = equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1) ./ volmem_area;
+  volmem_area = abs(equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1));
+  equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1)  = (equilibrium.time_slice{itime}.profiles_1d.q(1) .* ...
+	deuxd.R(1,1) .^ 2 ./ (equilibrium.time_slice{itime}.profiles_1d.f(1))  .*  factor_two_pi);
+  equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1)  = abs(equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1)) .* ...
+  sign(mean(equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(2:end)));
+  fact_area_dpsi = abs(equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(1) ./ volmem_area);
   % n'augmente pas la precision
   %equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi = equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi .* profil.vpr ./ ...
   %    (equilibrium.time_slice{itime}.profiles_1d.dvolume_dpsi(end) .* equilibrium.time_slice{itime}.profiles_1d.dpsi_drho_tor(end));
@@ -567,12 +664,15 @@ for itime=1:ntime
   equilibrium.time_slice{itime}.profiles_1d.gm8 = profil.rmoy;
   equilibrium.time_slice{itime}.profiles_1d.gm9 = profil0d.ri(itime,:);
   equilibrium.time_slice{itime}.profiles_1d.b_field_average = sqrt(profil.b2); % must be check
+  equilibrium.time_slice{itime}.profiles_1d.b_average = sqrt(profil.b2); % backwad compatibility with COCOS tools
   
   bmap = sqrt(deuxd.BR .^ 2 +deuxd.BZ .^ 2 + ((profil.fdia' * ones(1,size(deuxd.BR,2))) ./ deuxd.R) .^ 2);
   b_min = min(bmap,[],2);
   b_max = max(bmap,[],2);
   equilibrium.time_slice{itime}.profiles_1d.b_field_min = b_min;
   equilibrium.time_slice{itime}.profiles_1d.b_field_max = b_max;
+  equilibrium.time_slice{itime}.profiles_1d.b_min = b_min; % backwad compatibility with COCOS tools
+  equilibrium.time_slice{itime}.profiles_1d.b_max = b_max; % backwad compatibility with COCOS tools
   
   %equilibrium_cpo.profiles_1d.omega(itime,:)      = profil0d.omega(itime,:);
   %equilibrium_cpo.profiles_1d.omegaprime(itime,:) = pdederive(profil0d.psi(itime,:),profil0d.omega(itime,:),0,2,2,1);
@@ -592,33 +692,40 @@ for itime=1:ntime
   pressure = equilibrium.time_slice{itime}.profiles_1d.pressure' * ones(1,size(deuxd.R,2)); 
   phi      = equilibrium.time_slice{itime}.profiles_1d.phi' * ones(1,size(deuxd.R,2)); 
   jphi  = pprim .* deuxd.R + ffprim ./ deuxd.R ./ phys.mu0; 
-  jpar  = jphi .* deuxd.BPHI + ffprim ./ phys.mu0 ./ (equilibrium.time_slice{itime}.profiles_1d.f' * ones(1,size(deuxd.R,2))) .*  ...
-	  (deuxd.BR .^ 2 +deuxd.BZ .^ 2);	  
+  b0    = equilibrium.time_slice{itime}.profiles_1d.f(end) ./ profil0d.Raxe(itime,end);
+  jpar  = ((jphi .* deuxd.BPHI + ffprim ./ phys.mu0 ./ (equilibrium.time_slice{itime}.profiles_1d.f' * ones(1,size(deuxd.R,2))) .*  ...
+	  (deuxd.BR .^ 2 +deuxd.BZ .^ 2))) ./ b0;	  
   vphi   = (profil0d.omega(itime,:)' * ones(1,size(deuxd.R,2))) .* deuxd.R;
   bpol2d = abs(deuxd.BR + sqrt(-1) .*  deuxd.BZ);
   vtheta =  (profil0d.utheta(itime,:)' * ones(1,size(bpol2d,2))) .* bpol2d;
-  b0    = equilibrium.time_slice{itime}.profiles_1d.f(end) ./ profil0d.Raxe(itime,end);
-  jphi  = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_tor)) .* jphi;
-  jpar  = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_parallel)) .* jpar ./ b0;
+  jphi  = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_tor)) .* sign(mean(jphi(:))) .* jphi;
+  jpar  = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_parallel)) .* sign(mean(jpar(:))) .* jpar;
   RC    = (min(deuxd.R,[],2) + max(deuxd.R,[],2)) ./ 2;
   ZC    = (min(deuxd.Z,[],2) + max(deuxd.Z,[],2)) ./ 2;
+  %
+  BPHI2D_LOC = sbt0 .* sign(mean(deuxd.BPHI(:))) .* deuxd.BPHI;
+  % if V4 close the contour in inverse grid => these grid is already closed in theta: nothing to do
   theta = unwrap(angle((deuxd.R - RC * (ones(1,size(deuxd.R,2)))) + sqrt(-1) .*  (deuxd.Z - ZC * (ones(1,size(deuxd.Z,2))))));
   equilibrium.time_slice{itime}.profiles_2d{iprof}.grid.dim1 = deuxd.PSI(:,1);
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.grid.dim2 = deuxd.th(1,:);
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.grid.dim2 = sign2theta(deuxd.th(1,:),sign(equilibrium.time_slice{itime}.global_quantities.ip),COCOS_out);
   equilibrium.time_slice{itime}.profiles_2d{iprof}.grid_type.name = 'inverse rhopolar_polar';
   equilibrium.time_slice{itime}.profiles_2d{iprof}.grid_type.index = 2;
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.grid_type.description = '2D polar coordinates (rho, theta) with magnetic axis as center of grid; theta and values following the corresponding COCOS convention, theta=atan2(z-zaxis,r-raxis) polar angle (COCOS=11 is assumed in ITER)';
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.grid_type.description = '2D polar coordinates (rho, theta) with magnetic axis as center of grid; theta and values following the corresponding COCOS convention, theta=atan2(z-zaxis,r-raxis) polar angle (COCOS=17 is assumed in IMAS)';
   equilibrium.time_slice{itime}.profiles_2d{iprof}.r = deuxd.R;
   equilibrium.time_slice{itime}.profiles_2d{iprof}.z = deuxd.Z;
   equilibrium.time_slice{itime}.profiles_2d{iprof}.psi = deuxd.PSI;
   equilibrium.time_slice{itime}.profiles_2d{iprof}.j_tor = jphi;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.j_phi = jphi;
   equilibrium.time_slice{itime}.profiles_2d{iprof}.j_parallel = jpar;
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_r = deuxd.BR;
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_z = deuxd.BZ;
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_r = deuxd.BR; 
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_z = deuxd.BZ;
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_tor = deuxd.BPHI;
-  equilibrium.time_slice{itime}.profiles_2d{iprof}.theta = theta;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_r = - sigma_RphiZ_eff  .* deuxd.BR;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_z = - sigma_RphiZ_eff .* deuxd.BZ;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_tor = BPHI2D_LOC;   % backward compatibility with COCOS tools
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_phi = BPHI2D_LOC;   % backward compatibility with COCOS tools
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_r = - sigma_RphiZ_eff .* deuxd.BR; 
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_z = - sigma_RphiZ_eff .* deuxd.BZ;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_tor = BPHI2D_LOC;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.b_field_phi = BPHI2D_LOC;
+  equilibrium.time_slice{itime}.profiles_2d{iprof}.theta = sign2theta(theta,sign(equilibrium.time_slice{itime}.global_quantities.ip),COCOS_out);
   equilibrium.time_slice{itime}.profiles_2d{iprof}.phi = phi;
    
   % filling outline with profiles_2d LCFS if it is empty (no real LCFS provided to METIS)
@@ -637,6 +744,7 @@ for itime=1:ntime
       disp('Using profiles_2d data to provide LCFS');
   end
   
+  
   % backward compatibility
   equilibrium.time_slice{itime}.boundary.lcfs.r = equilibrium.time_slice{itime}.boundary.outline.r;
   equilibrium.time_slice{itime}.boundary.lcfs.z = equilibrium.time_slice{itime}.boundary.outline.z;
@@ -645,14 +753,15 @@ for itime=1:ntime
   grid2 = equilibrium.time_slice{1}.coordinate_system.grid;
   % remplissage de coord_sys
   grid2.dim1       = deuxd.PSI(:,1);
-  grid2.dim2       = deuxd.th(1,:);
+  grid2.dim2       = sign2theta(deuxd.th(1,:),sign(equilibrium.time_slice{itime}.global_quantities.ip),COCOS_out);
   equilibrium.time_slice{itime}.coordinate_system.grid_type.name = 'inverse rhopolar_polar';
   equilibrium.time_slice{itime}.coordinate_system.grid_type.index = 2;
-  equilibrium.time_slice{itime}.coordinate_system.grid_type.description = '2D polar coordinates (rho, theta) with magnetic axis as center of grid; theta and values following the corresponding COCOS convention, theta=atan2(z-zaxis,r-raxis) polar angle (COCOS=11 is assumed in ITER)';
+  equilibrium.time_slice{itime}.coordinate_system.grid_type.description = '2D polar coordinates (rho, theta) with magnetic axis as center of grid; theta and values following the corresponding COCOS convention, theta=atan2(z-zaxis,r-raxis) polar angle (COCOS=17 is assumed in IMAS)';
   equilibrium.time_slice{itime}.coordinate_system.grid = grid2;  
   jacobian                                       = abs(2 .* pi .* deuxd.R .* (deuxd.dRdPSI .* deuxd.dZdth - deuxd.dZdPSI .* deuxd.dRdth));
   jacobian(1,:)                                  = 0;
   equilibrium.time_slice{itime}.coordinate_system.jacobian = abs(jacobian);
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant = NaN * equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant;
   equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant(:,:,1,1) = (deuxd.dPSIdR .^ 2 + deuxd.dPSIdZ .^ 2);
   equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant(:,:,1,2) = deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ;
   equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant(:,:,1,3) = 0;
@@ -662,9 +771,37 @@ for itime=1:ntime
   equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant(:,:,3,1) = 0;
   equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant(:,:,3,2) = 0;
   equilibrium.time_slice{itime}.coordinate_system.tensor_contravariant(:,:,3,3) = 1./ deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,1,1) =  (deuxd.dthdR .^2 + deuxd.dthdZ .^ 2) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,1,2) = -(deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,1,3) = 0;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,2,1) = -(deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,2,2) =  (deuxd.dPSIdR .^ 2 + deuxd.dPSIdZ .^ 2) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,2,3) = 0;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,3,1) = 0;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,3,2) = 0;
+  equilibrium.time_slice{itime}.coordinate_system.tensor_covariant(:,:,3,3) = deuxd.R .^2;
   equilibrium.time_slice{itime}.coordinate_system.r        = deuxd.R;
   equilibrium.time_slice{itime}.coordinate_system.z        = deuxd.Z;
-  
+  % backward compatibility with COCOS tools
+  equilibrium.time_slice{itime}.coordinate_system.g11_contravariant = (deuxd.dPSIdR .^ 2 + deuxd.dPSIdZ .^ 2);
+  equilibrium.time_slice{itime}.coordinate_system.g12_contravariant = deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ;
+  equilibrium.time_slice{itime}.coordinate_system.g13_contravariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g21_contravariant =  deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ;
+  equilibrium.time_slice{itime}.coordinate_system.g22_contravariant =  deuxd.dthdR .^2 + deuxd.dthdZ .^ 2;
+  equilibrium.time_slice{itime}.coordinate_system.g23_contravariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g31_contravariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g32_contravariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g33_contravariant = 1./ deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.g11_covariant =  (deuxd.dthdR .^2 + deuxd.dthdZ .^ 2) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.g12_covariant = -(deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.g13_covariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g21_covariant = -(deuxd.dthdR .* deuxd.dPSIdR +  deuxd.dthdZ .* deuxd.dPSIdZ) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.g22_covariant =  (deuxd.dPSIdR .^ 2 + deuxd.dPSIdZ .^ 2) .* jacobian .^ 2 ./deuxd.R .^2;
+  equilibrium.time_slice{itime}.coordinate_system.g23_covariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g31_covariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g32_covariant = 0;
+  equilibrium.time_slice{itime}.coordinate_system.g33_covariant = deuxd.R .^2;
+
   % equilibre etendu hors du plasma
   % EVALUATION IN THE VACCUUM
   method_extrap = NaN;
@@ -710,7 +847,6 @@ for itime=1:ntime
   end
     
   [r2d,z2d] = meshgrid(grid3.dim1,grid3.dim2);
-
   % multi matlab version
 %    if 0
 %    try
@@ -738,9 +874,9 @@ for itime=1:ntime
     else
         [psi2d,BR2d,BZ2d] = zpsivide_updown_16_jorek(equivide,r2d,z2d);
     end
-  BR2d  = BR2d .* sign(factor_two_pi);
-  BZ2d  = BZ2d .* sign(factor_two_pi);
-  psi2d = psi2d .* factor_two_pi;
+  BR2d  = real(BR2d .* sign(factor_two_pi));
+  BZ2d  = real(BZ2d .* sign(factor_two_pi));
+  psi2d = real(psi2d .* factor_two_pi);
   mask = zinout(equivide.R(end,:),equivide.Z(end,:),r2d,z2d);
   BPHI2d   = profil0d.fdia(itime,end) ./ r2d;
   warning off
@@ -763,7 +899,7 @@ for itime=1:ntime
                        psi2d,'pchip','extrap');
       pprim(~mask) = 0;            
       ffprim  = interp1(equilibrium.time_slice{itime}.profiles_1d.psi,equilibrium.time_slice{itime}.profiles_1d.f_df_dpsi, ...
-                       psi2d,'pchip','extrap');
+                        psi2d,'pchip','extrap');
       ffprim(~mask) = 0;            
       jphi  = pprim .* r2d + ffprim ./ r2d ./ phys.mu0; 
       jphi(~mask) = 0;
@@ -789,11 +925,12 @@ for itime=1:ntime
       %contour(r2d,z2d,phi,equilibrium.time_slice{itime}.profiles_1d.phi,'b-.');
       %drawnow
       phi(~mask) = NaN;
-      RC    = (min(deuxd.R,[],2) + max(deuxd.R,[],2)) ./ 2;
-      ZC    = (min(deuxd.Z,[],2) + max(deuxd.Z,[],2)) ./ 2;
-      theta = unwrap(angle((deuxd.R - RC * (ones(1,size(deuxd.R,2)))) + sqrt(-1) .*  (deuxd.Z - ZC * (ones(1,size(deuxd.Z,2))))));
-      theta  = griddata(deuxd.R,deuxd.Z,theta,r2d,z2d,'cubic');
-      theta(~mask) = 0;
+      %RC    = (min(deuxd.R,[],2) + max(deuxd.R,[],2)) ./ 2;
+      %ZC    = (min(deuxd.Z,[],2) + max(deuxd.Z,[],2)) ./ 2;
+      %theta = unwrap(angle((deuxd.R - RC * (ones(1,size(deuxd.R,2)))) + sqrt(-1) .*  (deuxd.Z - ZC * (ones(1,size(deuxd.Z,2))))));
+      %theta  = griddata(deuxd.R,deuxd.Z,theta,r2d,z2d,'cubic');
+      %theta(~mask) = 0;
+      theta = unwrap(angle((r2d - deuxd.R(1,1)) + sqrt(-1) .*  (z2d - (deuxd.Z(1,1)- moment.zaxe(1)))));
   
   else
       pprim  = equilibrium.time_slice{itime}.profiles_1d.dpressure_dpsi'  * ones(1,size(equivide.R,2));
@@ -820,36 +957,50 @@ for itime=1:ntime
       phi      = equilibrium.time_slice{itime}.profiles_1d.phi' * ones(1,size(deuxd.R,2)); 
       phi      = griddata(deuxd.R,deuxd.Z,phi,r2d,z2d,'cubic');
       phi(~mask) = NaN;
-      RC    = (min(deuxd.R,[],2) + max(deuxd.R,[],2)) ./ 2;
-      ZC    = (min(deuxd.Z,[],2) + max(deuxd.Z,[],2)) ./ 2;
-      theta = unwrap(angle((deuxd.R - RC * (ones(1,size(deuxd.R,2)))) + sqrt(-1) .*  (deuxd.Z - ZC * (ones(1,size(deuxd.Z,2))))));
-      theta  = griddata(deuxd.R,deuxd.Z,theta,r2d,z2d,'cubic');
-      theta(~mask) = 0;
+%       RC    = (min(deuxd.R,[],2) + max(deuxd.R,[],2)) ./ 2;
+%       ZC    = (min(deuxd.Z,[],2) + max(deuxd.Z,[],2)) ./ 2;
+%       theta = unwrap(angle((deuxd.R - RC * (ones(1,size(deuxd.R,2)))) + sqrt(-1) .*  (deuxd.Z - ZC * (ones(1,size(deuxd.Z,2))))));
+%       theta  = griddata(deuxd.R,deuxd.Z,theta,r2d,z2d,'cubic');
+%       theta(~mask) = 0;
+      theta = unwrap(angle((r2d - deuxd.R(1,1)) + sqrt(-1) .*  (z2d - (deuxd.Z(1,1)- moment.zaxe(1)))));
+
   end
   
   % initialisation sub structure
   profiles_2d_2{1} = equilibrium.time_slice{1}.profiles_2d{1};
-
+  %
+  BPHI2d = sbt0 .* sign(mean(BPHI2d(:))) .* BPHI2d;
+  %
   warning on
   profiles_2d_2{1}.psi 	    = psi2d';
-  profiles_2d_2{1}.j_tor       = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_tor)) .* jphi';
-  profiles_2d_2{1}.j_parallel  = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_parallel)) .* jpar';
-  profiles_2d_2{1}.b_r	    = BR2d';
-  profiles_2d_2{1}.b_z 	    = BZ2d';
-  profiles_2d_2{1}.b_field_r   = BR2d';
-  profiles_2d_2{1}.b_field_z   = BZ2d';
+  profiles_2d_2{1}.j_tor       = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_tor)) .*  sign(mean(jphi(:))) .* jphi';
+  profiles_2d_2{1}.j_phi       = profiles_2d_2{1}.j_tor;
+  profiles_2d_2{1}.j_parallel  = sign(mean(equilibrium.time_slice{itime}.profiles_1d.j_parallel)) .*  sign(mean(jpar(:))) .* jpar';
+  profiles_2d_2{1}.b_r	       = - sigma_RphiZ_eff .* BR2d';
+  profiles_2d_2{1}.b_z 	       = - sigma_RphiZ_eff .* BZ2d';
+  profiles_2d_2{1}.b_tor       = BPHI2d';   % backward compatibility with COCOS tools
+  profiles_2d_2{1}.b_phi       = BPHI2d';   % backward compatibility with COCOS tools
+  profiles_2d_2{1}.b_field_r   = - sigma_RphiZ_eff .* BR2d';
+  profiles_2d_2{1}.b_field_z   = - sigma_RphiZ_eff .* BZ2d';
   profiles_2d_2{1}.b_field_tor = BPHI2d';
+  profiles_2d_2{1}.b_field_phi = BPHI2d';
   profiles_2d_2{1}.r           = r2d';
   profiles_2d_2{1}.z           = z2d' + moment.zaxe(1);
   %profiles_2d_2.vtheta 	 = vtheta';
   %profiles_2d_2.vphi 	 = vphi';
-  profiles_2d_2{1}.theta 	 = theta';
-  profiles_2d_2{1}.phi 	 = phi';
+  % this grid is not sensitive to ip
+  switch COCOS_out
+      case {1,4,6,7,11,14,16,17}
+              profiles_2d_2{1}.theta 	 = theta.';
+      otherwise
+              profiles_2d_2{1}.theta 	 = 2 .* pi - theta.';
+  end
+  profiles_2d_2{1}.phi 	       = phi';
   %profiles_2d_2.pressure 	 = pressure';
   profiles_2d_2{1}.grid = grid3;
   profiles_2d_2{1}.grid_type.name = 'rectangular';
   profiles_2d_2{1}.grid_type.index = 1;
-  profiles_2d_2{1}.grid_type.description = 'cylindrical R,Z ala eqdsk, within the corresponding COCOS convention (COCOS=11 is assumed in ITER)';
+  profiles_2d_2{1}.grid_type.description = 'cylindrical R,Z ala eqdsk, within the corresponding COCOS convention (COCOS=17 is assumed in IMAS)';
 
   fprintf('\n');
   
@@ -863,7 +1014,7 @@ for itime=1:ntime
   
 
 %     %% graphe for control
-  if itime ==  -1
+  if itime ==  -1 
 	figure(31)
 	clf
 	plot(profiles_2d_1{1}.r',profiles_2d_1{1}.z','m');
@@ -871,10 +1022,13 @@ for itime=1:ntime
 	contour(profiles_2d_2{1}.r,profiles_2d_2{1}.z,profiles_2d_2{1}.psi,equilibrium.time_slice{itime}.profiles_1d.psi,'color','c','linestyle','--')
 	contour(profiles_2d_2{1}.r,profiles_2d_2{1}.z,profiles_2d_2{1}.psi,101,'color','g','linestyle','-')
 	quiver(profiles_2d_2{1}.r,profiles_2d_2{1}.z,profiles_2d_2{1}.b_field_r,profiles_2d_2{1}.b_field_z,'color','r');
-	quiver(profiles_2d_1{1}.r,profiles_2d_1{1}.z,profiles_2d_1{1}.b_field_r,profiles_2d_1{1}.b_field_z,'color','b');
-	if isfield(profil0d,'Rsepa') &&isfield(profil0d,'Zsepa')
-	  plot(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0_offset ,'k');
-	end	
+    quiver(profiles_2d_1{1}.r,profiles_2d_1{1}.z,profiles_2d_1{1}.b_field_r,profiles_2d_1{1}.b_field_z,'color','b');
+    if isfield(profil0d,'Rsepa') &&isfield(profil0d,'Zsepa')
+        plot(profil0d.Rsepa(itime,:),profil0d.Zsepa(itime,:) + z0_offset ,'r');
+        indexp = find(z0dstruct.z0dinput.cons.temps >= profil0d.temps(itime),1);
+        plot(z0dstruct.z0dinput.exp0d.Rsepa(indexp,:),z0dstruct.z0dinput.exp0d.Zsepa(indexp,:) + z0_offset,'r.');
+        
+    end
 	
 	plot(equilibrium.time_slice{itime}.boundary.outline.r,equilibrium.time_slice{itime}.boundary.outline.z,'k.');
 	plot(equilibrium.time_slice{itime}.boundary.geometric_axis.r ,equilibrium.time_slice{itime}.boundary.geometric_axis.z,'or');
@@ -887,18 +1041,29 @@ for itime=1:ntime
       xlabel('R (m)');
       ylabel('Z (m)');
       drawnow
-      keyboard
+      %keyboard
 	  pause(1);
   end
   % adding ggd (copy of profiles_2d_2) to be compatible with ProfileMaker and associated tools
-  ggd = imas_write_regular_grid(profiles_2d_2{1},equilibrium.time_slice{1}.ggd{1});
-  equilibrium.time_slice{itime}.ggd{1} = ggd;
-  ggd = imas_write_regular_grid(profiles_2d_1{1},equilibrium.time_slice{1}.ggd{1});
-  equilibrium.time_slice{itime}.ggd{2} = ggd;
-  % new grid definition
-  equilibrium.grids_ggd{itime}.grid{1} = equilibrium.time_slice{itime}.ggd{1}.grid;
-  equilibrium.grids_ggd{itime}.grid{2} = equilibrium.time_slice{itime}.ggd{2}.grid;
-  equilibrium.grids_ggd{itime}.time    = equilibrium.time(itime);
+  if getappdata(0,'IMAS_VERSION') > 3
+      [ggd,grid] = imas_write_regular_grid_v4(profiles_2d_2{1},equilibrium.time_slice{1}.ggd{1},equilibrium.grids_ggd{1}.grid{1});
+      equilibrium.time_slice{itime}.ggd{1} = ggd;
+      equilibrium.grids_ggd{itime}.grid{1} = grid;
+      [ggd,grid] = imas_write_regular_grid_v4(profiles_2d_1{1},equilibrium.time_slice{1}.ggd{1},equilibrium.grids_ggd{1}.grid{1});
+      equilibrium.time_slice{itime}.ggd{2} = ggd;
+      equilibrium.grids_ggd{itime}.grid{2} = grid;
+      % time for new grid definition
+      equilibrium.grids_ggd{itime}.time    = equilibrium.time(itime);
+  else
+      ggd = imas_write_regular_grid(profiles_2d_2{1},equilibrium.time_slice{1}.ggd{1});
+      equilibrium.time_slice{itime}.ggd{1} = ggd;
+      ggd = imas_write_regular_grid(profiles_2d_1{1},equilibrium.time_slice{1}.ggd{1});
+      equilibrium.time_slice{itime}.ggd{2} = ggd;
+      % new grid definition
+      equilibrium.grids_ggd{itime}.grid{1} = equilibrium.time_slice{itime}.ggd{1}.grid;
+      equilibrium.grids_ggd{itime}.grid{2} = equilibrium.time_slice{itime}.ggd{2}.grid;
+      equilibrium.grids_ggd{itime}.time    = equilibrium.time(itime);
+  end
   % COCOS
   s_ip  = sign(mean(sign(equilibrium.time_slice{itime}.global_quantities.ip)));
   s_b0  = sign(mean(sign(equilibrium.vacuum_toroidal_field.b0)));
@@ -921,7 +1086,12 @@ for itime=1:ntime
     warning('mapequilibrium : sign missmatch between Ip and jeff');
     
   end
-
+  
+  % backward compatibility for COCOS tools
+  if isfield(equilibrium.time_slice{itime},'constraints') && isfield(equilibrium.time_slice{itime}.constraints,'b_field_pol_probe')
+      equilibrium.time_slice{itime}.constraints.bpol_probe = equilibrium.time_slice{itime}.constraints.b_field_pol_probe;
+  end
+  
 end %% END LOOP ITIME=1:NTIME
 
 
@@ -996,7 +1166,7 @@ psi2d(:,end) = psi_mem(:,end);
 
 
 function [u,upr,upz] = f(k,r,z,c1,c2)
-
+equilibrium.time_slice{1}.ggd{1}
 u    =  c1 .* sin(0.1e1 ./ r .* sqrt(k) .* sqrt(k - 0.2e1) .* z) +  ...
         c2 .* cos(0.1e1 ./ r .* sqrt(k) .* sqrt(k - 0.2e1) .* z);
 upr  = -c1 .* cos(0.1e1 ./ r .* sqrt(k) .* sqrt(k - 0.2e1) .* z) ./ r .^ 2 .* sqrt(k) .* sqrt(k - 0.2e1) .* z +  ...
@@ -1947,6 +2117,138 @@ ggd.z{1}.values                         = reshape(p2d.z.',n1 * n2,1);
 ggd.theta{1}.grid_index                 = -999999999;
 ggd.theta{1}.grid_subset_index          = -999999999;
 if isfield(p2d,'theta')
+  ggd.theta{1}.values                   = reshape(p2d.theta.',n1 * n2,1);
+else
+  ggd.theta{1}.values                   = [];
+end
+ggd.psi{1}.grid_index                   = -999999999;
+ggd.psi{1}.grid_subset_index            = -999999999;
+ggd.psi{1}.values                       = reshape(p2d.psi.',n1 * n2,1);
+ggd.phi{1}.grid_index                   = -999999999;
+ggd.phi{1}.grid_subset_index            = -999999999;
+if isfield(p2d,'phi')
+  ggd.phi{1}.values                     = reshape(p2d.phi.',n1 * n2,1);
+else
+  ggd.phi{1}.values                     = [];
+end
+ggd.j_tor{1}.grid_index                 = -999999999;
+ggd.j_tor{1}.grid_subset_index          = -999999999;
+if isfield(p2d,'j_tor')
+  ggd.j_tor{1}.values                   = reshape(p2d.j_tor.',n1 * n2,1);
+else
+  ggd.j_tor{1}.values                   = [];
+end
+ggd.j_parallel{1}.grid_index            = -999999999;
+ggd.j_parallel{1}.grid_subset_index     = -999999999;
+if isfield(p2d,'j_parallel')
+  ggd.j_parallel{1} .values             = reshape(p2d.j_parallel.',n1 * n2,1);
+else
+  ggd.j_parallel{1}.values              = [];
+end
+ggd.b_field_r{1}.grid_index             = -999999999;
+ggd.b_field_r{1}.grid_subset_index      = -999999999;
+ggd.b_field_r{1}.values                 = reshape(p2d.b_field_r.',n1 * n2,1);
+ggd.b_field_z{1}.grid_index             = -999999999;
+ggd.b_field_z{1}.grid_subset_index      = -999999999;
+ggd.b_field_z{1}.values                 = reshape(p2d.b_field_z.',n1 * n2,1);
+ggd.b_field_tor{1}.grid_index           = -999999999;
+ggd.b_field_tor{1}.grid_subset_index    = -999999999;
+ggd.b_field_tor{1}.values               = reshape(p2d.b_field_tor.',n1 * n2,1);
+
+function [ggd,grid] = imas_write_regular_grid_v4(p2d,ggd,grid)
+
+grid.identifier.name        = p2d.grid_type.name;
+grid.identifier.index       = p2d.grid_type.index;
+grid.identifier.description = p2d.grid_type.description; 
+%
+grid.space{1}.geometry_type.name        = [];
+grid.space{1}.geometry_type.index       =  -999999999;
+grid.space{1}.geometry_type.description = [];   
+grid.space{1}.coordinates_type    = [];
+%	
+n1 = length(p2d.grid.dim1); 
+n2 = length(p2d.grid.dim2); 
+
+for k1 = [1:n1]
+   % initialisation sustructure
+   grid.space{1}.objects_per_dimension{1}.object{k1} = grid.space{1}.objects_per_dimension{1}.object{1};
+   grid.space{1}.objects_per_dimension{1}.object{k1}.boundary{1}.index      = -999999999;
+   grid.space{1}.objects_per_dimension{1}.object{k1}.boundary{1}.neighbours = [];
+   grid.space{1}.objects_per_dimension{1}.object{k1}.geometry(1)            = p2d.grid.dim1(k1);
+   grid.space{1}.objects_per_dimension{1}.object{k1}.nodes                  = [];
+   grid.space{1}.objects_per_dimension{1}.object{k1}.measure                = -9.0e40;
+   
+end
+
+% initialisation substructure
+grid.space{2} = grid.space{1};
+for k2 = [1:n2]
+   % initialisation sustructure
+   grid.space{2}.objects_per_dimension{1}.object{k2} = grid.space{2}.objects_per_dimension{1}.object{1};		
+   grid.space{2}.objects_per_dimension{1}.object{k2}.boundary{1}.index      = -999999999;
+   grid.space{2}.objects_per_dimension{1}.object{k2}.boundary{1}.neighbours = [];
+   grid.space{2}.objects_per_dimension{1}.object{k2}.geometry(1)            = p2d.grid.dim2(k2);
+   grid.space{2}.objects_per_dimension{1}.object{k2}.nodes                  = [];
+   grid.space{2}.objects_per_dimension{1}.object{k2}.measure                = -9.0e40;
+   
+end
+   
+grid.grid_subset{1}.identifier.name                = '';
+grid.grid_subset{1}.identifier.index               = -999999999;
+grid.grid_subset{1}.identifier.description         = '';
+grid.grid_subset{1}.dimension                      = -999999999;
+grid.grid_subset{1}.element{1}.object{1}.space     = -999999999;
+grid.grid_subset{1}.element{1}.object{1}.dimension = -999999999;
+grid.grid_subset{1}.element{1}.object{1}.index     = -999999999;
+grid.grid_subset{1}.base{1}.jacobian               = [];
+grid.grid_subset{1}.base{1}.g11_covariant          = [];
+grid.grid_subset{1}.base{1}.g12_covariant          = [];
+grid.grid_subset{1}.base{1}.g13_covariant          = [];
+grid.grid_subset{1}.base{1}.g21_covariant          = [];
+grid.grid_subset{1}.base{1}.g22_covariant          = [];
+grid.grid_subset{1}.base{1}.g23_covariant          = [];
+grid.grid_subset{1}.base{1}.g31_covariant          = [];
+grid.grid_subset{1}.base{1}.g32_covariant          = [];
+grid.grid_subset{1}.base{1}.g33_covariant          = [];
+grid.grid_subset{1}.base{1}.g11_contravariant      = [];
+grid.grid_subset{1}.base{1}.g12_contravariant      = [];
+grid.grid_subset{1}.base{1}.g13_contravariant      = [];
+grid.grid_subset{1}.base{1}.g21_contravariant      = [];
+grid.grid_subset{1}.base{1}.g22_contravariant      = [];
+grid.grid_subset{1}.base{1}.g23_contravariant      = [];
+grid.grid_subset{1}.base{1}.g31_contravariant      = [];
+grid.grid_subset{1}.base{1}.g32_contravariant      = [];
+grid.grid_subset{1}.base{1}.g33_contravariant      = [];
+
+grid.grid_subset{1}.metric.jacobian          = [];
+grid.grid_subset{1}.metric.g11_covariant     = [];
+grid.grid_subset{1}.metric.g12_covariant     = [];
+grid.grid_subset{1}.metric.g13_covariant     = [];
+grid.grid_subset{1}.metric.g21_covariant     = [];
+grid.grid_subset{1}.metric.g22_covariant     = [];
+grid.grid_subset{1}.metric.g23_covariant     = [];
+grid.grid_subset{1}.metric.g31_covariant     = [];
+grid.grid_subset{1}.metric.g32_covariant     = [];
+grid.grid_subset{1}.metric.g33_covariant     = [];
+grid.grid_subset{1}.metric.g11_contravariant = [];
+grid.grid_subset{1}.metric.g12_contravariant = [];
+grid.grid_subset{1}.metric.g13_contravariant = [];
+grid.grid_subset{1}.metric.g21_contravariant = [];
+grid.grid_subset{1}.metric.g22_contravariant = [];
+grid.grid_subset{1}.metric.g23_contravariant = [];
+grid.grid_subset{1}.metric.g31_contravariant = [];
+grid.grid_subset{1}.metric.g32_contravariant = [];
+grid.grid_subset{1}.metric.g33_contravariant = [];
+
+ggd.r{1}.grid_index                     = -999999999;
+ggd.r{1}.grid_subset_index              = -999999999;
+ggd.r{1}.values                         = reshape(p2d.r.',n1 * n2,1);
+ggd.z{1}.grid_index                     = -999999999;
+ggd.z{1}.grid_subset_index              = -999999999;
+ggd.z{1}.values                         = reshape(p2d.z.',n1 * n2,1);
+ggd.theta{1}.grid_index                 = -999999999;
+ggd.theta{1}.grid_subset_index          = -999999999;
+if isfield(p2d,'theta')
   ggd.theta{1}.values                   = reshape(p2d.theta.',n1 * n2,1);;
 else
   ggd.theta{1}.values                   = [];
@@ -1961,13 +2263,14 @@ if isfield(p2d,'phi')
 else
   ggd.phi{1}.values                     = [];
 end
-ggd.j_tor{1}.grid_index                 = -999999999;
-ggd.j_tor{1}.grid_subset_index          = -999999999;
+ggd.j_phi{1}.grid_index                 = -999999999;
+ggd.j_phi{1}.grid_subset_index          = -999999999;
 if isfield(p2d,'j_tor')
-  ggd.j_tor{1}.values                   = reshape(p2d.j_tor.',n1 * n2,1);;
+  ggd.j_phi{1}.values                   = reshape(p2d.j_tor.',n1 * n2,1);;
 else
-  ggd.j_tor{1}.values                   = [];
+  ggd.j_phi{1}.values                   = [];
 end
+ggd.j_tor = ggd.j_phi; % backward compatibility on COCOS_out check
 ggd.j_parallel{1}.grid_index            = -999999999;
 ggd.j_parallel{1}.grid_subset_index     = -999999999;
 if isfield(p2d,'j_parallel')
@@ -1981,9 +2284,10 @@ ggd.b_field_r{1}.values                 = reshape(p2d.b_field_r.',n1 * n2,1);
 ggd.b_field_z{1}.grid_index             = -999999999;
 ggd.b_field_z{1}.grid_subset_index      = -999999999;
 ggd.b_field_z{1}.values                 = reshape(p2d.b_field_z.',n1 * n2,1);
-ggd.b_field_tor{1}.grid_index           = -999999999;
-ggd.b_field_tor{1}.grid_subset_index    = -999999999;
-ggd.b_field_tor{1}.values               = reshape(p2d.b_field_tor.',n1 * n2,1);
+ggd.b_field_phi{1}.grid_index           = -999999999;
+ggd.b_field_phi{1}.grid_subset_index    = -999999999;
+ggd.b_field_phi{1}.values               = reshape(p2d.b_field_tor.',n1 * n2,1);
+ggd.b_field_tor = ggd.b_field_phi; % backward compatibility on COCOS_out check
 
 % fonction appele par zfitvide_interp
 function [psi_out,BR_out,BZ_out] = zfitvide_interp(equivide,varargin)
@@ -2153,6 +2457,19 @@ else
   BR_out(~isfinite(BR_out))   = BR_out_mem(~isfinite(BR_out));
   BZ_out(~isfinite(BZ_out))   = BZ_out_mem(~isfinite(BZ_out));
   %
+  % in any ~isfinite
+  if any(~isfinite(psi_out(:)))
+      disp('Warning: NaN in 2D map interpolation -> corrected');
+      mask_f = isfinite(psi_out(:));
+      F_PSI_F   = scatteredInterpolant(Rin(mask_f),Zin(mask_f),psi_out(mask_f),'natural','linear');
+      F_BR_F    = scatteredInterpolant(Rin(mask_f),Zin(mask_f),BR_out(mask_f),'natural','linear');
+      F_BZ_F    = scatteredInterpolant(Rin(mask_f),Zin(mask_f),BZ_out(mask_f),'natural','linear');
+      mask_nf = ~isfinite(psi_out(:));
+      psi_out(mask_nf) = F_PSI_F(Rin(mask_nf),Zin(mask_nf));
+      BR_out(mask_nf)  = F_BR_F(Rin(mask_nf),Zin(mask_nf));
+      BZ_out(mask_nf)  = F_BZ_F(Rin(mask_nf),Zin(mask_nf));
+  end
+  %
   psi_out = reshape(psi_out,nsin);
   BR_out  = reshape(BR_out,nsin);
   BZ_out  = reshape(BZ_out,nsin);
@@ -2190,3 +2507,25 @@ else
       keyboard
   end
 end
+
+function theta = sign2theta(theta,sign_ip,COCOS_out)
+
+
+switch COCOS_out
+    case {5,6,7,8,15,16,17,18}
+        if sign_ip < 0
+           %theta 	 = theta;
+        else
+            theta 	 = 2 .* pi - theta;
+        end
+    otherwise
+        if sign_ip < 0
+            theta 	 = 2 .* pi - theta;
+       else
+            %theta 	 = theta;
+        end
+end
+
+
+
+

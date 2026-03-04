@@ -15,9 +15,10 @@ if getappdata(0,'ZGUI_CANCEL')
     return;
 end
 
+%qlkzparams.calc_part_transport = 1;
 % fisrt call
 clear QLK_nn_data
-klz_max = 31;
+klz_max = qlkzparams.ext_nbloop;
 dwait_ = 1 ./ (2 + 2 .* klz_max);
 fwait_ = 0;
 if isappdata(0,'WORKING_POINT_TIME');
@@ -32,8 +33,39 @@ setappdata(0,'WORKING_POINT_TIME',twp);
 for klz_ = 1:klz_max
   % memorisation of last result
   jeux2.post = post;
+  list = findobj(0, 'type', 'figure');
+  main = findobj(0, 'type', 'figure', 'tag', 'zeroda');
+  
+  for k = 1:length(list)
+      % Vérifie si c'est ni la fenêtre principale, ni un waitbar
+      is_waitbar = strcmp(get(list(k), 'Tag'), 'TMWWaitbar');
+      if list(k) ~= main && ~is_waitbar
+          close(list(k));
+      end
+  end
+
+  % Vérification avant d'utiliser ho (évite erreur si supprimé)
+  if exist('ho', 'var') && ishandle(ho)
+      set(ho, 'value', 0);
+  end
   % Qualikiz prediction 
-  [chie_loop,chii_loop,chii_neo,D_loop,V_loop] = z0qlkz_std(qlkzparams,post.z0dinput.option,post.zerod,post.profil0d,2);
+  if qlkzparams.imp_trans == 4
+    [chie_loop,chii_loop,chii_neo,D_loop,V_loop,G_loop,D_loop_n,V_loop_n,G_loop_n] = z0qlkz_imp_std(qlkzparams,post.z0dinput.option,post.zerod,post.profil0d,2,twp,post.z0dinput);
+
+  elseif qlkzparams.imp_trans == 3
+    [chie_loop,chii_loop,chii_neo,D_loop,V_loop,G_loop,D_loop_n,V_loop_n,G_loop_n] = z0qlkz_imp_std(qlkzparams,post.z0dinput.option,post.zerod,post.profil0d,2,twp,post.z0dinput);
+
+  elseif qlkzparams.imp_trans == 2
+    [chie_loop,chii_loop,chii_neo,D_loop,V_loop,G_loop] = z0qlkz_imp_std(qlkzparams,post.z0dinput.option,post.zerod,post.profil0d,2,twp,post.z0dinput);
+
+  elseif qlkzparams.imp_trans == 1
+    qlkzparams.nbloop_max=1;
+    [chie_loop,chii_loop,chii_neo,D_loop,V_loop,G_loop] = z0qlkz_imp_std(qlkzparams,post.z0dinput.option,post.zerod,post.profil0d,2,twp,post.z0dinput);
+    return
+  elseif qlkzparams.imp_trans == 0
+    [chie_loop,chii_loop,chii_neo,D_loop,V_loop] = z0qlkz_std(qlkzparams,post.z0dinput.option,post.zerod,post.profil0d,2);
+  end
+
   fwait_ = fwait_ + dwait_;
   waitbar(fwait_,hwaitbar,'Please wait...');
   drawnow
@@ -43,7 +75,12 @@ for klz_ = 1:klz_max
       cs4m('Ti','nointer');
   end
   if qlkzparams.calc_part_transport == 1
-      cs4m('Ne','nointer');
+    cs4m('Ne','nointer');
+    if qlkzparams.imp_trans ~= 0
+      cs4m('N1','nointer');
+      cs4m('NW','nointer');
+    else
+    end
   end
 
   % prediction for working point

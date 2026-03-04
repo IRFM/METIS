@@ -1,0 +1,128 @@
+#!/usr/bin/env python
+import imas, os
+import logging
+from libmuscle import Instance, Grid, Message, KEEPS_NO_STATE_FOR_NEXT_USE
+from yaml import load as yamlload
+from ymmsl import Operator
+from idstools.utils.clihelper import get_backend_id
+import copy
+try:
+    from yaml import CLoader as yamlLoader
+except ImportError:
+    from yaml import Loader as yamlLoader
+
+# EMBED SCRIPT INTO FUNCTION FOR ITS USE WITH MUSCLE3
+def cs_cooker() -> None:
+
+    instance = Instance({
+        Operator.F_INIT: ['plasma_sources_in',\
+                          'core_sources_in',\
+                          'waves_in',\
+                          'equilibrium_in',\
+                          'core_profiles_in'],
+        Operator.O_F:    ['plasma_sources_out']},
+        KEEPS_NO_STATE_FOR_NEXT_USE)
+    
+    logging.info('#sync# Start')
+ 
+    FirstRun = True
+    while instance.reuse_instance():
+
+        print('FirstRun',FirstRun)
+        if FirstRun:
+            config_folder = instance.get_setting('config_folder', 'str')
+            FirstRun = False
+            file = open('../../../../'+config_folder+'/scenario.yaml', 'r')
+            cc = yamlload(file,Loader=yamlLoader)
+            file.close()
+            if cc['output_user_or_path'] == 'default':
+                cc['output_user_or_path'] = os.getenv('USER')
+            output = imas.DBEntry(get_backend_id(cc['output_backend']),cc['output_database'],cc['shot'],cc['run_out'],cc['output_user_or_path'])
+            output.create()
+
+        # MUSCLE3: RECEIVE PLASMA_SOURCES
+        logging.info('#sync# Receiving plasma_sources_in')
+        print('Receiving plasma_sources_in')
+        plasma_sources_msg = instance.receive("plasma_sources_in")
+        input_plasma_sources = imas.plasma_sources()
+        input_plasma_sources.deserialize(plasma_sources_msg.data)
+        plasma_sources_timestamp = plasma_sources_msg.timestamp
+                      
+        # MUSCLE3: RECEIVE CORE_SOURCES
+        logging.info('#sync# Receiving core_sources_in')
+        print('Receiving core_sources_in')
+        core_sources_msg = instance.receive("core_sources_in")
+        input_core_sources = imas.core_sources()
+        input_core_sources.deserialize(core_sources_msg.data)
+        core_sources_timestamp = core_sources_msg.timestamp
+
+        # MUSCLE3: RECEIVE WAVES
+        logging.info('#sync# Receiving waves_in')
+        print('Receiving waves_in')
+        waves_msg = instance.receive("waves_in")
+        input_waves = imas.waves()
+        input_waves.deserialize(waves_msg.data)
+        waves_timestamp = waves_msg.timestamp
+
+        # MUSCLE3: RECEIVE EQUILIBRIUM
+        logging.info('#sync# Receiving equilibrium_in')
+        print('Receiving equilibrium_in')
+        equilibrium_msg = instance.receive("equilibrium_in")
+        input_equilibrium = imas.equilibrium()
+        input_equilibrium.deserialize(equilibrium_msg.data)
+        equilibrium_timestamp = equilibrium_msg.timestamp
+
+        # MUSCLE3: RECEIVE CORE_PROFILES
+        logging.info('#sync# Receiving core_profiles_in')
+        print('Receiving core_profiles_in')
+        core_profiles_msg = instance.receive("core_profiles_in")
+        input_core_profiles = imas.core_profiles()
+        input_core_profiles.deserialize(core_profiles_msg.data)
+        core_profiles_timestamp = core_profiles_msg.timestamp
+
+        # REPLACE ORIGINAL ECRH SOURCE BY THE ONE FROM HCD2CORE_SOURCES
+        plasma_sources_out = copy.deepcopy(input_plasma_sources)
+        for isource1 in range(len(plasma_sources_out.source)):
+            for isource2 in range(len(input_core_sources.source)):
+                if plasma_sources_out.source[isource1].identifier.index == 3 \
+                   and input_core_sources.source[isource2].identifier.index == 3:
+                    plasma_sources_out.source[isource1].identifier = \
+                        copy.deepcopy(input_core_sources.source[isource2].identifier)
+                    plasma_sources_out.source[isource1].species = \
+                        copy.deepcopy(input_core_sources.source[isource2].species)
+                    plasma_sources_out.source[isource1].global_quantities = \
+                        copy.deepcopy(input_core_sources.source[isource2].global_quantities)
+                    plasma_sources_out.source[isource1].profiles_1d = \
+                        copy.deepcopy(input_core_sources.source[isource2].profiles_1d)
+                    plasma_sources_out.source[isource1].code = \
+                        copy.deepcopy(input_core_sources.source[isource2].code)
+                    
+        # MUSCLE3: SEND PLASMA_SOURCES
+        plasma_sources_timestamp = plasma_sources_out.time[-1]
+        for isource in range(len(plasma_sources_out.source)):
+            if len(plasma_sources_out.source[isource].profiles_1d[0].grid.psi) > 1 \
+               and len(plasma_sources_out.source[isource].profiles_1d[0].grid.rho_pol_norm) < 1:
+                plasma_sources_out.source[isource].profiles_1d[0].grid.rho_pol_norm.\
+                    resize(len(plasma_sources_out.source[isource].profiles_1d[0].grid.psi))
+                plasma_sources_out.source[isource].profiles_1d[0].grid.rho_pol_norm = \
+                    plasma_sources_out.source[isource].profiles_1d[0].grid.psi
+        plasma_sources_msg = Message(plasma_sources_timestamp, data=plasma_sources_out.serialize())
+        logging.info('#sync# Sending plasma_sources_out')
+        print('Sending plasma_sources_out')
+        instance.send("plasma_sources_out", plasma_sources_msg)
+
+        #import pdb
+        #pdb.set_trace()
+        #output.put_slice(input_core_sources) # Pure ECRH from TORBEAM
+        output.put_slice(plasma_sources_out)  # Full core_sources METIS+TORBEAM
+        output.put_slice(input_waves)         # Raw TORBEAM output
+        output.put_slice(input_equilibrium)   # Needed for ecray plot
+        output.put_slice(input_core_profiles) # Needed for ecray plot
+
+    #output.close()
+        
+if __name__ == '__main__':
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.INFO)
+    cs_cooker()
+

@@ -1,0 +1,66 @@
+ymmsl_version: v0.1
+
+model:
+  name: METIS4MUSCLE3_DATAPROVIDER_TEST
+  components:
+    scheduler: 
+      implementation: scheduler
+      ports: 
+         o_i: [clock]
+    metis: 
+      implementation: metis
+      ports:
+         f_init: [clock]
+
+  conduits:
+    scheduler.clock: metis.clock
+
+resources:
+  scheduler:
+    threads: 1
+  metis:
+    threads: 30
+    
+implementations:
+   metis: 
+        executable: export IMAS_AL_SERIALIZER_TMP_DIR=$IMAS_AL_SERIALIZER_TMP_DIR_METIS ; matlab
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3(-3,0,1);"
+#       args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3')); metis4muscle3(2,0,1);"
+
+   scheduler:
+        executable: export IMAS_AL_SERIALIZER_TMP_DIR=$IMAS_AL_SERIALIZER_TMP_DIR_SCHEDULER; matlab
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3_data_provider(2,0,1);"
+#        args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3_data_provider(2,0,1);"
+
+
+
+settings:
+  muscle_local_log_level: INFO
+  muscle_remote_log_level: WARNING
+
+
+# for Scheduler actor
+  dataprovider_metis_filename:  /Home/JA132999/Zone_Travail/METIS4ITM/eufus.Git/metis/certification/metis/ITER_rampup_ECCD.mat
+  dataprovider_imas_pulse: 99
+  dataprovider_imas_run: 1 
+  dataprovider_imas_user: JA132999 
+  dataprovider_imas_machine: test 
+  dataprovider_imas_version: 3 
+  dataprovider_imas_backend: 13
+  dataprovider_imas_writedata: 1
+
+# for METIS actor
+# internal clock for replay mode and limit on time to prevent infinite loop
+  # start of the simulation in relay mode  (if inside simulated data time, otherwise start from first time of the simulation)
+  metis_clock_time_start: 0.0  
+  # end time of the simulation (if in replay mode, the simulation stop at the minimum of this time and the end of simulated data)
+  metis_clock_time_stop:  3.0  
+# METIS file name (with full path) for replay mode
+  metis_filename:  /Home/JA132999/Zone_Travail/METIS4ITM/eufus.Git/metis/certification/metis/ITER_rampup_ECCD.mat
+# for testing METIS computation can be switch off and data are interpolated from METIS simulation file define by setting metis_filename
+  metis_computation: 0
+
+
+# end of configuration file
+
+

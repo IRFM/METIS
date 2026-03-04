@@ -83,7 +83,7 @@ rm_cs4m;
 workingpoint = NaN;
 if nargin < 1
     % test access to tools_dc
-    if exist('run_gui_dc') ~= 2
+    if exist('run_gui_dc.m') ~= 2
         warndlg('WEST data access requires IMAS framework and tools_dc functions. You must load the module tools_dc before launching METIS. This feature is not yet available under Windows or Mac OS/X','Access to data not avialable');
         z0dinput = [];
         return
