@@ -642,4 +642,16 @@ end
 if ~isfield(option,'min_te_LCFS')
     option.min_te_LCFS    = 13.6;
 end
-
+if ~isfield(option,'second_stability')
+    option.second_stability = 0;
+end
+if ~isfield(option,'mavrin_sigmav')
+    option.mavrin_sigmav = 1;
+end
+if ~isfield(option,'icrh_mode_fast')
+    option.icrh_mode_fast = 1;
+end   
+% disable by default
+if ~isfield(option,'f_icrh_salpha')
+    option.f_icrh_salpha = 0;
+end

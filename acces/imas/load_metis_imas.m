@@ -151,9 +151,9 @@ end
 %% BACKWARD COMPATIBILTY (BUG SHORTCUT)
 if isfield(exp0d,'flux')
   if ~isfield(exp0d,'edgeflux')
-    exp0d.edgeflux = exp0d.flux;
+    exp0d.edgeflux = exp0d.flux ./ 2 ./ pi;
   elseif all(~isfinite(exp0d.edgeflux))
-    exp0d.edgeflux = exp0d.flux;   
+    exp0d.edgeflux = exp0d.flux ./2 ./ pi;   
   end
   exp0d = rmfield(exp0d,'flux');
 end

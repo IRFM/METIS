@@ -11,7 +11,7 @@ if nargin < 1
     type.metisfilename          = 'string';                    
     borne.metisfilename         = '';  
     defaut.metisfilename        = '';                
-    info.metisfilename          = 'path and name of METIS simulation file used for the computation (if empty, a file selector will be open at the next step)';
+    info.metisfilename          = 'Path and name of METIS simulation file used for the computation (if empty, a file selector will be open at the next step)';
 
     valeur.number_of_time_slices    = 101;   
     type.number_of_time_slices      = 'float';
@@ -41,7 +41,7 @@ if nargin < 1
     type.reinforce       = 'float';
     borne.reinforce      = [0,100];  
     defaut.reinforce     = 30;
-    info.reinforce      = 'weigths of extrema in LCFS (to have a better match on X-points and RIG and ROG)';
+    info.reinforce      = 'Weights of extrema in LCFS (to have a better match on X-points and RIG and ROG)';
     
     valeur.mesh_type = 'standard';     
     type.mesh_type   = 'string';
@@ -59,19 +59,19 @@ if nargin < 1
     type.current_margins       = 'float';
     borne.current_margins      = [-0.2,0.2];  
     defaut.current_margins     = 0;
-    info.current_margins       = 'margin to be keep to coil current limits (on absolute value, if < 0, allows to go above the limit);\n Pay attention to be compatible with plasma initialisation value;\n Applied only to EF coils';
+    info.current_margins       = 'Margin to be keep to coil current limits (on absolute value, if < 0, allows to go above the limit);\n Pay attention to be compatible with plasma initialization value;\n Applied only to EF coils';
     
     valeur.voltage_margins     = 0;   
     type.voltage_margins       = 'float';
     borne.voltage_margins      = [-0.2,0.2];  
     defaut.voltage_margins     = 0;
-    info.voltage_margins       = 'margin to be keep to coil voltage limits (on absolute value, if < 0, allows to go above the limit);\n Pay attention to be compatible with plasma initialisation value;\n Applied on all coils';
+    info.voltage_margins       = 'Margin to be keep to coil voltage limits (on absolute value, if < 0, allows to go above the limit);\n Pay attention to be compatible with plasma initialization value;\n Applied on all coils';
     
     valeur.mode_init_ps_vv = 'METIS Vloop';     
     type.mode_init_ps_vv   = 'string';
     borne.mode_init_ps_vv  = {'METIS Vloop', 'Precribed','zero','undetermined'};  
     defaut.mode_init_ps_vv = 'METIS Vloop';
-    info.mode_init_ps_vv   = 'Methode to initialise currents in passive strcutures at first time of computation (first_time):\nif = Metis Vloop, used vloop from METIS simulation;\nif = Prescribed, used parameter value_init_ps_vv;\nif = zero, set initial current in passive structures to zero;\nif = undetermined, no information are provided on current in passive structures';    
+    info.mode_init_ps_vv   = 'Method used to initialize currents in passive structures at first time of computation (first_time):\nif = Metis Vloop, used vloop from METIS simulation;\nif = Prescribed, used parameter value_init_ps_vv;\nif = zero, set initial current in passive structures to zero;\nif = undetermined, no information are provided on current in passive structures';    
     
     valeur.value_init_ps_vv     = 0;   
     type.value_init_ps_vv       = 'float';
@@ -83,7 +83,7 @@ if nargin < 1
     type.init_mode   = 'string';
     borne.init_mode  = {'current','full','simple'};  
     defaut.init_mode = 'full';
-    info.init_mode   = 'Methode used to initialise first equilibrium coil current and poloidal flux map:\nif = simple, start from pre-magnetisation current correct of poloidal flux consumption computed by METIS and simple analytical poloidal flux map;\nif = current, used fast fixed boundary identification mode to compute first coil current values and simple analytical poloidal flux map;\nif = full, used fast fixed boundary identification mode to compute first coil current values and interpolated on mesh poloidal flux map from  fast fixed boundary identification mode.';    
+    info.init_mode   = 'Method used to initialize first equilibrium coil current and poloidal flux map:\nif = simple, start from pre-magnetisation current correct of poloidal flux consumption computed by METIS and simple analytical poloidal flux map;\nif = current, used fast fixed boundary identification mode to compute first coil current values and simple analytical poloidal flux map;\nif = full, used fast fixed boundary identification mode to compute first coil current values and interpolated on mesh poloidal flux map from  fast fixed boundary identification mode.';    
  
     valeur.plotonoff    = 2;      
     type.plotonoffs     = 'integer';
@@ -101,7 +101,7 @@ if nargin < 1
     type.premag_file    = 'string';                    
     borne.premag_file   = '';  
     defaut.premag_file  = '';                
-    info.premag_file    = 'if available, name of file containing premagnetisation data (can be leave empty; if = workspace, reads data structure premagnetisation_jt60sa in Matlab workspace)';
+    info.premag_file    = 'if available, name of file containing pre-magnetization data (can be leave empty; if = workspace, reads data structure premagnetisation_jt60sa in Matlab workspace)';
     
     valeur.flux_constant_mode  = 'manual';      
     type.flux_constant_mode    = 'string';
@@ -128,13 +128,13 @@ if nargin < 1
     type.flux_offset      = 'float';
     borne.flux_offset     = [-50,50];  
     defaut.flux_offset    = 17.4;
-    info.flux_offset      = 'poloidal flux offset used to match METIS current diffusion LCFS poloidal flux and FEEQS.M LCFS poloidal flux (Wb)';
+    info.flux_offset      = 'Poloidal flux offset used to match METIS current diffusion LCFS poloidal flux and FEEQS.M LCFS poloidal flux (Wb)';
    
     valeur.breakdown_flux   = 0.3;   
     type.breakdown_flux     = 'float';
     borne.breakdown_flux    = [0, 20];  
     defaut.breakdown_flux   = 0.3;
-    info.breakdown_flux   = 'poloidal flux consumed for plasma break-down and burn-through (Wb);\nif METIS breakdown model is turn on, take the maximum of this value and METIS value.';
+    info.breakdown_flux   = 'Poloidal flux consumed for plasma break-down and burn-through (Wb);\nif METIS breakdown model is turn on, take the maximum of this value and METIS value.';
    
     valeur.init_voltages  = 'METIS Vloop';      
     type.init_voltages    = 'string';
@@ -164,13 +164,13 @@ if nargin < 1
     type.R_strike_point      = 'string';
     borne.R_strike_point     = '';  
     defaut.R_strike_point    = '1.92, 2.64';
-    info.R_strike_point      = 'list of strike point radial positions (m, quote separated)';
+    info.R_strike_point      = 'List of strike point radial positions (m, quote separated)';
 
     valeur.Z_strike_point    = '-2.48, -2.83';  
     type.Z_strike_point      = 'string';
     borne.Z_strike_point     = '';  
     defaut.Z_strike_point    = '-2.48, -2.83';
-    info.Z_strike_point      = 'list of strike point vertical positions (m, quote separated)';
+    info.Z_strike_point      = 'List of strike point vertical positions (m, quote separated)';
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % to be put in weight_struct %
@@ -180,31 +180,31 @@ if nargin < 1
     type.weight_I2       = 'float';
     borne.weight_I2      = [1e-21,1e-4];  
     defaut.weight_I2     = 1e-14;
-    info.weight_I2       = 'Weight or regularisation term son sum(Icoils^2) in first inverse mode';
+    info.weight_I2       = 'Weight or regularization term son sum(Icoils^2) in first inverse mode';
 
     valeur.factor_w_pfcur     = 1;   
     type.factor_w_pfcur       = 'float';
     borne.factor_w_pfcur      = [0,10];  
     defaut.factor_w_pfcur     = 1;
-    info.factor_w_pfcur       = 'relative weight on penalisation term for current limits in coils; used only for first inverse equilibrium computation';
+    info.factor_w_pfcur       = 'Relative weight on penalization term for current limits in coils; used only for first inverse equilibrium computation';
     
     valeur.ef5_w    = 3;   
     type.ef5_w      = 'float';
     borne.ef5_w     = [0,10];  
     defaut.ef5_w    = 3;
-    info.ef5_w      = 'penalisation of current in EF5 coil to prevent it be used as main coil to make X-point (power of 10); used only for first inverse equilibrium computation';
+    info.ef5_w      = 'Penalization of current in EF5 coil to prevent it be used as main coil to make X-point (power of 10); used only for first inverse equilibrium computation';
     
     valeur.weight_V2     = 1e-14;   
     type.weight_V2       = 'float';
     borne.weight_V2      = [1e-21,1e-4];  
     defaut.weight_V2     = 1e-14;
-    info.weight_V2       = 'Weight or regularisation term son sum(Voltages^2) in inverse evolutive mode';
+    info.weight_V2       = 'Weight or regularization term son sum(Voltages^2) in inverse evolutive mode';
 
     valeur.weight_LCFS     = 1;   
     type.weight_LCFS       = 'float';
     borne.weight_LCFS      = [1e-15,10];  
     defaut.weight_LCFS     = 1;
-    info.weight_LCFS       = 'relative weight on penalisation term on LCFS desired points in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';
+    info.weight_LCFS       = 'Relative weight on penalization term on LCFS desired points in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';
     
     valeur.weight_psibd     = 1;   
     type.weight_psibd       = 'float';
@@ -216,25 +216,25 @@ if nargin < 1
     type.weight_PS       = 'float';
     borne.weight_PS      = [0,10];  
     defaut.weight_PS     = 1;
-    info.weight_PS       = 'relative weight on penalisation term on integral(J_PS^2*dS) on passive structure elements in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
+    info.weight_PS       = 'Relative weight on penalization term on integral(J_PS^2*dS) on passive structure elements in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
     
     valeur.weight_VV     = 1;   
     type.weight_VV       = 'float';
     borne.weight_VV      = [0,10];  
     defaut.weight_VV     = 1;
-    info.weight_VV       = 'relative weight on penalisation term on integral(J_VV^2*dS) on vacuum vessel in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
+    info.weight_VV       = 'Relative weight on penalization term on integral(J_VV^2*dS) on vacuum vessel in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
     
     valeur.weight_current     = 1;   
     type.weight_current       = 'float';
     borne.weight_current      = [0,10];  
     defaut.weight_current     = 1;
-    info.weight_current       = 'relative weight on penalisation term for coil current limits compiliance in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
+    info.weight_current       = 'Relative weight on penalization term for coil current limits compiliance in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
 
     valeur.weight_Voltage     = 1;   
     type.weight_Voltage       = 'float';
     borne.weight_Voltage      = [0,10];  
     defaut.weighweight_Voltaget_Voltage     = 1;
-    info.weight_current       = 'relative weight on penalisation term for coil voltage limits compiliance in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
+    info.weight_current       = 'Relative weight on penalization term for coil voltage limits compliance in inverse evolutive mode\n(must be set to zero to switch off this term in cost function)';    
 
     interface.ts = '';                    % nom de la fonction d'interfacage avec les donnees TS
     interface.jet = '';                   % nom de la fonction d'interfacage avec les donnees Jet
@@ -246,7 +246,7 @@ if nargin < 1
     option_feeqs_jt60sa.info       = info;
     option_feeqs_jt60sa.interface  = interface;
     
-    option_feeqs_jt60sa.description = 'Computation of pre magnetisation before breakdown for JT-60SA';   % description (une ligne) de la fonction
+    option_feeqs_jt60sa.description = 'Computation of inverse evolutif for JT-60SA';   % description (une ligne) de la fonction
 
     option_feeqs_jt60sa.help     = '';                            % nom du fichier d'aide s'il existe, sinon aide de la fonction
     option_feeqs_jt60sa.gui      ='';                             % nom de l'interface graphique specifique si elle existe

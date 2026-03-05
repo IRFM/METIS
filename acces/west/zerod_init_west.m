@@ -189,11 +189,16 @@ end
 with_equinox = 0;
 if ~isempty(grho)
     
+    while any(diff(tgrho) <=0)
+        grho(diff(tgrho) <=0,:) = [];
+        tgrho(diff(tgrho) <=0,:) = [];        
+    end
+    
     grho     = interp1(tgrho,grho,temps,'nearest','extrap');
     Rext             = grho(:,1:2:end-1);
     Zext             = grho(:,2:2:end);
     Rext(:,end)    = Rext(:,1);
-    Zext(:,end)    = Zext(:,1);32.2764
+    Zext(:,end)    = Zext(:,1);
     
     % recalcul des parametres pour verification
     ve    = ones(1,size(Rext,2));

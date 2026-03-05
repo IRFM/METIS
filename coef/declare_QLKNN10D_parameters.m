@@ -140,10 +140,10 @@ defaut.calc_heat_transport	= 1;
 info.calc_heat_transport	= 'Calculate q_e and q_i';
 %label.calc_heat_transport
 
-valeur.calc_part_transport	= 1;
+valeur.calc_part_transport	= 0;
 type.calc_part_transport	= 'real';
 borne.calc_part_transport	= {0,1};
-defaut.calc_part_transport	= 1;
+defaut.calc_part_transport	= 0;
 info.calc_part_transport	= 'Calculate Gamma/D/V';
 %label.calc_part_transport
 
@@ -293,6 +293,13 @@ borne.Effect_TioTe	    =  {'real value','forced to 2.5','forced to 0.25'};
 defaut.Effect_TioTe	    = 'real value';
 info.Effect_TioTe	    = 'This key is used to test effect of Ti/Te (in the limit of the NN training set) on transport coefficients;\nIn QLK-NN call, if not = real value, force the Ti/Te input to be equal to:\nif = forced to 2.5, Ti/Te = 2.5;if = forced to 0.25, Ti/Te = 0.25;\n';
 %label.Effect_TioTe
+
+valeur.update_nbar	= 0;
+type.update_nbar	= 'real';
+borne.update_nbar	= {0,1};
+defaut.update_nbar	= 0;
+info.update_nbar	= 'if = 1, update nbar in METTIS when density predicted by QLK-NN is computed';
+
 
 valeur.use_ion_diffusivity_networks	= 0;
 type.use_ion_diffusivity_networks	= 'real';

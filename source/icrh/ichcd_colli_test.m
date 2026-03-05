@@ -1,9 +1,57 @@
-function [Pe,PM,pabs,R,Wperp,Wpar,Tpar_out,P_loss_conv,flag_non_conv,Xi,next] = ichcd_colli_test(q,te,ne0,ti,ni0,U,model,ichcd_params,g,last)
+function [Pe,PM,pabs,R,Wperp,Wpar,Tpar_out,P_loss_conv,flag_non_conv,Xi,next,salpha_icrh] = ichcd_colli_test(q,te,ne0,ti,ni0,U,model,ichcd_params,g,last)
 %#codegen
 % Function to derive ICRH power
 % persisten,t remove to ensure Matlab automatic parallelisation will be
 % working, replace by last
 %persistent te_prev pabs_prev Pe_prev PM_prev U_prev R_prev Wperp_prev Wpar_prev Tpar_prev Xi
+
+% load  precomputed table for mono-kinetic -> thermal plasma fusion rate
+persistent svs_td
+persistent Ftd
+persistent svs_dt 
+persistent Fdt
+persistent svs_dhe3
+persistent Fdhe3
+persistent svs_he3d
+persistent Fhe3d
+persistent svs_pb
+persistent Fpb
+persistent svs_bp
+persistent Fbp
+if isempty(svs_td)
+   svs_td = load('sigmav_nbi_t_plasma_d');
+   % make interpolant function
+   Ftd = griddedInterpolant(svs_td.enbi * ones(size(svs_td.eti)),ones(size(svs_td.enbi)) * svs_td.eti,svs_td.svnbitd,'linear','none');
+end
+if isempty(svs_dt)
+   svs_dt = load('sigmav_nbi_d_plasma_t');
+   % make interpolant function
+   Fdt = griddedInterpolant(svs_dt.enbi * ones(size(svs_dt.eti)),ones(size(svs_dt.enbi)) * svs_dt.eti,svs_dt.svnbidt,'linear','none');
+end
+if isempty(svs_dhe3)
+   svs_dhe3 = load('sigmav_nbi_d_plasma_he3');
+   % make interpolant function
+   Fdhe3 = griddedInterpolant(svs_dhe3.enbi * ones(size(svs_dhe3.eti)),ones(size(svs_dhe3.enbi)) * svs_dhe3.eti,svs_dhe3.svnbidhe3,'linear','none');
+end
+if isempty(svs_he3d)
+   svs_he3d = load('sigmav_nbi_he3_plasma_d');
+   % make interpolant function
+   Fhe3d = griddedInterpolant(svs_he3d.enbi * ones(size(svs_he3d.eti)),ones(size(svs_he3d.enbi)) * svs_he3d.eti,svs_he3d.svnbihe3d,'linear','none');
+end
+if isempty(svs_pb)
+   svs_pb = load('sigmav_nbi_p_plasma_b');
+   % make interpolant function
+   Fpb = griddedInterpolant(svs_pb.enbi * ones(size(svs_pb.eti)),ones(size(svs_pb.enbi)) * svs_pb.eti,svs_pb.svnbipb,'linear','none');
+end
+if isempty(svs_bp)
+   svs_bp = load('sigmav_nbi_b_plasma_p');
+   % make interpolant function
+   Fbp = griddedInterpolant(svs_bp.enbi * ones(size(svs_bp.eti)),ones(size(svs_bp.enbi)) * svs_bp.eti,svs_bp.svnbibp,'linear','none');
+end
+if ~isfield(ichcd_params,'mode_fast')
+    ichcd_params.mode_fast = false;
+end
+
 nrho = length(model.geom.rhogauss);
 if (nargin > 9) &&  isempty(last) % first iteration
     last.te_prev = zeros(nrho,1);
@@ -17,9 +65,10 @@ if (nargin > 9) &&  isempty(last) % first iteration
     last.Tpar_prev = zeros(nrho,ichcd_params.Nz);
     last.Tpar_out_prev = zeros(nrho,1);
     last.Xi = 0.5e-3*ones(nrho,1);
+    last.salpha_icrh_prev = zeros(nrho,1);
 elseif (nargin > 9)    
     Xi = last.Xi;
-elseif isfield(ichcd_params,'Xi');
+elseif isfield(ichcd_params,'Xi')
     Xi = ichcd_params.Xi;
 else
     Xi = 0.02 .* ones(nrho,1);
@@ -38,6 +87,7 @@ if (nargin > 9) && (abs(mean(te-last.te_prev))< 0.5e2) && (abs(U-last.U_prev) <1
     Wperp =tau*last.Wperp_prev;
     Wpar = tau*last.Wpar_prev;
     Tpar_out = tau*last.Tpar_out_prev;
+    salpha_icrh = tau * last.salpha_icrh_prev;
 else    
     phys = icrh_phys;
     ipa = ichcd_params;
@@ -55,7 +105,8 @@ else
     
     nm0 = ni0*ipa.rate_ni;
     nM0 = ni0 - nm0;
-    mi = ipa.Am*phys.mp;
+    mi  = ipa.Am*phys.mp;
+    miM = ipa.AM*phys.mp;
     % Given heating Power
     P_RF = U; % U(ipa.uindices);
     P_loss = ipa.Ploss;
@@ -128,9 +179,11 @@ else
  
     %%%% R in rho_METIS coordinate
     if isfield(model.equi,'Raxe')
-        tmp = abs(abs(R-model.equi.Raxe)/a - model.geom.rhogauss);[~,Ridx_rho] = min(tmp);
+        tmp = abs(abs(R-model.equi.Raxe)/a - model.geom.rhogauss);
+        [~,Ridx_rho] = min(tmp);
     else
-        tmp = abs(abs(R-R0)/a - model.geom.rhogauss);[~,Ridx_rho] = min(tmp);
+        tmp = abs(abs(R-R0)/a - model.geom.rhogauss);
+        [~,Ridx_rho] = min(tmp);
     end
     % % Average!!!!
     % Vint = 2*pi*R*delR*delZ; % C.7
@@ -181,8 +234,16 @@ else
     % resample on integral to prevent high space frequency effect
     pabs_inte = interp1(rhoNz,Prho,model.geom.rhogauss,'linear',0);
     rho_mid = (model.geom.rhogauss(1:end-1) + model.geom.rhogauss(2:end)) / 2;
-    vrho  = 2*pi^2*R*a^2*eps1*model.geom.rhogauss.^2;
-    dvrho = 4*pi^2*R*a^2*eps1*model.geom.rhogauss;
+    if isfield(model.equi,'vrho')
+        vrho = model.equi.vrho;
+    else
+        vrho  = 2*pi^2*R*a^2*eps1*model.geom.rhogauss.^2;
+    end
+    if isfield(model.equi,'dvrho')
+        dvrho = model.equi.dvrho;
+    else
+        dvrho = 4*pi^2*R*a^2*eps1*model.geom.rhogauss;
+    end
     pabs = diff(pabs_inte)./diff(vrho);
     pabs(pabs < eps) = eps;
     pabs = interp1(cat(1,-1,rho_mid,1.05),cat(1,0,pabs,0),model.geom.rhogauss,'pchip','extrap');
@@ -324,7 +385,7 @@ else
     
     Fu_M = - viM_vi.*tim./tiM.*Psi_func(u_iM); % 4.58
     Fu_e = - vie_vi.*tim./tee.*Psi_func(u_e);
-    % Fu = Fu_M + Fu_e;
+    Fu   = Fu_M + Fu_e;
     
     Duu_M = 1./2./u.*(-Fu_M.*tiM./tim);  % 4.57
     Duu_e = 1./2./u.*(-Fu_e.*tee./tim);
@@ -356,66 +417,146 @@ else
     %%%%%%%%% Cal Fbot C.33 the distribution func
     % suppose u == u_bot = up (perpendicular)
     
-    %% 2016 Sept 26: Try iteration loop for coefficient \Xi = Plin /pabs; or Dw_up == \Xi* Dw
-    %%%%  Computing Fbot
-    count = 0; % to set max iterative loop number!!!
-    pabs_loop = pabs*1;
-    differ = ipa.eps_Xi*max(pabs)+1;
-    differ_mem = differ;
-    sign_differ_flag = 1;
-    count_change = NaN;
-    count_max = (20 + 80 .* (nargin < 10));
-    %%
-    while   (differ >= ipa.eps_Xi*max(pabs) || differ <= -ipa.eps_Xi*max(pabs)) && (count < count_max)
-        if sign_differ_flag  && (count  < (count_max / 2))
-             Xi = pabs ./ pabs_loop .* Xi;    
-        elseif (count  < (count_max / 2))
-             Xi = sqrt(pabs./pabs_loop) .* Xi;
-        else
-             Xi = (0.7 + 0.3 .* sqrt(pabs./pabs_loop)) .* Xi;
+    % direct computation (more stable).
+    if ichcd_params.mode_fast
+        pabs_mem = NaN .* ones(21,31);
+        Xi_vect = logspace(-6,0,31);
+        for lk = 1:length(Xi_vect)
+            Xi_loc = Xi_vect(lk) * ones(size(Xi));
+            Dw_up = repmat(Xi_loc,1,ipa.Nu).*Dw0;
+            fbot = ( -4.*alp.*up + gam + 2*beta + 2*up*2.*du_Duu)./(2*up.*beta + 4*up.*Dw_up);
+            Fbot_norm = exp(-cumtrapz(u(1,:),fbot,2)); % C.33 without CF
+            CF = nm0./(2*pi.*vthi0.^3.*(trapz(u0,up.*Fbot_norm,2))); % CF from density
+            du_dF = diff(Fbot_norm')./diff(up');
+            duFbot = [du_dF',du_dF(end,:)'];
+            pabs_int = up.^2.*Dw_up.*duFbot;
+            pabs_mem(:,lk) = -4*pi*nu_i.*vthi0.^3.*tim0.*CF.*(trapz(u0,pabs_int,2));
         end
+        %figure;loglog(Xi_vect,pabs_mem,Xi_vect,pabs*ones(size(Xi_vect)),'k')
+        for lk=1:length(pabs)
+            %%Xi(lk) = 10 .^ interp1(log10(pabs_mem(lk,:)),log10(Xi_vect),log10(pabs(lk)),'linear','extrap');
+            Xi(lk) = max(eps,interp1(pabs_mem(lk,:),Xi_vect,pabs(lk),'linear','extrap'));
+            %figure;loglog(pabs_mem(lk,:),Xi_vect,'r',pabs(lk)*ones(size(Xi_vect)),Xi_vect,'b',pabs(lk),Xi(lk),'ok')
+        end
+        
         Dw_up = repmat(Xi,1,ipa.Nu).*Dw0;
         fbot = ( -4.*alp.*up + gam + 2*beta + 2*up*2.*du_Duu)./(2*up.*beta + 4*up.*Dw_up);
-        %Fbot_norm_old = exp(-int_u(u,fbot)); % C.33 without CF
         Fbot_norm = exp(-cumtrapz(u(1,:),fbot,2)); % C.33 without CF
-        %figure(110);plot(u0,Fbot_norm - Fbot_norm_old); title('Fbotnorm')
-        %set(gca,'ylim',[1e-10,10])
-        %drawnow
-        %    figure(110);semilogy(u0,Fbot_norm); title('Fbotnorm')
-        %    set(gca,'ylim',[1e-10,10])
-       
-        CF = nm0./(2*pi.*vthi0.^3.*(trapz(u0,up.*Fbot_norm,2))); % CF from density
-        
-        %     du_dF = diff(Fbot')./diff(up');
+        CF = nm0./(2*pi.*vthi0.^3.*(trapz(u0,up.*Fbot_norm,2))); % CF from density      
         du_dF = diff(Fbot_norm')./diff(up');
         duFbot = [du_dF',du_dF(end,:)'];
         pabs_int = up.^2.*Dw_up.*duFbot;
-        pabs_loop = -4*pi*nu_i.*vthi0.^3.*tim0.*CF.*(trapz(u0,pabs_int,2));
-        % pabs_loop == plin
+        pabs_verif = -4*pi*nu_i.*vthi0.^3.*tim0.*CF.*(trapz(u0,pabs_int,2));
         
-        %figure(500);plot([pabs pabs_loop]); legend('plin','ploop');drawnow
-        %     differ = abs((mean(pabs-pabs_loop)));
-        % differ = max(pabs_loop)- max(pabs);
-        differ = pabs_loop - pabs;
-        indmax_differ = find(abs(differ) == max(abs(differ)),1);
-        differ = differ(indmax_differ);
-        if count > 5
-            if sign(differ_mem) ~= sign(differ)
-                sign_differ_flag = 0;
-                count_change = count;
-            end
-        end
+        %     figure;semilogy(linspace(0,1,21)',pabs_verif,'r',linspace(0,1,21)',pabs,'b');
+        differ = max((pabs_verif - pabs) ./ max(1,max(pabs)));
+        if differ > ipa.eps_Xi
+            flag_non_conv = 1;
+        end 
+        
+%         % try isotropic function for testing
+%         piso_mem = NaN .* ones(21,31);
+%         Xi_iso   = NaN * Xi;
+%         Xi_vect = logspace(-6,0,31);
+%         for lk = 1:length(Xi_vect)
+%             Xi_loc = Xi_vect(lk) * ones(size(Xi));
+%             Dw_up = repmat(Xi_loc,1,ipa.Nu).*Dw0;
+%             fiso = -Fu ./ max(eps,Duu + Dw_up);
+%             fiso = fiso ./ max(abs(fiso));
+%             Fiso_norm = exp(-cumtrapz(u(1,:),fiso,2));
+%             CF_iso = nm0./(2*pi.*vthi0.^3.*(trapz(u0,up.*Fiso_norm,2))); % CF from density
+%             du_dF = diff(Fiso_norm')./diff(up');
+%             duFbot = [du_dF',du_dF(end,:)'];
+%             pabs_int = up.^2.*Dw_up.*duFbot;
+%             piso_mem(:,lk) = -4*pi*nu_i.*vthi0.^3.*tim0.*CF_iso.*(trapz(u0,pabs_int,2));
+%         end
+%         for lk=1:length(pabs)
+%             %%Xi(lk) = 10 .^ interp1(log10(pabs_mem(lk,:)),log10(Xi_vect),log10(pabs(lk)),'linear','extrap');
+%             Xi_iso(lk) = max(eps,interp1(piso_mem(lk,:),Xi_vect,pabs(lk),'linear','extrap'));
+%             %figure;loglog(piso_mem(lk,:),Xi_vect,'r',pabs(lk)*ones(size(Xi_vect)),Xi_vect,'b',pabs(lk),Xi_iso(lk),'ok')
+%         end
+%         Dw_up = repmat(Xi_iso,1,ipa.Nu).*Dw0;
+%         fiso = -Fu ./ max(eps,Duu + Dw_up);
+%         fiso = fiso ./ max(abs(fiso));
+%         Fiso_norm = exp(-cumtrapz(u(1,:),fiso,2)); 
+%         CF_iso = nm0./(2*pi.*vthi0.^3.*(trapz(u0,up.*Fiso_norm,2))); % CF from density
+%         du_dF = diff(Fiso_norm')./diff(up');
+%         duFbot = [du_dF',du_dF(end,:)'];
+%         pabs_int = up.^2.*Dw_up.*duFbot;
+%         pabs_iso = -4*pi*nu_i.*vthi0.^3.*tim0.*CF_iso.*(trapz(u0,pabs_int,2));
+% 
+    else
+        %% 2016 Sept 26: Try iteration loop for coefficient \Xi = Plin /pabs; or Dw_up == \Xi* Dw
+        %%%%  Computing Fbot
+        count = 0; % to set max iterative loop number!!!
+        pabs_loop = pabs*1;
+        differ = ipa.eps_Xi*max(pabs)+1;
         differ_mem = differ;
-        count = count +1;
+        sign_differ_flag = 1;
+        count_change = NaN;
+        count_max = (20 + 80 .* (nargin < 10));
+        %%
+        while   (differ >= ipa.eps_Xi*max(pabs) || differ <= -ipa.eps_Xi*max(pabs)) && (count < count_max)
+            if sign_differ_flag  && (count  < (count_max / 2))
+                %Xi = pabs ./ pabs_loop .* Xi;
+                Xi = tanh(pabs ./ pabs_loop) .* Xi;
+            elseif (count  < (count_max / 2))
+                Xi = sqrt(pabs./pabs_loop) .* Xi;
+            else
+                Xi = (0.7 + 0.3 .* sqrt(pabs./pabs_loop)) .* Xi;
+            end
+            
+            Dw_up = repmat(Xi,1,ipa.Nu).*Dw0;
+            fbot = ( -4.*alp.*up + gam + 2*beta + 2*up*2.*du_Duu)./(2*up.*beta + 4*up.*Dw_up);
+            %Fbot_norm_old = exp(-int_u(u,fbot)); % C.33 without CF
+            Fbot_norm = exp(-cumtrapz(u(1,:),fbot,2)); % C.33 without CF
+            %figure(110);
+            %plot(u0,Fbot_norm - Fbot_norm_old);
+            %title('Fbotnorm')
+            %set(gca,'ylim',[1e-10,10])
+            %drawnow
+            
+            CF = nm0./(2*pi.*vthi0.^3.*(trapz(u0,up.*Fbot_norm,2))); % CF from density
+            
+            %        fprintf('Xi = %g & Cf = %g\n',Xi(3),CF(3));
+            
+            %         figure(110);
+            %         semilogy(u0,CF(3) .* Fbot_norm(3,:));
+            %         title(sprintf('Fbotnorm (Xi = %g, CF = %g)',Xi(1),CF(3)));
+            %         set(gca,'ylim',[1e-10,10])
+            %         hold on
+            %         drawnow
+            %
+            %     du_dF = diff(Fbot')./diff(up');
+            du_dF = diff(Fbot_norm')./diff(up');
+            duFbot = [du_dF',du_dF(end,:)'];
+            pabs_int = up.^2.*Dw_up.*duFbot;
+            pabs_loop = -4*pi*nu_i.*vthi0.^3.*tim0.*CF.*(trapz(u0,pabs_int,2));
+            % pabs_loop == plin
+            
+            %figure(500);plot([pabs pabs_loop]); legend('plin','ploop');drawnow
+            %     differ = abs((mean(pabs-pabs_loop)));
+            % differ = max(pabs_loop)- max(pabs);
+            differ = pabs_loop - pabs;
+            indmax_differ = find(abs(differ) == max(abs(differ)),1);
+            differ = differ(indmax_differ);
+            if count > 5
+                if sign(differ_mem) ~= sign(differ)
+                    sign_differ_flag = 0;
+                    count_change = count;
+                end
+            end
+            differ_mem = differ;
+            count = count +1;
+        end
+        if count >= count_max
+            % non convergence
+            flag_non_conv = 1;
+            %figure(500);plot([pabs pabs_loop]); legend('plin','ploop');drawnow
+            %disp([count,count_change]);
+            %keyboard
+        end
     end
-    if count >= count_max
-        % non convergence
-        flag_non_conv = 1;
-	%figure(500);plot([pabs pabs_loop]); legend('plin','ploop');drawnow
-	%disp([count,count_change]);
-        %keyboard
-    end
-    
     %%%%%%% Cal power profiles
     % P_toInt = up.*Fbot_norm.*(alp.*up -gam/4 + beta/2); % OLD
     %P_toInt = up.*Fbot_norm.*(alp.*up -gam/4 - beta/2 - up.*du_Duu) -1/2*up.^2.*beta.*duFbot; % No CF
@@ -441,12 +582,17 @@ else
     
     %%%% Useful params
     %%%% only 2/3 of energy is perpendicular
-    tmp =  (2/3) .* 1/2.*mi.*(up.*vthi).^2.*up.*Fbot_norm;
+    %%%% but here we have f(v_perp) ! => 1 and not 2/3 (D.34 directly).
+    tmp =  1/2.*mi.*(up.*vthi).^2.*up.*Fbot_norm;
     Wperp = 2*pi.*vthi(:,Ridx_rho).^3.*CF.*(trapz(u0,abs(tmp')))'; % D.34
     
     v_gam = sqrt(2/mi*14.810*te*phys.e.*(2*ipa.Am^0.5./ne0.*ipa.ZM^2.*nM0).^2/3);
-    Tpar = mi/4./(up.*vthi).*repmat(v_gam.^3,1,ipa.Nu); % D.36
-    tmp = up.*Tpar.*Fbot_norm .* ((up.*vthi) > repmat(v_gam .* 4 ^(-1/3),1,ipa.Nu));
+    %Tpar = mi/4./(up.*vthi).*repmat(v_gam.^3,1,ipa.Nu); % D.36
+    %tmp = up.*Tpar.*Fbot_norm .* ((up.*vthi) > repmat(v_gam .* 4 ^(-1/3),1,ipa.Nu));
+    mask = ((up.*vthi) > repmat(v_gam .* 4 ^(-1/3),1,ipa.Nu));
+    Tpar = mi/4./(up.*vthi).*repmat(v_gam.^3,1,ipa.Nu).* double(mask) +  ...
+           mi .* (up.*vthi).^2 .* double(~mask); % D.36 + under Ecrit, the distribution become isotropic
+    tmp = up.*Tpar.*Fbot_norm ;
     Wpar = 2*pi.*vthi(:,Ridx_rho).^3.*CF.*(trapz(u0,abs(tmp')))';  % D.37
     Tpar_out = trapz(u0,abs(tmp'))' ./ trapz(u0,abs(up.*Fbot_norm)')' ./ phys.e;
     
@@ -472,7 +618,8 @@ else
     Wperp_th = 2*pi.*vthi(:,Ridx_rho).^3.*CF_th.*(trapz(u0,abs(tmp')))'; % D.34
     
     %tmp = up.*(tim0 * ones(1,size(Tpar,2))).*Fbot_norm_th;
-    tmp = up.*Tpar.*Fbot_norm_th .* ((up.*vthi) > repmat(v_gam .* 4 ^(-1/3),1,ipa.Nu));
+    %tmp = up.*Tpar.*Fbot_norm_th .* ((up.*vthi) > repmat(v_gam .* 4 ^(-1/3),1,ipa.Nu));
+    tmp = up.*Tpar.*Fbot_norm_th ;
     Wpar_th = 2*pi.*vthi(:,Ridx_rho).^3.*CF_th.*(trapz(u0,abs(tmp')))';  % D.37
     
     % substraction of thermal contribution
@@ -481,9 +628,97 @@ else
     Pe    = max(0,Pe - Pe_th);
     Wperp = max(0,Wperp - Wperp_th);
     Wpar  = max(0,Wpar - Wpar_th);
+    
+    % compute salpha_icrh
+    salpha_icrh = zeros(size(up,1),1);
+    if (ichcd_params.Zm == 1) && (ichcd_params.ZM == 1)
+        if (round(ichcd_params.Am) == 3) && (round(ichcd_params.AM) == 2)
+            % ICRH T -> plasma D
+            for lz = 1:size(up,1)
+                ev  = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)) .^ 2  + Tpar(lz,:);
+                svm = Ftd(ev' ./ phys.e,tiM(lz,:)'./ phys.e)'; 
+                svm(~isfinite(svm)) = 0;
+                svm((ev ./ phys.e)> max(svs_td.enbi)) = 0;
+                svm(svm < 0) = 0;
+                salpha_icrh(lz)      = 2*pi.*vthi(lz,Ridx_rho).^3 .* CF(lz) .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm .* nM(lz,:),2);
+                
+%                 svnbitd     = tsplinet((svs_td.enbi * ones(1,size(svs_td.svnbitd,2)))',svs_td.svnbitd', ((ev' ./ phys.e) * ones(1,size(svs_td.svnbitd,2)))')';               
+%                 svnbitd((ev ./ phys.e)> max(svs_td.enbi),:) = 0;
+%                 svm_alt         = tsplinet(ones(size(svnbitd,1),1)*svs_td.eti,svnbitd,ones(size(svnbitd,1),1)*min(tiM(lz,:)./ phys.e,max(svs_td.eti)))';
+%                 
+%                 2*pi.*vthi(lz,Ridx_rho).^3 .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm(1,:) .* nM(lz,:),2)
+%                 2*pi.*vthi(lz,Ridx_rho).^3 .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm_alt(1,:) .* nM(lz,:),2)
+%                fact                 = nm(lz) ./ max(eps,2*pi.*vthi(lz,Ridx_rho).^3 .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:))))
+                
+%                 % try with isotropic function
+%                 ev  = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)) .^ 2;
+%                 svm = Ftd(ev' ./ phys.e,tiM(lz,:)'./ phys.e)'; 
+%                 svm(~isfinite(svm)) = 0;
+%                 svm((ev ./ phys.e)> max(svs_td.enbi)) = 0;
+%                 svm(svm < 0) = 0;               
+%                 salpha_icrh(lz) = 2*pi.*vthi(lz,Ridx_rho).^3 .* CF_iso(lz) .* trapz(u0,abs(up(lz,:).* Fiso_norm(lz,:)) .* svm .* nM(lz,:),2);
+            end
+           
+       elseif (round(ichcd_params.Am) == 2) && (round(ichcd_params.AM) == 3)
+           % ICRH D -> plasma T
+           for lz = 1:size(up,1)
+               ev = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)).^2 + Tpar(lz,:);
+               svm = Ftd(ev' ./ phys.e,tiM(lz,:)'./ phys.e)';
+               svm(~isfinite(svm)) = 0;
+               svm((ev ./ phys.e)> max(svs_td.enbi)) = 0;
+               svm(svm < 0) = 0;
+               salpha_icrh(lz)      = 2*pi.*vthi(lz,Ridx_rho).^3 .* CF(lz) .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm .* nM(lz,:),2);
+           end
+        end
+    elseif (ichcd_params.Zm == 1) && (round(ichcd_params.Am) == 2) && (ichcd_params.gas  == 5)
+           % ICRH D -> plasma He3
+           for lz = 1:size(up,1)
+               ev = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)).^2 + Tpar(lz,:);
+               svm = Fdhe3(ev' ./ phys.e,tiM(lz,:)'./ phys.e)';
+               svm(~isfinite(svm)) = 0;
+               svm((ev ./ phys.e)> max(svs_dhe3.enbi)) = 0;
+               svm(svm < 0) = 0;
+               salpha_icrh(lz)      = 2*pi.*vthi(lz,Ridx_rho).^3 .* CF(lz) .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm .* nM(lz,:),2);
+           end       
+           warning('The fusion source induced by ICRH for D-He3 reaction has not yet been validated');                
+    elseif (ichcd_params.Zm == 2)  && (round(ichcd_params.Am) == 3) && (ichcd_params.gas  == 5)
+           % ICRH He3 -> plasma D
+           for lz = 1:size(up,1)
+               ev = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)).^2 + Tpar(lz,:);
+               svm = Fhe3d(ev' ./ phys.e,tiM(lz,:)'./ phys.e)';
+               svm(~isfinite(svm)) = 0;
+               svm((ev ./ phys.e)> max(svs_he3d.enbi)) = 0;
+               svm(svm < 0) = 0;
+               salpha_icrh(lz)      = 2*pi.*vthi(lz,Ridx_rho).^3 .* CF(lz) .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm .* nM(lz,:),2);
+           end               
+           warning('The fusion source induced by ICRH for D-He3 reaction has not yet been validated');                
+    elseif (ichcd_params.Zm == 5) && (round(ichcd_params.Am) == 11) && (ichcd_params.gas  == 11)
+          % ICRH B11 -> plasma p
+           for lz = 1:size(up,1)
+               ev = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)).^2 + Tpar(lz,:);
+               svm = Fbp(ev' ./ phys.e,tiM(lz,:)'./ phys.e)';
+               svm(~isfinite(svm)) = 0;
+               svm((ev ./ phys.e)> max(svs_bp.enbi)) = 0;
+               svm(svm < 0) = 0;
+               salpha_icrh(lz)      = 3 .* 2*pi.*vthi(lz,Ridx_rho).^3 .* CF(lz) .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm .* nM(lz,:),2);
+           end               
+           warning('The fusion source induced by ICRH for p-B11 reaction has not yet been validated');
+    elseif (ichcd_params.Zm == 1) && (round(ichcd_params.Am) == 1) && (ichcd_params.gas  == 11)
+          % ICRH p -> plasma B11
+           for lz = 1:size(up,1)
+               ev = 1/2.*mi.*abs(up(lz,:).*vthi(lz,:)).^2 + Tpar(lz,:);
+               svm = Fpb(ev' ./ phys.e,tiM(lz,:)'./ phys.e)';
+               svm(~isfinite(svm)) = 0;
+               svm((ev ./ phys.e)> max(svs_pb.enbi)) = 0;
+               svm(svm < 0) = 0;
+               salpha_icrh(lz)      = 3 .* 2*pi.*vthi(lz,Ridx_rho).^3 .* CF(lz) .* trapz(u0,abs(up(lz,:) .* Fbot_norm(lz,:)) .* svm .* nM(lz,:),2);
+               warning('The fusion source induced by ICRH for p-B11 reaction has not yet been validated');
+           end                       
+    end
+    
 end
 
-if (nargin > 9)
+if (nargin > 9) || (nargout > 10)
     next.Pe_prev = Pe;
     next.PM_prev = PM;
     next.pabs_prev = pabs;
@@ -495,6 +730,7 @@ if (nargin > 9)
     next.U_prev = U;
     next.te_prev = te;
     next.Xi = Xi;
+    next.salpha_icrh_prev = salpha_icrh;
 end 
 
 function phys = icrh_phys

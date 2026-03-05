@@ -175,6 +175,7 @@ fact_psi = sigma_Ip_eff * sigma_Bp_eff * (2.*pi) ^ exp_Bp_eff;
 fact_q = sigma_Ip_eff * sigma_B0_eff * sigma_rhothetaphi_eff;
 factor_two_pi = factor_two_pi .* fact_psi;
 % transformation
+
 % changement normalisation psi
 profil0d.psi            = profil0d.psi    .* fact_psi;
 profil0d.dpsidt         = profil0d.dpsidt .* fact_psi;
@@ -182,6 +183,7 @@ profil0d.qjli           = profil0d.qjli   .* fact_q;
 profil0d.fdia           = profil0d.fdia .* sigma_B0_eff;
 profil0d.phi            = profil0d.phi .* sigma_B0_eff;
 profil0d.dphidx         = profil0d.dphidx .* sigma_B0_eff;
+%%profil0d.jli            = profil0d.jli .* sigma_Ip_eff;
 profil0d.jeff           = profil0d.jeff .* sigma_Ip_eff;
 profil0d.jboot          = profil0d.jboot .* sigma_Ip_eff;
 profil0d.jnbicd         = profil0d.jnbicd .* sigma_Ip_eff;

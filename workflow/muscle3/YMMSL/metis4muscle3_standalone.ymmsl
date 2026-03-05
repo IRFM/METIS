@@ -1,0 +1,73 @@
+ymmsl_version: v0.1
+
+model:
+  name: METIS4MUSCLE3_STANDALONE_TEST
+  components:
+
+    listener: 
+      implementation: listener
+      ports: 
+         f_init: [equilibrium_output,pulse_schedule_output,plasma_profiles_output,plasma_sources_output,dataset_fair_output,summary_output,plasma_transport_output,radiation_output,edge_output,transport_solver_numerics_output]
+
+    metis: 
+      implementation: metis
+      ports:
+         o_i: [equilibrium_output,pulse_schedule_output,plasma_profiles_output,plasma_sources_output,dataset_fair_output,summary_output,plasma_transport_output,radiation_output,edge_output,transport_solver_numerics_output]
+
+  conduits:
+    metis.equilibrium_output:               listener.equilibrium_output
+    metis.pulse_schedule_output:            listener.pulse_schedule_output
+    metis.plasma_profiles_output:           listener.plasma_profiles_output
+    metis.plasma_sources_output:            listener.plasma_sources_output
+#    metis.dataset_fair_output:              listener.dataset_fair_output
+    metis.summary_output:                   listener.summary_output
+    metis.plasma_transport_output:          listener.plasma_transport_output
+    metis.radiation_output:                 listener.radiation_output
+#    metis.edge_output:                      listener.edge_output
+    metis.transport_solver_numerics_output: listener.transport_solver_numerics_output
+
+
+
+resources:
+  metis:
+    threads: 30
+
+  listener:
+    threads: 1
+    
+implementations:
+   metis: 
+        executable: matlab
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3(2,false,true);"
+#       args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3')); metis4muscle3(2,false,true);"
+
+   listener: 
+        executable: matlab
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3_data_listener(3);"
+#       args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3')); metis4muscle3_data_listener(2);"
+
+
+
+settings:
+  muscle_local_log_level: INFO
+  muscle_remote_log_level: WARNING
+
+
+
+# for METIS actor
+# internal clock for replay mode and limit on time to prevent infinite loop
+  # start of the simulation in relay mode  (if inside simulated data time, otherwise start from first time of the simulation)
+  metis_clock_time_start: 0.0  
+  # end time of the simulation (if in replay mode, the simulation stop at the minimum of this time and the end of simulated data)
+  metis_clock_time_stop:  120.0 
+# METIS file name (with full path) for replay mode
+  metis_filename:  /Home/JA132999/Zone_Travail/METIS4ITM/eufus.Git/metis/certification/metis/ITER_rampup_ECCD.mat
+# for testing METIS computation can be switch off and data are interpolated from METIS simulation file define by setting metis_filename
+  metis_computation: 0
+
+# for listener
+  listener_maxloop: 10
+
+# end of configuration file
+
+

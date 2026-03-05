@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+import imas, os
+from waveform_cooker import add_dynamic
+from yaml import load as yamlload
+import logging
+try:
+    from yaml import CLoader as yamlLoader
+except ImportError:
+    from yaml import Loader as yamlLoader
+from libmuscle import Instance, Grid, Message, KEEPS_NO_STATE_FOR_NEXT_USE
+from ymmsl import Operator
+
+# EMBED SCRIPT INTO FUNCTION FOR ITS USE WITH MUSCLE3
+def ec_waveform_filler() -> None:
+
+    instance = Instance({
+        Operator.F_INIT: ['clock_in'],
+        Operator.O_F: ['ec_launchers_out']},
+        KEEPS_NO_STATE_FOR_NEXT_USE)
+    
+    logging.info('#sync# Start')
+            
+    FirstRun = True
+    while instance.reuse_instance():
+
+        if FirstRun:
+            config_folder = instance.get_setting('config_folder', 'str')
+            FirstRun = False
+            file = open('../../../../'+config_folder+'/scenario.yaml', 'r')
+            cc = yamlload(file,Loader=yamlLoader)
+            file.close()
+            if cc['output_user_or_path'] == 'default':
+                cc['output_user_or_path'] = os.getenv('USER')
+            ec_launchers = add_dynamic('../../../../'+config_folder+'/ec_waveforms.yaml')
+            md = imas.DBEntry(imas.imasdef.MEMORY_BACKEND,cc['output_database'],0,cc['run_out'],cc['output_user_or_path'])
+            md.create()
+            md.put(ec_launchers)
+            
+        # MUSCLE3: RECEIVE CLOCK
+        logging.info('#sync# Receiving clock_in')
+        clock_msg = instance.receive("clock_in")
+        clock_timestamp = clock_msg.timestamp
+
+        # EXTRACT TIME SLICE FROM WAVEFORM
+        input_ec_launchers = md.get_slice('ec_launchers',clock_timestamp,3)
+
+        # USE O_MODE_FRACTION TO MAKE THE POLARIZATION DYNAMIC (CF. IMAS-4424),
+        # BUT FOR TORBEAM IT WORKS ONLY IF IT REMAINS AN INTEGER
+        if imas.imasdef.isFieldValid(input_ec_launchers.beam[0].o_mode_fraction)\
+           and input_ec_launchers.beam[0].o_mode_fraction[0] == int(input_ec_launchers.beam[0].o_mode_fraction[0]):
+            if input_ec_launchers.beam[0].o_mode_fraction == 1:
+                input_ec_launchers.beam[0].mode = 1  # Pure O-mode
+            else:
+                input_ec_launchers.beam[0].mode = -1 # Pure X-mode
+        if input_ec_launchers.beam[0].mode == 1:
+            print('Polarization = 1 (O-mode)')
+        else: 
+            print('Polarization = -1 (X-mode)')
+
+        # CHECK IF THERE IS POWER ON THE LAUNCHERS
+        power = 0.
+        for ilauncher in range(len(input_ec_launchers.beam)):
+            power = power + input_ec_launchers.beam[ilauncher].power_launched.data
+        print('Time =',clock_timestamp,'s, Power =',power*1.e-6,'MW')
+
+        # MUSCLE3: SEND EC_LAUNCHERS TO TORBEAM
+        ec_launchers_timestamp = input_ec_launchers.time[-1]
+        ec_launchers_msg = Message(ec_launchers_timestamp, data=input_ec_launchers.serialize())
+        logging.info('#sync# Sending ec_launchers_out')
+        instance.send("ec_launchers_out", ec_launchers_msg)                         
+
+if __name__ == '__main__':
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.INFO)
+    ec_waveform_filler()

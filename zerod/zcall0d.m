@@ -610,15 +610,22 @@ col2 = {'radio_export_cpos'    ,'radio' ,'CPOS' ,0,'re-computes CPOS and 2D equi
 col3 = {'radio_qlkANN_k'     ,'radio' ,'QlkANNk' ,0,'Plot flux from Qualikiz neural network with kinetic electrons'};
 col4 = {'radio_qlkANN_k_wp'   ,'radio' ,'OP + QlkANNk' ,0,sprintf('Compute operating point for one time slice using kinetic profiles predicted with Qualikiz neural network\n(steady state, all d/dt = 0, only dPsi/dt #0,\ncreates external data for Te, Ti and Ne that can be reused;\n external data must be cleared before next call)')};
 col5 = {'radio_qlkz_std_wp'   ,'radio' ,'OP + QLKZ' ,0,sprintf('Compute operating point for one time slice using kinetic profiles predicted with Qualikiz \n(steady state, all d/dt = 0, only dPsi/dt #0,\ncreates external data for Te, Ti and Ne that can be reused;\n external data must be cleared before next call)')};
-col6 = {'radio_coils_currents'   ,'radio' ,'Coil currents' ,0,sprintf('Compute esitimation of current in poloidal coils using fast inverse module of FEEQS.M\n(FEEQS.M is not part of METIS and should be installed separately; not suitable for tokamak with iron core).')};
-col7 = {'radio_plot_coils_currents'   ,'radio' ,'Plot coils currents' ,0,sprintf('Plot results of current in poloidal coils computed with fast inverse module of FEEQS.M\n(FEEQS.M is not part of METIS and should be installed separately).')};
-col8 = {'radio_eqdsk'   ,'radio' ,'EQDSK file' ,0,sprintf('Computation of EQDSK files using fast fixe boundary equilibrium solver of FEEQS.M;\nextrapolation outside the lCFS will not included real x-point and is valid only far from external current sources\n(FEEQS.M is not part of METIS and should be installed separtely)')};
-col9 = {'radio_equi_gs'   ,'radio' ,'G-S' ,0,sprintf('Creation of an external equilibrium structure for METIS by recomputing Grad-Shafranov equation\nbased on fast fixed boundary mode of FEEQS.M code and using METIS data as input of FEEQS.M\n(FEEQS.M is not part of METIS and should be installed separtely)')};
+col6 = {'radio_TGLF_interp'     ,'radio' ,'TGLF' ,0,'Currently only available on IRFM/intra. Plot results from TGLF simulations including e.g. fluxes, diffusivities, growth rates/frequencies spectra.'};
+col7 = {'radio_TGLF_op'     ,'radio' ,'OP + TGLF' ,0,sprintf('Currently only available on IRFM/intra. Compute operating point for one time slice using kinetic profiles predicted with TGLF\n(steady state, all d/dt = 0, only dPsi/dt #0,\ncreates external data for Te, Ti and Ne that can be reused;\n external data must be cleared before next call)')};
+col8 = {'radio_coils_currents'   ,'radio' ,'Coil currents' ,0,sprintf('Compute estimation of current in poloidal coils using fast inverse module of FEEQS.M\n(FEEQS.M is not part of METIS and should be installed separately; not suitable for tokamak with iron core).')};
+col9 = {'radio_plot_coils_currents'   ,'radio' ,'Plot coils currents' ,0,sprintf('Plot results of current in poloidal coils computed with fast inverse module of FEEQS.M\n(FEEQS.M is not part of METIS and should be installed separately).')};
+col10 = {'radio_eqdsk'   ,'radio' ,'EQDSK file' ,0,sprintf('Computation of EQDSK files using fast fixed boundary equilibrium solver of FEEQS.M;\nextrapolation outside the lCFS will not included real x-point and is valid only far from external current sources\n(FEEQS.M is not part of METIS and should be installed separtely)')};
+col11 = {'radio_equi_gs'   ,'radio' ,'G-S' ,0,sprintf('Creation of an external equilibrium structure for METIS by recomputing Grad-Shafranov equation\nbased on fast fixed boundary mode of FEEQS.M code and using METIS data as input of FEEQS.M\n(FEEQS.M is not part of METIS and should be installed separtely)')};
+
 if isdeployed
     form{length(form)+1} = {col1,col2};
 else
-    form{length(form)+1} = {col1,col2,col3,col4,col5,col6,col7,col8,col9};
+    form{length(form)+1} = {col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11};
 end
+
+col1 = {'radio_ImpTrans'     ,'radio' ,'ImpTrans' ,0,'Plot results associated to impurity transport'};
+form{length(form)+1} = {col1};
+
 % separation
 sepa = {'separation_comm','frame','',3,''};
 form{length(form)+1} = {sepa};

@@ -1,6 +1,6 @@
 function ps_out = make_reference_data(ps_in)
 
-if isfield(ps_in.flux_control.i_plasma.reference,'data')
+if isfield(ps_in.flux_control,'i_plasma') && isfield(ps_in.flux_control.i_plasma.reference,'data')
     % nothing to do
     ps_out = ps_in;
     return

@@ -25,7 +25,13 @@ if option.evolution == 0
     psi_LCFS = resample_time_fbe(time_in,cur_diff_ext.psi(:,end),temps);
     psi_offset = psi_LCFS(1);
 end
-
+% get LCFS nbpts
+if isappdata(0,'LCFS_nbpts')
+    % For METIS internal resampling use with external data
+    LCFS_nbpts =  getappdata(0,'LCFS_nbpts');
+else
+    LCFS_nbpts = 201;
+end
 %
 % assigin field to data with resampling
 equi_ext.time         = temps;
@@ -122,7 +128,7 @@ z0dinput.cons     = cons;
 z0dinput.geo      = geo;
 z0dinput.option   = option;
 z0dinput.exp0d    = exp0d;
-z0dinput          = z0separatrix_fromfbetometis(z0dinput,fbe_lcfs);
+z0dinput          = z0separatrix_fromfbetometis(z0dinput,fbe_lcfs,'',LCFS_nbpts);
 equi_ext.geo      = z0dinput.geo;
 equi_ext.cons     = z0dinput.cons;
 rb0               = resample_time_fbe(time_in,cur_diff_ext.geo.b0 .* cur_diff_ext.geo.R,temps);

@@ -22,8 +22,12 @@ KY6        = cgcgetjet(post.z0dinput.shot,liste,'','');
 %  liste{end+1}   = 'ppf/@shot/KY6S/RMID';    % R_mid_plane Li-beam
 %  liste{end+1}   = 'ppf/@shot/KY6S/NE';      % TI Li-beam
 %  liste{end+1}   = 'ppf/@shot/KY6S/NER';      %TE Li-beam
-%  kY6S        = cgcgetjet(post.z0dinput.shot,liste,'','');
+%  kY6S        = cgcgetjet(post.z0dinput.shot,liste,'','')
 KY6 = KY6.ppf.KY6;
+if isempty(KY6.RMID.t)
+    disp('some data are empty!');
+    return
+end
 h = findobj(0,'type','figure','tag','z0plot_jet_libeam');
 if isempty(h)
       h=figure('tag','z0plot_jet_libeam');

@@ -4,14 +4,27 @@
 function dataset_description = mapdataset_description_imas(z0dstruct,data_zerod,texte_diary,error_flag,run,shot,code)
 
 %% generate empty ids
-dataset_description = ids_gen('dataset_description');
+try
+    % before dd 4.1
+    dataset_description = ids_gen('dataset_description');
+catch
+    % from dd 4.1
+    dataset_description = ids_gen('dataset_fair');    
+end
 
 %% DEFINE  CODE AND IDS_PROPERTIES STRUCTURES
 dataset_description.code = code; 
 dataset_description.output_flag = error_flag;
-dataset_description.ids_properties.homogeneous_time = 1;
+if getappdata(0,'IMAS_VERSION') > 3
+    dataset_description.ids_properties.homogeneous_time = 2;
+else
+    dataset_description.ids_properties.homogeneous_time = 1;
+end
 dataset_description.ids_properties.comment = texte_diary;
 dataset_description.ids_properties.source    = 'METIS';
+% create also provenance for version 4 of the dictionary
+dataset_description.ids_properties.provenance = make_provenance;
+
 if ispc
   dataset_description.ids_properties.provider  = getenv('USERNAME');
 else
@@ -20,7 +33,7 @@ end
 dataset_description.ids_properties.creation_date = sprintf('%s (julian date in second = %f)',datestr(now,'dd-mmm-yyyy HH:MM:SS'),clock2julday);
 
 %% PARENT 
-if isfield(z0dstruct.z0dinput,'dataset_description')
+if isfield(z0dstruct.z0dinput,'dataset_description') && isfield(z0dstruct.z0dinput.dataset_description,'data_entry')
 	dataset_description.parent_entry = z0dstruct.z0dinput.dataset_description.data_entry;
 end
 
@@ -47,7 +60,7 @@ dataset_description.data_entry.user = getenv('USER');
 
 %% SHOT NUMBER 
 if isempty(shot)
-   dataset_description.data_entry.pulse = real(shot)
+   dataset_description.data_entry.pulse = real(shot);
 else
   dataset_description.data_entry.pulse = real(z0dstruct.z0dinput.shot(1));
 end

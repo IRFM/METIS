@@ -91,7 +91,7 @@ while ~isempty(liste)
        dc.err  = err;
    end
    % ecriture dans la structure
-   nomout  = strrep(noms,'/','.');
+   nomout  = strrep(strrep(noms,'/','.'),'..','.');
    %data=zsetfield(data,nomout,dc);    Instruction plus recente dans la v2.2 de Deneb, mais ne marche pas sur JET ? Je remets la ligne en dessous
    eval(sprintf('data.%s = dc;',nomout));
    % fin de la boucle

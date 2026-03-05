@@ -1,5 +1,5 @@
 % automatic test of COCOS coherence in METIS for all configurations
-function make_test_cocos_in_metis(dataversion,moderefplus)
+function make_test_cocos_in_metis(dataversion,sauter_mode,moderefplus)
 
 % clear workspace for test with working point
 evalin('base','clear');
@@ -26,18 +26,22 @@ end
 %
 [ual_tokamak,ual_user,ual_dataversion,ual_backend] = imasdb('test_cocos_imas','',dataversion,13);
 
-if (nargin < 2) || isempty(moderefplus)
+if (nargin < 2 ) || isempty(sauter_mode)
+    sauter_mode = true;
+end
+if (nargin < 3 ) || isempty(moderefplus)
     moderefplus = false;
 end
-    
+  
+  
 
 % remove existing reccord (to be sure to update non timed data)
 home = fileparts(getenv('HOME'));
-pathtodata = fullfile(home,ual_user,'public','imasdb',ual_tokamak,ual_dataversion(1),'99999','99');
-if isdir(pathtodata) && ~isempty(dir(fullfile(pathtodata,'*.h5')))
-   [s,t] = unix(sprintf('rm %s',fullfile(pathtodata,'*.h5')));
+pathtodata = fullfile(home,ual_user,'public','imasdb',ual_tokamak,ual_dataversion(1),'99999');
+if isdir(pathtodata)
+   [s,t] = unix(sprintf('rm -rf %s',pathtodata));
    if s~= 0
-       error(t);
+       warning(t);
    end
 end
 
@@ -60,18 +64,33 @@ options = info.valeur;
 options.signe = 1;
 options.orientation = 1;
 options.COCOS = COCOS_ref;
-options.COCOS_method = 'Sauter';
-
+if sauter_mode
+    options.COCOS_method = 'Sauter';
+else
+    options.COCOS_method = 'Native';
+end
+options.COCOS_check = 'on';
 
 % make test imas 
 % create IMAS data
 [error_flag,output_data] = metis4imas(99999,99,'','test',[],options);
+% warning: codepara are write on one time !!!!
+[error_flag,output_data] = metis4imas(99999,99,'','init',999,options);
+options = pulse_schedule2option_imas(output_data.pulse_schedule);
+options.signe = 1;
+options.orientation = 1;
+options.COCOS = COCOS_ref;
+if sauter_mode
+    options.COCOS_method = 'Sauter';
+else
+    options.COCOS_method = 'Native';
+end
+options.COCOS_check = 'on';
 
 % initialisation
-[error_flag,output_data] = metis4imas(99999,99,'','init',19,options);
-options = pulse_schedule2option_imas(output_data.pulse_schedule);
 
 % loop of configuration signs for Bt and Ip
+time = 1000;
 for k=1:2
     switch k
         case 1
@@ -106,13 +125,22 @@ for k=1:2
             %z0dstruct.z0dinput.option = options;
             %setappdata(0,'IMAS_Z0DSTRUCT',z0dstruct);
             % need to read and write pulse_schdule !
-            
+             if sauter_mode
+                options.COCOS_method = 'Sauter';
+            else
+                options.COCOS_method = 'Native';
+            end
+          
             % call METIS one time
+            time = time + 1;
             try
-                [error_flag,output_data] = metis4imas(99999,99,'','one_time',98+k,options);
+                error_flag = metis4imas(99999,99,'','one_time',time,options);
             catch
                 keyboard
             end
+            % read data to get the laste one
+            output_data = read_idss_test_cocos(99999,99,ual_tokamak,ual_user,ual_dataversion,ual_backend,time+1);
+            
             
             % get orientation from METIS parameters
             % Does not work as IMAS don't update non timed data
@@ -133,9 +161,11 @@ for k=1:2
             diary('report_test_cocos_in_metis.txt');
             disp(' ')
             disp('****************************************************************************');
+            disp('Initial test: just generating IDS, no reccord in IMASDB');
             fprintf('COCOS = %d, case sign_bt = %d &  sign_ip= %d\n\n',options_real.COCOS,sign_bt,sign_ip)
-            for k=1:length(idslist)
-                ids_name = idslist{k};
+            for km=1:length(idslist)
+                ids_name = idslist{km};
+                stat_struct = [];
                 disp(' ')
                 disp('----------------------------------------------------------------------------');
                 fprintf('Testing IDS %s:\n',ids_name)
@@ -153,7 +183,7 @@ for k=1:2
                             end
                         end
                         %
-                        ids_generic_cocos_check(data,ids_name,options_real.COCOS,sign_ip,sign_bt);
+                        [~,~,stat_struct]=ids_generic_cocos_check(data,ids_name,options_real.COCOS,sign_ip,sign_bt);
                     case 'equilibrium'
                         % remove new field not defined in ids_gen due to differences in model version
                         model = ids_gen(ids_name);
@@ -167,18 +197,36 @@ for k=1:2
                             end
                         end
                         %
-                       ids_generic_cocos_check(data,ids_name,options_real.COCOS,sign_ip,sign_bt);
+                       [~,~,stat_struct]=ids_generic_cocos_check(data,ids_name,options_real.COCOS,sign_ip,sign_bt);
                     otherwise
                         % for the moment
                         disp('test not yet available');
                         continue;
                 end
+                if ~isempty(stat_struct)
+                    stop_here = false;
+                    noms = fieldnames(stat_struct);
+                    for k = 1:length(noms)
+                        switch noms{k}
+                            case 'global_status'
+                                fprintf('Number of error = %d\n',stat_struct.global_status);
+                                if stat_struct.global_status > 0
+                                    stop_here = true;
+                                end
+                            otherwise
+                                print_cocos_message(stat_struct.(noms{k}),noms{k});
+                        end
+                    end
+                    if stop_here
+                       % keyboard
+                    end
+                end
+                
             end
             diary off
         end
     end
 end
-
 % End of part one.
 % now use real METIS run
 metisfile = fullfile(root,'certification','metis','ITER_rampup_ECCD.mat');
@@ -196,7 +244,12 @@ for k=1:length(noms)
     end
 end
 options = secure_option_imas(options);
-options.COCOS_method = 'Sauter';
+if sauter_mode
+    options.COCOS_method = 'Sauter';
+else
+    options.COCOS_method = 'Native';
+end
+options.COCOS_check = 'on';
 
 % loop on signe, orientation  and COCOS
 for k=1:2
@@ -239,6 +292,7 @@ for k=1:2
             diary('report_test_cocos_in_metis.txt');
             disp(' ')
             disp('****************************************************************************');
+            disp('Test with IMASDB input/output');
             fprintf('COCOS = %d, case sign_bt = %d &  sign_ip= %d\n\n',options.COCOS,options.signe,options.orientation)
 
             test_cocos_IMAS_METIS(post,ual_dataversion);
@@ -252,3 +306,24 @@ end
 
 % 
 edit('report_test_cocos_in_metis.txt');
+
+
+function  output_data = read_idss_test_cocos(shot,run,ual_tokamak,ual_user,ual_dataversion,ual_backend,time)
+
+% for the moment only core_profiles and equilibrium are tested.
+% pulse_schedule is also needed for parameters.
+!sync
+idx = imas_open_env_backend(real(shot),real(run),ual_user,ual_tokamak,ual_dataversion,ual_backend);
+%
+output_data.pulse_schedule = ids_get_slice(idx,'pulse_schedule',time,2);
+output_data.equilibrium = ids_get_slice(idx,'equilibrium',time,2);
+output_data.core_profiles = ids_get_slice(idx,'core_profiles',time,2);
+%
+imas_close(idx);
+
+
+
+
+
+
+

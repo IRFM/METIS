@@ -92,7 +92,7 @@ if nargin < 1
     type.weight      = 'float';
     borne.weight     = [1e-6,1];  
     defaut.weight    = 5e-4;
-    info.weight      = 'regularisation term wieght in cost function';
+    info.weight      = 'Regularization term weight in cost function';
 
     valeur.mode_profile    = 'on';   
     type.mode_profile     = 'string';

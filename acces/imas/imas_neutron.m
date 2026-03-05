@@ -6,7 +6,13 @@ if ~isfield(post,'profil0d')
 end
 
 % initialisation
-zz           = zeros(size(post.z0dinput.cons.temps));
+if isfield(post.zerod,'temps')
+    zz           = zeros(size(post.zerod.temps));
+    t            = post.zerod.temps;
+else
+    zz           = zeros(size(post.z0dinput.cons.temps));
+    t            = post.z0dinput.cons.temps;
+end
 %  ntot         = zz;
 %  ndd          = zz;
 %  ndd_th       = zz;
@@ -23,7 +29,6 @@ ntt_nbi_th   = zz;
 ntt_nbi_nbi  = zz;
 
 % DD neutrons
-t            = post.z0dinput.cons.temps;
 ndd          = post.zerod.ndd;
 ndd_th       = post.zerod.ndd_th;
 ndd_nbi_th   = post.zerod.ndd_nbi_th;
@@ -77,7 +82,7 @@ if post.z0dinput.option.gaz == 3
         zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,post.profil0d.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
         zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth, ...
         post.z0dinput.option.tae,post.z0dinput.option.nb_nbi,post.z0dinput.option.fspot,post.z0dinput.option.e_shielding,post.profil0d, ...
-        post.z0dinput.option.fpolarized, post.z0dinput.option.forced_H_NBI);
+        post.z0dinput.option.fpolarized, post.z0dinput.option.forced_H_NBI,post.z0dinput.option.mino,zs.salpha_icrh);
     
     % resmplaing if needed
     if length(post.profil0d.temps) ~= length(post.zerod.temps)

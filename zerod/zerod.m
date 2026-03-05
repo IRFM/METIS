@@ -14,6 +14,11 @@ if nargin <= 1
     return
 end
 
+% backward compatibility on reaction rate
+if isfield(option,'mavrin_sigmav')
+    setappdata(0,'USED_ZSIGMAVFUSION_INSTEAD_ZSIGMAVFUSION2',option.mavrin_sigmav);
+end 
+
 % debut du calcul
 clock_mem = clock;
 cpu_mem   = cputime;

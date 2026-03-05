@@ -38,6 +38,7 @@
 <fpl2h_lim>1</fpl2h_lim>
 <pl2h_mass_charge>0</pl2h_mass_charge>
 <hysteresis>1</hysteresis>
+<second_stability>0</second_stability>
 <ton_modeh>Inf</ton_modeh>
 <toff_modeh>Inf</toff_modeh>
 <fpped>1</fpped>
@@ -208,6 +209,8 @@
 <fabs_fw>0</fabs_fw>
 <MC_onoff>on</MC_onoff>
 <fMC_loss>0</fMC_loss>
+<icrh_mode_fast>1</icrh_mode_fast>
+<f_icrh_salpha>0</f_icrh_salpha>
 <sitb>0</sitb>
 <itb_sensitivity>1</itb_sensitivity>
 <itb_slope_max>2</itb_slope_max>
@@ -243,6 +246,7 @@
 <machine></machine>
 <shot>957165</shot>
 <orientation>1</orientation>
+<mavrin_sigmav>1</mavrin_sigmav>
 <reference_parameters></reference_parameters>
 <first_wall></first_wall>
 <extrapolation_ext_data>0</extrapolation_ext_data>
@@ -259,6 +263,7 @@
 <radiation>1</radiation>
 <edge>1</edge>
 <numerics>1</numerics>
+<plasma_ids>both</plasma_ids>
 <equilibrium>1</equilibrium>
 <equi_extrap>0</equi_extrap>
 <Convex_LCFS>1</Convex_LCFS>
@@ -274,8 +279,8 @@
 <edge_occurrence></edge_occurrence>
 <numerics_occurrence></numerics_occurrence>
 <equilibrium_occurrence></equilibrium_occurrence>
-<COCOS>11</COCOS>
-<COCOS_method>Sauter</COCOS_method>
+<COCOS>17</COCOS>
+<COCOS_method>Native</COCOS_method>
 <COCOS_verbose>1</COCOS_verbose>
-<COCOS_check>on</COCOS_check>
+<COCOS_check>off</COCOS_check>
 </ROOT>

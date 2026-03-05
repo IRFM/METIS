@@ -1,0 +1,19 @@
+module load mamba/python39 mamba-forge
+module load tools_dc/14_m2020b
+
+pip3 install --user muscle3
+pip3 install --user ymmsl
+
+
+bash-4.2$ module li
+Currently Loaded Modulefiles:
+  1) mamba/python39                                            6) fmt/10.0.0-gcc-13.2.0                                    11) mdsplus/7.131.5-gcc-13.2.0
+  2) gcc/13.2.0                                                7) uda/2.8.0                                                12) IMAS/3.39.0-4.11.7-matlab-2020b-mamba-gcc13-hdf5-1.8.12
+  3) matlab/2020b                                              8) hdf5/1.8.12-gcc-13.2.0                                   13) tools_dc/14_m2020b
+  4) spdlog/1.14.1-gcc-13.2.0                                  9) boost/1.76.0-gcc-13.2.0
+  5) capnproto/1.0.2-gcc-13.2.0                               10) blitz/1.0.2-gcc-13.2.0
+
+  
+bash-4.2$ export PATH=$PATH:"/Home/JA132999/.local/bin"
+
+muscle_manager --start-all YMMSL/metis4muscle3_test.ymmsl 

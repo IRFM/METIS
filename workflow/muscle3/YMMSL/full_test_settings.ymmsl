@@ -1,0 +1,137 @@
+ymmsl_version: v0.1
+
+settings:
+  muscle_local_log_level: INFO
+  muscle_remote_log_level: WARNING
+
+
+#=====================
+# for Scheduler actor
+#=====================
+  dataprovider_metis_filename: /home/ITER/schneim/public/git/metis/certification/metis/ITER_rampup_ECCD.mat
+# to impose sign and orientation in METIS loaded data as it is not always set at when the METIS simulation is run (sign=1 and oreintation = -1 for ITER)
+  dataprovider_metis_sign: 1
+  dataprovider_metis_orientation: -1
+# information for IMAS database recording
+  dataprovider_imas_pulse: 100
+  dataprovider_imas_run: 1
+  dataprovider_imas_user: schneim
+  dataprovider_imas_machine: ITER
+  dataprovider_imas_version: 4
+  dataprovider_imas_backend: 13
+# if the data are already available in imasdb, it is not useful to rewrite it, set writedata = 0, otherwise writedata = 1
+  dataprovider_imas_writedata: 1
+
+# starting time in the simulation (s)
+  dataprovider_starttime: 0.0 
+
+#=====================
+# for METIS actor
+#=====================
+
+#----------------- 
+# 1- Actor setting
+#----------------- 
+
+# a - workflow synchronisation
+#-----------------------------
+# synchronisation on reuse_instance : METIS actor can be forced to be synchronised or not on reuse_instance state 
+  metis_synchronization_reuse: 0
+# Force buffer to be flushed when O_I ports are used to prevent workflow dead lock or message synchronisation porblemon some system with MUSCLE3
+  metis_synchronization_flush: 0
+# if = 1, read also init ports on every iteration in addition of input ports, not only at initialisation
+  metis_alwaysreadinitport: 0
+# if =1, update time on restart with resuming message time stamp
+  metis_updatetimeonrestart: 0
+
+# b - workflow datation
+#-----------------------
+# start of the simulation in relay mode  (if inside simulated data time, otherwise start from first time of the simulation provide by MUSCLE3 message)
+  metis_clock_time_start: 0.0  
+# end time of the simulation (if in replay mode, the simulation stop at the minimum of this time and the end of simulated data. Can be set to large number to switch it off)
+  metis_clock_time_stop:  99.0  
+# time step (s): used if no source of time is provided to the actor or if internal clock is used
+  metis_clock_time_dt: 3.14
+# switch on or off  internal actor clock use
+  metis_clock_internal: off
+# if = 1, METIS compute for next_timestamp instead of timestamp.
+  metis_usenexttimestamp: 0
+
+# c- METIS initialisation and behaviour 
+#--------------------------------------
+# METIS file name (with full path) for replay mode
+  metis_filename: /home/ITER/schneim/public/git/metis/certification/metis/ITER_rampup_ECCD.mat
+# for testing METIS computation can be switch off and data are interpolated from METIS simulation file define by setting metis_filename
+  metis_computation: 1
+# if = 1, METIS is run in working point mode for power plant design
+  metis_workingpoint: 0
+# cold initialisation: if =1, if = 1, METIS is initialized from METIS simulation file defined by setting metis_filename using interpolated data instead of making a first computation run
+  metis_coldinit: 0
+
+# d - External data stearing (see next section for selection of external data used in the workflow)
+#----------------------------------------------------------------------------------------------------
+# metis_idstime: if = 1, external data will use time store in IDS instead of time stamp from MUSCLE3 message
+  metis_idstime: 0
+# metis_timeoffset: offset between METIS internal time (time stamp in METIS output message) and input message time stamp or IDS time (s).
+  metis_timeoffset: 0.0
+# metis_nbpts1d: number of radial points in 1D profile used for external except for the equilibrium (default = 101).
+  metis_nbpts1d: 101
+# polodial flux offset between METIS and external equilibrium psi_metis = cocos_sign * psi_equilibrium / (2*pi) - psioffset
+  metis_psioffset: 0.0
+# number of external equilibrium time slices stored in METIS actor. The minimum is 3. Should be set to Inf if the workflow is intented to rewind. It has a impact on memory used by the actor.
+  metis_numberofequilibriumtimeslices: 3
+
+# e- Tuning of sawtooth mimicking mechanism (to be used with NICE code in evolutive mode)
+#-----------------------------------------------------------------------------------------
+# Turn on or off mechanism for mimicking sawtooth when METIS is used in link with NICE code solving Grad-Shafranov and diamagnetic function evolution (equivalent to current diffusion equation).
+  metis_sawtooth_onoff: off
+# minimum number of time steps between two sawtooth triggers
+  metis_sawtooth_nbtmin: 3
+
+
+#----------------- ---------------------------------------------------------------
+# 2- METIS internal parameters (can be expanded with any METIS inernal parameter)
+#--------------------------------------------------------------------------------- 
+# METIS optional parameter that will overload field of structure z0dinput.option. Any field of z0dinput.option can be used. The prefix metis_option is mandatory.
+  metis_option_machine: test_muscle3
+  metis_option_available_flux: 130.0
+# orientation should be enforced as COCOS is handle by IMAS IDS (sign=1 & orientation = -1 for ITER)
+  metis_option_sign: 1
+  metis_option_orientation: -1
+# if other IDS than equilibrium and plasma_profiles are extported from METIS, the intrinsic METIS COCOS function should be used as the tool from O.Sauter take in charge only these two IDSs.
+#  metis_option_COCOS_method: Sauter
+  metis_option_COCOS_method: Native
+  metis_option_COCOS_check: off
+
+#----------------- -------------
+# 3- external data use in METIS
+#------------------------------- 
+# METIS switch for the use of external data read in IDSs
+
+# From equilibrium IDS
+#---------------------
+  metis_external_data_equilibrium: 1
+  metis_external_data_current_diffusion: 1
+
+# From IDS plasma_profiles (need equilibrium IDS  for precise coordinates transformation)
+#----------------------------------------------------------------------------------------
+  metis_external_data_electron_temperature: 1
+  metis_external_data_electron_density: 1
+  metis_external_data_ion_temperature: 1
+  metis_external_data_charge_effective: 1
+  metis_external_data_momentum: 1
+
+# From IDS plasma_sources (need equilibrium IDS  for precise coordinates transformation)
+#---------------------------------------------------------------------------------------
+  metis_external_data_LHCD: 1
+  metis_external_data_ECRH: 1
+  metis_external_data_ICRH: 1
+  metis_external_data_NBI:  1
+  metis_external_data_PLINE: 1
+  metis_external_data_runaway: 1
+
+#=====================
+# for listener
+#=====================
+  listener_maxloop: 1000
+

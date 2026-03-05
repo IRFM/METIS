@@ -1,0 +1,302 @@
+ymmsl_version: v0.1
+
+checkpoints:
+  at_end: true
+  simulation_time:
+  - at: [30,60,90]
+
+model:
+  name: METIS4MUSCLE3_FULL_TEST
+  
+  components:
+
+#====================
+# ==== scheduler ====
+#====================
+    scheduler: 
+      implementation: scheduler
+      ports: 
+         o_i: [clock,pulse_schedule,equilibrium,plasma_profiles,plasma_sources]
+
+#====================
+# ==== METIS ========
+#====================
+    metis: 
+      implementation: metis
+      ports:
+# Init and input ports used:
+# clock port is used to force the synchronisation even on update if this port is connected and metis_alwaysreadinitport = 1
+# F_INIT ports are duplicated on init and input.
+# after initialisation port with operator F_INIT or S are used to send data to METIS
+# If both are connected, data from input S ports overwrite data from input F_INIT ports 
+         f_init: [clock_f_init,pulse_schedule_f_init,equilibrium_f_init,plasma_profiles_f_init,plasma_sources_f_init,core_profiles_f_init,core_sources_f_init,clock_in_f,pulse_schedule_in_f,equilibrium_in_f,plasma_profiles_in_f,plasma_sources_in_f,core_profiles_in_f,core_sources_in_f]
+# after initialisation port with operator S are used to send data to METIS
+         s: [clock_in_s,pulse_schedule_in_s,equilibrium_in_s,plasma_profiles_in_s,plasma_sources_in_s,core_profiles_in_s,core_sources_in_s]
+# default is O_F for outputed data, but if METIS is the scheduler, then the output port operator should be O_I
+         o_f: [equilibrium_out_f,pulse_schedule_out_f,plasma_profiles_out_f,plasma_sources_out_f,core_profiles_out_f,core_sources_out_f,dataset_fair_out_f,summary_out_f,plasma_transport_out_f,radiation_out_f,edge_out_f,transport_solver_numerics_out_f]
+# depending on METIS actor configuration : outputted data are duplicated on O_I ports
+         o_i: [equilibrium_out_i,pulse_schedule_out_i,plasma_profiles_out_i,plasma_sources_out_i,core_profiles_out_i,core_sources_out_i,dataset_fair_out_i,summary_out_i,plasma_transport_out_i,radiation_out_i,edge_out_i,transport_solver_numerics_out_i]
+
+#====================
+# ==== listener =====
+#====================
+    listener: 
+      implementation: listener
+      ports: 
+         f_init: [clock_output,equilibrium_output,pulse_schedule_output,plasma_profiles_output,plasma_sources_output,dataset_fair_output,summary_output,plasma_transport_output,radiation_output,edge_output,transport_solver_numerics_output]
+
+#==========================
+# ==== WAVEFORM-EDITOR ====
+#==========================
+    waveform_editor:
+      implementation: waveform_editor
+      ports:
+        f_init: [clock_in]
+        o_f: [ec_launchers_out]
+
+#=================
+# ==== CHEASE ====
+#=================
+    chease:
+      implementation: chease
+      ports:
+        f_init: [equilibrium_in]
+        o_f: [equilibrium_out]
+
+#==================
+# ==== TORBEAM ====
+#==================
+    torbeam:
+      implementation: torbeam
+      ports:
+        f_init: [equilibrium_in,core_profiles_in,ec_launchers_in]
+        o_f: [waves_out]
+
+#===========================
+# ==== HCD2CORE_SOURCES ====
+#===========================
+    hcd2core_sources:
+      implementation: hcd2core_sources
+      ports:
+        f_init: [distributions_in,distribution_sources_in,waves_in,core_profiles_in]
+        o_f: [core_sources_out]
+
+#====================
+# ==== CS_COOKER ====
+#====================
+    cs_cooker:
+      implementation: cs_cooker
+      ports:
+        f_init: [plasma_sources_in,core_sources_in,waves_in,equilibrium_in,core_profiles_in]
+        o_f: [plasma_sources_out]
+
+  conduits:
+
+#============================
+# from dataprovider to METIS
+#============================
+# 1 - on init with ports f_init
+    scheduler.clock: metis.clock_f_init
+    scheduler.pulse_schedule: metis.pulse_schedule_f_init
+#    scheduler.equilibrium: metis.equilibrium_f_init
+#    scheduler.plasma_profiles: metis.plasma_profiles_f_init
+#    scheduler.plasma_profiles: metis.core_profiles_f_init
+#    scheduler.plasma_sources: metis.plasma_sources_f_init
+#    scheduler.plasma_sources: metis.core_sources_f_init
+
+# 2 - on input with ports F_INIT
+# if an IDS message is empty, previous data are kept
+    scheduler.clock: metis.clock_in_f
+#    scheduler.pulse_schedule: metis.pulse_schedule_in_f
+#    scheduler.equilibrium: metis.equilibrium_in_f
+#    scheduler.plasma_profiles: metis.plasma_profiles_in_f
+#    scheduler.plasma_profiles: metis.core_profiles_in_f
+#    scheduler.plasma_sources: metis.plasma_sources_in_f
+#    scheduler.plasma_sources: metis.core_sources_in_f
+
+# 3- on input with  ports S
+# ports S data overwrite ports F_INIT data if both are connected
+#   scheduler.clock: metis.clock_in_s
+    scheduler.pulse_schedule: metis.pulse_schedule_in_s
+    scheduler.equilibrium: metis.equilibrium_in_s
+#    scheduler.plasma_profiles: metis.plasma_profiles_in_s
+    scheduler.plasma_profiles: metis.core_profiles_in_s
+    #scheduler.plasma_sources: metis.plasma_sources_in_s # To be replaced by plasma_sources from cs_cooker (incl. ECRH)
+#    scheduler.plasma_sources: metis.core_sources_in_s
+
+#=========================================================
+# from METIS to listener (ports can be O_I or O_F or both)
+#=========================================================
+
+# 1- O_I ports
+    metis.equilibrium_out_i:               listener.equilibrium_output
+#    metis.pulse_schedule_out_i:            listener.pulse_schedule_output
+#    metis.plasma_profiles_out_i:           listener.plasma_profiles_output
+#    metis.core_profiles_out_i:           listener.plasma_profiles_output
+#    metis.plasma_sources_out_i:            listener.plasma_sources_output
+#    metis.core_sources_out_i:            listener.plasma_sources_output
+# bug in AL on serialisation of dataset_fair IDS
+#    metis.dataset_fair_out_i:              listener.dataset_fair_output
+#    metis.summary_out_i:                   listener.summary_output
+#    metis.plasma_transport_out_i:          listener.plasma_transport_output
+#    metis.core_transport_out_i:          listener.plasma_transport_output
+#    metis.radiation_out_i:                 listener.radiation_output
+# should be check if METIS produce these IDS (depending on METIS configuration): message should be send on connected port
+#    metis.edge_out_i:                      listener.edge_output
+#    metis.transport_solver_numerics_out_i: listener.transport_solver_numerics_output
+
+
+# 2- O_F ports
+#    metis.equilibrium_out_f:               listener.equilibrium_output
+    metis.pulse_schedule_out_f:            listener.pulse_schedule_output
+    metis.plasma_profiles_out_f:           listener.plasma_profiles_output
+#    metis.core_profiles_out_f:           listener.plasma_profiles_output
+#    metis.plasma_sources_out_f:            listener.plasma_sources_output
+    metis.core_sources_out_f:            listener.plasma_sources_output
+# bug in AL on serialisation of dataset_fair IDS
+#    metis.dataset_fair_out_f:              listener.dataset_fair_output
+    metis.summary_out_f:                   listener.summary_output
+    metis.plasma_transport_out_f:          listener.plasma_transport_output
+#    metis.core_transport_out_f:          listener.plasma_transport_output
+    metis.radiation_out_f:                 listener.radiation_output
+# should be check if METIS produce these IDS (depending on METIS configuration): message should be send on connected port
+#    metis.edge_out_f:                      listener.edge_output
+    metis.transport_solver_numerics_out_f: listener.transport_solver_numerics_output
+
+#==============================
+# from dataprovider to listener
+#==============================
+    scheduler.clock: listener.clock_output
+
+#===================================
+# from SCHEDULER to WAVEFORM-EDITOR
+#===================================
+    scheduler.clock: waveform_editor.clock_in
+
+#=======================
+# From METIS to CHEASE
+#=======================
+    metis.equilibrium_out_i: chease.equilibrium_in
+
+#=======================
+# From METIS to TORBEAM
+#=======================
+    #metis.equilibrium_out_i: torbeam.equilibrium_in
+    metis.plasma_profiles_out_i: torbeam.core_profiles_in
+
+#================================
+# From METIS to HCD2CORE-SOURCES
+#================================
+    metis.plasma_profiles_out_i: hcd2core_sources.core_profiles_in
+
+#=======================
+# From CHEASE to TORBEAM
+#=======================
+    chease.equilibrium_out: torbeam.equilibrium_in
+
+#=========================
+# From CHEASE to CS_COOKER
+#=========================
+    chease.equilibrium_out: cs_cooker.equilibrium_in
+
+#=================================
+# From WAVEFORM-EDITOR to TORBEAM
+#=================================
+    waveform_editor.ec_launchers_out: torbeam.ec_launchers_in
+
+#==================================
+# From TORBEAM to HCD2CORE-SOURCES
+#==================================
+    torbeam.waves_out: hcd2core_sources.waves_in
+
+#===========================
+# From TORBEAM to CS_COOKER
+#===========================
+    torbeam.waves_out: cs_cooker.waves_in
+
+#====================================
+# From HCD2CORE-SOURCES to CS_COOKER
+#====================================
+    hcd2core_sources.core_sources_out: cs_cooker.core_sources_in
+
+#=========================
+# From METIS to CS_COOKER
+#=========================
+    metis.plasma_sources_out_i: cs_cooker.plasma_sources_in
+    metis.plasma_profiles_out_i: cs_cooker.core_profiles_in
+
+#=========================
+# From CS_COOKER to METIS
+#=========================
+    cs_cooker.plasma_sources_out: metis.plasma_sources_in_s
+
+# =====================
+# From CHEASE to METIS
+# =====================
+    #chease.equilibrium_out: metis.equilibrium_in_s # METIS unhappy with it (--> take from scheduler instead)
+
+resources:
+  scheduler:
+    threads: 1
+  metis:
+# METIS can  used up to 64 cores with recent Matlab version
+    threads: 10
+  listener:
+    threads: 1
+    
+  waveform_editor:
+    threads: 1
+  chease:
+    threads: 1
+  torbeam:
+    threads: 3
+  hcd2core_sources:
+    threads: 1
+  cs_cooker:
+    threads: 1
+
+#===========================================================================
+# For interactive use and debug, "-r" and for non interactive use, "-batch"
+#===========================================================================
+    
+implementations:
+   metis: 
+        executable: matlab
+# without checkpointing
+#        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3(2,false);"
+# with checkpointing
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3(2,true);"
+#        args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3')); metis4muscle3(0,true);"
+
+   scheduler:
+        executable: matlab
+# always checkpointing
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3_data_provider(2,'NONE','O_I');"
+#        args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3_data_provider(0,'NONE','O_I');"
+
+   listener: 
+        executable: matlab
+# always checkpointing
+        args: -r "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3'));metis4muscle3_data_listener(2);"
+#       args: -batch "[s,t] = unix('which python');pyenv('Version',strtrim(t),'ExecutionMode','InProcess');addpath(getenv('DIR_METIS4MUSCLE3')); metis4muscle3_data_listener(0);"
+
+   waveform_editor:
+        executable: python
+        args: ../../../../ec_waveform_filler
+
+   chease:
+        executable: ../../../../chease/bin/chease.exe
+
+   torbeam:
+        executable: ../../../../torbeam/torbeam_m3.exe
+
+   hcd2core_sources:
+        executable: ../../../../hcd2core_sources/hcd2core_sources_m3.exe
+
+   cs_cooker:
+        executable: python # konsole -e
+        args: ../../../../cs_cooker
+
+# end of configuration file
+
+

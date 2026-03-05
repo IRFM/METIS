@@ -66,6 +66,9 @@ fus.ddn_he3    = 0.82e6; % (eV)
 fus.ddp_t      = 1.01e6; % (eV)
 fus.ddp_p      = 3.02e6; % (ev)
 fus.dt_he4     = 3.56e6; % (eV)
+
+% to be allocated 
+self_dunne = [];
                 
 % flag pour debug
 fwr = option.plotconv;
@@ -96,6 +99,13 @@ zs.diboot  = 0;
 gas_puff_mem = imag(cons.nbar);  % en e-/s
 cons.nbar    = max(eps,real(cons.nbar));
 
+% nbar predicted by external code
+if isappdata(0,'NE_EXP')
+    ne_exp = getappdata(0,'NE_EXP');
+    if isfield(ne_exp,'nbar')
+        cons.nbar = max(1e13,interp1_ex(ne_exp.temps,ne_exp.nbar,cons.temps,'nearest','extrap'));
+    end
+end
 % activation ou desactivation de IDN2
 if option.nb_nbi == 1
   cons.pnbi = real(cons.pnbi);
@@ -155,7 +165,7 @@ if (mode == 0) || (option.init_geo == 1)
     zs.peri = peri;
 end
 
-if isfield(profli,'Rsepa') & isfield(profli,'Zsepa')
+if isfield(profli,'Rsepa') && isfield(profli,'Zsepa')
     Rsepa = profli.Rsepa;
     Zsepa = profli.Zsepa;
     
@@ -337,6 +347,8 @@ if mode == 0
    % breakdown variable 
    zs.eddy_current  = zeros(size(cons.temps));
    zs.flux_edge_cor = zeros(size(cons.temps));
+   zs.teff0 = ones(size(cons.temps));
+   zs.salpha_icrh = zeros(size(cons.temps));
 end
 
 %save('sat2','option','cons','geo','zs','amorti','profli');
@@ -375,9 +387,11 @@ if (mode == 1)
 		  d95    = tsplinet(psin,profli.dx,0.95*ones(size(psin,1),1));
 		  Ka95prof = cumtrapz(profli.xli,profli.vpr,2) ./ max(eps,2*pi^2.*profli.Raxe .* (geo.a * profli.xli) .^ 2); 
 		  Ka95   = tsplinet(psin,Ka95prof,0.95*ones(size(psin,1),1));
+          bpola   = profli.bpol(:,end);
 		else
 		  Ka95 = zs.vp ./ (2*pi^2.*geo.R.*geo.a.^2);
 		  d95  = geo.d;
+          bpola = 4e-7 .* pi .* zs.ip ./ zs.sp;
 		end
      
                 tau_bohm = max(1e-6,(zs.sp ./ pi) .* geo.b0 ./ max(option.min_te_LCFS,zs.tem) .* 2 ./ (1 + zs.zeff .* zs.tite));
@@ -385,7 +399,7 @@ if (mode == 1)
                 zscale0(zs.nbar./ 1e20,zs.ip ./ 1e6 ,geo.b0,zs.ploss./ 1e6, ...
                         max(zs.ploss,zs.pin - zs.dwdt) ./ 1e6,geo.R,geo.K,geo.a, zs.meff, zs.zeff,zs.vp,zs.sp, ...
 	                zs.q95,zs.sext,option.scaling,option.l2hscaling,zs.pohm./1e6,zs.nem,zs.tite,zs.nim ./ zs.nem, ...
-                    tau_bohm,(zs.prad + zs.pbrem + zs.pcyclo) ./ 1e6,geo.d,Ka95,d95,cons.temps);
+                    tau_bohm,(zs.prad + zs.pbrem + zs.pcyclo) ./ 1e6,geo.d,Ka95,d95,cons.temps,bpola);
                 %
 		[void1,fact_confinement,void_ieddy,ne_ini,void4,prf_ini,void_flux_bord_cor,void_dt,ip_c_break,x_ioniz,gas_puff_equi,f_wth] = ...
 		            z0taue_burnthrough(option,geo,cons,zs,tauthl_ref, ...
@@ -662,8 +676,8 @@ if (mode == 1)
                     mem_esup_icrh = zs.esup_icrh;
                     
                     [zs.picrh_th,zs.pel_icrh,zs.pion_icrh,zs.esup_icrh,zs.einj_icrh, ...
-                        zs.ecrit_icrh,teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino, ...
-                        Pe,PM,esupra_icrh_par,j_fast_mino,i_fast_mino,puissance_fw] = ...
+                        zs.ecrit_icrh,zs.teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino, ...
+                        Pe,PM,esupra_icrh_par,j_fast_mino,i_fast_mino,puissance_fw,pabs_void,zs.salpha_icrh] = ...
                         z0icrh_trang(zs,geo,cons,option,profli);
                     frpar_icrh          = max(0,min(1,zs.esup_icrh ./ max(eps,esupra_icrh_par)));
                     zs.picrh_th(1:2)    = mem_picrh_th(1:2);
@@ -673,8 +687,8 @@ if (mode == 1)
                     
                 else
                     [zs.picrh_th,zs.pel_icrh,zs.pion_icrh,zs.esup_icrh,zs.einj_icrh, ...
-                        zs.ecrit_icrh,teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino, ...
-                        Pe,PM,esupra_icrh_par,j_fast_mino,i_fast_mino,puissance_fw] = ...
+                        zs.ecrit_icrh,zs.teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino, ...
+                        Pe,PM,esupra_icrh_par,j_fast_mino,i_fast_mino,puissance_fw,pabs_void,zs.salpha_icrh] = ...
                         z0icrh_trang(zs,geo,cons,option,profli);
                     frpar_icrh          = max(0,min(1,zs.esup_icrh ./  max(eps,esupra_icrh_par)));
                     profli.picrh        = Pe + PM;
@@ -687,7 +701,7 @@ if (mode == 1)
                     mem_esup_icrh = zs.esup_icrh;
                     
                     [zs.picrh_th,zs.pel_icrh,zs.pion_icrh,zs.esup_icrh,zs.einj_icrh, ...
-                        zs.ecrit_icrh,teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino] = ...
+                        zs.ecrit_icrh,zs.teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino,zs.salpha_icrh] = ...
                         z0icrh(zs,geo,cons,option,profli);
                     
                     zs.picrh_th(1:2) = mem_picrh_th(1:2);
@@ -695,11 +709,43 @@ if (mode == 1)
                     
                 else
                     [zs.picrh_th,zs.pel_icrh,zs.pion_icrh,zs.esup_icrh,zs.einj_icrh, ...
-                        zs.ecrit_icrh,teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino] = ...
+                        zs.ecrit_icrh,zs.teff0,zs.taus_icrh,zs.frloss_icrh,zs.rres,zs.xres,zs.fracmino,zs.harm,zs.nmino,zs.salpha_icrh] = ...
                         z0icrh(zs,geo,cons,option,profli);
                 end
         end
     end
+    
+    % external source salpha_icrh
+    if isappdata(0,'ICRH_SHAPE_EXP') && isfield(profli,'qjli')
+        icexp = getappdata(0,'ICRH_SHAPE_EXP');
+        if isfield(icexp,'pfusopicrh')
+            pfus_icrh  = max(0,abs(interp1_ex(icexp.temps,icexp.pfusopicrh,zs.temps,'nearest','extrap'))) .* zs.picrh_th;
+            switch option.gaz
+                case 1
+                    warning('ICRH fusion source not implemented')
+                case 2
+                    switch option.mino
+                        case 'T'
+                            zs.salpha_icrh = pfus_icrh ./ (3.56e6 .* 1.602176462e-19);
+                        otherwise
+                            warning('ICRH fusion source not implemented')
+                    end
+                case 3
+                    switch option.mino
+                        case {'T','D'}
+                            zs.salpha_icrh = pfus_icrh ./ (3.56e6 .* 1.602176462e-19);
+                        otherwise
+                            warning('ICRH fusion source not implemented')
+                    end
+                    
+                otherwise
+                    warning('ICRH fusion source not implemented')
+            end
+        end
+    end
+
+    
+    % for LH
     if option.lhmode ~= 5
         % formule de F. Imbeaux
         we           = (4/3 * 1.602176462e-19) .* zs.nem .* (1 + zs.ane) .* zs.te0 ./ (zs.ate + zs.ane +1) .* zs.vp;
@@ -832,7 +878,7 @@ else
 end
 if fwr == 1; disp('zfract0');end
 if mode == 1
-   if isappdata(0,'ICRH_SHAPE_EXP') & isfield(profli,'qjli');
+   if isappdata(0,'ICRH_SHAPE_EXP') && isfield(profli,'qjli')
 	% il faut aussi modifier dans zero1t
 	icrhexp = getappdata(0,'ICRH_SHAPE_EXP');
 
@@ -1008,16 +1054,18 @@ if isfield(profli,'psi') && isfield(profli,'vpr')
   d95    = tsplinet(psin,profli.dx,0.95*ones(size(psin,1),1));
   Ka95prof = cumtrapz(profli.xli,profli.vpr,2) ./ max(eps,2*pi^2.*profli.Raxe .* (geo.a * profli.xli) .^ 2); 
   Ka95   = tsplinet(psin,Ka95prof,0.95*ones(size(psin,1),1));
+  bpola   = profli.bpol(:,end);
 else
   Ka95 = zs.vp ./ (2*pi^2.*geo.R.*geo.a.^2);
   d95  = geo.d;
+  bpola = 4e-7 .* pi .* zs.ip ./ zs.sp;
 end
 
 [zs.wrlw,zs.plossl2h,zs.tauthl,zs.tauh,zs.tauhe_l,zs.tauhe_h,tau_na,tau_nas,tau_ped_sc] = ...
          zscale0(zs.nbar./ 1e20,zs.ip ./ 1e6 ,geo.b0,zs.ploss./ 1e6, ...
          max(zs.ploss,zs.pin - zs.dwdt) ./ 1e6,geo.R,geo.K,geo.a, zs.meff, zs.zeff,zs.vp,zs.sp, ...
 	 zs.q95,zs.sext,option.scaling,option.l2hscaling,zs.pohm./1e6,zs.nem,zs.tite,ae,tau_bohm, ...
-     (zs.prad + zs.pbrem + zs.pcyclo) ./ 1e6,geo.d,Ka95,d95,cons.temps);
+     (zs.prad + zs.pbrem + zs.pcyclo) ./ 1e6,geo.d,Ka95,d95,cons.temps,bpola);
 
 % using scaling for pped to get difference between H-mode and L-mode 
 switch  option.scaling
@@ -1230,7 +1278,16 @@ elseif (option.fpped < 0) && (mode ~= 0) && isfield(profli,'nip')
         iob = (2/5) .* geo.R .* zs.ip ./ 1e6 .* geo.K .^ 2 ./  geo.a .^ 2 ./ (1 + geo.K .^ 2);
         pped   =  min(zs.pped,max(0,4.53138e3 .* (min(0.5,abs(geo.d)) + 0.0034) .^ 0.435509 .* (p_scaling_pped ./ 1e6) .^ 0.121836 .* iob .^ 1.51649));
         wped      = abs(option.fpped)  .*  3/2 .*  pped .* zs.vp;
-    else
+    elseif option.usepped_scl == 5
+        % model reference :F.D. Halpern et al, PoP 15 (2008) p 062505
+        [wped,pped] = z0pped_onjun(zs,profli,geo,cons,option);
+        wped        = abs(option.fpped)  .*  wped;
+        pped        = abs(option.fpped)  .*  pped;
+    elseif option.usepped_scl == 6
+        [pped,self_dunne] = z0dunne_pedestal(zs,profli,geo,cons,option);
+        pped        = abs(option.fpped)  .*  pped;
+        wped        =  3/2 .*  pped .* zs.vp;
+   else
         % model reference :F.D. Halpern et al, PoP 15 (2008) p 062505
         [wped,pped] = z0pped_onjun(zs,profli,geo,cons,option);
         wped        = abs(option.fpped)  .*  wped;
@@ -1341,6 +1398,14 @@ else
    %zs.modeh      = (zs.plhthr >= (zs.plossl2h + 1e6 .*option.l2hmul)) | (hdecal & (zs.pin >= (zs.plossl2h + 1e6 .* option.l2hmul)));
    zs.modeh      = (zs.plhthr >= (zs.plossl2h + 1e6 .*option.l2hmul)) | (hdecal & (physteresis >= (zs.plossl2h + 1e6 .* option.l2hmul)));
 end
+
+% effect of negative triangularity on mode H transition -> 
+% accessibility to second stability
+if option.second_stability
+    flag = z0secondstab(geo.a ./ geo.R,zs.q95,geo.K,geo.d);
+    zs.modeh(~flag) = 0;
+end
+
 if option.modeh == 0
    zs.modeh      = zeros(size(zs.modeh));
 elseif  option.modeh == 2
@@ -1358,7 +1423,6 @@ end
 if (option.berror > 0) && (mode ~= 0)
 	zs.modeh(fact_confinement < 1) = 0;
 end
-
 
 % not useful but add numerical convergence problem
 %  if (option.disrup > 0) && (mode ~= 0) && 0
@@ -1632,6 +1696,8 @@ elseif option.usepped_scl == 4
 elseif option.usepped_scl == 5
         % model reference :F.D. Halpern et al, PoP 15 (2008) p 062505
         [~,zs.pped] = z0pped_onjun(zs,profli,geo,cons,option);
+elseif option.usepped_scl == 6
+        [zs.pped,self_dunne] = z0dunne_pedestal(zs,profli,geo,cons,option);
 end
 if option.fpped > 0
 	zs.pped  = option.fpped .* zs.pped;
@@ -1692,7 +1758,7 @@ if (option.ode_pped == 1) && (mode ~= 0)
       %subplot(3,1,2);plot(cons.temps,double(zs.pped > pped_min),'b.',cons.temps,zs.modeh,'r');
       %subplot(3,1,3);plot(cons.temps,tau_W_ped,'b',cons.temps,zs.taue,'r',cons.temps,zs.taup,'g');
       %set(gca,'ylim',[0,max(zs.taue)]);drawnow
-      zs.modeh = double(zs.pped > pped_min);
+      zs.modeh(2:end) = double(zs.pped(2:end) > pped_min(2:end));
   end
 elseif option.evolution ~= 1
   try
@@ -2217,6 +2283,12 @@ switch option.nea_model
         nebord_x  = (zs.modeh) .*  cnb .* min(zs.negr,zs.nbar) .^ 2 .* (1 + edge_density_elm_modulation) + ...
             (~zs.modeh) .* 3.4485e-13.* min(zs.negr,zs.nbar) .^ 1.6;
 end
+
+% Dunne model
+if option.usepped_scl == 6
+    nebord_x  = (zs.modeh) .*  self_dunne.ne_sep+ (~zs.modeh) .* nebord_x;
+end
+
 % en limiteur toroidal (F. Clairet)
 nebord_lim = 1e-21 .* min(zs.negr,zs.nbar) .^ 2 .* zs.qa .* geo.R;
 % en limiteur poloidal (Wesson Tokamak, loi multi machine)
@@ -2273,7 +2345,7 @@ else
 end
 
 % si profils lu en entree
-if isappdata(0,'NE_EXP') & isfield(profli,'nep');	 
+if isappdata(0,'NE_EXP') && isfield(profli,'nep')	 
 	zs.nebord = profli.nep(:,end);
 end   
 
@@ -2868,10 +2940,15 @@ tebord_x = min(zs.te0 ./ 2,max(option.min_te_LCFS,real(tebord_x)));
 nelim_x  = 0.5 .* zs.nebord .* tebord_x ./ max(1,telim_x);
 nelim_x  = max(1,real(nelim_x));
 
+% Dunne model
+if option.usepped_scl == 6
+    tebord_x  = (zs.modeh) .*  self_dunne.te_sep + (~zs.modeh) .* tebord_x;
+end
+
 % model a 2 points
 switch option.sol_model
-case '2_points'
-	[tebord_x,nelim_x,telim_x] = z0convergence_2points_dic(option,cons,geo,zs,profli);
+    case '2_points'
+        [tebord_x,nelim_x,telim_x] = z0convergence_2points_dic(option,cons,geo,zs,profli);
 end
 
 if isfield(profli,'tep')
@@ -3175,8 +3252,8 @@ z0dnanimag
 %save('sat6','option','cons','geo','zs','amorti','profli');
 
 % calcul de la generation de courant
-ir           = zs.ip - zs.ifwcd - zs.ieccd - real(zs.inbicd) - imag(zs.inbicd) - zs.iboot;
-ir(zs.asser > 0) = 0;
+% ir           = zs.ip - zs.ifwcd - zs.ieccd - real(zs.inbicd) - imag(zs.inbicd) - zs.iboot;
+% ir(zs.asser > 0) = 0;
 
 %  if isfield(zs,'pnbi_th') && all(isfinite(zs.pnbi_th))
 %    pnbi_ref = (1 - option.cur_nbi_time) .*  zs.pnbi +  option.cur_nbi_time .* zs.pnbi_th;
@@ -3228,9 +3305,17 @@ if mode == 0
 end
 
 % calcul du profil de ne
-[profli.nep,profli.n0,profli.s0,profli.n0m,profli.s0m, ...
- profli.dn,profli.vn,profli.ware,zs.n0a,profli.spellet,profli.ge,zs.frac_pellet,zs.sn0fr,zs.taup] = ...
- z0profne(cons,zs,profli,option,geo);
+% Dunne model
+if option.usepped_scl == 6
+    [profli.nep,profli.n0,profli.s0,profli.n0m,profli.s0m, ...
+        profli.dn,profli.vn,profli.ware,zs.n0a,profli.spellet,profli.ge,zs.frac_pellet,zs.sn0fr,zs.taup] = ...
+        z0profne(cons,zs,profli,option,geo,self_dunne.ne_ped);
+    
+else
+    [profli.nep,profli.n0,profli.s0,profli.n0m,profli.s0m, ...
+        profli.dn,profli.vn,profli.ware,zs.n0a,profli.spellet,profli.ge,zs.frac_pellet,zs.sn0fr,zs.taup] = ...
+        z0profne(cons,zs,profli,option,geo);
+end
  
 % effet du  condinement au breakdown
 if (option.berror > 0) && (mode ~= 0)
@@ -3659,13 +3744,13 @@ switch option.gaz
                 zfus0tae_dhe(zs.nDm,zs.nhem,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
                 zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2 ,ftnbi, ...
                 zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin,zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim, ...
-                zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.te_max);
+                zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.te_max,zs.salpha_icrh);
         else
             [pfus0,salpha0,zs.pfus,zs.salpha,ifus,zs.xfus,jxfus,j0fus,zs.taus_he,ecrit_he_void,zs.pfus_nbi,zs.pfus_loss,profli.jfusshape,~,palf0,profli.salf,profli.palf] = ...
                 zfus0tae_dhe(zs.nDm,zs.nhem,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
                 zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2,ftnbi, ...
                 zeros(size(zs.pion_icrh)),zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin,zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,...
-                zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.te_max);
+                zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.te_max,zs.salpha_icrh);
         end
         
         % neutron dd
@@ -3701,20 +3786,24 @@ switch option.gaz
  	     zfus0tae_pB11(zs.nDm,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
          zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2 ,ftnbi, ...,
          zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
-         zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI,option.mino);
+         zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli, ...
+         option.fpolarized,option.forced_H_NBI,option.mino,zs.salpha_icrh);
     otherwise
-        if strcmp(option.mino ,'T')&& any(cons.iso > 0)
+        % pion_icrh -> picrh !!!!
+        if (strcmp(option.mino ,'T')  || strcmp(option.mino ,'D')) && any(cons.iso > 0)
             [zs.pfus,zs.salpha,ifus,zs.xfus,jxfus,j0fus,zs.taus_he,ecrit_he_void,zs.pfus_nbi,zs.pfus_loss,profli.jfusshape,profli.salf,profli.palf] = ...
                 zfus0tae(zs.nDm,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
                 zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2 ,ftnbi, ...
-                zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
-                zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI);
+                zs.picrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
+                zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding, ...
+                profli,option.fpolarized,option.forced_H_NBI,option.mino,zs.salpha_icrh);
         else
             [zs.pfus,zs.salpha,ifus,zs.xfus,jxfus,j0fus,zs.taus_he,ecrit_he_void,zs.pfus_nbi,zs.pfus_loss,profli.jfusshape,profli.salf,profli.palf] = ...
                 zfus0tae(zs.nDm,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
                 zs.pnbi_th,zs.taus_nbi,zs.ecrit_nbi,option.einj,option.einj2,ftnbi, ...
                 zeros(size(zs.pion_icrh)),zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,cons.temps,cons.pnbi,zs.d0,zs.qa, ...
-                zs.qmin,zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding,profli,option.fpolarized,option.forced_H_NBI);
+                zs.qmin,zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth,option.tae,option.nb_nbi,option.fspot,option.e_shielding, ...
+                profli,option.fpolarized,option.forced_H_NBI,option.mino,zs.salpha_icrh);
             
         end
 end
@@ -3904,7 +3993,8 @@ end
 % Collisional transport in magnetized plasma , P. Helander, and D.J. Sigmar, Cambridge University Press, 2002 (p 164)
 paux   = (zs.pfus + zs.picrh + zs.plh + real(zs.pnbi) + imag(zs.pnbi) + zs.pecrh) - (zs.pbrem + zs.pcyclo + zs.prad);
 iv     = zs.ip .* profli.vpr(:,end) ./ profli.spr(:,end) .* profli.epar(:,end);
-bpol   = sqrt( profli.grho2r2) .* abs(pdederive(profli.xli,profli.psi,0,2,2,1)) ./ (profli.rmx(:,end) * ones(size(profli.xli)));
+%bpol   = sqrt( profli.grho2r2) .* abs(pdederive(profli.xli,profli.psi,0,2,2,1)) ./ (profli.rmx(:,end) * ones(size(profli.xli)));
+bpol   = profli.bpol;
 xcor   = profli.rmx(:,end) .* trapz(profli.xli, ...
           bpol .* pdederive(cons.temps,bpol,2,2,1,1) + ...
          (profli.fdia - (profli.fdia(:,end) *  ones(size(profli.xli))))  .* profli.ri.* ...

@@ -50,13 +50,21 @@ for k=1:length(rcsh)
   if ~isempty(te)
 	  if isempty(newtemps)
 	    newtemps     = (min(tteshf):1e-4:max(tteshf))';
-	  end
-	  te	       = interp1(tteshf,te,newtemps,'nearest',NaN);
-	  re	       = interp1(tRshc,re,newtemps,'nearest',NaN);
-	  tteshf         = newtemps;	      
-	  teshf	       = [teshf te];	  
-	  Rshc	       = [Rshc re];
+      end
+      if ~isempty(te) && (size(tteshf,1) == size(te,1)) && ...
+              ~isempty(re) && (size(tRshc,1) == size(re,1))
+          te	       = interp1(tteshf,te,newtemps,'nearest',NaN);
+          re	       = interp1(tRshc,re,newtemps,'nearest',NaN);
+          tteshf         = newtemps;
+          teshf	       = [teshf te];
+          Rshc	       = [Rshc re];
+      end
  end
+end
+
+if isempty(Rshc)
+    disp('some data are empty !');
+    return
 end
 
 % retreive plasma center

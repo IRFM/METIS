@@ -31,9 +31,9 @@ end
 % backward compatibilty (bug shortcut)
 if isfield(z0dinput.exp0d,'flux')
     if ~isfield(z0dinput.exp0d,'edgeflux')
-	  z0dinput.exp0d.edgeflux = z0dinput.exp0d.flux;
+	  z0dinput.exp0d.edgeflux = z0dinput.exp0d.flux ./ 2 ./ pi;
     elseif all(~isfinite(z0dinput.exp0d.edgeflux))
- 	  z0dinput.exp0d.edgeflux = z0dinput.exp0d.flux;   
+ 	  z0dinput.exp0d.edgeflux = z0dinput.exp0d.flux ./ 2 ./ pi;   
     end
     z0dinput.exp0d = rmfield(z0dinput.exp0d,'flux');
 end

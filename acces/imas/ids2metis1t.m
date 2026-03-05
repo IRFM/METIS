@@ -40,6 +40,18 @@ else
 	time = [];
 end
 cons1t.temps = time;
+
+% make puls_schedule structure compatible with dictionary 4
+if ~isfield(pulse_schedule.flux_control,'i_plasma') 
+    pulse_schedule.flux_control.i_plasma = pulse_schedule.flux_control.ip;
+end
+if ~isfield(pulse_schedule.flux_control,'loop_voltage') 
+    pulse_schedule.flux_control.loop_voltage = pulse_schedule.flux_control.v_loop;
+end
+if ~isfield(pulse_schedule.flux_control,'beta_normal') 
+    pulse_schedule.flux_control.beta_normal = pulse_schedule.flux_control.beta_tor_norm;
+end
+ 
  
 % les consignes a 1 temps
 % recherche des infos
@@ -150,21 +162,36 @@ else
 	    cons1t.picrh    = 0;
     end
 end
+if  (cons1t.picrh == 0) && isfield(pulse_schedule.ic,'power') && isfield(pulse_schedule.ic.power,'reference') && isfield(pulse_schedule.ic.power.reference,'data')
+    if ~isempty(pulse_schedule.ic.power.reference.data)
+        cons1t.picrh  = pulse_schedule.ic.power.reference.data(end);
+    end
+end
 
 %% LH
+second_ec = true;
 if isfield(pulse_schedule.lh,'antenna')
     if ~isempty(pulse_schedule.lh.antenna) && ~isempty(pulse_schedule.lh.antenna{1}.power.reference.data)
-            cons1t.plh      = pulse_schedule.lh.antenna{1}.power.reference.data(end); 
+            cons1t.plh = pulse_schedule.lh.antenna{1}.power.reference.data(end); 
+            second_ec  = false;
     else
 	    cons1t.plh      = 0;
     end
 else
     if ~isempty(pulse_schedule.lh.launcher) && ~isempty(pulse_schedule.lh.launcher{1}.power.reference.data)
 	    cons1t.plh      = pulse_schedule.lh.launcher{1}.power.reference.data(end); 	
+        second_ec  = false;
     else
 	    cons1t.plh      = 0;
     end
 end
+if  (cons1t.plh == 0) && isfield(pulse_schedule.lh,'power') && isfield(pulse_schedule.lh.power,'reference') && isfield(pulse_schedule.lh.power.reference,'data')
+    if ~isempty(pulse_schedule.lh.power.reference.data)
+        cons1t.plh  = pulse_schedule.lh.power.reference.data(end);
+        second_ec  = false;
+    end
+end
+
 
 %% NBI
 pnbi = zeros(1,8);
@@ -192,6 +219,11 @@ switch option.gaz
         cons1t.pnbi     =  (pnbi(1,2) + pnbi(1,1)) + sqrt(-1) .* (pnbi(1,5) + pnbi(1,4));
         cons1t.ftnbi    =  pnbi(1,1) ./ max(1,real(cons1t.pnbi)) + sqrt(-1) .* pnbi(1,4) ./ max(1,imag(cons1t.pnbi));
 end
+if  (cons1t.pnbi == 0) && isfield(pulse_schedule.nbi,'power') && isfield(pulse_schedule.nbi.power,'reference') && isfield(pulse_schedule.nbi.power.reference,'data')
+    if ~isempty(pulse_schedule.nbi.power.reference.data)
+        cons1t.pnbi  = pulse_schedule.nbi.power.reference.data(end);
+    end
+end
 
 
 %% EC
@@ -214,25 +246,44 @@ else
 	    cons1t.pecrh     = 0;
     end
 end
-if isfield(pulse_schedule.ec,'beam')
-    if ~isempty(pulse_schedule.ec.beam) && (length(pulse_schedule.ec.beam) > 1) && ...
-      ~isempty(pulse_schedule.ec.beam{2}.power_launched.reference.data)
-	    cons1t.plh     = pulse_schedule.ec.beam{2}.power_launched.reference.data(end);
-	    option.lhmode  = 5;
+if (cons1t.pecrh == 0) && isfield(pulse_schedule.ec,'power_launched') && ...
+   isfield(pulse_schedule.ec.power_launched,'reference') && ...
+   isfield(pulse_schedule.ec.power_launched.reference,'data')
+    if  ~isempty(pulse_schedule.ec.power_launched.reference.data)
+        cons1t.pecrh     = pulse_schedule.ec.power_launched.reference.data(end);
+        second_ec  = false;
     end
-elseif isfield(pulse_schedule.ec,'antenna')
-    if ~isempty(pulse_schedule.ec.antenna) && (length(pulse_schedule.ec.antenna) > 1) && ...
-      ~isempty(pulse_schedule.ec.antenna{2}.power.reference.data)
-	    cons1t.plh     = pulse_schedule.ec.antenna{2}.power.reference.data(end);
-	    option.lhmode  = 5;
+end
+if (cons1t.pecrh == 0) && isfield(pulse_schedule.ec,'power') && ...
+   isfield(pulse_schedule.ec.power,'reference') && ...
+   isfield(pulse_schedule.ec.power.reference,'data')
+    if  ~isempty(pulse_schedule.ec.power.reference.data)
+        cons1t.pecrh     = pulse_schedule.ec.power.reference.data(end);
+        second_ec  = false;
     end
-else
-    if ~isempty(pulse_schedule.ec.launcher) && (length(pulse_schedule.ec.launcher) > 1) && ...
-      ~isempty(pulse_schedule.ec.launcher{2}.power.reference.data)
-	    cons1t.plh     = pulse_schedule.ec.launcher{2}.power.reference.data(end);	
-	    option.lhmode  = 5;
-    end
+end
 
+if second_ec
+    if isfield(pulse_schedule.ec,'beam')
+        if ~isempty(pulse_schedule.ec.beam) && (length(pulse_schedule.ec.beam) > 1) && ...
+                ~isempty(pulse_schedule.ec.beam{2}.power_launched.reference.data)
+            cons1t.plh     = pulse_schedule.ec.beam{2}.power_launched.reference.data(end);
+            option.lhmode  = 5;
+        end
+    elseif isfield(pulse_schedule.ec,'antenna')
+        if ~isempty(pulse_schedule.ec.antenna) && (length(pulse_schedule.ec.antenna) > 1) && ...
+                ~isempty(pulse_schedule.ec.antenna{2}.power.reference.data)
+            cons1t.plh     = pulse_schedule.ec.antenna{2}.power.reference.data(end);
+            option.lhmode  = 5;
+        end
+    else
+        if ~isempty(pulse_schedule.ec.launcher) && (length(pulse_schedule.ec.launcher) > 1) && ...
+                ~isempty(pulse_schedule.ec.launcher{2}.power.reference.data)
+            cons1t.plh     = pulse_schedule.ec.launcher{2}.power.reference.data(end);
+            option.lhmode  = 5;
+        end
+        
+    end
 end
 if isfield(pulse_schedule.ec,'beam')
     if (length(pulse_schedule.ec.beam)>=1) && ~isempty(pulse_schedule.ec.beam{1}.deposition_rho_tor_norm.reference.data)

@@ -185,7 +185,7 @@ end
 
 % fusion TT du plasma thermique (correction ,doit etre petit, l'enrichissement du milieu en T, H et He3 n'est pas prise en compte)
 % 2 neutrons par reaction
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(max(tip(:),13.6));
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(max(tip(:),13.6));
 sn       = 0.5 .* nT .^ 2 .* reshape(tt.sv,size(tip)) .* (tip >= dd_n.timin) .*  (tip <= dd_n.timax);
 neutron_th    = trapz(x,vpr .* sn,2);
 

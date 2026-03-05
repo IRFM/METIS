@@ -94,13 +94,15 @@ case 'JET'
                 seq = getappdata(0,'TRANSP_RUN');
                 [qui,arbre] = strtok(getappdata(0,'TRANSP_USER'),'/');
                 arbre = strrep(arbre,'/','');
-                liste          = {};
-                liste{end+1} = sprintf('ppf/@shot/%s/CB?uid=%s+seq=%d',arbre,qui,seq);
-                liste{end+1} = sprintf('ppf/@shot/%s/QBE?uid=%s+seq=%d',arbre,qui,seq);
-                liste{end+1} = sprintf('ppf/@shot/%s/QBI?uid=%s+seq=%d',arbre,qui,seq);
-                % data/pulse/99971/ppf/signal/mporad/trau/zef
-                jdata2          = cgcgetjet(post.z0dinput.shot,liste,'','');
-                TRA0            = jdata2.ppf.(arbre);
+                if ~isempty(arbre)
+                    liste          = {};
+                    liste{end+1} = sprintf('ppf/@shot/%s/CB?uid=%s+seq=%d',arbre,qui,seq);
+                    liste{end+1} = sprintf('ppf/@shot/%s/QBE?uid=%s+seq=%d',arbre,qui,seq);
+                    liste{end+1} = sprintf('ppf/@shot/%s/QBI?uid=%s+seq=%d',arbre,qui,seq);
+                    % data/pulse/99971/ppf/signal/mporad/trau/zef
+                    jdata2          = cgcgetjet(post.z0dinput.shot,liste,'','');
+                    TRA0            = jdata2.ppf.(arbre);
+                end
        end
 	    
  	    if isempty(TRA0.QBE.data) || isstr(TRA0.QBE.data)

@@ -16,10 +16,10 @@ end
 if ~isfield(z0dstruct.z0dinput.option,'te_max')
     z0dstruct.z0dinput.option.te_max = 1e5;
 end
-
-% initialise empty gdd
+%initialise empty gdd
 for k=1:length(profil0d.temps)
-  radiation.grid_gg{k} = radiation.grid_ggd{1};
+  radiation.grid_ggd{k} = radiation.grid_ggd{1};
+  radiation.process{1}.ggd{k} = radiation.process{1}.ggd{1};
 end
 
 %  identifier:
@@ -110,7 +110,7 @@ for k=1:length(profil0d.temps)
         global_quantities.inside_vessel.power_neutral_total + global_quantities.inside_vessel.power_electrons;
 
         global_quantities.time       = profil0d.temps(k);
-	process.global_quantities{k} = global_quantities;             
+	    process.global_quantities{k} = global_quantities;             
 end
 % fill structure
 radiation.process{1}      = process;
@@ -148,7 +148,7 @@ for k=1:length(profil0d.temps)
         global_quantities.inside_vessel.power_neutral_total + global_quantities.inside_vessel.power_electrons;
 
         global_quantities.time       = profil0d.temps(k);
-	process.global_quantities{k} = global_quantities;             
+	    process.global_quantities{k} = global_quantities;             
 end
 % fill structure
 radiation.process{2}      = process;
@@ -188,7 +188,7 @@ for k=1:length(profil0d.temps)
         global_quantities.inside_vessel.power_neutral_total + global_quantities.inside_vessel.power_electrons;
 
         global_quantities.time       = profil0d.temps(k);
-	process.global_quantities{k} = global_quantities;             
+	    process.global_quantities{k} = global_quantities;             
 end
 % fill structure
 radiation.process{3}      = process;
@@ -227,7 +227,7 @@ for k=1:length(profil0d.temps)
         global_quantities.inside_vessel.power_neutral_total + global_quantities.inside_vessel.power_electrons;
 
         global_quantities.time       = profil0d.temps(k);
-	process.global_quantities{k} = global_quantities;             
+	    process.global_quantities{k} = global_quantities;             
 end
 % fill structure
 radiation.process{4}      = process;

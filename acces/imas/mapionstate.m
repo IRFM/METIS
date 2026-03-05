@@ -36,8 +36,10 @@ end
 noms = fieldnames(tabmat);
 ind  = min(strmatch(label,noms,'exact'));
 stateone = state{1};
-if ~isempty(state)
+if ~isempty(state) && isfield(state{1},'velocity')
     velocity = state{1}.velocity;
+else
+    velocity = [];
 end
 if isempty(ind)
   fprintf('unable to find element %s in data\n',label);
@@ -87,8 +89,13 @@ else
   % filling
   for k=2:length(info.Zl)
       if ~isempty(state)
-        stateone = state{1};
-        velocity = state{1}.velocity;
+          stateone = state{1};
+          if isfield(state{1},'velocity')
+              velocity = state{1}.velocity;
+          else
+              velocity = [];  
+              stateone.velocity = velocity;
+          end
       end
       stateone.z_min =  info.Zl(k);
       stateone.z_max =  info.Zl(k);

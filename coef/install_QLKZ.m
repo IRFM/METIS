@@ -12,13 +12,6 @@
 %
 function path_to_QLKZ_data = install_QLKZ(server,flag)
 
-% for Jenkins use
-try
-  addpath(pwd);
-catch
-  disp('path is already setted');
-end
-
 % somme information
 disp('Start of installation of QuaLiKiz for METIS ');
 
@@ -44,7 +37,7 @@ if isempty(server)
     if ~isempty(strfind(t,'.intra.'))
         server = 'irfm_intra';
         disp('Server detected = irfm_intra');
-        disp('test of compilation has been done with: intel/2018 mpi/2018');
+        disp('test of compilation has been done with:  inteloneapi/2025.1.0 mpi/2025.1.0');
     end
 end
 
@@ -99,7 +92,6 @@ end
 % checkout branch master
 disp('Switch to branch main :')
 !git checkout main
-!git branch
 
 %
 disp('Cleaning the project');
@@ -116,7 +108,7 @@ end
 !rm -f bin/qlknn_mex.mexa64
 
 disp('Start project compilation')
-s = unix(sprintf('module purge \n module load intel/2018 mpi/2018 \n make %s VERBOSE=1',flag));
+s = unix(sprintf('module purge \n module load inteloneapi/2025.1.0 mpi/2025.1.0 \n make %s VERBOSE=1',flag));
 if s ~= 0
     cd(cdmem);
     error('Error during project compilation');

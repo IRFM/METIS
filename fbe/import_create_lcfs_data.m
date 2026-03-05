@@ -33,8 +33,10 @@ else
         nbp_max = max(nbp_max,length(ref.Shape_sequence(k).rc));
     end
 end
-km = menu('Choose a time rsampling method:','kept time slices from CREATE','kept time slices from METIS','resampling on plasma current','no resmapling');
-list = {'input','time','ip','none'};
+km = menu('Choose a time rsampling method:','kept time slices from CREATE', ...
+         'kept time slices from METIS','resampling on plasma current (time of FBE)', ...
+         'resampling on plasma current (time of METIS)','no resmapling');
+list = {'input','time','ip','ip metis','none'};
 z0dinput = z0separatrix_fromfbetometis(z0dinput,fbe_lcfs,list{km},[],1);
 
 % make matrix for figure

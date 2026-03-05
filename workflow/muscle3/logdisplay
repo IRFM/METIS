@@ -1,0 +1,12 @@
+#!/bin/csh -f
+
+# ./logdisplay run_METIS4MUSCLE3_ECRH_WITH_TORBEAM_20250812_144652 stderr.txt
+
+if ("$#" < 2 ) then
+    echo "  --- Use with 2 arguments: ---"
+    echo "  ./logdiplay [m3_folder] [filename]"
+    exit
+endif
+
+clear
+find $1 -name $2 -exec printf "------------------------------------------------\n" \; -exec ls {} \; -exec cat {} \;

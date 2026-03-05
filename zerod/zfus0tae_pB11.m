@@ -5,7 +5,7 @@
 function [pfus,salpha,ifus,xfus,jxfus,j0fus,taus,ecrit,pfus_nbi,pfus_loss,jfus,salf,palf,splusbp,spluspb,splusff,splusicrh] = ...
 	     zfus0tae_pB11(nDi,nTi,te,ne,zeff,tite,R,a,K,Bt,ane,ate,Vp,Sp, ...
          pnbi_th,taus_nbi,ecritnbi,e0nbi,e0nbi2,ftnbi,picrh_ion,taus_icrh,ecriticrh,e0icrh,temps,pnbi,d0,qa,qmin,te0, ...
-         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI,mino)
+         nebord,tebord,pped,ni,wth,taeonoff,nb_nbi,fspot,e_shielding,profli,fpolarized,forced_H_NBI,mino,splusicrh)
 
 % pour l'interaction faisceau plasma
 tii = te .* tite;
@@ -252,7 +252,7 @@ profli.jfusshape = jfus;
 
 
 % calcul de l'interraction faisceau-plasma (B-> p)
-if (all(real(ftnbi == 0)) && all(imag(ftnbi == 0)))  || all( pnbi  < 1e3) 
+if (all(real(ftnbi) == 0) && all(imag(ftnbi) == 0))  || all( pnbi  < 1e3) 
     splusbp   = zeros(size(temps));
     emeanb    = e0nbi;
 else
@@ -269,7 +269,7 @@ else
     end
 end
 % proton beam -> boron
-if	(all(real(ftnbi == 1)) && all(imag(ftnbi == 1)))  || all( pnbi  < 1e3)
+if	(all(real(ftnbi) == 1) && all(imag(ftnbi) == 1))  || all( pnbi  < 1e3)
     spluspb   = zeros(size(temps));
     emeanh    = e0nbi;
 else
@@ -320,26 +320,26 @@ end
 
 %  % acceleration de bore ou proton par icrh (approximation type idn)
 e0icrhm =zpmean(1:length(e0icrh),picrh_ion,e0icrh);
-if all(picrh_ion < 1e3)
-    splusicrh = zeros(size(nBi));
-elseif ~isempty(e0icrhm)
-    if e0icrhm == 0
-        splusicrh = zeros(size(nBi));
-    else
-        switch mino
-            case 'H'
-                rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nHi ./ max(1,nHi + nBi));
-                splusicrh = zbpi0_pb(nBi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
-           case 'B'
-                rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nBi ./ max(1,nHi + nBi));
-                splusicrh = zbpi0_bp(nHi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
-            otherwise
-                splusicrh = zeros(size(nBi));                
-        end
-    end
-else
-    splusicrh = zeros(size(nBi));
-end
+% if all(picrh_ion < 1e3)
+%     splusicrh = zeros(size(nBi));
+% elseif ~isempty(e0icrhm)
+%     if e0icrhm == 0
+%         splusicrh = zeros(size(nBi));
+%     else
+%         switch mino
+%             case 'H'
+%                 rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nHi ./ max(1,nHi + nBi));
+%                 splusicrh = zbpi0_pb(nBi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
+%            case 'B'
+%                 rap 	  = zpmean(1:length(e0icrh),max(1,picrh_ion),nBi ./ max(1,nHi + nBi));
+%                 splusicrh = zbpi0_bp(nHi,tii,picrh_ion,taus_icrh,e0icrhm,max(real(ecriticrh),imag(ecriticrh)),rap) ;
+%             otherwise
+%                 splusicrh = zeros(size(nBi));                
+%         end
+%     end
+% else
+%     splusicrh = zeros(size(nBi));
+% end
 
 splus     = max(0,splusbp) +  max(0,spluspb) +  max(0,splusff) + max(0,splusicrh) ;
 %disp([salpha(end-2),splus(end-2) , nDi(end-2) .* Vp(end-2),nTi(end-2) .* Vp(end-2)])

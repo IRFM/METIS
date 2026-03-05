@@ -127,7 +127,7 @@ switch upshiftmode
         % natural + upshift + poloidal extention effect (assume = toroidal extention, small in the simulation)
         % meilleur choix:
         switch upshiftmode
-            case 'newmodel'
+            case {'newmodel','newmodel retune'}
                 dlhabs = (dn0  + npar0 .* width ./ Raxe) .* (1 + landau ./ npar0);
             otherwise
                 dlhabs = (dn0  + npar0 .* width ./ Raxe);

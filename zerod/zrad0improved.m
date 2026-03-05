@@ -142,7 +142,7 @@ if Sn_fraction > 0
     lzsn    = cat(2,1e-38,lzsn,lzsn(end) + 5.355e3 .* 50  .*(sqrt(te_max_interp)-sqrt(tzsn(end))) .* 1e-28);
     tzsn    = cat(2,1e-4,tzsn,te_max_interp);
     if noncoronal == 1
-        rzsn  = z0noncronal(tzsn,lzsn,profli.xli,tep,nep,taue);
+        rzsn  = z0noncronal(tzsn,lzsn,xnew,tep,nep,taue);
     else
         rzsn  = reshape(10 .^ pchip(log10(tzsn),log10(lzsn),log10(tep(:))),size(tep));
     end

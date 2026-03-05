@@ -57,7 +57,7 @@ for k=1:length(noms)
             if length(post.z0dinput.exp0d.(noms{k})) == length(time0)
                 try
                     z0dstruct.z0dinput.exp0d.(noms{k})      = post.z0dinput.exp0d.(noms{k})(ind4t);
-                catchzs
+                catch
                     keyboard
                 end
             else

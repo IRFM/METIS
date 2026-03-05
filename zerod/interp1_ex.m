@@ -2,11 +2,21 @@
 function rep = interp1_ex(t,y,tt,varargin)
 
 % modification
-if isappdata(0,'EXTRAPOLATION_NEAREST_EX')
+if isappdata(0,'EXTRAPOLATION_NEAREST_EX') 
     extrapolation_ex = getappdata(0,'EXTRAPOLATION_NEAREST_EX');
+    if isempty(extrapolation_ex)
+        extrapolation_ex = false;
+    end
+else
+    extrapolation_ex = false;
 end
 if isappdata(0,'NONAN_EX')
     nonan_ex = getappdata(0,'NONAN_EX');
+    if isempty(nonan_ex)
+        nonan_ex = false;
+    end
+else
+    nonan_ex = false;
 end
 if nonan_ex
     mask = any(~isfinite(y),2);
@@ -18,7 +28,7 @@ end
 
 if (length(t) <= 1) && (length(tt) <= 1)
 	rep = y;
-elseif (length(t) == length(tt)) && all(t(:) == tt(:));
+elseif (length(t) == length(tt)) && all(t(:) == tt(:))
 	rep = y;
 elseif  (length(t) <= 1)
     rep = ones(length(tt),1) * y;

@@ -43,9 +43,13 @@ case 10
 case 28
 	scl2h = 'Low density case - Ryter et al, NF 54 (2014) 083003, equation 4';
 case 30
-	scl2h = 'Fit of metalic tokamaks database for horizontal targets (E . Delabie et al, 2025 ?)';
+	scl2h = 'Fit of metalic tokamaks database for horizontal targets (TC_26(Bt), E . Delabie et al, N.F. 2026)';
 case 31
-	scl2h = ' Fit of metalic tokamaks database for vertical targets and corner configuration (E . Delabie et al, 2025 ?);';
+	scl2h = 'Fit of metalic tokamaks database for vertical targets and corner configuration (TC_26(Bt),E . Delabie et al, N.F 2026)';
+case 32
+	scl2h = 'Fit of metalic tokamaks database for horizontal targets with B_pol instead of B_tor (TC_26(Bpol), E . Delabie et al, N.F. 2026)';
+case 33
+	scl2h = 'Fit of metalic tokamaks database for vertical targets and corner configuration with B_pol instead of B_tor (TC_26(Bpol),E . Delabie et al, N.F 2026)';
 otherwise
 	if post.z0dinput.option.l2hscaling < 0
 		scl2h = 'Rotation  (D. Testa Nucl. Fusion 46 (2006) 562-579)';

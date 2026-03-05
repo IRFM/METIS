@@ -52,7 +52,9 @@ nbpts = nbpts_max;  % number has been decreased for testing new UAL.
 pulse = ids_gen('pulse_schedule');
 
 % backward compatible 
-if isfield(pulse.flux_control.i_plasma.reference,'data')
+if isfield(pulse.flux_control,'i_plasma') && isfield(pulse.flux_control.i_plasma.reference,'data')
+    purge_reference_data = false;
+elseif  isfield(pulse.flux_control,'ip') && isfield(pulse.flux_control.ip.reference,'data')
     purge_reference_data = false;
 else
     purge_reference_data = true;
@@ -102,6 +104,8 @@ otherwise
 	pulse.ids_properties.comment = sprintf('METIS simlation process by %s',getenv('USER'));	
 end
 pulse.ids_properties.source    = 'METIS';
+% create also provenance for version 4 of the dictionary
+pulse.ids_properties.provenance = make_provenance;
 if ispc
   pulse.ids_properties.provider  = getenv('USERNAME');
 else
@@ -117,17 +121,28 @@ pulse.code.commit      = commit;
 pulse.code.repository  = repository;
 % creation des donnees pour codeparam
 data = z0dstruct.z0dinput.option;
-tpn = tempname;
-xml_write(tpn,data);
-% lecture du fichier
-fid = fopen(tpn,'r');
-if fid > 0
-	parameters = char(fread(fid,Inf,'char')');
-	fclose(fid);
-else
-	parameters = 'unable to read parameters xml file';
+if isempty(data.shot)
+    data.shot = z0dstruct.z0dinput.shot;
 end
-delete(tpn);
+if isempty(data.machine)
+    data.machine = z0dstruct.z0dinput.machine;
+end
+try
+    parameters = simple_struct2xml(data);
+catch
+    disp('switch to xml_write to encode the code parameters');
+    tpn = tempname;
+    xml_write(tpn,data);
+    % lecture du fichier
+    fid = fopen(tpn,'r');
+    if fid > 0
+        parameters = char(fread(fid,Inf,'char')');
+        fclose(fid);
+    else
+        parameters = 'unable to read parameters xml file';
+    end
+    delete(tpn);
+end
 pulse.code.parameters = parameters;
 tol0d = z0dstruct.z0dinput.option.tol0d;
 pulse.code.output_flag = fix(double((data_zerod.dw <= tol0d) & (data_zerod.dpfus <= tol0d) & ...
@@ -443,11 +458,17 @@ end
 % EM boundary condition 
 pulse.flux_control.i_plasma.reference_type = 1;
 pulse.flux_control.i_plasma.reference_name = 'Ip: plasma current (A)';
-pulse.flux_control.i_plasma.reference.data = cons.ip;
+pulse.flux_control.i_plasma.reference.data = sign(mean(data_zerod.ip)) .* cons.ip;
+pulse.flux_control.ip = pulse.flux_control.i_plasma;
 %
 pulse.flux_control.loop_voltage.reference_type = 1;
 pulse.flux_control.loop_voltage.reference_name = 'Vloop: plasma loop voltage (V, at plasma LCFS)';
-pulse.flux_control.loop_voltage.reference.data = vloop;
+if (sign(mean(data_zerod.vloop)) * sign(mean(vloop))) < 0
+    pulse.flux_control.loop_voltage.reference.data = - vloop;
+else
+    pulse.flux_control.loop_voltage.reference.data = vloop;
+end
+pulse.flux_control.v_loop = pulse.flux_control.loop_voltage;
 % verification
 if plotonoff 
 	dt = diff(pulse.time);
@@ -466,7 +487,7 @@ end
 inter   = pulse.nbi.unit{1};
 species = inter.species{1};
 element = species.element{1};
-% NBI power is splitted in 2 injector and 3 species = 6 refrences
+% NBI power is splitted in 2 injector and 3 species = 6 references
 % nbi_1 = injector 1 hydrogen
 % nbi_2 = injector 1 deuterium
 % nbi_3 = injector 1 tritium
@@ -591,6 +612,9 @@ for k=1:8
 	inter.energy.reference.data = einj;
 	pulse.nbi.unit{k} = inter;
 end
+%added power field
+pulse.nbi.power.reference.data = pnbi1 + pnbi2;
+pulse.nbi.power_launched.reference.data = pnbi1 + pnbi2;
 
 
 %  	% altenative implementation	
@@ -637,6 +661,10 @@ if isfield(pulse.ic,'antenna')
 else
     pulse.ic.launcher{1} = inter;
 end
+% added power field
+pulse.ic.power.reference.data = cons.picrh;
+pulse.ic.power_launched.reference.data = cons.picrh;
+
 % ECRH: one or two antenna depending on METIS internal configuration
 % initialisation sub structure
 if isfield(pulse.ec,'antenna')
@@ -680,6 +708,10 @@ switch z0dstruct.z0dinput.option.lhmode
             pulse.ec.launcher{1} = inter;
             pulse.ec.launcher{2} = pulse.ec.beam{1};
         end
+        % added power field
+        pulse.ec.power.reference.data = cons.pecrh;
+        pulse.ec.power_launched.reference.data = cons.pecrh;
+
         % second EC antenna
         inter.power.reference_name = sprintf('EC power for antenna %d (W)',2);
         inter.power.reference_type = 1;
@@ -704,6 +736,10 @@ switch z0dstruct.z0dinput.option.lhmode
         else
             pulse.ec.beam{2} = inter;
         end
+        % added power field
+        pulse.ec.power.reference.data          = pulse.ec.power.reference.data + cons.plh;
+        pulse.ec.power_launched.reference.data = pulse.ec.power_launched.reference.data + cons.plh;
+
     otherwise
         
         % Launcher are not descibed in METIS, so launching_angle_pol and launching_angle_tor is not required.
@@ -737,6 +773,11 @@ switch z0dstruct.z0dinput.option.lhmode
             pulse.ec.launcher{1} = inter;
             %pulse.ec.launcher{2} = pulse.ec.beam{1};
         end
+        
+        % added power field
+        pulse.ec.power.reference.data = cons.pecrh;
+        pulse.ec.power_launched.reference.data = cons.pecrh;
+
 %         % second EC antenna
 %         inter.power.reference_name = sprintf('EC power for antenna %d (W)',2);
 %         inter.power.reference_type = 1;
@@ -813,6 +854,10 @@ switch z0dstruct.z0dinput.option.lhmode
             pulse.lh.launcher{1} = inter;
         end
 end
+% added power field
+pulse.lh.power.reference.data = cons.plh;
+pulse.lh.power_launched.reference.data = cons.plh;
+
 
 %% compatibility with new version of IMAS
 % for k=1:length(pulse.ec.antenna)
@@ -833,7 +878,7 @@ pulse.flux_control.li_3.reference.data = (2/3) .* ones(size(cons.temps));
 pulse.flux_control.beta_normal.reference_type = 1;
 pulse.flux_control.beta_normal.reference_name = 'Beta_N targeted; will be used in the control of betan (confinement factor = beta_normal / 4 / li_3)';
 pulse.flux_control.beta_normal.reference.data =  (2/3) .* 4 .* cons.hmore;
-
+pulse.flux_control.beta_tor_norm = pulse.flux_control.beta_normal;
 %  initialisation sub structure
 boundary_outline = pulse.position_control.boundary_outline{1};
 % z0dstruct.z0dinput.geo

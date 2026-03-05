@@ -25,6 +25,19 @@ else
       title('choose a time')
       drawnow	
       [twp,void] = ginput(1);
+
+      % Ask user to enter the time manually
+      prompt = {'Check the time value:'};
+      dlgtitle = 'Input';
+      dims = [1 35];
+      definput = {num2str(twp)};
+      answer = inputdlg(prompt, dlgtitle, dims, definput);
+
+      if isempty(answer)
+        return; 	% Exit if the user cancels the input dialog
+      end
+
+      twp = str2double(answer{1});
       close(gcf);
       drawnow
     end

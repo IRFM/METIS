@@ -7,32 +7,32 @@ end
 path = [pth '/' flnm];
 
 % Read and stores inputs
-debug_path = [path, '/debug/'];
-yout.kthetarhos = load([debug_path, 'kthetarhos.dat']);
-yout.Ane        = load([debug_path, 'Ane.dat']);
-yout.Ani        = load([debug_path, 'Ani.dat']);
-yout.Ati        = load([debug_path, 'Ati.dat']);
-yout.Ate        = load([debug_path, 'Ate.dat']);
-yout.qx         = load([debug_path, 'q.dat']);
-yout.smag       = load([debug_path, 'smag.dat']);
-yout.Tex        = load([debug_path, 'Te.dat']);
-yout.Tix        = load([debug_path, 'Ti.dat']);
-yout.gammaE     = load([debug_path, 'gammaE.dat']);
-yout.Aupar      = load([debug_path, 'Aupar.dat']);
-yout.Autor      = load([debug_path, 'Autor.dat']);
-yout.Machpar    = load([debug_path, 'Machpar.dat']);
-yout.Machtor    = load([debug_path, 'Machtor.dat']);
-yout.Bo         = load([debug_path, 'Bo.dat']);
-yout.Ro         = load([debug_path, 'Ro.dat']);
-%yout.R0         = load([debug_path, 'R0.dat']);
-yout.Nex        = load([debug_path, 'ne.dat']);
-yout.ninorm     = load([debug_path, 'normni.dat']);
+debug_path = [path,'/debug/'];
+yout.kthetarhos = load([debug_path 'kthetarhos.dat']);
+yout.Ane        = load([debug_path 'Ane.dat']);
+yout.Ani        = load([debug_path 'Ani.dat']);
+yout.Ati        = load([debug_path 'Ati.dat']);
+yout.Ate        = load([debug_path 'Ate.dat']);
+yout.qx         = load([debug_path 'q.dat']);
+yout.smag       = load([debug_path 'smag.dat']);
+yout.Tex        = load([debug_path 'Te.dat']);
+yout.Tix        = load([debug_path 'Ti.dat']);
+yout.gammaE     = load([debug_path 'gammaE.dat']);
+yout.Aupar      = load([debug_path 'Aupar.dat']);
+yout.Autor      = load([debug_path 'Autor.dat']);
+yout.Machpar    = load([debug_path 'Machpar.dat']);
+yout.Machtor    = load([debug_path 'Machtor.dat']);
+yout.Bo         = load([debug_path 'Bo.dat']);
+yout.Ro         = load([debug_path 'Ro.dat']);
+%yout.R0         = load([debug_path 'R0.dat']);
+yout.Nex        = load([debug_path 'ne.dat']);
+yout.ninorm     = load([debug_path 'normni.dat']);
 yout.x          = load([debug_path, 'x.dat']);
-yout.rho          = load([debug_path, 'rho.dat']);
-yout.Zi         = load([debug_path, 'Zi.dat']);
-yout.alphax     = load([debug_path, 'alpha.dat']);
-yout.Ai         = load([debug_path, 'Ai.dat']);
-yout.Rmin       = load([debug_path, 'Rmin.dat']);
+yout.rho          = load([debug_path 'rho.dat']);
+yout.Zi         = load([debug_path 'Zi.dat']);
+yout.alphax     = load([debug_path 'alpha.dat']);
+yout.Ai         = load([debug_path 'Ai.dat']);
+yout.Rmin       = load([debug_path 'Rmin.dat']);
 yout.scann      = length(yout.x);
 yout.phi       = load([debug_path, 'phi.dat']);
 
@@ -57,6 +57,8 @@ yout.ome_SI = load([path '/output/ome_SI.dat']);
 yout.ntor = load([path '/output/primitive/ntor.dat']);
 
 try
+yout.kperp2 = load([path '/output/primitive/kperp2.dat']);
+
 yout.rLecirci = load([path '/output/primitive/rLecirci.dat']);
 yout.iLecirci = load([path '/output/primitive/iLecirci.dat']);
 yout.rLcirci = load([path '/output/primitive/rLcirci.dat']);
@@ -88,8 +90,12 @@ yout.vte_SI = load([path '/output/vte_SI.dat']);
 yout.vci_SI = load([path '/output/vci_SI.dat']); 
 yout.vti_SI = load([path '/output/vti_SI.dat']); 
 yout.vri_SI = load([path '/output/vri_SI.dat']); 
+yout.vci_GB = load([path '/output/vci_SI.dat']); 
+yout.vti_GB = load([path '/output/vti_SI.dat']); 
+yout.vri_GB = load([path '/output/vri_SI.dat']); 
 
 yout.dfi_SI = load([path '/output/dfi_SI.dat']); 
+yout.dfi_GB = load([path '/output/dfi_GB.dat']);
 yout.dfe_SI = load([path '/output/dfe_SI.dat']); 
 yout.dfe_GB = load([path '/output/dfe_GB.dat']); 
 yout.vce_GB = load([path '/output/vce_GB.dat']); 
@@ -139,6 +145,7 @@ yout.chieff_e = yout.efe_SI./yout.Ate./(yout.Nex*1e19)./(yout.Tex*q_ele*1e3).*yo
 
 %gam=reshape(yout.gam_GB,[length(yout.Ate) 3 length(yout.kthetarhos)]);
 %gam1=squeeze(gam(:,1,:));
+
 	     
 if ~(plt)
  return

@@ -11,7 +11,7 @@
 % zeff   = charge effective (su)
 % loi de confinement et de transition L-H
 function [wrlw,plossl2h,tauthl,tauh,tauhe_l,tauhe_h,tau_na,tau_nas,tau_ped_sc] =  ...
-         zscale0(nbar,ip,Bt,ploss,pin,R,K,a,meff,zeff,Vp,Sp,q95,sext,modescale,l2hsc,pohm,nem,eta,ae,tau_bohm,prad_bol,delta,Ka95,d95,time)
+         zscale0(nbar,ip,Bt,ploss,pin,R,K,a,meff,zeff,Vp,Sp,q95,sext,modescale,l2hsc,pohm,nem,eta,ae,tau_bohm,prad_bol,delta,Ka95,d95,time,bpola)
      
 % compatibilite ascendante
 if nargin < 23    
@@ -74,21 +74,39 @@ switch l2hsc
         plossl2h   = 0.36 .* ip .^ 0.27 .* Bt.^ 1.25 .* R .^ 1.23 .* (R./a) .^ 0.08;
         
     case 30
+        % exponent and constant from N.F. paper 2026
         % Metal DB: Status of TC 26: L H/H L scaling in the presence of
         % Metallic walls  JET ILW: E . Delabie, E.R. Solano, 
         % C . Maggi , J. Hillesheim ; AUG: F . Ryter , M. Cavedon  , 
         % G . Birkenmeier , U. Plank , C mod : J . Hughes 
         % case for horizontal target slide 23
-        plossl2h   = 0.045 .* nbar .^ 1.08 .* Bt .^ 0.56 .* sext .^ 1.0 .* (2 ./ meff) .^ 0.96;
+        plossl2h   = 0.0441 .* nbar .^ 1.08 .* Bt .^ 0.580 .* sext .^ 1.0 .* (2 ./ meff) .^ 0.975;
         
     case 31
+        % exponent and constant from N.F. paper 2026
         % Metal DB: Status of TC 26: L H/H L scaling in the presence of
         % Metallic walls  JET ILW: E . Delabie, E.R. Solano, 
         % C . Maggi , J. Hillesheim ; AUG: F . Ryter , M. Cavedon  , 
         % G . Birkenmeier , U. Plank , C mod : J . Hughes 
         % case for vertical/corner target slide 23
-        plossl2h   = 1.93 .* 0.045 .* nbar .^ 1.08 .* Bt .^ 0.56 .* sext .^ 1.0 .* (2 ./ meff) .^ 0.96;
+        plossl2h   = 1.93 .* 0.0441 .* nbar .^ 1.08 .* Bt .^ 0.580 .* sext .^ 1.0 .* (2 ./ meff) .^ 0.975;
         
+    case 32
+        % Metal DB: Status of TC 26: L H/H L scaling in the presence of
+        % Metallic walls  JET ILW: E . Delabie, E.R. Solano, 
+        % C . Maggi , J. Hillesheim ; AUG: F . Ryter , M. Cavedon  , 
+        % G . Birkenmeier , U. Plank , C mod : J . Hughes 
+        % case for horizontal target slide 23
+        plossl2h   = 0.166 .* nbar .^ 1.07 .* bpola .^ 0.631 .* sext .^ 1.0 .* (2 ./ meff) .^ 1.01;
+        
+    case 33
+        % Metal DB: Status of TC 26: L H/H L scaling in the presence of
+        % Metallic walls  JET ILW: E . Delabie, E.R. Solano, 
+        % C . Maggi , J. Hillesheim ; AUG: F . Ryter , M. Cavedon  , 
+        % G . Birkenmeier , U. Plank , C mod : J . Hughes 
+        % case for vertical/corner target slide 23
+        plossl2h   = 1.67 .* 0.166 .* nbar .^ 1.07 .* bpola .^ 0.631 .* sext .^ 1.0 .* (2 ./ meff) .^ 1.01;
+         
     otherwise
         % seuil mode H loi LH99(1)
         plossl2h   = 2.84 .* nbar .^ 0.58 .* Bt .^ 0.82 .* R .* a .^ 0.81 ./ meff; % MW
@@ -413,7 +431,21 @@ switch modescale
         % securite
         tauthl = min(tauthl,tauh);
         
+    case 30
         
+        % there is always an ambiguity on the definition of P to be used
+        % with reactor and large radiative fraction ...
+        % here we choose to use ploss as defined in METIS paper.
+        
+        % Riedel scaling
+        % K.S Riedel scaling for L (N.F 31 p 927 [1991] formula 13)
+        tauthl  = 0.03686 .* sqrt(meff) .* ep .^ 0.049 .* R .^ 1.426 .* K .^ 0.588 .* ...
+                  ip .^ 0.930 .* Bt .^ 0.152 .* ne .^ 0.078 .* ploss .^ -0.537; % s
+  
+        % K.S Riedel scaling for H mode (N.F. 32 p 1270 [1992] formula 3)
+        tauh  = 0.07192 .* sqrt(meff) .* ep .^ 0.221 .* R .^ 1.568 .* K .^ 0.3 .* ...
+                  ip .^ 0.904 .* Bt .^ 0.201 .* ne .^ 0.106 .* ploss .^ -0.493; % s
+  
 end
 
 % volume du plasma (rapport groupe dimensionnement)

@@ -1,6 +1,11 @@
 % test COCOS coherence for one METIS dataset 
 function test_cocos_IMAS_METIS(post,dataversion,targeted_cocos)
 
+persistent run
+if isempty(run)
+    run = 200;
+end
+
 % test availability of tools
 if isempty(which('ids_check_cocos'))
     init_cocos_test_in_metis([],true);
@@ -35,8 +40,11 @@ end
 fprintf('Targeted COCOS is %d\n',post.z0dinput.option.COCOS);
 
 % error_flag = metis4imas(99999,99,occurrence,post);
-%
-[error_flag,output_data] = metis4imas(99999,99,0,post,[]);
+run = run + 1;
+% write IDS
+metis4imas(99999,run,0,post,[])
+% read IDS
+[error_flag,output_data] = metis4imas(99999,run,0,'read',[]);
 %
 % get code param
 options = pulse_schedule2option_imas(output_data.pulse_schedule);
@@ -56,6 +64,7 @@ diary on
 idslist = fieldnames(output_data);
 for k=1:length(idslist)
     ids_name = idslist{k};
+    stat_struct = [];
     disp(' ')
     disp('----------------------------------------------------------------------------');
     fprintf('Testing IDS %s:\n',ids_name)
@@ -73,7 +82,7 @@ for k=1:length(idslist)
                 end
             end
             %
-            ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
+             [~,~,stat_struct]=ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
         case 'equilibrium'
             % remove new field not defined in ids_gen due to differences in model version
             model = ids_gen(ids_name);
@@ -87,7 +96,7 @@ for k=1:length(idslist)
                 end
             end
             %
-            ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
+             [~,~,stat_struct]=ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
         otherwise
             % for the moment
             disp('test not yet available');
@@ -114,7 +123,7 @@ for k=1:length(idslist)
             end
             %
             try
-                ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
+                 [~,~,stat_struct]=ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
             catch
                 disp('does not working with core_profiles like IDS');
             end
@@ -138,11 +147,30 @@ for k=1:length(idslist)
                 end
             end
             try
-                ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
+                [~,~,stat_struct]=ids_generic_cocos_check(data,ids_name,options.COCOS,sign_ip,sign_bt);
             catch
                 disp('does not working with equilibrium like IDS');
             end
     end
+    if ~isempty(stat_struct)
+        stop_here = false;
+        noms = fieldnames(stat_struct);
+        for km = 1:length(noms)
+            switch noms{km}
+                case 'global_status'
+                    fprintf('Number of error = %d\n',stat_struct.global_status);
+                    if stat_struct.global_status > 0
+                        stop_here = true;
+                    end
+                otherwise
+                    print_cocos_message(stat_struct.(noms{km}),noms{km});
+            end
+        end
+        if stop_here
+           % keyboard
+        end
+    end
+    
 end
 
 % that all !

@@ -31,7 +31,7 @@ info.temperature_factor		= 'temperature factor for simulated annealing';
   
 valeur.nbloop_max	= 501;
 type.nbloop_max		= 'real';
-borne.nbloop_max	= [0,1];
+borne.nbloop_max	= [0,10001];
 defaut.nbloop_max	= 501;
 info.nbloop_max		= 'maximum number of loop';
 %label.nbloop_max
@@ -239,13 +239,23 @@ borne.separateflux	= {0,1};
 defaut.separateflux	= 1;
 info.separateflux	= 'Output ITG/TEM seperated fluxes. See output. ETG separated flux is also provided by default';
 
-valeur.numproc  	= 8;
+valeur.numproc  	= maxNumCompThreads;
 type.numproc    	= 'real';
 borne.numproc   	= [0,100];
-defaut.numproc  	= 8;
+defaut.numproc  	= maxNumCompThreads;
 info.numproc    	= 'Number of processors to be used for QuaLiKiz simulations';
 
+valeur.imp_trans	= 0;
+type.imp_trans    	= 'real';
+borne.imp_trans	= {0,1,2,3,4};
+defaut.imp_trans	= 0;
+info.imp_trans	= 'Run options for turbulent and neoclassical transport. Is consistent with choices made in Imp_trans. If OP+QLKZ used put this to 0.\n 0: QuaLiKiz steady state without impurity transport. \n 1: QuaLiKiz standalone. \n 2: steady state QLKZ with impurity transport (no neoclassical transport).\n 3: steady state QLKZ+FACIT.\n steady state QLKZ+NEO.';
 
+valeur.ext_nbloop= 100;
+type.ext_nbloop		= 'real';
+borne.ext_nbloop	= [1,1000];
+defaut.ext_nbloop	= 100;
+info.ext_nbloop	= 'Maximum number of interation in the external loop';
 
 interface.ts = '';                    % nom de la fonction d'interfacage avec les donnees TS
 interface.jet = '';                   % nom de la fonction d'interfacage avec les donnees Jet

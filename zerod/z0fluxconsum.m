@@ -60,7 +60,7 @@ t    = post.zerod.temps;
 geo  = post.z0dinput.geo;
 exp0d = post.z0dinput.exp0d;
 if isfield(exp0d,'edgeflux')
-    exp0d.flux = exp0d.edgeflux;
+    exp0d.flux = exp0d.edgeflux ./ 2 ./ pi;
 end
 Raxe    = (geo.R + post.zerod.d0);
 Ka   = sqrt(post.zerod.sp ./ pi) ./ geo.a;

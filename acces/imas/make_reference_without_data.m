@@ -43,8 +43,12 @@ elseif isstruct(in)
                 case 'reference'
                     if isstruct(in.(noms{k}))
                         if isfield(in.(noms{k}),'data')
-                             out.(noms{k}) = in.(noms{k}).data;                        
-                       else
+                             out.(noms{k}) = in.(noms{k}).data;  
+                             % add also error fields
+                             out.(sprintf('%s_error_upper',noms{k}))   = [];
+                             out.(sprintf('%s_error_lower',noms{k}))   = [];
+                             out.envelope_type = [];
+                      else
                             error('this case should never happen');
                         end
                     else

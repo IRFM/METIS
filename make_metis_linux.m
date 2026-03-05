@@ -1,5 +1,5 @@
 local = pwd;
-cd(fullfile(local,'import','sampling'));
+cd(fullfile(fileparts(which('zineb_path')),'import','sampling'));
 disp('============================================')
 disp('compiling pchipslopest_mex')
 mex -v -cxx pchipslopest_mex.c

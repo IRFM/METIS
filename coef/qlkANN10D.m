@@ -67,7 +67,7 @@ end
 % cast 0 and 1 in logical
 noms = fieldnames(qlknn_params);
 for k=1:length(noms)
-    if iscell(param.borne.(noms{k})) && (length(param.borne.(noms{k})) == 2)
+    if isfield(param.borne,noms{k}) && iscell(param.borne.(noms{k})) && (length(param.borne.(noms{k})) == 2)
         switch qlknn_params.(noms{k})
             case {1,'on','yes'}
                 qlknn_params.(noms{k}) = true;

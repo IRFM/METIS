@@ -17,7 +17,6 @@ phys.ua          =   1.66053873e-27;           % 1 unite atomique (kg) (+/- 1.00
 phys.avo         =   6.02214199e23;            % nombre d'avogadro (mol^-1) (+/- 0.00000047e23)
 phys.sigma       =   5.670400e-8;              % constante de stephan ( W*m^-2*K^-4) (+/- 0.000040e-8)
 
-
 % precomputation
 amin  =   interp1_imas(z0dstruct.z0dinput.cons.temps,z0dstruct.z0dinput.geo.a,profil0d.temps,'pchip','extrap');
 
@@ -181,7 +180,6 @@ profil0d.zeff  = nizi2 ./ nizi;
 %  zplotprof(gca,profil0d.temps,profil0d.xli,nizi2 ./ nizi,'color','b','marker','o','linestyle',':');
 %  keyboard
 
-
 % rotation 
 [rtor,vtor,vpol,omega,mtor] = z0rot_imas(data_zerod,profil0d,z0dstruct.z0dinput.option,frhe3,z0dstruct.z0dinput.geo,z0dstruct.z0dinput.cons);
 
@@ -274,7 +272,7 @@ coreprof.time		    = profil0d.temps;
 rb0 =   interp1_imas(z0dstruct.z0dinput.cons.temps,z0dstruct.z0dinput.geo.R .* z0dstruct.z0dinput.geo.b0,profil0d.temps,'pchip','extrap');
 r0  =   interp1_imas(z0dstruct.z0dinput.cons.temps,z0dstruct.z0dinput.geo.R ,profil0d.temps,'pchip','extrap');
 coreprof.vacuum_toroidal_field.r0          = mean(z0dstruct.z0dinput.geo.R);
-coreprof.vacuum_toroidal_field.b0          = sigma_B0_eff .* z0dstruct.z0dinput.option.signe .* rb0 ./ coreprof.vacuum_toroidal_field.r0;
+coreprof.vacuum_toroidal_field.b0          = sigma_B0_eff .* abs(rb0) ./ coreprof.vacuum_toroidal_field.r0;
 
 %% global_quantities
 coreprof.global_quantities.ip                     = interp1_imas(data_zerod.temps,data_zerod.ip,profil0d.temps,'pchip','extrap');
@@ -294,15 +292,22 @@ coreprof.global_quantities.energy_diamagnetic     = interp1_imas(data_zerod.temp
 % null profile
 zz              = zeros(size(profil0d.xli));
 %model_ion   = coreprof.profiles_1d{1}.ion{1};
-model_ion   = ids_allocate('core_profiles','profiles_1d/ion',1);
-model_ion   = model_ion{1};
-%model_state = model_ion.state;
-model_state = ids_allocate('core_profiles','profiles_1d/ion/state',1);
-%model_state = model_state{1};
-%model_element = model_ion.element{1};
-model_element = ids_allocate('core_profiles','profiles_1d/ion/element',1);
-model_element = model_element{1};
-
+if getappdata(0,'IMAS_VERSION') > 3
+    model_ion   = merge_core_and_plasma(ids_allocate('core_profiles','profiles_1d/ion',1),ids_allocate('plasma_profiles','profiles_1d/ion',1));
+    model_ion   = model_ion{1};
+    model_state = merge_core_and_plasma(ids_allocate('core_profiles','profiles_1d/ion/state',1),ids_allocate('plasma_profiles','profiles_1d/ion/state',1));
+    model_element = merge_core_and_plasma(ids_allocate('core_profiles','profiles_1d/ion/element',1),ids_allocate('plasma_profiles','profiles_1d/ion/element',1));
+    model_element = model_element{1};
+else
+    model_ion   = ids_allocate('core_profiles','profiles_1d/ion',1);
+    model_ion   = model_ion{1};
+    %model_state = model_ion.state;
+    model_state = ids_allocate('core_profiles','profiles_1d/ion/state',1);
+    %model_state = model_state{1};
+    %model_element = model_ion.element{1};
+    model_element = ids_allocate('core_profiles','profiles_1d/ion/element',1);
+    model_element = model_element{1};
+end
 %% SOURCE terms
 for k=1:length(profil0d.temps)
     profiles_1d = coreprof.profiles_1d{1};
@@ -343,7 +348,8 @@ for k=1:length(profil0d.temps)
     %
     profiles_1d.t_i_average            = profil0d.tip(k,:);
     profiles_1d.n_i_total_over_n_e     = profil0d.nip(k,:) ./ max(1,profil0d.nep(k,:));
-    profiles_1d.momentum_tor           = rtor(k,:);
+    profiles_1d.momentum_tor           = rtor(k,:); % v3
+    profiles_1d.momentum_phi           = rtor(k,:); % v4
     profiles_1d.zeff                   = profil0d.zeff(k,:);
     profiles_1d.pressure_ion_total     = phys.e .* sum(nions(k,:,[1:8,10]),3) .* profil0d.tip(k,:) + sum(psupra(k,:,[1:8,10]),3);
     profiles_1d.pressure_thermal       = phys.e .* profil0d.tep(k,:) .* profil0d.nep(k,:) + phys.e .* profil0d.nip(k,:) .* profil0d.tip(k,:);
@@ -351,6 +357,7 @@ for k=1:length(profil0d.temps)
     profiles_1d.pressure_parallel      = sum(psupra_para(k,:,:),3) + profiles_1d.pressure_thermal;
     profiles_1d.j_total                = profil0d.jeff(k,:);
     profiles_1d.j_tor                  = profil0d.jli(k,:);
+    profiles_1d.j_phi                  = profil0d.jli(k,:);
     profiles_1d.j_ohmic                = profil0d.jeff(k,:) - profil0d.jni(k,:);
     profiles_1d.j_non_inductive        = profil0d.jni(k,:);
     profiles_1d.current_parallel_inside = cumtrapz(profil0d.xli,profil0d.jni(k,:) .* profil0d.spr(k,:),2);
@@ -368,13 +375,15 @@ for k=1:length(profil0d.temps)
     profiles_1d.magnetic_shear         = pdederive(profil0d.rmx(k,:),profil0d.qjli(k,:),0,2,2,1) ./ profil0d.qjli(k,:) .* profil0d.rmx(k,:);
     profiles_1d.time                   = profil0d.temps(k);
     
-%     % check q phi and psi
-%     qcheck = abs(pdederive(profiles_1d.grid.psi,profil0d.phi(k,:),1,2,2,1)) ./ 2 ./ pi;
+%    check q phi and psi
+%  missign 2 * pi factor and and COCOS sign effect
+%     qcheck =  - pdederive(profiles_1d.grid.psi,profil0d.phi(k,:),1,2,2,1) ./ 2 ./ pi;
 %     phi_check = profiles_1d.grid.rho_tor .^ 2 .* pi .* coreprof.vacuum_toroidal_field.b0(k);
-%     qcheck2 = abs(pdederive(profiles_1d.grid.psi,phi_check,1,2,2,1)) ./ 2 ./ pi;
+%     qcheck2  = -pdederive(profiles_1d.grid.psi,phi_check,1,2,2,1) ./ 2 ./ pi;
 %     mean(sqrt((qcheck - profiles_1d.q) .^ 2)) 
 %     mean(sqrt((qcheck2 - profiles_1d.q) .^ 2)) 
 %     mean(sqrt((qcheck2 -qcheck) .^ 2)) 
+%     keyboard
 % 
     
     % filling ion structure for each species
@@ -398,6 +407,7 @@ for k=1:length(profil0d.temps)
         ion.pressure_fast_perpendicular = psupra_perp(k,:,l);
         ion.pressure_fast_parallel      = psupra_para(k,:,l);
         ion.velocity_tor                = vtor(k,:,l);
+        ion.velocity_phi                = vtor(k,:,l);
         ion.velocity_pol                = vpol(k,:,l);
         %ion.velocity.radial             = not computed inside METIS
         %ion.velocity.diamagnetic        = not computed inside METIS
@@ -454,6 +464,16 @@ for k=1:length(profil0d.temps)
     
     coreprof.profiles_1d{k} = profiles_1d;
     coreprof.profiles_2d{k} = profiles_2d;
-    coreprof.statistics{k} = statistics;
+    coreprof.statistics{k}  = statistics;
+    if isfield(coreprof,'grid_ggd')
+        coreprof.grid_ggd{k}    = coreprof.grid_ggd{1};
+    end
+    if isfield(coreprof,'ggd')
+        coreprof.ggd{k}         = coreprof.ggd{1};
+    end
+    if  isfield(coreprof,'ggd_fast')
+        coreprof.ggd_fast{k}    = coreprof.ggd_fast{1};
+    end
 end
+
 

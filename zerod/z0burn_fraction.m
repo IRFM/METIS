@@ -21,7 +21,7 @@ phys.pam3        =   (4.41e-4 .* phys.avo);    % conversion d'un nombre de parti
 vt = ones(size(post.z0dinput.cons.temps));
 
 % pellet fraction
-if (nargin < 4) || all(pellet_fraction == 0);
+if (nargin < 4) || all(pellet_fraction == 0)
     frac_pellet = post.zerod.frac_pellet .* (post.zerod.frac_pellet > 1e-2);
 elseif length(pellet_fraction) == 1
     frac_pellet = vt * pellet_fraction;

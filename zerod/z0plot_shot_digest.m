@@ -558,6 +558,17 @@ if fid > 0
     fprintf('File %s as been created\n',filename);
     disp('===================================================')
 end
+filename = sprintf('METIS_simulation_digest_table_TOK_%s@shot_%d.csv',post.z0dinput.machine,post.z0dinput.shot);
+fid = fopen(filename,'w');
+if fid > 0
+    for k=1:length(bb)
+        fprintf(fid,'%s, %g\n',deblank(aa{k}),bb(k));
+    end
+    fclose(fid);
+    disp('===================================================')
+    fprintf('File %s as been created\n',filename);
+    disp('===================================================')
+end
 
 
 
@@ -1096,6 +1107,17 @@ fid = fopen(filename,'w');
 if fid > 0
     for k=1:length(bb)
         fprintf(fid,'%-25s\t%g\n',deblank(aa{k}),bb(k));
+    end
+    fclose(fid);
+    disp('===================================================')
+    fprintf('File %s as been created\n',filename);
+    disp('===================================================')
+end
+filename = sprintf('METIS_simulation_digest_table_TOK_%s@shot_%d.csv',post.z0dinput.machine,post.z0dinput.shot);
+fid = fopen(filename,'w');
+if fid > 0
+    for k=1:length(bb)
+        fprintf(fid,'%s, %g\n',deblank(aa{k}),bb(k));
     end
     fclose(fid);
     disp('===================================================')

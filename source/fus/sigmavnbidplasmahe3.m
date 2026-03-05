@@ -1,4 +1,4 @@
-% cette fonction tabule <sigma*v> pour l'interraction faisceau (D) - plasma (T)
+% cette fonction tabule <sigma*v> pour l'interraction faisceau (D) - plasma (He3)
 % ref :  D. R. Mikkelsen, NF vol 29 p 1113, 1989
 function sigmavnbidplasmahe3
 
@@ -11,13 +11,8 @@ xlabel('Ecm (eV)');
 ylabel('Sigma (mb)');
 drawnow
 
-
-
-
 % constantes utiles
-mp          =   1.6726485e-27;            % masse au repos du proton (kg)
-e           =   1.602176462e-19;          % charge de l'electron (C)   (+/- 0.000000063e-19)
-
+phys = cphys;
 
 % le premier indice est l'energie du faisceau (eV)
 enbi = logspace(3,6.5,101)';
@@ -26,9 +21,12 @@ eti  = logspace(3,5,51);
 % resevation de la sortie
 svnbidhe3 = NaN .* ones(101,51) ;
 
-
-la            = sqrt(2 .*e .*  1000./ mp ./ 3) % borne inferieur 1keV
-lb            = sqrt(2 .*e .*  4.7e6./ mp ./ 2) % borne superieur 4700 keV
+% reduce masse in eV
+% for pure D and He3
+mu = 3.016029322 * 2.0141017778 / (3.016029322 + 2.0141017778) * phys.ua;
+la = sqrt(2 .* phys.e .* 1000 ./ mu);
+lb = sqrt(2 .* phys.e .* 4.7e6 ./ mu); % to prevent NaN litle smaller
+v  = logspace(log10(la),log10(lb),100001);
 
 % boucle sur les energie de faisceau
 for k=1:length(enbi)
@@ -37,12 +35,9 @@ for k=1:length(enbi)
    for l=1:length(eti)
       enbic         = enbi(k);
       etic          = eti(l);
-      vb            = sqrt(2 .*e .*  enbic./ mp ./ 2);
-      vth           = sqrt(2 .*e .*  etic ./ mp ./ 3);
-      la            = sqrt(2 .*e .*  1000./ mp ./ 3); % borne inferieur 1keV
-      lb            = sqrt(2 .*e .*  4.7e6./ mp ./ 2); % borne superieur 4700 keV
-      v             = logspace(log(la)/log(10),log(lb)/log(10),100001);
-      svcb          = trapz(v,svb2int(v,vth,vb));
+      vb            = sqrt(2 .* phys.e .*  enbic./ phys.ua ./ 2.0141017778);
+      vth           = sqrt(2 .* phys.e .*  etic ./ phys.ua ./ 3.016029322);
+      svcb          = trapz(v,svb2int_dhe3(v,vth,vb));
       %warning off
       %svc           = quad('svb2int',la,lb,1e-28,0,vth,vb);
       %warning on

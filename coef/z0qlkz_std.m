@@ -290,10 +290,10 @@ V_ref(V_ref > qlkparams.maxVe)          = qlkparams.maxVe;
 D_ref(D_ref > qlkparams.maxDe)          = qlkparams.maxDe;
 
 % initialisation
-chie_loop = ones(size(profil.tep));
-chii_loop = 3 .* ones(size(profil.tep));
-D_loop    = ones(size(profil.tep)) / 3;
-V_loop    = Vware_ref;
+chie_loop = chie_ref;
+chii_loop = chii_ref;
+D_loop    = D_ref;
+V_loop    = V_ref;
 %
 chie_mem = chie_loop;
 chii_mem = chii_loop;

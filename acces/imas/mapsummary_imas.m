@@ -296,6 +296,7 @@ configs.ecrh_freq.value     = [];
 configs.ecrh_loc.value      = mean(z0dstruct.z0dinput.cons.xece) ;
 configs.ecrh_mode.value     = []; 
 configs.ecrh_tor_ang.value  = (z0dstruct.z0dinput.option.sens .* (pi / 8) ) * vt; 
+configs.ecrh_phi_ang.value  = (z0dstruct.z0dinput.option.sens .* (pi / 8) ) * vt; 
 configs.ecrh_pol_ang.value  = (z0dstruct.z0dinput.option.angle_ece ./180 .* pi) * vt;
 configs.ecrh_harm.value     = [];
 configs.enbi.value          = z0dstruct.z0dinput.option.einj * vt ;
@@ -469,6 +470,14 @@ switch z0dstruct.z0dinput.option.l2hscaling
         configs.l2h_sc		= 'multimachine scaling law from Murami 2013 (BUEMS)';
     case 28
         configs.l2h_sc		= 'Low density case - Ryter et al, Nucl. Fusion 54 (2014) 083003 (9pp), equation 4';
+    case 30
+        configs.l2h_sc      = 'Fit of metalic tokamaks database for horizontal targets (TC_26(Bt), E . Delabie et al, N.F. 2026)';
+    case 31
+        configs.l2h_sc      = 'Fit of metalic tokamaks database for vertical targets and corner configuration (TC_26(Bt),E . Delabie et al, N.F 2026)';
+    case 32
+        configs.l2h_sc      = 'Fit of metalic tokamaks database for horizontal targets with B_pol instead of B_tor (TC_26(Bpol), E . Delabie et al, N.F. 2026)';
+    case 33
+        configs.l2h_sc      = 'Fit of metalic tokamaks database for vertical targets and corner configuration with B_pol instead of B_tor (TC_26(Bpol),E . Delabie et al, N.F 2026)';
     otherwise
         configs.l2h_sc		= 'criterion base on plasma rotation ( Gamma_ExB / Gamma_ITG)';
 end
@@ -512,6 +521,45 @@ end
 if ~defined_imas(summary.ids_properties.homogeneous_time)
   summary.ids_properties.homogeneous_time = 1;
 end
+summary.ids_properties.comment = texte_diary;
+summary.ids_properties.source    = 'METIS';
+% create also provenance for version 4 of the dictionary
+summary.ids_properties.provenance = make_provenance;
+if ispc
+  summary.ids_properties.provider  = getenv('USERNAME');
+else
+  summary.ids_properties.provider  = getenv('USER');
+end
+summary.ids_properties.creation_date = sprintf('%s (julian date in second = %f)',datestr(now,'dd-mmm-yyyy HH:MM:SS'),clock2julday);
+
+if isappdata(0,'root')
+	summary.simulation.comment_before = sprintf('simulation using METIS located at %s',getappdata(0,'root'));
+end
+if isappdata(0,'METIS_INTERFACE_TITLE')
+	summary.simulation.comment_after = getappdata(0,'METIS_INTERFACE_TITLE');
+end
+summary.simulation.time_begin   = min(z0dstruct.z0dinput.cons.temps);
+summary.simulation.time_end     = max(z0dstruct.z0dinput.cons.temps);
+summary.simulation.time_restart = min(data_zerod.temps);
+summary.simulation.time_current = max(data_zerod.temps);
+if length(data_zerod.temps) > 1
+	summary.simulation.time_step = mean(diff(data_zerod.temps));
+else
+	indicet = find(z0dstruct.z0dinput.cons.temps < data_zerod.temps(1),1);
+	if ~isempty(indicet)
+		summary.simulation.time_step = abs(z0dstruct.z0dinput.cons.temps(indicet) - data_zerod.temps(1));
+	end
+end
+ 
+%% not avilable from METIS  : time_begun and ime_ended
+
+% workflow
+if isfield(z0dstruct,'simout') && ~isempty(z0dstruct.simout)
+	summary.simulation.workflow = 'METIS embedded in Simulink workflow';
+else
+	summary.simulation.workflow = 'METIS alone';
+end
+
 
 if isfield(summary,'data_entry')
 
@@ -544,17 +592,23 @@ summary.time = data_zerod.temps;
 % creation des donnees pour codeparam
 z0dstruct.z0dinput.option.configs=configs;
 data = z0dstruct.z0dinput.option;
-tpn = tempname;
-xml_write(tpn,data);
-% lecture du fichier
-fid = fopen(tpn,'r');
-if fid > 0
-  parameters = char(fread(fid,Inf,'char')');
-  fclose(fid);
-else
-  parameters = 'unable to read parameters xml file';
+try
+    parameters = simple_struct2xml(data);
+catch
+    disp('switch to xml_write to encode the code parameters')
+    tpn = tempname;
+    xml_write(tpn,data);
+    % lecture du fichier
+    fid = fopen(tpn,'r');
+    if fid > 0
+        parameters = char(fread(fid,Inf,'char')');
+        fclose(fid);
+    else
+        parameters = 'unable to read parameters xml file';
+    end
+    delete(tpn);
 end
-delete(tpn);
+
 %
 summary.code.name       = 'METIS4IMAS';
 summary.code.version    = num2str(zinebversion);
@@ -569,17 +623,22 @@ data.difcurconv  = data_zerod.difcurconv;
 data.stf         = data_zerod.stf;
 data.nb          = data_zerod.nb;
 data.texte_diary = texte_diary;
-tpn = tempname;
-xml_write(tpn,data);
-% lecture du fichier
-fid = fopen(tpn,'r');
-if fid > 0
-  parameters = char(fread(fid,Inf,'char')');
-  fclose(fid);
-else
-  parameters = 'unable to read parameters xml file';
+try
+    parameters = simple_struct2xml(data);
+catch
+    disp('switch to xml_write to encode the code parameters')
+    tpn = tempname;
+    xml_write(tpn,data);
+    % lecture du fichier
+    fid = fopen(tpn,'r');
+    if fid > 0
+        parameters = char(fread(fid,Inf,'char')');
+        fclose(fid);
+    else
+        parameters = 'unable to read parameters xml file';
+    end
+    delete(tpn);
 end
-delete(tpn);
 summary.code.output_diag  = parameters;
 %
 summary.code.output_flag = error_flag * ones(size(data_zerod.temps));
@@ -593,6 +652,7 @@ summary.global_quantities.current_ohm.value = data_zerod.iohm;
 summary.global_quantities.current_alignment.value = data_zerod.ialign;
 summary.global_quantities.v_loop.value = data_zerod.vloop;
 summary.global_quantities.li.value = data_zerod.li;
+summary.global_quantities.li_3.value = data_zerod.li;
 if length(data_zerod.temps) == 1
   summary.global_quantities.beta_tor.value = (2/3) .* (data_zerod.w ./ data_zerod.vp) ./ (z0dstruct.z0dinput.geo.b0(end) .^ 2 ./2 ./ phys.mu0); 
 else
@@ -637,6 +697,29 @@ summary.global_quantities.tau_energy.value = data_zerod.taue;
 summary.global_quantities.tau_helium.value = data_zerod.tauhe;
 summary.global_quantities.tau_resistive.value = data_zerod.ip;
 summary.global_quantities.resistance.value = data_zerod.RR;
+
+% fusion gain
+pfusion_total  =  compute_total_fusion_power(z0dstruct);
+fluence_fusion = cumtrapz(z0dstruct.profil0d.temps,pfusion_total);
+if length(pfusion_total) ~= length(data_zerod.temps)
+   pfusion_total = interp1_imas(z0dstruct.profil0d.temps,pfusion_total,data_zerod.temps,'pchip','extrap');
+   fluence_fusion = interp1_imas(z0dstruct.profil0d.temps,fluence_fusion,data_zerod.temps,'pchip','extrap');
+end
+summary.global_quantities.fusion_gain.value = pfusion_total ./ max(eps,data_zerod.pin - data_zerod.pfus);
+summary.global_quantities.power_ohm.value = data_zerod.pohm;
+summary.global_quantities.power_steady.value = data_zerod.pin - data_zerod.dwdt;
+summary.global_quantities.power_radiated.value = data_zerod.prad + data_zerod.pbrem + data_zerod.pcyclo + data_zerod.pradsol;
+summary.global_quantities.power_radiated_inside_lcfs.value  = data_zerod.prad + data_zerod.pbrem + data_zerod.pcyclo; 
+summary.global_quantities.power_radiated_outside_lcfs.value = data_zerod.pradsol;
+summary.global_quantities.power_line.value = data_zerod.prad +data_zerod.pradsol;
+summary.global_quantities.power_bremsstrahlung.value = data_zerod.pbrem;
+summary.global_quantities.power_synchrotron.value = data_zerod.pcyclo;
+summary.global_quantities.power_loss.value = data_zerod.plhthr;
+summary.global_quantities.greenwald_fraction.value = data_zerod.nbar ./ max(eps,data_zerod.negr);
+summary.global_quantities.fusion_fluence.value = fluence_fusion;
+flux_data_output = poloidal_flux(z0dstruct,1/3);
+summary.global_quantities.psi_external_average.value = flux_data_output.flux_tot;
+
 
 
 %% LINE-AVERAGED QUANTITIES
@@ -752,7 +835,21 @@ summary.fusion.neutron_fluxes.tt.thermal.value         = interp1_imas(neutron.ti
 summary.fusion.neutron_fluxes.tt.beam_thermal.value    = interp1_imas(neutron.time,neutron.ntt_nbi_th,data_zerod.temps,'pchip','extrap');
 summary.fusion.neutron_fluxes.tt.beam_beam.value       = interp1_imas(neutron.time,neutron.ntt_nbi_nbi,data_zerod.temps,'pchip','extrap');
 % new definition 
-summary.fusion.neutron_rates = summary.fusion.neutron_fluxes;
+summary.fusion.neutron_rates.total.value              = interp1_imas(neutron.time,neutron.ntot,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.thermal.value            = interp1_imas(neutron.time,neutron.ndd_th + neutron.ndt_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dd.total.value           = interp1_imas(neutron.time,neutron.ndd,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dd.thermal.value         = interp1_imas(neutron.time,neutron.ndd_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dd.beam_thermal.value    = interp1_imas(neutron.time,neutron.ndd_nbi_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dd.beam_beam.value       = interp1_imas(neutron.time,neutron.ndd_nbi_nbi,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dt.total.value           = interp1_imas(neutron.time,neutron.ndt,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dt.thermal.value         = interp1_imas(neutron.time,neutron.ndt_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dt.beam_thermal.value    = interp1_imas(neutron.time,neutron.ndt_nbi_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.dt.beam_beam.value       = interp1_imas(neutron.time,neutron.ndt_nbi_nbi,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.tt.total.value           = interp1_imas(neutron.time,neutron.ntt,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.tt.thermal.value         = interp1_imas(neutron.time,neutron.ntt_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.tt.beam_thermal.value    = interp1_imas(neutron.time,neutron.ntt_nbi_th,data_zerod.temps,'pchip','extrap');
+summary.fusion.neutron_rates.tt.beam_beam.value       = interp1_imas(neutron.time,neutron.ntt_nbi_nbi,data_zerod.temps,'pchip','extrap');
+
 % power from neutrons
 if isfield(z0dstruct,'profil0d')
     summary.fusion.neutron_power_total.value = max(0,interp1_imas(z0dstruct.profil0d.temps,fusion.pfusion_total,data_zerod.temps,'pchip','extrap') - summary.fusion.power.value);
@@ -831,6 +928,11 @@ for ispec=6:7
     warning('plasma composition not yet implemented in summary IDS');
   end
 end
+noms = fieldnames(summary.local.magnetic_axis.velocity_tor);
+for k= 1:length(noms)
+    summary.local.magnetic_axis.velocity_phi.(noms{k}).value = summary.local.magnetic_axis.velocity_tor.(noms{k}).value;
+end
+%
 summary.local.magnetic_axis.n_i.hydrogen.value   = interp1_imas(profil0d.temps,nions(:,1,1),data_zerod.temps,'pchip','extrap');
 summary.local.magnetic_axis.n_i.deuterium.value  = interp1_imas(profil0d.temps,nions(:,1,2),data_zerod.temps,'pchip','extrap');
 summary.local.magnetic_axis.n_i.tritium.value    = interp1_imas(profil0d.temps,nions(:,1,3),data_zerod.temps,'pchip','extrap');
@@ -929,7 +1031,11 @@ for ispec=6:7
     warning('plasma composition not yet implemented in summary IDS');
   end
 end
-
+noms = fieldnames(summary.local.edge.velocity_tor);
+for k= 1:length(noms)
+    summary.local.edge.velocity_phi.(noms{k}).value = summary.local.edge.velocity_tor.(noms{k}).value;
+end
+%
 summary.local.edge.n_i.hydrogen.value   = interp1_imas(profil0d.temps,nions(:,end,1),data_zerod.temps,'pchip','extrap');
 summary.local.edge.n_i.deuterium.value  = interp1_imas(profil0d.temps,nions(:,end,2),data_zerod.temps,'pchip','extrap');
 summary.local.edge.n_i.tritium.value    = interp1_imas(profil0d.temps,nions(:,end,3),data_zerod.temps,'pchip','extrap');
@@ -1435,7 +1541,11 @@ for ispec=6:7
     warning('plasma composition not yet implemented in summary IDS');
   end
 end
-
+noms = fieldnames(summary.local.itb.velocity_tor);
+for k= 1:length(noms)
+    summary.local.itb.velocity_phi.(noms{k}).value = summary.local.itb.velocity_tor.(noms{k}).value;
+end
+%
 summary.local.itb.n_i.hydrogen.value = griddata_imas(tt,xx,nions(:,:,1),data_zerod.temps,data_zerod.xitb,'cubic');
 summary.local.itb.n_i.deuterium.value = griddata_imas(tt,xx,nions(:,:,2),data_zerod.temps,data_zerod.xitb,'cubic');
 summary.local.itb.n_i.tritium.value = griddata_imas(tt,xx,nions(:,:,3),data_zerod.temps,data_zerod.xitb,'cubic');
@@ -1593,7 +1703,12 @@ for ispec=6:7
     warning('plasma composition not yet implemented in summary IDS');
   end
 end
+noms = fieldnames(summary.local.pedestal.velocity_tor);
+for k= 1:length(noms)
+    summary.local.pedestal.velocity_phi.(noms{k}).value = summary.local.pedestal.velocity_tor.(noms{k}).value;
+end
 
+%
 summary.local.pedestal.n_i.hydrogen.value   = interp1_imas(profil0d.temps,nions(:,end-1,1),data_zerod.temps,'pchip','extrap');
 summary.local.pedestal.n_i.deuterium.value  = interp1_imas(profil0d.temps,nions(:,end-1,2),data_zerod.temps,'pchip','extrap');
 summary.local.pedestal.n_i.tritium.value    = interp1_imas(profil0d.temps,nions(:,end-1,3),data_zerod.temps,'pchip','extrap');
@@ -1786,6 +1901,24 @@ end
 
 
 function [h98,h96] = compute_H98(zs,geo,cons)
+
+if isfield(zs,'temps')
+    time = zs.temps;
+    temps = cons.temps;
+    noms = fieldnames(geo);
+    for k=1:length(noms)
+        if length(temps) == length(geo.(noms{k}))
+            geo.(noms{k}) = interp1(temps,geo.(noms{k}),time,'nearest','extrap');
+        end
+    end
+    noms = fieldnames(cons);
+    for k=1:length(noms)
+        if length(temps) == length(cons.(noms{k}))
+            cons.(noms{k}) = interp1(temps,cons.(noms{k}),time,'nearest','extrap');
+        end
+    end
+    
+end
 
 % rapport pour le facteur d'amplification (Ealpha +En)/Ealpha
 rfan = (3.56e6 + 14.03e6) ./ 3.56e6 ;
@@ -1991,3 +2124,75 @@ flux_output = interp1(profli.temps,profli.ge(:,end) .* profli.grho2(:,end) .* pr
 
 maskx = ones(size(zs.temps));
 maskx(zs.xpoint == 0) = NaN;
+
+function flux_data_output_ = poloidal_flux(post,couplage)
+
+% make all time basis compatible
+if isfield(post.zerod,'temps') && (length(post.zerod.temps) ~= length(post.z0dinput.cons.temps))
+    noms = fieldnames(post.zerod);
+    temps = post.zerod.temps;
+    for k=1:length(noms)
+        nomc = noms{k};
+        var  = post.zerod.(nomc);
+        if length(var) == length(temps)
+            post.zerod.(nomc) = interp1(temps,var,post.profil0d.temps,'nearest','extrap');
+        else
+            post.zerod.(nomc) = var;
+        end
+    end
+    zs.temps = post.profil0d.temps;
+    
+    temps = post.z0dinput.cons.temps;
+    noms = fieldnames(post.z0dinput.geo);
+    for k=1:length(noms)
+        nomc = noms{k};
+        var  = post.z0dinput.geo.(nomc);
+        if length(var) == length(temps)
+            post.z0dinput.geo.(nomc) = interp1(temps,var,post.profil0d.temps,'nearest','extrap');
+        else
+            post.z0dinput.geo.(nomc) = var;
+        end
+    end
+
+    
+    noms = fieldnames(post.z0dinput.cons);
+    temps = post.z0dinput.cons.temps;
+    for k=1:length(noms)
+        nomc = noms{k};
+        var  = post.z0dinput.cons.(nomc);
+        if length(var) == length(temps)
+            post.z0dinput.cons.(nomc) = interp1(temps,var,post.profil0d.temps,'nearest','extrap');
+        else
+            post.z0dinput.cons.(nomc) = var;
+        end
+    end
+    cons.temps = post.profil0d.temps;
+ 
+elseif length(post.profil0d.temps) ~= length(post.z0dinput.cons.temps)
+    noms  = fieldnames(post.profil0d);
+    time  = post.z0dinput.cons.temps;
+    temps = post.profil0d.temps;
+    for k=1:length(noms)
+        val = post.profil0d.(noms{k});
+        if size(val,1) == length(temps)
+            if all(isfinite(val(:)))
+                post.profil0d.(noms{k}) = interp1(temps,val,time,'pchip','extrap');
+            else
+                post.profil0d.(noms{k}) = interp1(temps,val,time,'nearest','extrap');
+            end
+        end
+    end
+        
+end
+dbstop if all error
+% z0plotflux.m
+NOPLUTFLUX_HELIOS = 1;
+z0plotflux;
+
+% create data structure
+liste_of_fields_ = who;
+for kkk_ = 1:length(liste_of_fields_)
+    flux_data_output_.(liste_of_fields_{kkk_}) = eval(liste_of_fields_{kkk_});
+end
+
+dbclear  all

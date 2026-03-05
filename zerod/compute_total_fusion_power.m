@@ -7,6 +7,11 @@ function [pfusion_total,pfusion_DT,pfusion_DD,pfusion_TT,neutron_total_tt, ...
           frac_tt_thermal,frac_tt_beam_plasma,frac_tt_beam_beam]  =  ...
           compute_total_fusion_power(post)
 
+switch post.z0dinput.option.gaz
+    case {5,11}
+        error('This function does not work for D-He3 and p-B11 fusion reactions');
+end
+      
 % various used
 if ~isfield(post,'profil0d')
     post.profil0d = post.profil;
@@ -14,29 +19,10 @@ end
 if ~isfield(post,'zerod')
     post.zerod = post.zs;
 end
-      
-% retreive data for particle energies
-[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(post.zerod.tite .* post.zerod.tem);
-%
-pfusion_DT = max(0,(dt.n + dt.he4) ./ dt.he4  * (post.zerod.pfus   - post.zerod.pddfus - post.zerod.pttfus + post.zerod.pfus_loss));
-%
-pfusion_DD = max(0,post.zerod.pddfus  + post.zerod.ndd .* dd_n.n .* 1.602176462e-19); % (proton and He3 in pddfus, should add neutron )
-%
-% TT neutron
-%pttfus    = phys.e .* 1.6e6 .* neutron_total ./ 2;
-%ntt         = 2 .* post.zerod.pttfus ./ 1.6e6 ./ 1.602176462e-19;
-%pfusion_TT  = post.zerod.pttfus  + ntt .* (tt.n/2) .* 1.602176462e-19;  
-% tt.n is the total released energy by the reaction, including 2 neutrons and He4
-% as it is a reaction with 3 products, the spectrum in energy of each
-% spectrum is complex:
-% https://www.sciencedirect.com/science/article/pii/0029558265900404
-%
-pfusion_TT  = max(0,post.zerod.pttfus ./ 1.6e6 .* tt.n); 
-%
-pfusion_total = pfusion_DT + pfusion_DD + pfusion_TT;
-
+     
 % now compute contribution from thermal, beam-plasma, beam-beam
-if length(post.profil0d.temps) == length(post.zerod.temps)
+if (length(post.profil0d.temps) == length(post.zerod.temps)) && ...
+   (length(post.profil0d.temps) == length(post.z0dinput.cons.temps))     
     zs   = post.zerod;
     geo  = post.z0dinput.geo;
     cons = post.z0dinput.cons;
@@ -53,6 +39,19 @@ else
         end
     end
     zs.temps = post.profil0d.temps;
+    
+    temps = post.z0dinput.cons.temps;
+    noms = fieldnames(post.z0dinput.geo);
+    for k=1:length(noms)
+        nomc = noms{k};
+        var  = post.z0dinput.geo.(nomc);
+        if length(var) == length(temps)
+            geo.(nomc) = interp1(temps,var,post.profil0d.temps,'nearest','extrap');
+        else
+            geo.(nomc) = var;
+        end
+    end
+    
     noms = fieldnames(post.z0dinput.cons);
     temps = post.z0dinput.cons.temps;
     for k=1:length(noms)
@@ -65,23 +64,38 @@ else
         end
     end
     cons.temps = post.profil0d.temps;
-    noms = fieldnames(post.z0dinput.geo);
-    for k=1:length(noms)
-        nomc = noms{k};
-        var  = post.z0dinput.geo.(nomc);
-        if length(var) == length(temps)
-            geo.(nomc) = interp1(temps,var,post.profil0d.temps,'nearest','extrap');
-        else
-            geo.(nomc) = var;
-        end
-    end
     %
-    pfusion_total = interp1(temps,pfusion_total,post.profil0d.temps,'nearest','extrap');
-    pfusion_DT    = interp1(temps,pfusion_DT,post.profil0d.temps,'nearest','extrap');
-    pfusion_DD    = interp1(temps,pfusion_DD,post.profil0d.temps,'nearest','extrap');
-    pfusion_TT    = interp1(temps,pfusion_TT,post.profil0d.temps,'nearest','extrap');
-
+    
+    %
+%     pfusion_total = interp1(temps,pfusion_total,post.profil0d.temps,'nearest','extrap');
+%     pfusion_DT    = interp1(temps,pfusion_DT,post.profil0d.temps,'nearest','extrap');
+%     pfusion_DD    = interp1(temps,pfusion_DD,post.profil0d.temps,'nearest','extrap');
+%     pfusion_TT    = interp1(temps,pfusion_TT,post.profil0d.temps,'nearest','extrap');
+% 
 end
+
+% retreive data for particle energies
+[dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(zs.tite .* zs.tem);
+%
+pfusion_DT = max(0,(dt.n + dt.he4) ./ dt.he4  * (zs.pfus   - zs.pddfus - zs.pttfus + zs.pfus_loss));
+%
+pfusion_DD = max(0,zs.pddfus  + zs.ndd .* dd_n.n .* 1.602176462e-19); % (proton and He3 in pddfus, should add neutron )
+%
+% TT neutron
+%pttfus    = phys.e .* 1.6e6 .* neutron_total ./ 2;
+%ntt         = 2 .* post.zerod.pttfus ./ 1.6e6 ./ 1.602176462e-19;
+%pfusion_TT  = post.zerod.pttfus  + ntt .* (tt.n/2) .* 1.602176462e-19;  
+% tt.n is the total released energy by the reaction, including 2 neutrons and He4
+% as it is a reaction with 3 products, the spectrum in energy of each
+% spectrum is complex:
+% https://www.sciencedirect.com/science/article/pii/0029558265900404
+%
+pfusion_TT  = max(0,zs.pttfus ./ 1.6e6 .* tt.n); 
+%
+pfusion_total = pfusion_DT + pfusion_DD + pfusion_TT;
+
+
+
 %
 [~,salpha,~,~,~,~,~,~,~,~,~,~,~,splustd,splusdt,splusff,splusicrh] = ...
     zfus0tae(zs.nDm,zs.nTm,zs.tem,zs.nem,zs.zeff,zs.tite,geo.R,geo.a,geo.K,geo.b0,zs.ane,zs.ate,zs.vp,zs.sp, ...
@@ -89,28 +103,28 @@ end
     zs.pion_icrh,zs.taus_icrh,zs.ecrit_nbi,zs.einj_icrh,post.profil0d.temps,cons.pnbi,zs.d0,zs.qa,zs.qmin, ...
     zs.te0,zs.nebord,zs.tebord,zs.pped,zs.nim,zs.wth, ...
     post.z0dinput.option.tae,post.z0dinput.option.nb_nbi,post.z0dinput.option.fspot,post.z0dinput.option.e_shielding, ...
-    post.profil0d,post.z0dinput.option.fpolarized,post.z0dinput.option.forced_H_NBI);
+    post.profil0d,post.z0dinput.option.fpolarized,post.z0dinput.option.forced_H_NBI,post.z0dinput.option.mino,zs.salpha_icrh);
 %
 [neutron_total_tt,neutron_th_tt,neutron_nbi_th_tt,neutron_nbi_nbi_tt,pttfus,proton_tt,picrh_nbi_tt,einj_tt] = ...
     z0neutron_tt(post.z0dinput.option,cons,zs,post.profil0d);
 
 % total source DT
-dt_total        = salpha .* (zs.pfus + zs.pfus_loss) ./ zs.pfus;
-frac_dt_thermal = max(0,(salpha .* (zs.pfus + zs.pfus_loss) ./ zs.pfus -  ...
-                  (splustd + splusdt + splusff + splusicrh)) ./ max(eps,dt_total));
-frac_dt_beam_plasma = max(0,(splustd + splusdt) ./ dt_total);
-frac_dt_beam_beam   = max(0,splusff ./ dt_total);
-frac_dt_icrh        = max(0,splusicrh ./ dt_total);
+dt_total        = salpha .* (zs.pfus + zs.pfus_loss) ./ max(1,zs.pfus);
+frac_dt_thermal = max(0,(salpha .* (zs.pfus + zs.pfus_loss) ./ max(1,zs.pfus) -  ...
+                  (splustd + splusdt + splusff + splusicrh)) ./ max(1,dt_total));
+frac_dt_beam_plasma = min(1,max(0,(splustd + splusdt) ./ max(1,dt_total)));
+frac_dt_beam_beam   = min(1,max(0,splusff ./ max(1,dt_total)));
+frac_dt_icrh        = min(1,max(0,splusicrh ./ max(1,dt_total)));
 
 % DD
-frac_dd_thermal     = max(0,zs.ndd_th ./ max(eps,zs.ndd));
-frac_dd_beam_plasma = max(0,zs.ndd_nbi_th./ max(eps,zs.ndd));
-frac_dd_beam_beam   = max(0,zs.ndd_nbi_nbi./ max(eps,zs.ndd));
+frac_dd_thermal     = min(1,max(0,zs.ndd_th ./ max(1,zs.ndd)));
+frac_dd_beam_plasma = min(1,max(0,zs.ndd_nbi_th./ max(1,zs.ndd)));
+frac_dd_beam_beam   = min(1,max(0,zs.ndd_nbi_nbi./ max(1,zs.ndd)));
 
 % TT
-frac_tt_thermal     = max(0,neutron_th_tt ./ max(eps,neutron_total_tt));
-frac_tt_beam_plasma = max(0,neutron_nbi_th_tt ./ max(eps,neutron_total_tt));
-frac_tt_beam_beam   = max(0,neutron_nbi_nbi_tt ./ max(eps,neutron_total_tt));
+frac_tt_thermal     = min(1,max(0,neutron_th_tt ./ max(1,neutron_total_tt)));
+frac_tt_beam_plasma = min(1,max(0,neutron_nbi_th_tt ./ max(1,neutron_total_tt)));
+frac_tt_beam_beam   = min(1,max(0,neutron_nbi_nbi_tt ./ max(1,neutron_total_tt)));
 
 
 if nargout == 0

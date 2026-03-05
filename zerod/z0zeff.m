@@ -187,7 +187,7 @@ end
 % Modif D. Moreau 30/04/2014 pour donn?es externes sur ZEFF.
 % completer le 27/08/2014 par J-F Artaud
 
-if isappdata(0,'ZEFF_SHAPE_EXP');
+if isappdata(0,'ZEFF_SHAPE_EXP')
     zeffexp = getappdata(0,'ZEFF_SHAPE_EXP');
     zeffp  = max(1,interp1_ex(zeffexp.temps,zeffexp.zeff,temps,'nearest','extrap'));
     zeffp  = pchip(zeffexp.x,zeffp,x);
@@ -195,7 +195,7 @@ if isappdata(0,'ZEFF_SHAPE_EXP');
     indok  = find(all(isfinite(zeffp),2));
     zeffp(indnok,:) = ones(length(indnok),1) * mean(zeffp(indok,:),1);
     % normalisation au zeff moyen lineique de consigne
-    zeffp    = zeffp .* ((zeff0./trapz(x,zeffp,2)) * ve);
+    zeffp    = max(1+sqrt(eps),zeffp .* ((zeff0./trapz(x,zeffp,2)) * ve));
     % calcul de nzp
     nzp = (nep .* (zeffp -1) - 2 .* nhep + nwz1 - nwz2) ./  ((zimp .^ 2 + rimp * zmax .^ 2) - (zimp + rimp * zmax));   
     % normalisation de nzp pour retrouver nimpm (et le zeffm)

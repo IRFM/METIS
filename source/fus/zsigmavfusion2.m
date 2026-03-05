@@ -1,6 +1,6 @@
 % ZSIGMAVFUSION calcul les reactivites thermique des reactions de fusion
 %-------------------------------------------------------------------------
-% fichier zsigmavfusion.m ->  zsigmavfusion
+% fichier zsigmavfusion2.m ->  zsigmavfusion2
 %
 %
 % fonction Matlab 5 :
@@ -10,7 +10,7 @@
 %  
 % syntaxe  :
 %  
-%     [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(ti);
+%     [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(ti);
 %
 % entrees :
 %
@@ -67,6 +67,17 @@
 %--------------------------------------------------------------
 %
 function [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion2(ti)
+
+
+% for backward compatibility
+if isappdata(0,'USED_ZSIGMAVFUSION_INSTEAD_ZSIGMAVFUSION2')
+    if ~getappdata(0,'USED_ZSIGMAVFUSION_INSTEAD_ZSIGMAVFUSION2')
+        [dd_p,dd_n,dt,dhe3,tt,the3_pn,the3_d]=zsigmavfusion(ti);
+        %fprintf('1');
+        return
+    end
+end
+%fprintf('2');
 
 % ti doit etre en keV
 tikev    = max(1e-3,real(ti) ./ 1e3);
