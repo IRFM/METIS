@@ -1,0 +1,10 @@
+case,tolerance,observed_octave_8.4,note
+DIII-D_like_shot_zjrun_test,3e-3,1.48e-03,unexplained Octave/MATLAB difference
+JET53521_itb_bgb,1e-2,4.89e-03,unexplained Octave/MATLAB difference
+JET53521_itb_test,5e-2,2.48e-02,unexplained Octave/MATLAB difference
+JET53521_itb_test_nomorph,5e-4,1.65e-04,unexplained Octave/MATLAB difference
+JET84746_density_4DoF,5e-2,2.66e-02,unexplained Octave/MATLAB difference
+TFTR80539_like_neutron_rate_test,0.15,9.05e-02,unexplained Octave/MATLAB difference
+TS28305_DDS_2,8e-2,4.03e-02,unexplained Octave/MATLAB difference
+iter_2nbi_pfus,1e-3,5.26e-04,unexplained Octave/MATLAB difference
+reference_NTM_ITER,2e-3,7.62e-04,unexplained Octave/MATLAB difference
