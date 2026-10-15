@@ -65,6 +65,14 @@ jobs:
       - name: Run case
         run: octave --no-gui --quiet octave/run_certification_case.m "${{ matrix.test_case }}" "result-${{ matrix.test_case }}.tsv"
 
+      - name: Annotate result
+        if: always()
+        run: |
+          f="result-${{ matrix.test_case }}.tsv"
+          [ -f "$f" ] || exit 0
+          awk -F'\t' '{level = ($2 == "PASS") ? "notice" : "error";
+                       printf "::%s title=%s %s::max key deviation %s (tolerance %s), run time %s s %s\n", level, $1, $2, $4, $5, $3, $8}' "$f"
+
       - name: Upload result
         if: always()
         uses: actions/upload-artifact@v4
