@@ -1,0 +1,99 @@
+name: Octave certification
+
+# Reruns every METIS certification case (certification/metis/*.mat) in GNU Octave
+# and compares it with the MATLAB reference stored in the case file.
+# See octave/README.md.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  case:
+    name: ${{ matrix.test_case }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        test_case:
+          - DIII-D_like_shot_zjrun_test
+          - ITER_rampup_ECCD
+          - ITER_rampup_ECCD_expo_inte
+          - ITER_rampup_switch_flux
+          - JET53521_itb_bgb
+          - JET53521_itb_test
+          - JET53521_itb_test_nomorph
+          - JET69581_2.8mw
+          - JET69581_2.8mw_lhvariable
+          - JET69581_2_points_SOL
+          - JET71827_rampup_low_density
+          - JET77210_burnthrough
+          - JET84746_density_4DoF
+          - MAST_like
+          - METIS_2nbi
+          - RFX_tokamak_mode_shot_38688
+          - TFTR80539_like_neutron_rate_test
+          - TS28305_DDS
+          - TS28305_DDS_2
+          - TS40888_natural_density
+          - TS40888_pellets
+          - TS40888_pellets_hollow_density
+          - TS_SA_test
+          - iter_2nbi_pfus
+          - low_taue_limitation
+          - reference_NTM_ITER
+          - test_regul_q0
+          - test_xiioxie_CGM
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install GNU Octave
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq octave octave-dev
+          octave --version | head -1
+
+      - name: Build mex files
+        run: octave/build_mex.sh
+
+      - name: Run case
+        run: octave --no-gui --quiet octave/run_certification_case.m "${{ matrix.test_case }}" "result-${{ matrix.test_case }}.tsv"
+
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ matrix.test_case }}
+          path: result-${{ matrix.test_case }}.tsv
+          if-no-files-found: ignore
+
+  summary:
+    needs: case
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: result-*
+          merge-multiple: true
+
+      - name: Summary table
+        run: |
+          {
+            echo "## METIS in GNU Octave vs MATLAB reference"
+            echo
+            echo "Largest relative difference in flattop means of vloop, pfus, li, iboot, te0, betan."
+            echo
+            echo "| Case | Status | Run time (s) | Max key deviation | Tolerance | Note |"
+            echo "|---|---|---|---|---|---|"
+            for f in result-*.tsv; do
+              [ -f "$f" ] || continue
+              awk -F'\t' '{printf "| %s | %s | %s | %s | %s | %s |\n", $1, $2, $3, $4, $5, $8}' "$f"
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
