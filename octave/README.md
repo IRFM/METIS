@@ -26,8 +26,9 @@ Changes to METIS sources, all neutral for MATLAB:
 
 Octave-only files in `octave/` (never on the MATLAB path):
 
-- `metis_octave_setup.m`: calls `zineb_path`, then puts `octave/compat` first and selects the pure-M PDE solver (the compiled one needs MPI/MUMPS).
-- `compat/griddedInterpolant.m`, `compat/pwch.m`, `compat/chckxy.m`: minimal versions of MATLAB functions missing in Octave, used by `z0icrh.m` and `import/sampling/pchip.m`.
+- `metis_octave_setup.m`: calls `zineb_path`, then puts `octave/compat` and Octave's polynomial functions first and selects the pure-M PDE solver (the compiled one needs MPI/MUMPS).
+- `compat/griddedInterpolant.m`: minimal version of the MATLAB function, missing in Octave, used by `z0icrh.m`.
+- Octave's own `pchip` is put ahead of `import/sampling/pchip.m` (a copy of MATLAB's 2004 version that needs MATLAB internals); it reproduces the MATLAB references more closely.
 - `compat/time.m`: restores Octave's built-in `time()`, which `trait/time.m` shadows and which Octave's `clock()` needs.
 
 ## Certification against MATLAB
