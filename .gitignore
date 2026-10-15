@@ -14,3 +14,8 @@ libs/MUMPS_4.7.3/test/dsimpletest
 libs/MUMPS_4.7.3/test/zsimpletest
 python/__pycache__
 *.pyc
+
+# GNU Octave mex files (octave/build_mex.sh)
+*.mex
+# saved by interface/finish.m when a session ends with z0dinput in the workspace
+METIS_z0dinput@*

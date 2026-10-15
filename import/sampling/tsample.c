@@ -42,6 +42,7 @@ Routines appelees : cround, ctable1 et cspline
  R.Masset  - CEA DRFC Tore Supra - Juin 1995 
  JF.Artaud - CEA DRFC Tore Supra - Juillet 1995 */
 
+#include <float.h>
 #include <mex.h>
 #include <stdio.h>
 #ifdef _WIN32
