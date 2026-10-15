@@ -41,15 +41,16 @@ octave --no-gui --quiet octave/run_certification_case.m ITER_rampup_ECCD
 
 The metric is the largest relative difference in the flattop means (Ip at least 98% of max) of `vloop`, `pfus`, `li`, `iboot`, `te0` and `betan`.
 
-- **19 cases** reproduce MATLAB to machine precision (below 1e-7; tolerance 1e-6).
-- **9 cases** differ by 0.02% to 9%, for a reason not yet identified. They are well conditioned (a 1e-12 input perturbation moves the result by at most 1e-6), so the difference comes from some built-in function behaving differently, not from chaos. They pass against per-case tolerances in `certification_tolerances.csv`, set at about twice the observed difference, so CI catches regressions.
+- **18 cases** reproduce MATLAB to machine precision (1e-9 or better; tolerance 1e-6).
+- **10 cases** differ by 0.02% to 9%, for a reason not yet identified. They pass against per-case tolerances in `certification_tolerances.csv`, set at about twice the difference observed on GitHub runners, so CI catches regressions. Most are well conditioned (a 1e-12 input perturbation moves the result by at most 1e-6), so the difference comes from some built-in function behaving differently rather than from chaos. The exception is JET69581_2_points_SOL, which matches MATLAB to 4e-7 on some machines and differs by 8.5e-4 on GitHub runners.
 
-| Case | Octave vs MATLAB |
+| Case | Octave vs MATLAB (GitHub runner) |
 |---|---|
-| iter_2nbi_pfus | 5.3e-4 |
-| reference_NTM_ITER | 7.6e-4 |
 | JET53521_itb_test_nomorph | 1.7e-4 |
+| iter_2nbi_pfus | 3.3e-4 |
+| JET69581_2_points_SOL | 8.5e-4 |
 | DIII-D_like_shot_zjrun_test | 1.5e-3 |
+| reference_NTM_ITER | 3.6e-3 |
 | JET53521_itb_bgb | 4.9e-3 |
 | JET53521_itb_test | 2.5e-2 |
 | JET84746_density_4DoF | 2.7e-2 |
